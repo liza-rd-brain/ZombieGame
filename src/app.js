@@ -6,7 +6,7 @@ import { createStore } from "redux";
 import styled, { ThemeProvider } from "styled-components";
 
 import Grid from "./features/Grid";
-import Man from "./features/Man";
+/* import Man from "./features/Man"; */
 import Arrows from "./features/Arrows";
 
 const Field = styled.div`
@@ -15,33 +15,37 @@ const Field = styled.div`
   margin: 0 auto;
 `;
 
+const Game = styled.div`
+  width: 500px;
+  margin: 0 auto;
+  display: flex;
+
+  &:last-child {
+    align-items: flex-end;
+    /*  background-color: gold; */
+  }
+`;
+
 const initialState = {
   gameState: "start",
   gamePhase: null,
   startCoord: { hor: 0, vert: 0 },
-  endCoord: { hor: 0, vert: 0 },
+  endCoord: { hor: 9, vert: 9 },
   man: {
     hor: 0,
     vert: 0,
   },
-  /*   manHor,
-  manVert, */
+
   mode: 0,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "changeCoordY":
+    case "changeCoord":
       console.log(state);
       return {
         ...state,
-        man: { ...state.man, vert: state.man.vert + action.payload },
-      };
-    case "changeCoordX":
-      console.log(state);
-      return {
-        ...state,
-        man: { ...state.man, hor: state.man.hor + action.payload },
+        man: action.payload,
       };
     default:
       return state;
@@ -50,11 +54,13 @@ const reducer = (state = initialState, action) => {
 function App() {
   return (
     <>
-      <Field>
-        <Grid />
-        <Man />
-      </Field>
-      <Arrows />
+      <Game>
+        <Field>
+          <Grid />
+          {/*   <Man /> */}
+        </Field>
+        <Arrows />
+      </Game>
     </>
   );
 }

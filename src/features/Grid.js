@@ -1,6 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-
+import Man from "./Man";
 const GridItem = styled.div`
   border: 2px solid red;
   margin: 0 auto;
@@ -17,6 +18,7 @@ const GridItem = styled.div`
 `;
 
 const Cell = styled.div`
+  position: relative;
   border: 1px solid #000;
   box-sizing: content-box;
   width: 30px;
@@ -27,30 +29,35 @@ const Cell = styled.div`
 const width = 10;
 const height = 10;
 
-const array = new Array(height)
-  .fill(0)
-  .map((itemHor, indexVer) =>
-    new Array(width).fill({}).map((itemVer, indexHor) => {
-      return (
-        <Cell
-          hor={indexHor}
-          vert={indexVer}
-          key={`${indexHor}${indexVer}`}
-        >{`${indexHor}${indexVer}`}</Cell>
-      );
-    })
-  )
-  .reverse();
-
-console.log(array);
-
-array.length = height;
-
-array.map(() => {});
-const cellGrid = () => {};
+function getArray(hor, vert) {
+  return new Array(height)
+    .fill(0)
+    .map((itemHor, indexVer) =>
+      new Array(width).fill({}).map((itemVer, indexHor) => {
+        if (indexVer === vert && indexHor === hor) {
+          return (
+            <Cell hor={indexHor} vert={indexVer} key={`${indexHor}${indexVer}`}>
+              {`${indexHor}${indexVer}`}
+              <Man />
+            </Cell>
+          );
+        } else {
+          return (
+            <Cell
+              hor={indexHor}
+              vert={indexVer}
+              key={`${indexHor}${indexVer}`}
+            >{`${indexHor}${indexVer}`}</Cell>
+          );
+        }
+      })
+    )
+    .reverse();
+}
 
 function Grid() {
-  return <GridItem vert={width}>{array}</GridItem>;
+  const [hor, vert] = useSelector((state) => [state.man.hor, state.man.vert]);
+  return <GridItem vert={width}>{getArray(hor, vert)}</GridItem>;
 }
 
 export default Grid;

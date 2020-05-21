@@ -52,57 +52,62 @@ const ArrowContainer = styled.div`
 `;
 
 function Arrows() {
+  const [
+    manHor,
+    manVert,
+    startHor,
+    startVert,
+    endHor,
+    endVert,
+  ] = useSelector((state) => [
+    state.man.hor,
+    state.man.vert,
+    state.startCoord.hor,
+    state.startCoord.vert,
+    state.endCoord.hor,
+    state.endCoord.vert,
+  ]);
   const dispatch = useDispatch();
 
-  const renderArrow = (direction) => {
+  const getCoord = (direction) => {
     switch (direction) {
       case "top":
-        return (
-          <Arrow
-            type="top"
-            onClick={() => {
-              dispatch({ type: "changeCoordY", payload: 1 });
-            }}
-          >
-            >
-          </Arrow>
-        );
+        return {
+          hor: manHor,
+          vert: manVert < endVert ? manVert + 1 : manVert,
+        };
       case "bottom":
-        return (
-          <Arrow
-            type="bottom"
-            onClick={() => {
-              dispatch({ type: "changeCoordY", payload: -1 });
-            }}
-          >
-            >
-          </Arrow>
-        );
+        return {
+          hor: manHor,
+          vert: manVert > startVert ? manVert - 1 : manVert,
+        };
       case "right":
-        return (
-          <Arrow
-            type="right"
-            onClick={() => {
-              dispatch({ type: "changeCoordX", payload: 1 });
-            }}
-          >
-            >
-          </Arrow>
-        );
+        return {
+          hor: manHor < endHor ? manHor + 1 : manHor,
+          vert: manVert,
+        };
       case "left":
-        return (
-          <Arrow
-            type="left"
-            onClick={() => {
-              dispatch({ type: "changeCoordX", payload: -1 });
-            }}
-          >
-            >
-          </Arrow>
-        );
+        return {
+          hor: manHor > startHor ? manHor - 1 : manHor,
+          vert: manVert,
+        };
       default:
         break;
     }
+  };
+
+  const renderArrow = (direction) => {
+    const coord = getCoord(direction);
+    return (
+      <Arrow
+        type={direction}
+        onClick={() => {
+          dispatch({ type: "changeCoord", payload: coord });
+        }}
+      >
+        >
+      </Arrow>
+    );
   };
 
   return (
