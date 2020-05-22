@@ -59,6 +59,7 @@ function Arrows() {
     startVert,
     endHor,
     endVert,
+    dice,
   ] = useSelector((state) => [
     state.man.hor,
     state.man.vert,
@@ -66,43 +67,65 @@ function Arrows() {
     state.startCoord.vert,
     state.endCoord.hor,
     state.endCoord.vert,
+    state.dice,
   ]);
   const dispatch = useDispatch();
 
   const getCoord = (direction) => {
     switch (direction) {
       case "top":
-        return {
-          hor: manHor,
-          vert: manVert < endVert ? manVert + 1 : manVert,
-        };
+        return manVert < endVert
+          ? {
+              hor: manHor,
+              vert: manVert + 1,
+            }
+          : 0;
       case "bottom":
-        return {
-          hor: manHor,
-          vert: manVert > startVert ? manVert - 1 : manVert,
-        };
+        return manVert > startVert
+          ? {
+              hor: manHor,
+              vert: manVert - 1,
+            }
+          : 0;
       case "right":
-        return {
-          hor: manHor < endHor ? manHor + 1 : manHor,
-          vert: manVert,
-        };
+        return manHor < endHor
+          ? {
+              hor: manHor + 1,
+              vert: manVert,
+            }
+          : 0;
       case "left":
-        return {
-          hor: manHor > startHor ? manHor - 1 : manHor,
-          vert: manVert,
-        };
+        return manHor > startHor
+          ? {
+              hor: manHor - 1,
+              vert: manVert,
+            }
+          : 0;
       default:
-        break;
+        return 0;
     }
   };
 
   const renderArrow = (direction) => {
-    const coord = getCoord(direction);
     return (
       <Arrow
         type={direction}
         onClick={() => {
-          dispatch({ type: "changeCoord", payload: coord });
+          const coord = getCoord(direction);
+
+          if (dice > 1 && coord) {
+            dispatch({ type: "changeCoord", payload: coord }),
+              dispatch({ type: "changeDice", payload: dice - 1 });
+          } else if (dice === 1 && coord) {
+            dispatch({ type: "changeCoord", payload: coord }),
+              dispatch({ type: "changeDice", payload: dice - 1 }),
+              dispatch({
+                type: "changeGameState",
+                payload: "бросить кубик",
+              });
+          } else {
+            return;
+          }
         }}
       >
         >

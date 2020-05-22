@@ -6,8 +6,8 @@ import { createStore } from "redux";
 import styled, { ThemeProvider } from "styled-components";
 
 import Grid from "./features/Grid";
-/* import Man from "./features/Man"; */
 import Arrows from "./features/Arrows";
+import Dice from "./features/Dice";
 
 const Field = styled.div`
   position: relative;
@@ -19,16 +19,31 @@ const Game = styled.div`
   width: 500px;
   margin: 0 auto;
   display: flex;
-
-  &:last-child {
-    align-items: flex-end;
-    /*  background-color: gold; */
-  }
 `;
+
+const LeftPanel = styled.div`
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  flex-grow: 0;
+
+  /*  &:last-child {
+    align-items: flex-end;
+ 
+  } */
+`;
+const Status = styled.div`
+  border: 1px dotted red;
+  color: red;
+`;
+
+const startText = "бросить кубик";
 
 const initialState = {
   gameState: "start",
-  gamePhase: null,
+  gamePhase: startText,
   startCoord: { hor: 0, vert: 0 },
   endCoord: { hor: 9, vert: 9 },
   man: {
@@ -37,33 +52,57 @@ const initialState = {
   },
 
   mode: 0,
+  dice: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "changeCoord":
-      console.log(state);
       return {
         ...state,
         man: action.payload,
+      };
+    case "changeDice":
+      return {
+        ...state,
+        dice: action.payload,
+      };
+    case "changeGameState":
+      return {
+        ...state,
+        gamePhase: action.payload,
       };
     default:
       return state;
   }
 };
 function App() {
+  const [gamePhase, manHor, manVert] = useSelector((state) => [
+    state.gamePhase,
+    state.man.hor,
+    state.man.vert,
+  ]);
   return (
     <>
       <Game>
         <Field>
           <Grid />
-          {/*   <Man /> */}
         </Field>
-        <Arrows />
+        <LeftPanel>
+          <Status>{gamePhase}</Status>
+          <Status>{`координаты: ${manHor}${manVert}`}</Status>
+          <Dice />
+          <Arrows />
+        </LeftPanel>
       </Game>
     </>
   );
 }
+
+/* export function GameStatus() {
+  const gamePhase = useSelector((state) => state.gamePhase);
+  return <Status>{gamePhase}</Status>;
+} */
 
 const store = createStore(
   reducer,
