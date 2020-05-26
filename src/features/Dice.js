@@ -25,9 +25,9 @@ const maxNumber = 4;
 
 function Dice() {
   const dispath = useDispatch();
-  const [diceNumber, gamePhase] = useSelector((state) => [
+  const [diceNumber, diceState] = useSelector((state) => [
     state.dice,
-    state.gamePhase,
+    state.diceState,
   ]);
   const getNumber = () => {
     return Math.floor(Math.random() * maxNumber + 1);
@@ -38,20 +38,11 @@ function Dice() {
       <DiceNumber>{diceNumber}</DiceNumber>
       <DiceButton
         onClick={() => {
-          switch (gamePhase) {
-            case "бросить кубик":
-              dispath({
-                type: "changeDice",
-                payload: getNumber(),
-              }),
-                dispath({
-                  type: "changeGameState",
-                  payload: "двигать фишку",
-                });
-            case "двигать фишку":
-              break;
-            default:
-              break;
+          if (diceState === "enable") {
+            dispath({
+              type: "diceThrown",
+              payload: getNumber(),
+            });
           }
         }}
       >

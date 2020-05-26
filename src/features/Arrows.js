@@ -59,7 +59,7 @@ function Arrows() {
     startVert,
     endHor,
     endVert,
-    dice,
+    arrowState,
   ] = useSelector((state) => [
     state.man.hor,
     state.man.vert,
@@ -67,7 +67,7 @@ function Arrows() {
     state.startCoord.vert,
     state.endCoord.hor,
     state.endCoord.vert,
-    state.dice,
+    state.arrowState,
   ]);
   const dispatch = useDispatch();
 
@@ -79,21 +79,30 @@ function Arrows() {
               hor: manHor,
               vert: manVert + 1,
             }
-          : 0;
+          : {
+              hor: manHor,
+              vert: manVert,
+            };
       case "bottom":
         return manVert > startVert
           ? {
               hor: manHor,
               vert: manVert - 1,
             }
-          : 0;
+          : {
+              hor: manHor,
+              vert: manVert + 1,
+            };
       case "right":
         return manHor < endHor
           ? {
               hor: manHor + 1,
               vert: manVert,
             }
-          : 0;
+          : {
+              hor: manHor,
+              vert: manVert + 1,
+            };
       case "left":
         return manHor > startHor
           ? {
@@ -111,20 +120,8 @@ function Arrows() {
       <Arrow
         type={direction}
         onClick={() => {
-          const coord = getCoord(direction);
-
-          if (dice > 1 && coord) {
-            dispatch({ type: "changeCoord", payload: coord }),
-              dispatch({ type: "changeDice", payload: dice - 1 });
-          } else if (dice === 1 && coord) {
-            dispatch({ type: "changeCoord", payload: coord }),
-              dispatch({ type: "changeDice", payload: dice - 1 }),
-              dispatch({
-                type: "changeGameState",
-                payload: "бросить кубик",
-              });
-          } else {
-            return;
+          if (arrowState === "enable") {
+            dispatch({ type: "setCoord", payload: direction });
           }
         }}
       >
