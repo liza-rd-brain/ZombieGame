@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Man from "./Man";
+
 const GridItem = styled.div`
   border: 2px solid red;
   margin: 0 auto;
@@ -26,14 +27,13 @@ const Cell = styled.div`
   color: lightgrey;
 `;
 
-const width = 10;
-const height = 10;
 
-function getArray(hor, vert) {
-  return new Array(height)
+
+function getArray(hor, vert, maxHor, maxVert) {
+  return new Array(maxVert + 1)
     .fill(0)
     .map((itemHor, indexVer) =>
-      new Array(width).fill({}).map((itemVer, indexHor) => {
+      new Array(maxHor + 1).fill({}).map((itemVer, indexHor) => {
         if (indexVer === vert && indexHor === hor) {
           return (
             <Cell hor={indexHor} vert={indexVer} key={`${indexHor}${indexVer}`}>
@@ -56,8 +56,17 @@ function getArray(hor, vert) {
 }
 
 function Grid() {
-  const [hor, vert] = useSelector((state) => [state.man.hor, state.man.vert]);
-  return <GridItem vert={width}>{getArray(hor, vert)}</GridItem>;
+  const [hor, vert, maxHor, maxVert] = useSelector((state) => [
+    state.man.hor,
+    state.man.vert,
+    state.endCoord.hor,
+    state.endCoord.vert,
+  ]);
+  return (
+    <GridItem vert={maxVert + 1}>
+      {getArray(hor, vert, maxHor, maxVert)}
+    </GridItem>
+  );
 }
 
 export default Grid;

@@ -38,7 +38,7 @@ const initialState = {
   gameState: "start",
   gamePhase: "бросить кубик",
   startCoord: { hor: 0, vert: 0 },
-  endCoord: { hor: 9, vert: 9 },
+  endCoord: { hor: 6, vert: 6 },
   man: {
     hor: 0,
     vert: 0,
@@ -50,12 +50,12 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    /*__________Вариант 1 setCoord___________*/
 
-    case "setCoord":
+  switch (action.type) {
+
+    case "arrowPressed":
       switch (action.payload) {
-        case "top":
+        case "top": {
           if (state.man.vert < state.endCoord.vert) {
             return state.dice === 1
               ? {
@@ -80,6 +80,7 @@ const reducer = (state = initialState, action) => {
           } else {
             return state;
           }
+        }
 
         case "bottom":
           if (state.man.vert > state.startCoord.vert) {

@@ -121,7 +121,7 @@ function Arrows() {
         type={direction}
         onClick={() => {
           if (arrowState === "enable") {
-            dispatch({ type: "setCoord", payload: direction });
+            dispatch({ type: "arrowPressed", payload: direction });
           }
         }}
       >
