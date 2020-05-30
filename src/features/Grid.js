@@ -27,13 +27,11 @@ const Cell = styled.div`
   color: lightgrey;
 `;
 
-
-
-function getArray(hor, vert, maxHor, maxVert) {
-  return new Array(maxVert + 1)
+function getArray(hor, vert, width, height) {
+  return new Array(height)
     .fill(0)
     .map((itemHor, indexVer) =>
-      new Array(maxHor + 1).fill({}).map((itemVer, indexHor) => {
+      new Array(width).fill({}).map((itemVer, indexHor) => {
         if (indexVer === vert && indexHor === hor) {
           return (
             <Cell hor={indexHor} vert={indexVer} key={`${indexHor}${indexVer}`}>
@@ -62,11 +60,9 @@ function Grid() {
     state.endCoord.hor,
     state.endCoord.vert,
   ]);
-  return (
-    <GridItem vert={maxVert + 1}>
-      {getArray(hor, vert, maxHor, maxVert)}
-    </GridItem>
-  );
+  const width = maxHor + 1;
+  const height = maxVert + 1;
+  return <GridItem vert={width}>{getArray(hor, vert, width, height)}</GridItem>;
 }
 
 export default Grid;

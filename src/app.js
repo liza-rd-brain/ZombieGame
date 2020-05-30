@@ -38,10 +38,10 @@ const initialState = {
   gameState: "start",
   gamePhase: "бросить кубик",
   startCoord: { hor: 0, vert: 0 },
-  endCoord: { hor: 6, vert: 6 },
+  endCoord: { hor: 9, vert: 9 },
   man: {
-    hor: 0,
-    vert: 0,
+    hor: 8,
+    vert: 8,
   },
   diceState: "enable",
   arrowState: "disable",
@@ -49,119 +49,127 @@ const initialState = {
   dice: null,
 };
 
+const changeCoord = (state, direction) => {
+  const currManVert = state.man.vert;
+  const currManHor = state.man.hor;
+  const nextManVert = state.man.vert + 1;
+  const nextManHor = state.man.hor + 1;
+  const prevManVert = state.man.vert - 1;
+  const prevManHor = state.man.hor - 1;
+
+  switch (direction) {
+    case "top": {
+      return {
+        hor: currManHor,
+        vert: nextManVert,
+      };
+    }
+    case "bottom": {
+      return {
+        hor: currManHor,
+        vert: prevManVert,
+      };
+    }
+    case "left": {
+      return {
+        hor: prevManHor,
+        vert: currManVert,
+      };
+    }
+    case "right": {
+      return {
+        hor: nextManHor,
+        vert: currManVert,
+      };
+    }
+    default:
+      break;
+  }
+};
+
 const reducer = (state = initialState, action) => {
+  const currManVert = state.man.vert;
+  const currManHor = state.man.hor;
+  const nextManVert = state.man.vert + 1;
+  const nextManHor = state.man.hor + 1;
+  const endGameVert = state.endCoord.vert;
+  const endGameHor = state.endCoord.hor;
+  const startGameVert = state.startCoord.vert;
+  const startGameHor = state.startCoord.hor;
+  const isInFieldHor = currManHor < endGameHor && currManHor > startGameHor;
+  const isInFieldVert =
+    currManVert > startGameVert && currManVert < endGameVert;
 
   switch (action.type) {
-
     case "arrowPressed":
-      switch (action.payload) {
-        case "top": {
-          if (state.man.vert < state.endCoord.vert) {
-            return state.dice === 1
-              ? {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor,
-                    vert: state.man.vert + 1,
-                  },
-                  gamePhase: "бросить кубик",
-                  arrowState: "disable",
-                  diceState: "enable",
-                }
-              : {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor,
-                    vert: state.man.vert + 1,
-                  },
-                };
-          } else {
-            return state;
-          }
-        }
+      const direction = action.payload;
 
-        case "bottom":
-          if (state.man.vert > state.startCoord.vert) {
-            return state.dice === 1
-              ? {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor,
-                    vert: state.man.vert - 1,
-                  },
-                  gamePhase: "бросить кубик",
-                  arrowState: "disable",
-                  diceState: "enable",
-                }
-              : {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor,
-                    vert: state.man.vert - 1,
-                  },
-                };
-          } else {
-            return state;
-          }
+      
+      /*проверка на конец игры*/
+      /*на границу поля*/
+      let isEndGame = false;
+      let isInField = true;
+      let isСurrentStepEndVert = false;
+      let isCurrentStepEndHor = false;
 
+      switch (direction) {
+        case "top":
+          isСurrentStepEndVert =
+            nextManVert === endGameVert && currManHor === endGameHor;
+          isEndGame = isСurrentStepEndVert;
+          isInField = isInFieldVert;
+
+          break;
         case "right":
-          if (state.man.hor < state.endCoord.hor) {
-            return state.dice === 1
-              ? {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor + 1,
-                    vert: state.man.vert,
-                  },
-                  gamePhase: "бросить кубик",
-                  arrowState: "disable",
-                  diceState: "enable",
-                }
-              : {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor + 1,
-                    vert: state.man.vert,
-                  },
-                };
-          } else {
-            return state;
-          }
+          isCurrentStepEndHor =
+            currManVert === endGameVert && nextManHor === endGameHor;
+          isEndGame = isCurrentStepEndHor;
+          isInField = isInFieldHor;
 
+          break;
+        case "bottom":
+          isInField = isInFieldVert;
+          break;
         case "left":
-          if (state.man.hor > state.startCoord.hor) {
-            return state.dice === 1
-              ? {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor - 1,
-                    vert: state.man.vert,
-                  },
-                  gamePhase: "бросить кубик",
-                  arrowState: "disable",
-                  diceState: "enable",
-                }
-              : {
-                  ...state,
-                  dice: state.dice - 1,
-                  man: {
-                    hor: state.man.hor - 1,
-                    vert: state.man.vert,
-                  },
-                };
-          } else {
-            return state;
-          }
-
+          isInField = isInFieldHor;
+          break;
         default:
-          return state;
+          break;
+      }
+
+      /*последний бросок кубика*/
+      const isLastDiceThrow = state.dice === 1;
+
+      if (isEndGame) {
+        return {
+          ...state,
+          dice: null,
+          gameState: "end",
+          diceState: "disable",
+          arrowState: "disable",
+          gamePhase: "игра окончена",
+          man: changeCoord(state, direction),
+        };
+        /*человек в поле и не последняя цифра кубика*/
+      } else if (isInField && !isLastDiceThrow) {
+        return {
+          ...state,
+          dice: state.dice - 1,
+          man: changeCoord(state, direction),
+        };
+      } else if (isInField && isLastDiceThrow) {
+        /*человек в поле и последняя цифра кубика*/
+        return {
+          ...state,
+          dice: state.dice - 1,
+          man: changeCoord(state, direction),
+          gamePhase: "бросить кубик",
+          arrowState: "disable",
+          diceState: "enable",
+        };
+      } else {
+        /*человек вне поля*/
+        return state;
       }
 
     case "diceThrown":
