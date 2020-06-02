@@ -8,6 +8,7 @@ import styled, { ThemeProvider } from "styled-components";
 import Grid from "./features/Grid";
 import Arrows from "./features/Arrows";
 import Dice from "./features/Dice";
+import Health from "./features/Health";
 
 const Field = styled.div`
   position: relative;
@@ -40,22 +41,28 @@ const initialState = {
   startCoord: { hor: 0, vert: 0 },
   endCoord: { hor: 9, vert: 9 },
   man: {
-    hor: 8,
-    vert: 8,
+    hor: 0,
+    vert: 0,
   },
+  manHealth: 3,
   diceState: "enable",
   arrowState: "disable",
   mode: 0,
   dice: null,
+  healthCoord: [
+    { hor: 1, vert: 0 },
+    { hor: 6, vert: 4 },
+    { hor: 8, vert: 2},
+  ],
 };
 
 const changeCoord = (state, direction) => {
   const currManVert = state.man.vert;
   const currManHor = state.man.hor;
-  const nextManVert = state.man.vert + 1;
-  const nextManHor = state.man.hor + 1;
-  const prevManVert = state.man.vert - 1;
-  const prevManHor = state.man.hor - 1;
+  const nextManVert = currManVert + 1;
+  const nextManHor = currManHorr + 1;
+  const prevManVert = currManVert - 1;
+  const prevManHor = currManHor - 1;
 
   switch (direction) {
     case "top": {
@@ -90,8 +97,8 @@ const changeCoord = (state, direction) => {
 const reducer = (state = initialState, action) => {
   const currManVert = state.man.vert;
   const currManHor = state.man.hor;
-  const nextManVert = state.man.vert + 1;
-  const nextManHor = state.man.hor + 1;
+  const nextManVert = currManVert + 1;
+  const nextManHor = currManHor + 1;
   const endGameVert = state.endCoord.vert;
   const endGameHor = state.endCoord.hor;
   const startGameVert = state.startCoord.vert;
@@ -104,7 +111,6 @@ const reducer = (state = initialState, action) => {
     case "arrowPressed":
       const direction = action.payload;
 
-      
       /*проверка на конец игры*/
       /*на границу поля*/
       let isEndGame = false;
