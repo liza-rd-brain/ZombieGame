@@ -16,10 +16,10 @@ const HealthItem = styled.div`
 `;
 
 function Health(props) {
-  const healthCoord = useSelector((state) => state.healthCoord);
+  const healthList = useSelector((state) => state.healthList);
 
   if (
-    healthCoord.findIndex((item) => {
+    healthList.findIndex((item) => {
       return item.hor === props.hor && item.vert === props.vert;
     }) != -1
   ) {

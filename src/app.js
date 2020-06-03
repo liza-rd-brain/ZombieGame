@@ -50,7 +50,7 @@ const initialState = {
   arrowState: "disable",
   mode: 0,
   dice: null,
-  healthCoord: [
+  healthList: [
     { hor: 1, vert: 0 },
     { hor: 6, vert: 4 },
     { hor: 8, vert: 2 },
@@ -98,6 +98,23 @@ const changeCoord = (state, direction) => {
   }
 };
 
+const checkCurrentCell = (currManCoord, healthList, manHealth) => {
+  /*проверяем попал ли человек на координату с здоровьем*/
+  if (
+    healthList.findIndex((item) => {
+      return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
+    }) != -1
+  ) {
+    return manHealth + 1;
+  } else return manHealth;
+};
+
+const changeHealthList = (currManCoord, healthList) => {
+  return healthList.filter((item) => {
+    return !(currManCoord.hor === item.hor && currManCoord.vert === item.vert);
+  });
+};
+
 const reducer = (state = initialState, action) => {
   const currManVert = state.man.vert;
   const currManHor = state.man.hor;
@@ -122,6 +139,7 @@ const reducer = (state = initialState, action) => {
       let isInField = true;
       let isСurrentStepEndVert = false;
       let isCurrentStepEndHor = false;
+
       switch (direction) {
         case "top":
           isСurrentStepEndVert =
@@ -150,6 +168,8 @@ const reducer = (state = initialState, action) => {
       /*последний бросок кубика*/
       const isLastDiceThrow = state.dice === 1;
 
+      const currManCoord = changeCoord(state, direction);
+
       if (isEndGame) {
         return {
           ...state,
@@ -158,21 +178,40 @@ const reducer = (state = initialState, action) => {
           diceState: "disable",
           arrowState: "disable",
           gamePhase: "игра окончена",
-          man: changeCoord(state, direction),
+          man: currManCoord,
+          manHealth: checkCurrentCell(
+            currManCoord,
+            state.healthList,
+            state.manHealth
+          ),
+          healthList: changeHealthList(currManCoord, state.healthList),
         };
+
         /*человек в поле и не последняя цифра кубика*/
       } else if (isInField && !isLastDiceThrow) {
         return {
           ...state,
           dice: state.dice - 1,
-          man: changeCoord(state, direction),
+          man: currManCoord,
+          manHealth: checkCurrentCell(
+            currManCoord,
+            state.healthList,
+            state.manHealth
+          ),
+          healthList: changeHealthList(currManCoord, state.healthList),
         };
       } else if (isInField && isLastDiceThrow) {
         /*человек в поле и последняя цифра кубика*/
         return {
           ...state,
           dice: state.dice - 1,
-          man: changeCoord(state, direction),
+          man: currManCoord,
+          manHealth: checkCurrentCell(
+            currManCoord,
+            state.healthList,
+            state.manHealth
+          ),
+          healthList: changeHealthList(currManCoord, state.healthList),
           gamePhase: "бросить кубик",
           arrowState: "disable",
           diceState: "enable",
@@ -197,7 +236,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         manHealth: state.manHealth + 1,
-        healthCoord: state.healthCoord.filter((item) => {
+        healthList: state.healthList.filter((item) => {
           item.hor != action.payload.hor && item.vert != action.payload.vert;
         }),
       };
