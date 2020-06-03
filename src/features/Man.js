@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 const ManItem = styled.div`
@@ -15,10 +15,11 @@ const ManItem = styled.div`
   left: ${(props) => `${props.hor * 30 + 4}px`}; */
 `;
 
-function Man() {
-  /*   const state = useSelector((state) => state); */
+function Man(props) {
   const [hor, vert] = useSelector((state) => [state.man.hor, state.man.vert]);
-  return <ManItem hor={hor} vert={vert}></ManItem>;
+  if (hor === props.hor && vert === props.vert) {
+    return <ManItem hor={hor} vert={vert}></ManItem>;
+  } else return <></>;
 }
 
 export default Man;

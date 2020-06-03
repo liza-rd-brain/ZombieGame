@@ -52,68 +52,8 @@ const ArrowContainer = styled.div`
 `;
 
 function Arrows() {
-  const [
-    manHor,
-    manVert,
-    startHor,
-    startVert,
-    endHor,
-    endVert,
-    arrowState,
-  ] = useSelector((state) => [
-    state.man.hor,
-    state.man.vert,
-    state.startCoord.hor,
-    state.startCoord.vert,
-    state.endCoord.hor,
-    state.endCoord.vert,
-    state.arrowState,
-  ]);
+  const [arrowState] = useSelector((state) => [state.arrowState]);
   const dispatch = useDispatch();
-
-  const getCoord = (direction) => {
-    switch (direction) {
-      case "top":
-        return manVert < endVert
-          ? {
-              hor: manHor,
-              vert: manVert + 1,
-            }
-          : {
-              hor: manHor,
-              vert: manVert,
-            };
-      case "bottom":
-        return manVert > startVert
-          ? {
-              hor: manHor,
-              vert: manVert - 1,
-            }
-          : {
-              hor: manHor,
-              vert: manVert + 1,
-            };
-      case "right":
-        return manHor < endHor
-          ? {
-              hor: manHor + 1,
-              vert: manVert,
-            }
-          : {
-              hor: manHor,
-              vert: manVert + 1,
-            };
-      case "left":
-        return manHor > startHor
-          ? {
-              hor: manHor - 1,
-              vert: manVert,
-            }
-          : 0;
-      default:
-        return 0;
-    }
-  };
 
   const renderArrow = (direction) => {
     return (

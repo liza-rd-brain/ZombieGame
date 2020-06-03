@@ -33,6 +33,7 @@ const LeftPanel = styled.div`
 const Status = styled.div`
   border: 1px dotted red;
   color: red;
+  width: 150px;
 `;
 
 const initialState = {
@@ -52,7 +53,10 @@ const initialState = {
   healthCoord: [
     { hor: 1, vert: 0 },
     { hor: 6, vert: 4 },
-    { hor: 8, vert: 2},
+    { hor: 8, vert: 2 },
+    { hor: 5, vert: 0 },
+    { hor: 6, vert: 2 },
+    { hor: 7, vert: 7 },
   ],
 };
 
@@ -60,7 +64,7 @@ const changeCoord = (state, direction) => {
   const currManVert = state.man.vert;
   const currManHor = state.man.hor;
   const nextManVert = currManVert + 1;
-  const nextManHor = currManHorr + 1;
+  const nextManHor = currManHor + 1;
   const prevManVert = currManVert - 1;
   const prevManHor = currManHor - 1;
 
@@ -103,12 +107,13 @@ const reducer = (state = initialState, action) => {
   const endGameHor = state.endCoord.hor;
   const startGameVert = state.startCoord.vert;
   const startGameHor = state.startCoord.hor;
-  const isInFieldHor = currManHor < endGameHor && currManHor > startGameHor;
+  /* 
+  const isInFieldHor = currManHor < endGameHor && nextManHor > startGameHor;
   const isInFieldVert =
-    currManVert > startGameVert && currManVert < endGameVert;
-
+    nextManVert > startGameVert && currManVert < endGameVert;
+ */
   switch (action.type) {
-    case "arrowPressed":
+    case "arrowPressed": {
       const direction = action.payload;
 
       /*проверка на конец игры*/
@@ -117,27 +122,26 @@ const reducer = (state = initialState, action) => {
       let isInField = true;
       let isСurrentStepEndVert = false;
       let isCurrentStepEndHor = false;
-
       switch (direction) {
         case "top":
           isСurrentStepEndVert =
             nextManVert === endGameVert && currManHor === endGameHor;
           isEndGame = isСurrentStepEndVert;
-          isInField = isInFieldVert;
+          isInField = currManVert >= startGameVert && currManVert < endGameVert;
 
           break;
         case "right":
           isCurrentStepEndHor =
             currManVert === endGameVert && nextManHor === endGameHor;
           isEndGame = isCurrentStepEndHor;
-          isInField = isInFieldHor;
+          isInField = currManHor < endGameHor && currManHor >= startGameHor;
 
           break;
         case "bottom":
-          isInField = isInFieldVert;
+          isInField = currManVert > startGameVert && currManVert <= endGameVert;
           break;
         case "left":
-          isInField = isInFieldHor;
+          isInField = currManHor <= endGameHor && currManHor > startGameHor;
           break;
         default:
           break;
@@ -177,8 +181,9 @@ const reducer = (state = initialState, action) => {
         /*человек вне поля*/
         return state;
       }
+    }
 
-    case "diceThrown":
+    case "diceThrown": {
       return {
         ...state,
         dice: action.payload,
@@ -186,6 +191,17 @@ const reducer = (state = initialState, action) => {
         diceState: "disable",
         arrowState: "enable",
       };
+    }
+
+    case "incHealth": {
+      return {
+        ...state,
+        manHealth: state.manHealth + 1,
+        healthCoord: state.healthCoord.filter((item) => {
+          item.hor != action.payload.hor && item.vert != action.payload.vert;
+        }),
+      };
+    }
 
     default:
       return state;
@@ -193,10 +209,11 @@ const reducer = (state = initialState, action) => {
 };
 
 function App() {
-  const [gamePhase, manHor, manVert] = useSelector((state) => [
+  const [gamePhase, manHor, manVert, manHealth] = useSelector((state) => [
     state.gamePhase,
     state.man.hor,
     state.man.vert,
+    state.manHealth,
   ]);
 
   return (
@@ -208,6 +225,7 @@ function App() {
         <LeftPanel>
           <Status>{gamePhase}</Status>
           <Status>{`координаты: ${manHor}${manVert}`}</Status>
+          <Status>{`здоровье: ${manHealth}`}</Status>
           {/*  {
             gamePhase === "бросить кубик" ? <Dice /> : <Arrows />
           } */}

@@ -28,23 +28,6 @@ const Cell = styled.div`
   color: lightgrey;
 `;
 
-function getArray(manHor, manVert, width, height, healthCoord) {
-  return new Array(height)
-    .fill(0)
-    .map((itemVert, indexVert) =>
-      new Array(width).fill({}).map((itemHor, indexHor) => {
-        //стоит ли в клетке человек
-        return (
-          <Cell hor={indexHor} vert={indexVert} key={`${indexHor}${indexVert}`}>
-            {`${indexHor}${indexVert}`}
-            <Man hor={indexHor} vert={indexVert} />
-            <Health hor={indexHor} vert={indexVert} />
-          </Cell>
-        );
-      })
-    )
-    .reverse();
-}
 /* 
 function checkHealthCard(indexHor, indexVert, healthCoord) {
   return healthCoord.map((item, index) => {
@@ -52,36 +35,7 @@ function checkHealthCard(indexHor, indexVert, healthCoord) {
   })[0];
 }
  */
-
-function Grid() {
-  const [
-    manHor,
-    manVert,
-    maxHor,
-    maxVert,
-    healthCoord,
-  ] = useSelector((state) => [
-    state.man.hor,
-    state.man.vert,
-    state.endCoord.hor,
-    state.endCoord.vert,
-    state.healthCoord,
-  ]);
-
-  const width = maxHor + 1;
-  const height = maxVert + 1;
-
-  console.log(getArray(manHor, manVert, width, height, healthCoord));
-
-  return (
-    <GridItem vert={width}>
-      {getArray(manHor, manVert, width, height, healthCoord)}
-    </GridItem>
-  );
-}
-
-export default Grid;
-
+function getGridArray(manHor, manVert, width, height, healthCoord) {
 function getGridArray(manHor, manVert, width, height, healthCoord) {
   const dispatch = useDispatch();
 
@@ -159,3 +113,32 @@ function getGridArray(manHor, manVert, width, height, healthCoord) {
     })
     .reverse();
 }
+
+function Grid() {
+  const [
+    manHor,
+    manVert,
+    maxHor,
+    maxVert,
+    healthCoord,
+  ] = useSelector((state) => [
+    state.man.hor,
+    state.man.vert,
+    state.endCoord.hor,
+    state.endCoord.vert,
+    state.healthCoord,
+  ]);
+
+  const width = maxHor + 1;
+  const height = maxVert + 1;
+
+  console.log(getArray(manHor, manVert, width, height, healthCoord));
+
+  return (
+    <GridItem vert={width}>
+      {getArray(manHor, manVert, width, height, healthCoord)}
+    </GridItem>
+  );
+}
+
+export default Grid;
