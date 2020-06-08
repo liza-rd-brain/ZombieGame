@@ -28,7 +28,7 @@ const Cell = styled.div`
   color: lightgrey;
 `;
 
-function getArray(manHor, manVert, width, height, healthList) {
+function getArray(manHor, manVert, width, height) {
   return new Array(height)
     .fill(0)
     .map((itemVert, indexVert) =>
@@ -45,30 +45,19 @@ function getArray(manHor, manVert, width, height, healthList) {
     .reverse();
 }
 
-function Grid() {
-  const [
-    manHor,
-    manVert,
-    maxHor,
-    maxVert,
-    healthList,
-  ] = useSelector((state) => [
+function Grid(props) {
+  const [manHor, manVert, maxHor, maxVert] = useSelector((state) => [
     state.man.hor,
     state.man.vert,
     state.endCoord.hor,
     state.endCoord.vert,
-    state.healthList,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  console.log(getArray(manHor, manVert, width, height, healthList));
-
   return (
-    <GridItem vert={width}>
-      {getArray(manHor, manVert, width, height, healthList)}
-    </GridItem>
+    <GridItem vert={width}>{getArray(manHor, manVert, width, height)}</GridItem>
   );
 }
 

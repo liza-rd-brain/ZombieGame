@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -36,29 +36,54 @@ const Status = styled.div`
   width: 150px;
 `;
 
-const initialState = {
-  gameState: "start",
-  gamePhase: "бросить кубик",
-  startCoord: { hor: 0, vert: 0 },
-  endCoord: { hor: 9, vert: 9 },
-  man: {
-    hor: 0,
-    vert: 0,
-  },
-  manHealth: 3,
-  diceState: "enable",
-  arrowState: "disable",
-  mode: 0,
-  dice: null,
-  healthList: [
-    { hor: 1, vert: 0 },
-    { hor: 6, vert: 4 },
-    { hor: 8, vert: 2 },
-    { hor: 5, vert: 0 },
-    { hor: 6, vert: 2 },
-    { hor: 7, vert: 7 },
-  ],
-};
+function createHealthArray(number, type) {
+  let healthArray = new Array(number)
+    .fill(0)
+    .reduce((prevValue, currentValue, index) => {
+      let hor = Math.floor(Math.random() * 9 + 1);
+      let vert = Math.floor(Math.random() * 9 + 1);
+      let randomType = Math.floor(Math.random() * 2);
+      if (
+        !prevValue.find((item) => {
+          return item.hor === hor && item.vert === vert;
+        }) ||
+        prevValue === 0
+      ) {
+        console.log(prevValue);
+        return [
+          {
+            hor: hor,
+            vert: vert,
+            type: type[randomType],
+          },
+          ...prevValue,
+        ];
+      } else return prevValue;
+    }, []);
+
+  return healthArray;
+}
+
+const initialState = (() => {
+  const healthArray = createHealthArray(14, ["increment", "decrement"]);
+  return {
+    gameState: "waiting",
+    gamePhase: "бросить кубик",
+    startCoord: { hor: 0, vert: 0 },
+    endCoord: { hor: 9, vert: 9 },
+    man: {
+      hor: 0,
+      vert: 0,
+    },
+    manHealth: 3,
+    diceState: "enable",
+    arrowState: "disable",
+    mode: 0,
+    dice: null,
+    healthCards: 10,
+    healthList: healthArray,
+  };
+})();
 
 const changeCoord = (state, direction) => {
   const currManVert = state.man.vert;
@@ -100,12 +125,23 @@ const changeCoord = (state, direction) => {
 
 const checkCurrentCell = (currManCoord, healthList, manHealth) => {
   /*проверяем попал ли человек на координату с здоровьем*/
-  if (
-    healthList.findIndex((item) => {
-      return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
-    }) != -1
-  ) {
-    return manHealth + 1;
+  const index = healthList.findIndex((item) => {
+    return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
+  });
+
+  if (index != -1) {
+    const currType = healthList[index].type;
+
+    switch (currType) {
+      case "increment":
+        return manHealth + 1;
+      case "decrement":
+        /* const isEndGame
+        switch() */
+        return manHealth - 1;
+      default:
+        break;
+    }
   } else return manHealth;
 };
 
@@ -130,6 +166,30 @@ const reducer = (state = initialState, action) => {
     nextManVert > startGameVert && currManVert < endGameVert;
  */
   switch (action.type) {
+    case "createСalculated":
+      const healthList = createHealthArray(14, ["increment", "decrement"]);
+      if (state.healthList.length > 0) {
+        return {
+          ...state,
+          healthList: healthList,
+          gameState: "start",
+        };
+      }
+
+    case "gameEnd":
+      return {
+        ...state,
+        gameState: "end",
+        diceState: "disable",
+        arrowState: "disable",
+        gamePhase: action.payload,
+      };
+    case "createHealthArr": {
+      return {
+        ...state,
+        healthList: action.payload,
+      };
+    }
     case "arrowPressed": {
       const direction = action.payload;
 
@@ -248,12 +308,52 @@ const reducer = (state = initialState, action) => {
 };
 
 function App() {
-  const [gamePhase, manHor, manVert, manHealth] = useSelector((state) => [
+  const [
+    gamePhase,
+    gameState,
+    manHor,
+    manVert,
+    manHealth,
+  ] = useSelector((state) => [
     state.gamePhase,
+    state.gameState,
     state.man.hor,
     state.man.vert,
     state.manHealth,
   ]);
+  const dispatch = useDispatch();
+
+  /*проверка на конец игры перед рендером-?!
+  большой switch-case*/
+
+  /* switch (gameState) {
+    case "waiting":
+      dispatch({ type: "createСalculated", payload: 10 });
+
+    case "start":
+      if (manHealth === 0 && gameState === "start") {
+        dispatch({ type: "gameEnd", payload: "здровье закончилось" });
+      } else
+        return (
+          <>
+            <Game>
+              <Field>
+                <Grid />
+              </Field>
+              <LeftPanel>
+                <Status>{gamePhase}</Status>
+                <Status>{`координаты: ${manHor}${manVert}`}</Status>
+                <Status>{`здоровье: ${manHealth}`}</Status>
+
+                <Dice />
+                <Arrows />
+              </LeftPanel>
+            </Game>
+          </>
+        );
+    default:
+      break;
+  } */
 
   return (
     <>
@@ -265,9 +365,7 @@ function App() {
           <Status>{gamePhase}</Status>
           <Status>{`координаты: ${manHor}${manVert}`}</Status>
           <Status>{`здоровье: ${manHealth}`}</Status>
-          {/*  {
-            gamePhase === "бросить кубик" ? <Dice /> : <Arrows />
-          } */}
+
           <Dice />
           <Arrows />
         </LeftPanel>
@@ -287,3 +385,12 @@ ReactDOM.render(
   </Provider>,
   document.querySelector("#root")
 );
+
+/* healthList: [
+    { hor: 1, vert: 0 },
+    { hor: 6, vert: 4 },
+    { hor: 8, vert: 2 },
+    { hor: 5, vert: 0 },
+    { hor: 6, vert: 2 },
+    { hor: 7, vert: 7 },
+  ], */

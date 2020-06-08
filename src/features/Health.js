@@ -3,11 +3,31 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const HealthItem = styled.div`
-     border: 10px solid green;
+     border: 10px solid;
+     background-color: ${(props) => {
+       switch (props.type) {
+         case "increment":
+           return "green";
+         case "decrement":
+           return "gray";
+         default:
+           break;
+       }
+     }};
+     border-color:${(props) => {
+       switch (props.type) {
+         case "increment":
+           return "green";
+         case "decrement":
+           return "gray";
+         default:
+           break;
+       }
+     }};
     /* border-radius: 50%; */
     width: 10px;
     height: 10px;
-    background-color: green;
+   
     position: absolute;
     top: 0px;
     left: 0px;
@@ -17,17 +37,22 @@ const HealthItem = styled.div`
 
 function Health(props) {
   const healthList = useSelector((state) => state.healthList);
+  /*находим индех из списка карточек здоровья*/
 
-  if (
-    healthList.findIndex((item) => {
-      return item.hor === props.hor && item.vert === props.vert;
-    }) != -1
-  ) {
+  const index = healthList.findIndex((item) => {
+    return item.hor === props.hor && item.vert === props.vert;
+  });
+  /*если в этой ячейке есть элемент здоровья*/
+  if (index != -1) {
+    /*вытаскиваем ее тип*/
+
+    const currType = healthList[index].type;
     return (
       <HealthItem
         key={`${props.hor}${props.vert}`}
         hor={props.hor}
         vert={props.vert}
+        type={currType}
       ></HealthItem>
     );
   } else return <></>;
