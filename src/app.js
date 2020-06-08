@@ -8,6 +8,7 @@ import styled, { ThemeProvider } from "styled-components";
 import Grid from "./features/Grid";
 import Arrows from "./features/Arrows";
 import Dice from "./features/Dice";
+import StartScreen from "./features/StartScreen";
 
 const Field = styled.div`
   position: relative;
@@ -19,6 +20,7 @@ const Game = styled.div`
   width: 500px;
   margin: 0 auto;
   display: flex;
+  justify-content: center;
 `;
 
 const LeftPanel = styled.div`
@@ -170,6 +172,11 @@ const reducer = (state = initialState, action) => {
   const startGameHor = state.startCoord.hor;
 
   switch (action.type) {
+    case "clickStartButton":
+      return {
+        ...state,
+        gameState: "start",
+      };
     case "gameEnd":
       return {
         ...state,
@@ -329,23 +336,32 @@ function App() {
     state.manHealth,
   ]);
 
-  return (
-    <>
-      <Game>
-        <Field>
-          <Grid />
-        </Field>
-        <LeftPanel>
-          <Status>{gamePhase}</Status>
-          <Status>{`координаты: ${manHor}${manVert}`}</Status>
-          <Status>{`здоровье: ${manHealth}`}</Status>
+  const getGameScreen = () => {
+    switch (gameState) {
+      case "waiting":
+        return <StartScreen />;
+      case "start":
+        return (
+          <>
+            <Field>
+              <Grid />
+            </Field>
+            <LeftPanel>
+              <Status>{gamePhase}</Status>
+              <Status>{`координаты: ${manHor}${manVert}`}</Status>
+              <Status>{`здоровье: ${manHealth}`}</Status>
 
-          <Dice />
-          <Arrows />
-        </LeftPanel>
-      </Game>
-    </>
-  );
+              <Dice />
+              <Arrows />
+            </LeftPanel>
+          </>
+        );
+      default:
+        break;
+    }
+  };
+
+  return <Game>{getGameScreen()}</Game>;
 }
 
 const store = createStore(
