@@ -8,7 +8,6 @@ import styled, { ThemeProvider } from "styled-components";
 import Grid from "./features/Grid";
 import Arrows from "./features/Arrows";
 import Dice from "./features/Dice";
-import Health from "./features/Health";
 
 const Field = styled.div`
   position: relative;
@@ -36,33 +35,41 @@ const Status = styled.div`
   width: 150px;
 `;
 
-function createHealthArray(number, type) {
+const getRandomArray = (arr, type) => {
+  let hor = Math.floor(Math.random() * 9 + 1);
+  let vert = Math.floor(Math.random() * 9 + 1);
+  let randomType = Math.floor(Math.random() * 2);
+
+  if (arr.length === 0) {
+    return {
+      hor: hor,
+      vert: vert,
+      type: type[randomType],
+    };
+  } else if (
+    !arr.find((item) => {
+      return item && item.hor === hor && item.vert === vert;
+    })
+  ) {
+    return {
+      hor: hor,
+      vert: vert,
+      type: type[randomType],
+    };
+  } else return getRandomArray(arr, type);
+};
+
+const createHealthArray = (number, type) => {
   let healthArray = new Array(number)
     .fill(0)
     .reduce((prevValue, currentValue, index) => {
-      let hor = Math.floor(Math.random() * 9 + 1);
-      let vert = Math.floor(Math.random() * 9 + 1);
-      let randomType = Math.floor(Math.random() * 2);
-      if (
-        !prevValue.find((item) => {
-          return item.hor === hor && item.vert === vert;
-        }) ||
-        prevValue === 0
-      ) {
-        console.log(prevValue);
-        return [
-          {
-            hor: hor,
-            vert: vert,
-            type: type[randomType],
-          },
-          ...prevValue,
-        ];
-      } else return prevValue;
-    }, []);
+      const currValue = getRandomArray(prevValue, type);
 
+      return [currValue, ...prevValue];
+    }, []);
+  console.log(healthArray.length, healthArray);
   return healthArray;
-}
+};
 
 const initialState = (() => {
   const healthArray = createHealthArray(14, ["increment", "decrement"]);
@@ -123,28 +130,29 @@ const changeCoord = (state, direction) => {
   }
 };
 
-const checkCurrentCell = (currManCoord, healthList, manHealth) => {
+const checkCurrentCell = (currManCoord, healthList) => {
   /*проверяем попал ли человек на координату с здоровьем*/
+
   const index = healthList.findIndex((item) => {
     return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
   });
 
   if (index != -1) {
     const currType = healthList[index].type;
-
-    switch (currType) {
-      case "increment":
-        return manHealth + 1;
-      case "decrement":
-        /* const isEndGame
-        switch() */
-        return manHealth - 1;
-      default:
-        break;
-    }
-  } else return manHealth;
+    return currType;
+  } else return false;
 };
 
+const changeManHealth = (sign, manHealth) => {
+  switch (sign) {
+    case "increment":
+      return manHealth + 1;
+    case "decrement":
+      return manHealth - 1;
+    default:
+      break;
+  }
+};
 const changeHealthList = (currManCoord, healthList) => {
   return healthList.filter((item) => {
     return !(currManCoord.hor === item.hor && currManCoord.vert === item.vert);
@@ -160,22 +168,8 @@ const reducer = (state = initialState, action) => {
   const endGameHor = state.endCoord.hor;
   const startGameVert = state.startCoord.vert;
   const startGameHor = state.startCoord.hor;
-  /* 
-  const isInFieldHor = currManHor < endGameHor && nextManHor > startGameHor;
-  const isInFieldVert =
-    nextManVert > startGameVert && currManVert < endGameVert;
- */
-  switch (action.type) {
-    case "createСalculated":
-      const healthList = createHealthArray(14, ["increment", "decrement"]);
-      if (state.healthList.length > 0) {
-        return {
-          ...state,
-          healthList: healthList,
-          gameState: "start",
-        };
-      }
 
+  switch (action.type) {
     case "gameEnd":
       return {
         ...state,
@@ -184,18 +178,13 @@ const reducer = (state = initialState, action) => {
         arrowState: "disable",
         gamePhase: action.payload,
       };
-    case "createHealthArr": {
-      return {
-        ...state,
-        healthList: action.payload,
-      };
-    }
+
     case "arrowPressed": {
       const direction = action.payload;
 
       /*проверка на конец игры*/
       /*на границу поля*/
-      let isEndGame = false;
+      let isEndGamePlace = false;
       let isInField = true;
       let isСurrentStepEndVert = false;
       let isCurrentStepEndHor = false;
@@ -204,14 +193,14 @@ const reducer = (state = initialState, action) => {
         case "top":
           isСurrentStepEndVert =
             nextManVert === endGameVert && currManHor === endGameHor;
-          isEndGame = isСurrentStepEndVert;
+          isEndGamePlace = isСurrentStepEndVert;
           isInField = currManVert >= startGameVert && currManVert < endGameVert;
 
           break;
         case "right":
           isCurrentStepEndHor =
             currManVert === endGameVert && nextManHor === endGameHor;
-          isEndGame = isCurrentStepEndHor;
+          isEndGamePlace = isCurrentStepEndHor;
           isInField = currManHor < endGameHor && currManHor >= startGameHor;
 
           break;
@@ -230,7 +219,27 @@ const reducer = (state = initialState, action) => {
 
       const currManCoord = changeCoord(state, direction);
 
-      if (isEndGame) {
+      /*Inc,dec,false*/
+      const currCellHealthSign = checkCurrentCell(
+        currManCoord,
+        state.healthList
+      );
+
+      const isEndHealth =
+        currCellHealthSign === "decrement" && state.manHealth === 1;
+
+      if (isEndHealth) {
+        return {
+          ...state,
+          dice: state.dice - 1,
+          man: currManCoord,
+          manHealth: changeManHealth(currCellHealthSign, state.manHealth),
+          healthList: changeHealthList(currManCoord, state.healthList),
+          gamePhase: "здоровье закончилось",
+          diceState: "disable",
+          arrowState: "disable",
+        };
+      } else if (isEndGamePlace) {
         return {
           ...state,
           dice: null,
@@ -239,11 +248,11 @@ const reducer = (state = initialState, action) => {
           arrowState: "disable",
           gamePhase: "игра окончена",
           man: currManCoord,
-          manHealth: checkCurrentCell(
-            currManCoord,
-            state.healthList,
-            state.manHealth
-          ),
+          /*если есть знак изменения здоровья-меняем*/
+
+          manHealth: currCellHealthSign
+            ? changeManHealth(currCellHealthSign, state.manHealth)
+            : state.manHealth,
           healthList: changeHealthList(currManCoord, state.healthList),
         };
 
@@ -253,12 +262,11 @@ const reducer = (state = initialState, action) => {
           ...state,
           dice: state.dice - 1,
           man: currManCoord,
-          manHealth: checkCurrentCell(
-            currManCoord,
-            state.healthList,
-            state.manHealth
-          ),
+          manHealth: currCellHealthSign
+            ? changeManHealth(currCellHealthSign, state.manHealth)
+            : state.manHealth,
           healthList: changeHealthList(currManCoord, state.healthList),
+          /*  gamePhase: isEndHealth ? "здоровье закончилось" : state.gamePhase, */
         };
       } else if (isInField && isLastDiceThrow) {
         /*человек в поле и последняя цифра кубика*/
@@ -266,13 +274,12 @@ const reducer = (state = initialState, action) => {
           ...state,
           dice: state.dice - 1,
           man: currManCoord,
-          manHealth: checkCurrentCell(
-            currManCoord,
-            state.healthList,
-            state.manHealth
-          ),
+          manHealth: currCellHealthSign
+            ? changeManHealth(currCellHealthSign, state.manHealth)
+            : state.manHealth,
           healthList: changeHealthList(currManCoord, state.healthList),
-          gamePhase: "бросить кубик",
+          gamePhase:
+            /* isEndHealth ? "здоровье закончилось" : */ "бросить кубик",
           arrowState: "disable",
           diceState: "enable",
         };
@@ -321,39 +328,6 @@ function App() {
     state.man.vert,
     state.manHealth,
   ]);
-  const dispatch = useDispatch();
-
-  /*проверка на конец игры перед рендером-?!
-  большой switch-case*/
-
-  /* switch (gameState) {
-    case "waiting":
-      dispatch({ type: "createСalculated", payload: 10 });
-
-    case "start":
-      if (manHealth === 0 && gameState === "start") {
-        dispatch({ type: "gameEnd", payload: "здровье закончилось" });
-      } else
-        return (
-          <>
-            <Game>
-              <Field>
-                <Grid />
-              </Field>
-              <LeftPanel>
-                <Status>{gamePhase}</Status>
-                <Status>{`координаты: ${manHor}${manVert}`}</Status>
-                <Status>{`здоровье: ${manHealth}`}</Status>
-
-                <Dice />
-                <Arrows />
-              </LeftPanel>
-            </Game>
-          </>
-        );
-    default:
-      break;
-  } */
 
   return (
     <>
