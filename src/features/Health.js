@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const HealthItem = styled.div`
      border: 10px solid;
-     background-color: ${(props) => {
+  /*    background-color: ${(props) => {
        switch (props.type) {
          case "increment":
            return "green";
@@ -13,15 +13,34 @@ const HealthItem = styled.div`
          default:
            break;
        }
+     }}; */
+     background-color:${(props) => {
+       if (props.apperance === "closed") {
+         return "gray";
+       } else {
+         switch (props.type) {
+           case "increment":
+             return "green";
+           case "decrement":
+             return "orange";
+           default:
+             break;
+         }
+       }
      }};
+
      border-color:${(props) => {
-       switch (props.type) {
-         case "increment":
-           return "green";
-         case "decrement":
-           return "gray";
-         default:
-           break;
+       if (props.apperance === "closed") {
+         return "gray";
+       } else {
+         switch (props.type) {
+           case "increment":
+             return "green";
+           case "decrement":
+             return "orange";
+           default:
+             break;
+         }
        }
      }};
     /* border-radius: 50%; */
@@ -47,12 +66,14 @@ function Health(props) {
     /*вытаскиваем ее тип*/
 
     const currType = healthList[index].type;
+    const currApperance = healthList[index].apperance;
     return (
       <HealthItem
         key={`${props.hor}${props.vert}`}
         hor={props.hor}
         vert={props.vert}
         type={currType}
+        apperance={currApperance}
       ></HealthItem>
     );
   } else return <></>;

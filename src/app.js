@@ -47,6 +47,7 @@ const getRandomArray = (arr, type) => {
       hor: hor,
       vert: vert,
       type: type[randomType],
+      apperance: "closed",
     };
   } else if (
     !arr.find((item) => {
@@ -57,6 +58,7 @@ const getRandomArray = (arr, type) => {
       hor: hor,
       vert: vert,
       type: type[randomType],
+      apperance: "closed",
     };
   } else return getRandomArray(arr, type);
 };
@@ -84,7 +86,7 @@ const initialState = (() => {
       hor: 0,
       vert: 0,
     },
-    manHealth: 1,
+    manHealth: 3,
     diceState: "enable",
     arrowState: "disable",
     mode: 0,
@@ -92,75 +94,9 @@ const initialState = (() => {
     healthCards: 10,
     healthList: healthArray,
     gameResult: "waiting",
+    cardInteract: false,
   };
 })();
-
-const changeCoord = (state, direction) => {
-  const currManVert = state.man.vert;
-  const currManHor = state.man.hor;
-  const nextManVert = currManVert + 1;
-  const nextManHor = currManHor + 1;
-  const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1;
-
-  switch (direction) {
-    case "top": {
-      return {
-        hor: currManHor,
-        vert: nextManVert,
-      };
-    }
-    case "bottom": {
-      return {
-        hor: currManHor,
-        vert: prevManVert,
-      };
-    }
-    case "left": {
-      return {
-        hor: prevManHor,
-        vert: currManVert,
-      };
-    }
-    case "right": {
-      return {
-        hor: nextManHor,
-        vert: currManVert,
-      };
-    }
-    default:
-      break;
-  }
-};
-
-const checkCurrentCell = (currManCoord, healthList) => {
-  /*проверяем попал ли человек на координату с здоровьем*/
-
-  const index = healthList.findIndex((item) => {
-    return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
-  });
-
-  if (index != -1) {
-    const currType = healthList[index].type;
-    return currType;
-  } else return false;
-};
-
-const changeManHealth = (sign, manHealth) => {
-  switch (sign) {
-    case "increment":
-      return manHealth + 1;
-    case "decrement":
-      return manHealth - 1;
-    default:
-      break;
-  }
-};
-const changeHealthList = (currManCoord, healthList) => {
-  return healthList.filter((item) => {
-    return !(currManCoord.hor === item.hor && currManCoord.vert === item.vert);
-  });
-};
 
 const reducer = (state = initialState, action) => {
   const currManVert = state.man.vert;
@@ -173,6 +109,14 @@ const reducer = (state = initialState, action) => {
   const startGameHor = state.startCoord.hor;
 
   switch (action.type) {
+    case "needOpenHealthCard":
+      return { ...state, cardInteract: action.payload };
+    /*    return{...state,
+      healthlist:[...state, ]
+      cardInteract:"open"
+    }
+    */
+
     case "clickStartButton":
       return {
         ...state,
@@ -225,10 +169,13 @@ const reducer = (state = initialState, action) => {
       const currManCoord = changeCoord(state, direction);
 
       /*Inc,dec,false*/
+
       const currCellHealthSign = checkCurrentCell(
         currManCoord,
         state.healthList
       );
+
+      const currCellHasCard = checkCurrentCell(currManCoord, state.healthList);
 
       const isEndHealth =
         currCellHealthSign === "decrement" && state.manHealth === 1;
@@ -270,11 +217,12 @@ const reducer = (state = initialState, action) => {
           ...state,
           dice: state.dice - 1,
           man: currManCoord,
-          manHealth: currCellHealthSign
+          cardInteract: currCellHasCard ? currCellHasCard : false,
+          healthList: openHealthItem(state.cardInteract, state.healthList),
+          /*    manHealth: currCellHealthSign
             ? changeManHealth(currCellHealthSign, state.manHealth)
             : state.manHealth,
-          healthList: changeHealthList(currManCoord, state.healthList),
-          /*  gamePhase: isEndHealth ? "здоровье закончилось" : state.gamePhase, */
+          healthList: changeHealthList(currManCoord, state.healthList), */
         };
       } else if (isInField && isLastDiceThrow) {
         /*человек в поле и последняя цифра кубика*/
@@ -282,14 +230,13 @@ const reducer = (state = initialState, action) => {
           ...state,
           dice: state.dice - 1,
           man: currManCoord,
-          manHealth: currCellHealthSign
+          /*   manHealth: currCellHealthSign
             ? changeManHealth(currCellHealthSign, state.manHealth)
             : state.manHealth,
           healthList: changeHealthList(currManCoord, state.healthList),
-          gamePhase:
-            /* isEndHealth ? "здоровье закончилось" : */ "бросить кубик",
+          gamePhase: "бросить кубик",
           arrowState: "disable",
-          diceState: "enable",
+          diceState: "enable", */
         };
       } else {
         /*человек вне поля*/
@@ -322,6 +269,85 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+const changeCoord = (state, direction) => {
+  const currManVert = state.man.vert;
+  const currManHor = state.man.hor;
+  const nextManVert = currManVert + 1;
+  const nextManHor = currManHor + 1;
+  const prevManVert = currManVert - 1;
+  const prevManHor = currManHor - 1;
+
+  switch (direction) {
+    case "top": {
+      return {
+        hor: currManHor,
+        vert: nextManVert,
+      };
+    }
+    case "bottom": {
+      return {
+        hor: currManHor,
+        vert: prevManVert,
+      };
+    }
+    case "left": {
+      return {
+        hor: prevManHor,
+        vert: currManVert,
+      };
+    }
+    case "right": {
+      return {
+        hor: nextManHor,
+        vert: currManVert,
+      };
+    }
+    default:
+      break;
+  }
+};
+
+const checkCurrentCell = (currManCoord, healthList) => {
+  /*проверяем попал ли человек на координату с здоровьем*/
+  const index = healthList.findIndex((item) => {
+    return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
+  });
+
+  /* if (index != -1) {
+    const currType = healthList[index].type;
+    return currType;
+  } else return false; */
+  if (index != -1) {
+    const currItem = healthList[index];
+    return currItem;
+  } else return false;
+};
+
+const changeManHealth = (sign, manHealth) => {
+  switch (sign) {
+    case "increment":
+      return manHealth + 1;
+    case "decrement":
+      return manHealth - 1;
+    default:
+      break;
+  }
+};
+
+const changeHealthList = (currManCoord, healthList) => {
+  return healthList.filter((item) => {
+    return !(currManCoord.hor === item.hor && currManCoord.vert === item.vert);
+  });
+};
+
+const openHealthItem = (cardInteract, healthList) => {
+  return healthList.map((item, index) => {
+    if (cardInteract.hor === item.hor && cardInteract.vert === item.vert) {
+      return cardInteract;
+    } else return item;
+  });
+};
+
 function App() {
   const [
     gamePhase,
@@ -329,12 +355,14 @@ function App() {
     manHor,
     manVert,
     manHealth,
+    cardInteract,
   ] = useSelector((state) => [
     state.gamePhase,
     state.gameState,
     state.man.hor,
     state.man.vert,
     state.manHealth,
+    state.cardInteract,
   ]);
 
   const dispatch = useDispatch();
@@ -347,15 +375,63 @@ function App() {
             () => dispatch({ type: "setGameEnd" }),
             1000
           );
+
           return () => clearTimeout(timer);
 
         default:
           break;
       }
-
-      /* dispatch({ type: "setGameEnd" }); */
     },
     [gameState]
+  );
+
+  useEffect(
+    function openCard() {
+      if (cardInteract) {
+        cardInteract.apperance = "open";
+        const timer = setTimeout(
+          /*  () =>
+            console.log(
+              "карточка открыта"
+            )  */
+
+          dispatch({
+            type: "needOpenHealthCard",
+            payload: cardInteract,
+          }),
+          1000
+        );
+        return () => clearTimeout(timer);
+      }
+
+      /*
+  принимаем карточку, координаты
+  добавить св-во apperance: closed/open
+  сменить цвет карточки
+  через 1 секунду
+  dispatch({type:openHealthCard,payload:новая карточка})
+
+  */
+    },
+    [cardInteract]
+  );
+
+  useEffect(
+    () => {
+      /*
+  принимаем карточку, координаты
+  добавить св-во apperance: closed/open
+  сменить цвет карточки
+  через 1 секунду
+  dispatch({type:openHealthCard,payload:новая карточка})
+
+  */
+    },
+    [
+      /*
+      cardInteract:"open"
+      */
+    ]
   );
 
   const getGameScreen = () => {
@@ -396,6 +472,7 @@ function App() {
         );
       case "getScore":
         return <EndScreen />;
+
       default:
         break;
     }
