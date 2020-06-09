@@ -9,7 +9,7 @@ import Grid from "./features/Grid";
 import Arrows from "./features/Arrows";
 import Dice from "./features/Dice";
 import StartScreen from "./features/StartScreen";
-
+import EndScreen from "./features/EndScreen";
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -84,13 +84,14 @@ const initialState = (() => {
       hor: 0,
       vert: 0,
     },
-    manHealth: 3,
+    manHealth: 1,
     diceState: "enable",
     arrowState: "disable",
     mode: 0,
     dice: null,
     healthCards: 10,
     healthList: healthArray,
+    gameResult: "waiting",
   };
 })();
 
@@ -177,13 +178,10 @@ const reducer = (state = initialState, action) => {
         ...state,
         gameState: "start",
       };
-    case "gameEnd":
+    case "setGameEnd":
       return {
         ...state,
-        gameState: "end",
-        diceState: "disable",
-        arrowState: "disable",
-        gamePhase: action.payload,
+        gameState: "getScore",
       };
 
     case "arrowPressed": {
@@ -243,8 +241,10 @@ const reducer = (state = initialState, action) => {
           manHealth: changeManHealth(currCellHealthSign, state.manHealth),
           healthList: changeHealthList(currManCoord, state.healthList),
           gamePhase: "здоровье закончилось",
+          gameState: "end",
           diceState: "disable",
           arrowState: "disable",
+          gameResult: "Вы проиграли",
         };
       } else if (isEndGamePlace) {
         return {
@@ -253,8 +253,9 @@ const reducer = (state = initialState, action) => {
           gameState: "end",
           diceState: "disable",
           arrowState: "disable",
-          gamePhase: "игра окончена",
+          gamePhase: "Финиш!",
           man: currManCoord,
+          gameResult: "Вы выиграли",
           /*если есть знак изменения здоровья-меняем*/
 
           manHealth: currCellHealthSign
@@ -336,6 +337,27 @@ function App() {
     state.manHealth,
   ]);
 
+  const dispatch = useDispatch();
+
+  useEffect(
+    function getEndScreen() {
+      switch (gameState) {
+        case "end":
+          const timer = setTimeout(
+            () => dispatch({ type: "setGameEnd" }),
+            1000
+          );
+          return () => clearTimeout(timer);
+
+        default:
+          break;
+      }
+
+      /* dispatch({ type: "setGameEnd" }); */
+    },
+    [gameState]
+  );
+
   const getGameScreen = () => {
     switch (gameState) {
       case "waiting":
@@ -356,6 +378,24 @@ function App() {
             </LeftPanel>
           </>
         );
+      case "end":
+        return (
+          <>
+            <Field>
+              <Grid />
+            </Field>
+            <LeftPanel>
+              <Status>{gamePhase}</Status>
+              <Status>{`координаты: ${manHor}${manVert}`}</Status>
+              <Status>{`здоровье: ${manHealth}`}</Status>
+
+              <Dice />
+              <Arrows />
+            </LeftPanel>
+          </>
+        );
+      case "getScore":
+        return <EndScreen />;
       default:
         break;
     }
