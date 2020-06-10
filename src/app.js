@@ -66,7 +66,7 @@ const getRandomArray = (arr, type) => {
 const createHealthArray = (number, type) => {
   let healthArray = new Array(number)
     .fill(0)
-    .reduce((prevValue, currentValue, index) => {
+    .reduce((prevValue) => {
       const currValue = getRandomArray(prevValue, type);
 
       return [currValue, ...prevValue];
@@ -86,7 +86,7 @@ const getInitialState = () => {
       hor: 0,
       vert: 0,
     },
-    manHealth: 3,
+    manHealth: 1,
     diceState: "enable",
     arrowState: "disable",
     mode: 0,
@@ -99,13 +99,51 @@ const getInitialState = () => {
 };
 
 const reducer = (state = getInitialState(), action) => {
-
   switch (action.type) {
+    case "freezeController": {
+      return {
+        ...state,
+        diceState: "disable",
+        arrowState: "disable",
+      };
+    }
     case "needOpenHealthCard": {
       return {
         ...state,
         cardInteract: action.payload,
         healthList: openHealthItemList(action.payload, state.healthList),
+      };
+    }
+    case "changeManHealth": {
+      return {
+        ...state,
+        manHealth: changeManHealth(action.payload, state.manHealth),
+
+        /*пока тут отследим уровень здоровья! */
+      };
+    }
+
+    case "setEndHealth": {
+      return {
+        ...state,
+        gameResult: "Вы проиграли",
+        gamePhase: "Здоровье закончилось",
+        gameState: "end",
+      };
+    }
+
+    case "changeHealthList": {
+      const isLastDiceThrow = state.dice === 0;
+      const currDiceState = isLastDiceThrow ? "enable" : "disable";
+      const currArrowState = isLastDiceThrow ? "disable" : "enable";
+      return {
+        ...state,
+        healthList: changeHealthList(action.payload, state.healthList),
+        diceState: "disable",
+        arrowState: "disable",
+        cardInteract: false,
+        diceState: currDiceState,
+        arrowState: currArrowState,
       };
     }
 
@@ -126,8 +164,9 @@ const reducer = (state = getInitialState(), action) => {
     case "arrowPressed": {
       const direction = action.payload;
       const nextManCoord = changeCoord(state, direction);
-
-      /*проверка на границу*/
+      const isLastDiceThrow = state.dice === 1;
+      const nextDiceState = isLastDiceThrow ? "enable" : "disable";
+      const nextArrowState = isLastDiceThrow ? "disable" : "enable";
       const manInField = checkCanMove(
         direction,
         state.startCoord,
@@ -143,9 +182,6 @@ const reducer = (state = getInitialState(), action) => {
       const nextCellCard = checkCell(nextManCoord, state.healthList);
       const nextCellHasCard = nextCellCard ? true : false;
 
-      const isLastDiceThrow = state.dice === 1;
-      const nextDiceState = isLastDiceThrow ? "enable" : "disable";
-      const nextArrowState = isLastDiceThrow ? "disable" : "enable";
       const nextGamePhase = isLastDiceThrow ? "бросить кубик" : "сделать ход";
 
       switch (manInField) {
@@ -291,10 +327,6 @@ const checkCell = (nextManCoord, healthList) => {
     return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
   });
 
-  /* if (index != -1) {
-    const currType = healthList[index].type;
-    return currType;
-  } else return false; */
   if (index != -1) {
     const currItem = healthList[index];
     return currItem;
@@ -312,9 +344,9 @@ const changeManHealth = (sign, manHealth) => {
   }
 };
 
-const changeHealthList = (nextManCoord, healthList) => {
+const changeHealthList = (coord, healthList) => {
   return healthList.filter((item) => {
-    return !(nextManCoord.hor === item.hor && nextManCoord.vert === item.vert);
+    return !(coord.hor === item.hor && coord.vert === item.vert);
   });
 };
 
@@ -347,6 +379,19 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(
+    function setEndHealth() {
+      switch (manHealth) {
+        case 0:
+          dispatch({ type: "setEndHealth" });
+          break;
+        default:
+          break;
+      }
+    },
+    [manHealth]
+  );
+
+  useEffect(
     function getEndScreen() {
       switch (gameState) {
         case "end":
@@ -369,58 +414,45 @@ function App() {
       const hasCardInteract = cardInteract ? true : false;
       switch (hasCardInteract) {
         case true:
-          const timer = setTimeout(
+          dispatch({
+            type: "freezeController",
+          });
+
+          const timerOpen = setTimeout(
             () =>
               dispatch({
                 type: "needOpenHealthCard",
                 payload: cardInteract,
               }),
-            500
+            1000
           );
-          return () => clearTimeout(timer);
+          const timerChangeManHealth = setTimeout(
+            () =>
+              dispatch({
+                type: "changeManHealth",
+                payload: cardInteract.type,
+              }),
+            1500
+          );
+          const timerChangeHealthList = setTimeout(
+            () =>
+              dispatch({
+                type: "changeHealthList",
+                payload: cardInteract,
+              }),
+            2000
+          );
+          return () =>
+            clearTimeout(
+              timerOpen,
+              timerChangeManHealth,
+              timerChangeHealthList
+            );
         default:
           break;
       }
-      /*       if (cardInteract) {
-        cardInteract = "open";
-        const timer = setTimeout(
-          dispatch({
-            type: "needOpenHealthCard",
-            payload: cardInteract,
-          }),
-          1000
-        );
-        return () => clearTimeout(timer);
-      } */
-
-      /*
-  принимаем карточку, координаты
-  добавить св-во apperance: closed/open
-  сменить цвет карточки
-  через 1 секунду
-  dispatch({type:openHealthCard,payload:новая карточка})
-
-  */
     },
     [cardInteract]
-  );
-
-  useEffect(
-    () => {
-      /*
-  принимаем карточку, координаты
-  добавить св-во apperance: closed/open
-  сменить цвет карточки
-  через 1 секунду
-  dispatch({type:openHealthCard,payload:новая карточка})
-
-  */
-    },
-    [
-      /*
-      cardInteract:"open"
-      */
-    ]
   );
 
   const getGameScreen = () => {
@@ -437,7 +469,6 @@ function App() {
               <Status>{gamePhase}</Status>
               <Status>{`координаты: ${manHor}${manVert}`}</Status>
               <Status>{`здоровье: ${manHealth}`}</Status>
-
               <Dice />
               <Arrows />
             </LeftPanel>
