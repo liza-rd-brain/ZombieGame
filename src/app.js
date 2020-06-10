@@ -75,7 +75,7 @@ const createHealthArray = (number, type) => {
   return healthArray;
 };
 
-const initialState = (() => {
+const getInitialState = () => {
   const healthArray = createHealthArray(14, ["increment", "decrement"]);
   return {
     gameState: "waiting",
@@ -96,151 +96,108 @@ const initialState = (() => {
     gameResult: "waiting",
     cardInteract: false,
   };
-})();
+};
 
-const reducer = (state = initialState, action) => {
-  const currManVert = state.man.vert;
-  const currManHor = state.man.hor;
-  const nextManVert = currManVert + 1;
-  const nextManHor = currManHor + 1;
-  const endGameVert = state.endCoord.vert;
-  const endGameHor = state.endCoord.hor;
-  const startGameVert = state.startCoord.vert;
-  const startGameHor = state.startCoord.hor;
+const reducer = (state = getInitialState(), action) => {
 
   switch (action.type) {
-    case "needOpenHealthCard":
-      return { ...state, cardInteract: action.payload };
-    /*    return{...state,
-      healthlist:[...state, ]
-      cardInteract:"open"
+    case "needOpenHealthCard": {
+      return {
+        ...state,
+        cardInteract: action.payload,
+        healthList: openHealthItemList(action.payload, state.healthList),
+      };
     }
-    */
 
-    case "clickStartButton":
+    case "clickStartButton": {
       return {
         ...state,
         gameState: "start",
       };
-    case "setGameEnd":
+    }
+
+    case "setGameEnd": {
       return {
         ...state,
         gameState: "getScore",
       };
+    }
 
     case "arrowPressed": {
       const direction = action.payload;
+      const nextManCoord = changeCoord(state, direction);
 
-      /*проверка на конец игры*/
-      /*на границу поля*/
-      let isEndGamePlace = false;
-      let isInField = true;
-      let isСurrentStepEndVert = false;
-      let isCurrentStepEndHor = false;
-
-      switch (direction) {
-        case "top":
-          isСurrentStepEndVert =
-            nextManVert === endGameVert && currManHor === endGameHor;
-          isEndGamePlace = isСurrentStepEndVert;
-          isInField = currManVert >= startGameVert && currManVert < endGameVert;
-
-          break;
-        case "right":
-          isCurrentStepEndHor =
-            currManVert === endGameVert && nextManHor === endGameHor;
-          isEndGamePlace = isCurrentStepEndHor;
-          isInField = currManHor < endGameHor && currManHor >= startGameHor;
-
-          break;
-        case "bottom":
-          isInField = currManVert > startGameVert && currManVert <= endGameVert;
-          break;
-        case "left":
-          isInField = currManHor <= endGameHor && currManHor > startGameHor;
-          break;
-        default:
-          break;
-      }
-
-      /*последний бросок кубика*/
-      const isLastDiceThrow = state.dice === 1;
-
-      const currManCoord = changeCoord(state, direction);
-
-      /*Inc,dec,false*/
-
-      const currCellHealthSign = checkCurrentCell(
-        currManCoord,
-        state.healthList
+      /*проверка на границу*/
+      const manInField = checkCanMove(
+        direction,
+        state.startCoord,
+        state.endCoord,
+        nextManCoord
       );
 
-      const currCellHasCard = checkCurrentCell(currManCoord, state.healthList);
+      const isNextCellFinish =
+        nextManCoord.hor === state.endCoord.hor &&
+        nextManCoord.vert === state.endCoord.vert;
 
-      const isEndHealth =
-        currCellHealthSign === "decrement" && state.manHealth === 1;
+      /*вернет объект или false*/
+      const nextCellCard = checkCell(nextManCoord, state.healthList);
+      const nextCellHasCard = nextCellCard ? true : false;
 
-      if (isEndHealth) {
-        return {
-          ...state,
-          dice: state.dice - 1,
-          man: currManCoord,
-          manHealth: changeManHealth(currCellHealthSign, state.manHealth),
-          healthList: changeHealthList(currManCoord, state.healthList),
-          gamePhase: "здоровье закончилось",
-          gameState: "end",
-          diceState: "disable",
-          arrowState: "disable",
-          gameResult: "Вы проиграли",
-        };
-      } else if (isEndGamePlace) {
-        return {
-          ...state,
-          dice: null,
-          gameState: "end",
-          diceState: "disable",
-          arrowState: "disable",
-          gamePhase: "Финиш!",
-          man: currManCoord,
-          gameResult: "Вы выиграли",
-          /*если есть знак изменения здоровья-меняем*/
+      const isLastDiceThrow = state.dice === 1;
+      const nextDiceState = isLastDiceThrow ? "enable" : "disable";
+      const nextArrowState = isLastDiceThrow ? "disable" : "enable";
+      const nextGamePhase = isLastDiceThrow ? "бросить кубик" : "сделать ход";
 
-          manHealth: currCellHealthSign
-            ? changeManHealth(currCellHealthSign, state.manHealth)
-            : state.manHealth,
-          healthList: changeHealthList(currManCoord, state.healthList),
-        };
+      switch (manInField) {
+        case true: {
+          switch (isNextCellFinish) {
+            case false: {
+              /*проверка на попадание на карточку*/
+              switch (nextCellHasCard) {
+                case true: {
+                  /*процесс открытия карточки*/
 
-        /*человек в поле и не последняя цифра кубика*/
-      } else if (isInField && !isLastDiceThrow) {
-        return {
-          ...state,
-          dice: state.dice - 1,
-          man: currManCoord,
-          cardInteract: currCellHasCard ? currCellHasCard : false,
-          healthList: openHealthItem(state.cardInteract, state.healthList),
-          /*    manHealth: currCellHealthSign
-            ? changeManHealth(currCellHealthSign, state.manHealth)
-            : state.manHealth,
-          healthList: changeHealthList(currManCoord, state.healthList), */
-        };
-      } else if (isInField && isLastDiceThrow) {
-        /*человек в поле и последняя цифра кубика*/
-        return {
-          ...state,
-          dice: state.dice - 1,
-          man: currManCoord,
-          /*   manHealth: currCellHealthSign
-            ? changeManHealth(currCellHealthSign, state.manHealth)
-            : state.manHealth,
-          healthList: changeHealthList(currManCoord, state.healthList),
-          gamePhase: "бросить кубик",
-          arrowState: "disable",
-          diceState: "enable", */
-        };
-      } else {
-        /*человек вне поля*/
-        return state;
+                  return {
+                    ...state,
+                    dice: state.dice - 1,
+                    man: nextManCoord,
+                    cardInteract: nextCellCard,
+                    arrowState: nextArrowState,
+                    diceState: nextDiceState,
+                    gamePhase: nextGamePhase,
+                  };
+                }
+
+                case false: {
+                  return {
+                    ...state,
+                    dice: state.dice - 1,
+                    man: nextManCoord,
+                    arrowState: nextArrowState,
+                    diceState: nextDiceState,
+                    gamePhase: nextGamePhase,
+                  };
+                }
+              }
+            }
+            case true: {
+              return {
+                ...state,
+                gameState: "end",
+                diceState: "disable",
+                arrowState: "disable",
+                gamePhase: "Финиш!",
+                man: nextManCoord,
+                gameResult: "Вы выиграли",
+              };
+            }
+          }
+        }
+
+        case false:
+          return state;
+        default:
+          return state;
       }
     }
 
@@ -266,6 +223,27 @@ const reducer = (state = initialState, action) => {
 
     default:
       return state;
+  }
+};
+
+const checkCanMove = (direction, startCoord, endCoord, manCoord) => {
+  switch (direction) {
+    case "top":
+      if (manCoord.vert <= endCoord.vert) {
+        return true;
+      } else return false;
+    case "bottom":
+      if (manCoord.vert >= startCoord.vert) {
+        return true;
+      } else return false;
+    case "right":
+      if (manCoord.hor <= endCoord.hor) {
+        return true;
+      } else return false;
+    case "left":
+      if (manCoord.hor >= startCoord.hor) {
+        return true;
+      } else return false;
   }
 };
 
@@ -307,10 +285,10 @@ const changeCoord = (state, direction) => {
   }
 };
 
-const checkCurrentCell = (currManCoord, healthList) => {
+const checkCell = (nextManCoord, healthList) => {
   /*проверяем попал ли человек на координату с здоровьем*/
   const index = healthList.findIndex((item) => {
-    return item.hor === currManCoord.hor && item.vert === currManCoord.vert;
+    return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
   });
 
   /* if (index != -1) {
@@ -334,16 +312,17 @@ const changeManHealth = (sign, manHealth) => {
   }
 };
 
-const changeHealthList = (currManCoord, healthList) => {
+const changeHealthList = (nextManCoord, healthList) => {
   return healthList.filter((item) => {
-    return !(currManCoord.hor === item.hor && currManCoord.vert === item.vert);
+    return !(nextManCoord.hor === item.hor && nextManCoord.vert === item.vert);
   });
 };
 
-const openHealthItem = (cardInteract, healthList) => {
+const openHealthItemList = (card, healthList) => {
   return healthList.map((item, index) => {
-    if (cardInteract.hor === item.hor && cardInteract.vert === item.vert) {
-      return cardInteract;
+    if (card.hor === item.hor && card.vert === item.vert) {
+      card.apperance = "open";
+      return card;
     } else return item;
   });
 };
@@ -387,14 +366,24 @@ function App() {
 
   useEffect(
     function openCard() {
-      if (cardInteract) {
-        cardInteract.apperance = "open";
+      const hasCardInteract = cardInteract ? true : false;
+      switch (hasCardInteract) {
+        case true:
+          const timer = setTimeout(
+            () =>
+              dispatch({
+                type: "needOpenHealthCard",
+                payload: cardInteract,
+              }),
+            500
+          );
+          return () => clearTimeout(timer);
+        default:
+          break;
+      }
+      /*       if (cardInteract) {
+        cardInteract = "open";
         const timer = setTimeout(
-          /*  () =>
-            console.log(
-              "карточка открыта"
-            )  */
-
           dispatch({
             type: "needOpenHealthCard",
             payload: cardInteract,
@@ -402,7 +391,7 @@ function App() {
           1000
         );
         return () => clearTimeout(timer);
-      }
+      } */
 
       /*
   принимаем карточку, координаты

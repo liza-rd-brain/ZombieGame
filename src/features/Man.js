@@ -11,6 +11,7 @@ const ManItem = styled.div`
   position: absolute;
   top:2px;
   left: 1px;
+  z-index: 1;
 /*   bottom: ${(props) => `${props.vert * 32 + 4}px`};
   left: ${(props) => `${props.hor * 30 + 4}px`}; */
 `;
