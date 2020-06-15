@@ -60,12 +60,10 @@ function Arrows() {
       <Arrow
         type={direction}
         onClick={() => {
-          if (arrowState === "enable") {
-            dispatch({ type: "arrowPressed", payload: direction });
-          }
+          dispatch({ type: "arrowPressed", payload: direction })
         }}
       >
-        >
+        &gt;
       </Arrow>
     );
   };

@@ -38,12 +38,10 @@ function Dice() {
       <DiceNumber>{diceNumber}</DiceNumber>
       <DiceButton
         onClick={() => {
-          if (diceState === "enable") {
-            dispath({
-              type: "diceThrown",
-              payload: getNumber(),
-            });
-          }
+          dispath({
+            type: "diceThrown",
+            payload: getNumber(),
+          });
         }}
       >
         бросить кубик

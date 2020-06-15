@@ -64,22 +64,27 @@ const getRandomArray = (arr, type) => {
 };
 
 const createHealthArray = (number, type) => {
-  let healthArray = new Array(number)
-    .fill(0)
-    .reduce((prevValue) => {
-      const currValue = getRandomArray(prevValue, type);
+  let healthArray = new Array(number).fill(0).reduce((prevValue) => {
+    const currValue = getRandomArray(prevValue, type);
 
-      return [currValue, ...prevValue];
-    }, []);
+    return [currValue, ...prevValue];
+  }, []);
   console.log(healthArray.length, healthArray);
   return healthArray;
 };
 
 const getInitialState = () => {
-  const healthArray = createHealthArray(14, ["increment", "decrement"]);
+  /* const healthArray  */
   return {
-    gameState: "waiting",
-    gamePhase: "бросить кубик",
+    gameState: "waitingStart",
+    /* waitingStart ,
+      trownDice ,
+      clickArrow,
+      checkCellHasCard,
+      openHealthCard,
+      changeManHealth,
+      changeHealthList
+      endGame, */
     startCoord: { hor: 0, vert: 0 },
     endCoord: { hor: 9, vert: 9 },
     man: {
@@ -87,18 +92,82 @@ const getInitialState = () => {
       vert: 0,
     },
     manHealth: 1,
-    diceState: "enable",
-    arrowState: "disable",
-    mode: 0,
     dice: null,
     healthCards: 10,
-    healthList: healthArray,
-    gameResult: "waiting",
     cardInteract: false,
+    healthList: createHealthArray(14, ["increment", "decrement"]),
+    /*   diceState: "enable",
+    arrowState: "disable",
+    gameState: "waiting",
+    gamePhase: "бросить кубик",
+    ,
+    gameResult: "waiting",
+     */
   };
 };
 
 const reducer = (state = getInitialState(), action) => {
+  const waitingStart = state.gameState === "waitingStart";
+  const trownDice = state.gameState === "trownDice";
+  const clickArrow = state.gameState === "clickArrow";
+  switch (true) {
+    case waitingStart: {
+      switch (action.type) {
+        case "clickStartButton": {
+          return {
+            ...state,
+            gameState: "trownDice",
+          };
+        }
+        default:
+          return state;
+      }
+    }
+    case trownDice: {
+      switch (action.type) {
+        case "diceThrown": {
+          return {
+            ...state,
+            dice: action.payload,
+            gameState: "clickArrow",
+          };
+        }
+        default:
+          return state;
+      }
+    }
+    case clickArrow: {
+      switch (action.type) {
+        case "arrowPressed": {
+          const direction = action.payload;
+          const nextManCoord = changeCoord(state, direction);
+          const isLastDiceThrow = state.dice === 1;
+
+          const manInField = checkCanMove(
+            direction,
+            state.startCoord,
+            state.endCoord,
+            nextManCoord
+          );
+
+          const isNextCellFinish =
+            nextManCoord.hor === state.endCoord.hor &&
+            nextManCoord.vert === state.endCoord.vert;
+        }
+      }
+    }
+    default:
+      return state;
+  }
+
+  /*   case "clickStartButton": {
+    return {
+      ...state,
+      gameState: "start",
+    };
+  } */
+};
+const reducerOLD = (state = getInitialState(), action) => {
   switch (action.type) {
     case "freezeController": {
       return {
@@ -165,8 +234,10 @@ const reducer = (state = getInitialState(), action) => {
       const direction = action.payload;
       const nextManCoord = changeCoord(state, direction);
       const isLastDiceThrow = state.dice === 1;
+
       const nextDiceState = isLastDiceThrow ? "enable" : "disable";
       const nextArrowState = isLastDiceThrow ? "disable" : "enable";
+
       const manInField = checkCanMove(
         direction,
         state.startCoord,
@@ -361,14 +432,12 @@ const openHealthItemList = (card, healthList) => {
 
 function App() {
   const [
-    gamePhase,
     gameState,
     manHor,
     manVert,
     manHealth,
     cardInteract,
   ] = useSelector((state) => [
-    state.gamePhase,
     state.gameState,
     state.man.hor,
     state.man.vert,
@@ -377,7 +446,7 @@ function App() {
   ]);
 
   const dispatch = useDispatch();
-
+  const textPhase = gameState === "trownDice" ? "бросить кубик" : "сделать ход";
   useEffect(
     function setEndHealth() {
       switch (manHealth) {
@@ -457,44 +526,28 @@ function App() {
 
   const getGameScreen = () => {
     switch (gameState) {
-      case "waiting":
+      case "waitingStart":
         return <StartScreen />;
-      case "start":
-        return (
-          <>
-            <Field>
-              <Grid />
-            </Field>
-            <LeftPanel>
-              <Status>{gamePhase}</Status>
-              <Status>{`координаты: ${manHor}${manVert}`}</Status>
-              <Status>{`здоровье: ${manHealth}`}</Status>
-              <Dice />
-              <Arrows />
-            </LeftPanel>
-          </>
-        );
-      case "end":
-        return (
-          <>
-            <Field>
-              <Grid />
-            </Field>
-            <LeftPanel>
-              <Status>{gamePhase}</Status>
-              <Status>{`координаты: ${manHor}${manVert}`}</Status>
-              <Status>{`здоровье: ${manHealth}`}</Status>
 
-              <Dice />
-              <Arrows />
-            </LeftPanel>
-          </>
-        );
       case "getScore":
         return <EndScreen />;
 
       default:
-        break;
+        return (
+          <>
+            <Field>
+              <Grid />
+            </Field>
+            <LeftPanel>
+              <Status>{textPhase}</Status>
+              <Status>{`координаты: ${manHor}${manVert}`}</Status>
+              <Status>{`здоровье: ${manHealth}`}</Status>
+
+              <Dice />
+              <Arrows />
+            </LeftPanel>
+          </>
+        );
     }
   };
 
