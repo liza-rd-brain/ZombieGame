@@ -17,7 +17,7 @@ const ManItem = styled.div`
 `;
 
 function Man(props) {
-  const [hor, vert] = useSelector((state) => [state.man.hor, state.man.vert]);
+  const [hor, vert] = useSelector((state) => [state.manCoord.hor, state.manCoord.vert]);
   if (hor === props.hor && vert === props.vert) {
     return <ManItem hor={hor} vert={vert}></ManItem>;
   } else return <></>;

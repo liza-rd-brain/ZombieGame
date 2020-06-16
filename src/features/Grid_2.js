@@ -35,7 +35,7 @@ function checkHealthCard(indexHor, indexVert, healthCoord) {
   })[0];
 }
  */
-function getGridArray(manHor, manVert, width, height, healthCoord) {
+
 function getGridArray(manHor, manVert, width, height, healthCoord) {
   const dispatch = useDispatch();
 

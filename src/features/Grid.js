@@ -47,8 +47,8 @@ function getArray(manHor, manVert, width, height) {
 
 function Grid(props) {
   const [manHor, manVert, maxHor, maxVert] = useSelector((state) => [
-    state.man.hor,
-    state.man.vert,
+    state.manCoord.hor,
+    state.manCoord.vert,
     state.endCoord.hor,
     state.endCoord.vert,
   ]);
