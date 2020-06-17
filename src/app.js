@@ -90,8 +90,8 @@ const getInitialState = () => {
     startCoord: { hor: 0, vert: 0 },
     endCoord: { hor: 9, vert: 9 },
     manCoord: {
-      hor: 0,
-      vert: 0,
+      hor: 8,
+      vert: 9,
     },
     manHealth: 1,
     dice: null,
@@ -106,14 +106,9 @@ const reducer = (state = getInitialState(), action) => {
   const waitingStart = state.gameState === "waitingStart";
   const trownDice = state.gameState === "trownDice";
   const clickArrow = state.gameState === "clickArrow";
-  const checkCellHasCard = state.gameState === "checkCellHasCard";
   const openHealthCard = state.gameState === "openHealthCard";
-  const checkCellIsFinish = state.gameState === "checkCellIsFinish";
   const endGame = state.gameState === "endGame";
-  const changeManHealth = state.gameState === "changeManHealth";
-  const changeHealthList = state.gameState === "changeHealthList";
-  const checkDice = state.gameState === "checkDice";
-  const checkManHealth = state.gameState === "checkManHealth";
+
   switch (true) {
     case waitingStart: {
       switch (action.type) {
@@ -145,8 +140,7 @@ const reducer = (state = getInitialState(), action) => {
         case "arrowPressed": {
           const direction = action.payload;
           const nextManCoord = changeCoord(state, direction);
-
-          const isLastDiceThrow = state.dice === 1;
+          const isNextTrowLast = state.dice === 1;
 
           const manInField = checkCanMove(
             direction,
@@ -154,42 +148,62 @@ const reducer = (state = getInitialState(), action) => {
             state.endCoord,
             nextManCoord
           );
+          const nextCellCard = checkCell(nextManCoord, state.healthList);
+          const nextCellHasCard = nextCellCard ? true : false;
+          const isNextCellFinish =
+            nextManCoord.hor === state.endCoord.hor &&
+            nextManCoord.vert === state.endCoord.vert;
 
           switch (true) {
             case manInField: {
-              return {
-                ...state,
-                /*здесь меняем кубик-?! */
-                dice: state.dice - 1,
-
-                manCoord: nextManCoord,
-                gameState: "checkCellHasCard",
-              };
+              switch (true) {
+                case nextCellHasCard: {
+                  /*открываем карточку */
+                  return {
+                    ...state,
+                    dice: state.dice - 1,
+                    manCoord: nextManCoord,
+                    cardInteract: nextCellCard,
+                    gameState: "openHealthCard",
+                  };
+                }
+                case !nextCellHasCard: {
+                  switch (true) {
+                    case isNextCellFinish: {
+                      return {
+                        ...state,
+                        dice: state.dice - 1,
+                        manCoord: nextManCoord,
+                        gameState: "endGame",
+                        gameResult: "Вы выиграли",
+                      };
+                    }
+                    case !isNextCellFinish: {
+                      switch (true) {
+                        case isNextTrowLast: {
+                          return {
+                            ...state,
+                            dice: state.dice - 1,
+                            manCoord: nextManCoord,
+                            gameState: "trownDice",
+                          };
+                        }
+                        case !isNextTrowLast: {
+                          return {
+                            ...state,
+                            dice: state.dice - 1,
+                            manCoord: nextManCoord,
+                            gameState: "clickArrow",
+                          };
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-          }
-        }
-      }
-    }
-
-    case checkCellHasCard: {
-      switch (action.type) {
-        case "checkCellHasCard": {
-          const nextCellCard = checkCell(state.manCoord, state.healthList);
-          const nextCellHasCard = nextCellCard ? true : false;
-
-          switch (true) {
-            case nextCellHasCard: {
-              return {
-                ...state,
-                gameState: "openHealthCard",
-                cardInteract: nextCellCard,
-              };
-            }
-            case !nextCellHasCard: {
-              return {
-                ...state,
-                gameState: "checkCellIsFinish",
-              };
+            case !manInField: {
+              return { ...state };
             }
           }
         }
@@ -197,117 +211,64 @@ const reducer = (state = getInitialState(), action) => {
     }
 
     case openHealthCard: {
-      /*координата карты =координата человека */
       switch (action.type) {
         case "needOpenHealthCard": {
           return {
             ...state,
-            gameState: "changeManHealth",
             healthList: openHealthItemList(
               state.cardInteract,
               state.healthList
             ),
           };
         }
-      }
-    }
-
-    case changeManHealth: {
-      switch (action.type) {
         case "changeManHealth": {
           return {
             ...state,
             manHealth: changeHealth(state.cardInteract.type, state.manHealth),
-            gameState: "changeHealthList",
           };
         }
-        default:
-          return state;
-      }
-    }
-
-    case changeHealthList: {
-      switch (action.type) {
         case "changeHealthList": {
-          return {
-            ...state,
-            healthList: getHealthList(state.cardInteract, state.healthList),
-            gameState: "checkManHealth",
-          };
-        }
-      }
-    }
-
-    case checkManHealth: {
-      switch (action.type) {
-        case "checkManHealth": {
           const isManLive = state.manHealth > 0;
           switch (true) {
             case isManLive: {
-              return {
-                ...state,
-                gameState: "checkDice",
-              };
+              const isNextTrowLast = state.dice === 0;
+              switch (true) {
+                case isNextTrowLast: {
+                  return {
+                    ...state,
+                    healthList: changeHealthList(
+                      state.cardInteract,
+                      state.healthList
+                    ),
+                    gameState: "trownDice",
+                    cardInteract: false,
+                  };
+                }
+                case !isNextTrowLast: {
+                  return {
+                    ...state,
+                    healthList: changeHealthList(
+                      state.cardInteract,
+                      state.healthList
+                    ),
+                    cardInteract: false,
+                    gameState: "clickArrow",
+                  };
+                }
+              }
             }
             case !isManLive: {
               return {
                 ...state,
+                healthList: changeHealthList(
+                  state.cardInteract,
+                  state.healthList
+                ),
+                cardInteract: false,
                 gameState: "endGame",
                 gameResult: "Вы проиграли",
               };
             }
-          }
-        }
-      }
-    }
-
-    case checkCellIsFinish: {
-      switch (action.type) {
-        case "checkCellIsFinish": {
-          const cellFinish =
-            state.manCoord.hor === state.endCoord.hor &&
-            state.manCoord.vert === state.endCoord.vert;
-          switch (true) {
-            case cellFinish: {
-              return {
-                ...state,
-                gameState: "endGame",
-                gameResult: "Вы выиграли",
-              };
-            }
-            case !cellFinish: {
-              return {
-                ...state,
-                gameState: "checkDice",
-              };
-            }
-            default:
-              return state;
-          }
-        }
-        default:
-          return state;
-      }
-    }
-    case checkDice: {
-      switch (action.type) {
-        case "checkDice": {
-          const isDiceZero = state.dice === 0;
-          switch (true) {
-            case isDiceZero: {
-              return {
-                ...state,
-                gameState: "trownDice",
-              };
-            }
-            case !isDiceZero: {
-              return {
-                ...state,
-                gameState: "clickArrow",
-              };
-            }
-            default:
-              return state;
           }
         }
       }
@@ -409,8 +370,7 @@ const changeHealth = (sign, manHealth) => {
       break;
   }
 };
-
-const getHealthList = (coord, healthList) => {
+const changeHealthList = (coord, healthList) => {
   return healthList.filter((item) => {
     return !(coord.hor === item.hor && coord.vert === item.vert);
   });
@@ -435,12 +395,14 @@ function App() {
     manVert,
     manHealth,
     gameResult,
+    cardInteract,
   ] = useSelector((state) => [
     state.gameState,
     state.manCoord.hor,
     state.manCoord.vert,
     state.manHealth,
     state.gameResult,
+    state.cardInteract,
   ]);
 
   const dispatch = useDispatch();
@@ -456,28 +418,12 @@ function App() {
         return " ";
     }
   };
-  gameState === "trownDice" ? "бросить кубик" : "сделать ход";
 
   useEffect(
-    function setEndHealth() {
-      switch (manHealth) {
-        case 0:
-          dispatch({ type: "setEndHealth" });
-          break;
-        default:
-          break;
-      }
-    },
-    [manHealth]
-  );
-
-  useEffect(
-    function checkNewPosition() {
-      switch (gameState) {
-        case "checkCellHasCard": {
-          dispatch({ type: "checkCellHasCard" });
-        }
-        case "openHealthCard": {
+    function openCard() {
+      const hasCardInteract = cardInteract ? true : false;
+      switch (true) {
+        case hasCardInteract: {
           const timerOpen = setTimeout(
             () =>
               dispatch({
@@ -485,49 +431,41 @@ function App() {
               }),
             1000
           );
-
-          return () => clearTimeout(timerOpen);
-        }
-        case "changeManHealth": {
           const timerChangeManHealth = setTimeout(
             () =>
               dispatch({
                 type: "changeManHealth",
               }),
-            1000
+            1500
           );
-          return () => clearTimeout(timerChangeManHealth);
-        }
-        case "changeHealthList": {
           const timerChangeHealthList = setTimeout(
             () =>
               dispatch({
                 type: "changeHealthList",
               }),
-            1000
+            2000
           );
-          return () => clearTimeout(timerChangeHealthList);
+          return () =>
+            clearTimeout(
+              timerOpen,
+              timerChangeManHealth,
+              timerChangeHealthList
+            );
         }
-
-        case "checkManHealth": {
-          dispatch({ type: "checkManHealth" });
-        }
-        case "checkDice": {
-          dispatch({ type: "checkDice" });
-        }
-
-        case "checkCellIsFinish": {
-          dispatch({ type: "checkCellIsFinish" });
-        }
-
-        case "endGame": {
+      }
+    },
+    [cardInteract]
+  );
+  useEffect(
+    function getEndScreen() {
+      switch (gameState) {
+        case "endGame":
           const timer = setTimeout(
             () => dispatch({ type: "getEndScreen" }),
             1000
           );
 
           return () => clearTimeout(timer);
-        }
 
         default:
           break;
@@ -577,12 +515,3 @@ ReactDOM.render(
   </Provider>,
   document.querySelector("#root")
 );
-
-/* healthList: [
-    { hor: 1, vert: 0 },
-    { hor: 6, vert: 4 },
-    { hor: 8, vert: 2 },
-    { hor: 5, vert: 0 },
-    { hor: 6, vert: 2 },
-    { hor: 7, vert: 7 },
-  ], */
