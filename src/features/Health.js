@@ -1,82 +1,58 @@
 import React from "react";
-import { useSelector } from "react-redux";
+
 import styled from "styled-components";
 
 const HealthItem = styled.div`
-     border: 10px solid;
-  /*    background-color: ${(props) => {
-       switch (props.type) {
-         case "increment":
-           return "green";
-         case "decrement":
-           return "gray";
-         default:
-           break;
-       }
-     }}; */
-     background-color:${(props) => {
-       if (props.apperance === "closed") {
-         return "gray";
-       } else {
-         switch (props.type) {
-           case "increment":
-             return "green";
-           case "decrement":
-             return "orange";
-           default:
-             break;
-         }
-       }
-     }};
+  border: 10px solid;
 
-     border-color:${(props) => {
-       if (props.apperance === "closed") {
-         return "gray";
-       } else {
-         switch (props.type) {
-           case "increment":
-             return "green";
-           case "decrement":
-             return "orange";
-           default:
-             break;
-         }
-       }
-     }};
-    /* border-radius: 50%; */
-    width: 10px;
-    height: 10px;
-   
-    position: absolute;
-    top: 0px;
-    left: 0px;
-/*   bottom: ${(props) => `${props.vert * 32 + 4}px`};
-  left: ${(props) => `${props.hor * 30 + 4}px`}; */
+  background-color: ${(props) => {
+    if (props.apperance === "closed") {
+      return "gray";
+    } else {
+      switch (props.type) {
+        case "increment":
+          return "green";
+        case "decrement":
+          return "orange";
+        default:
+          break;
+      }
+    }
+  }};
+
+  border-color: ${(props) => {
+    if (props.apperance === "closed") {
+      return "gray";
+    } else {
+      switch (props.type) {
+        case "increment":
+          return "green";
+        case "decrement":
+          return "orange";
+        default:
+          break;
+      }
+    }
+  }};
+
+  width: 10px;
+  height: 10px;
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
 `;
 
 function Health(props) {
-  const healthList = useSelector((state) => state.healthList);
-  /*находим индех из списка карточек здоровья*/
-
-  const index = healthList.findIndex((item) => {
-    return item.hor === props.hor && item.vert === props.vert;
-  });
-  /*если в этой ячейке есть элемент здоровья*/
-  if (index != -1) {
-    /*вытаскиваем ее тип*/
-
-    const currType = healthList[index].type;
-    const currApperance = healthList[index].apperance;
-    return (
-      <HealthItem
-        key={`${props.hor}${props.vert}`}
-        hor={props.hor}
-        vert={props.vert}
-        type={currType}
-        apperance={currApperance}
-      ></HealthItem>
-    );
-  } else return <></>;
+  return (
+    <HealthItem
+      key={`${props.hor}${props.vert}`}
+      hor={props.hor}
+      vert={props.vert}
+      type={props.type}
+      apperance={props.apperance}
+    ></HealthItem>
+  );
 }
 
 export default Health;

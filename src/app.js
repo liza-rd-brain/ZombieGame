@@ -75,7 +75,6 @@ const createHealthArray = (number, type) => {
 };
 
 const getInitialState = () => {
-  /* const healthArray  */
   return {
     gameState: "waitingStart",
     /* waitingStart ,
@@ -90,8 +89,8 @@ const getInitialState = () => {
     startCoord: { hor: 0, vert: 0 },
     endCoord: { hor: 9, vert: 9 },
     manCoord: {
-      hor: 8,
-      vert: 9,
+      hor: 0,
+      vert: 0,
     },
     manHealth: 1,
     dice: null,
@@ -115,6 +114,8 @@ const reducer = (state = getInitialState(), action) => {
             gameState: "gameStarted.trownDice",
           };
         }
+        default:
+          return state;
       }
     }
 
@@ -205,6 +206,8 @@ const reducer = (state = getInitialState(), action) => {
                 }
               }
             }
+            default:
+              return state;
           }
         }
 
@@ -274,8 +277,12 @@ const reducer = (state = getInitialState(), action) => {
                 }
               }
             }
+            default:
+              return state;
           }
         }
+        default:
+          return state;
       }
     }
 
@@ -287,6 +294,8 @@ const reducer = (state = getInitialState(), action) => {
             gameState: "getEndScreen",
           };
         }
+        default:
+          return state;
       }
     }
     default:
@@ -312,6 +321,8 @@ const checkCanMove = (direction, startCoord, endCoord, manCoord) => {
       if (manCoord.hor >= startCoord.hor) {
         return true;
       } else return false;
+    default:
+      return false;
   }
 };
 
@@ -427,7 +438,6 @@ function App() {
 
   useEffect(
     function openCard() {
-      /*  const hasCardInteract = cardInteract ? true : false; */
       switch (gameState) {
         case "gameStarted.openHealthCard": {
           const timerOpen = setTimeout(
@@ -458,6 +468,8 @@ function App() {
               timerChangeHealthList
             );
         }
+        default:
+          break;
       }
     },
     [gameState]
