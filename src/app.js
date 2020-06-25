@@ -102,8 +102,7 @@ const getInitialState = () => {
 };
 
 const reducer = (state = getInitialState(), action) => {
-  const phaseOuter = state.gameState.split(".")[0];
-  const phaseInner = state.gameState.split(".")[1];
+  const [phaseOuter, phaseInner] = state.gameState.split(".");
 
   switch (phaseOuter) {
     case "waitingStart": {

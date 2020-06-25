@@ -49,28 +49,31 @@ function Cell(props) {
         </CellItem>
       );
     }
-    case hasMan: {
-      return (
-        <CellItem>
-          <Man hor={props.manHor} vert={props.manVert} />
-        </CellItem>
-      );
-    }
-    case hasHealth: {
-      return (
-        <CellItem>
-          <Health
-            hor={health.hor}
-            vert={health.vert}
-            type={health.type}
-            apperance={health.apperance}
-          />
-        </CellItem>
-      );
-    }
-
-    default: {
-      return <CellItem />;
+    case !hasManAndHealth: {
+      switch (true) {
+        case hasMan: {
+          return (
+            <CellItem>
+              <Man hor={props.manHor} vert={props.manVert} />
+            </CellItem>
+          );
+        }
+        case hasHealth: {
+          return (
+            <CellItem>
+              <Health
+                hor={health.hor}
+                vert={health.vert}
+                type={health.type}
+                apperance={health.apperance}
+              />
+            </CellItem>
+          );
+        }
+        default: {
+          return <CellItem />;
+        }
+      }
     }
   }
 }

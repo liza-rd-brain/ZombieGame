@@ -2,24 +2,33 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
-
 module.exports = {
+  /* entry: "./src/test_index.tsx", */
   entry: "./src/app.js",
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
   },
-  devtool: false,
+  devtool: "source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
     new webpack.SourceMapDevToolPlugin({}),
-    
   ],
-  mode: "development",
+  mode: "production",
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader",
+      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -31,9 +40,16 @@ module.exports = {
       },
     ],
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+  },
   devServer: {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, "dist"),
-    port: 8030
+    port: 8030,
   },
+  /*  externals: {
+    'react': "React",
+    "react-dom": "ReactDOM",
+  }, */
 };
