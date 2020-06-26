@@ -4,8 +4,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
+    "moduleResolution": "Node",
     "target": "es5",
-    "jsx": "react", 
-    "allowJs": true
+    "jsx": "react",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   }
 }

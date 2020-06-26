@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { createStore } from "redux";
+import { createStore, compose } from "redux";
 import styled, { ThemeProvider } from "styled-components";
 
 import Grid from "./features/Grid";
@@ -10,6 +9,7 @@ import Arrows from "./features/Arrows";
 import Dice from "./features/Dice";
 import StartScreen from "./features/StartScreen";
 import EndScreen from "./features/EndScreen";
+
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -24,6 +24,7 @@ const Game = styled.div`
 `;
 
 const LeftPanel = styled.div`
+
   width: 120px;
   display: flex;
   flex-direction: column;
@@ -38,9 +39,28 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-const getRandomArray = (arr, type) => {
+/*getRandomHealthItem -переименовать в getRandomHealthCell  */
+
+type HealthItem={hor:number,vert:number,type?:string,apperance?:string,}
+type CoordItem={hor:number,vert:number}
+
+
+type State={gameState:string,
+  startCoord:{hor:number,vert:number},
+  endCoord:{hor:number,vert:number},
+  manCoord: {hor:number,vert:number},
+  manHealth:number,
+  dice:null|number,
+  healthCards:number,
+  cardInteract:HealthItem|false,
+  healthList:Array<HealthItem>,
+  gameResult:string
+
+}
+
+const getRandomHealthItem = (arr:Array<object>, type:Array<string>):HealthItem => {
   let hor = Math.floor(Math.random() * 9);
-  let vert = Math.floor(Math.random() * 9);
+  let vert= Math.floor(Math.random() * 9);
   let randomType = Math.floor(Math.random() * 2);
 
   if (arr.length === 0) {
@@ -51,7 +71,7 @@ const getRandomArray = (arr, type) => {
       apperance: "closed",
     };
   } else if (
-    !arr.find((item) => {
+    !arr.find((item:CoordItem) => {
       return item && item.hor === hor && item.vert === vert;
     })
   ) {
@@ -61,30 +81,27 @@ const getRandomArray = (arr, type) => {
       type: type[randomType],
       apperance: "closed",
     };
-  } else return getRandomArray(arr, type);
+  } else return getRandomHealthItem(arr, type);
 };
 
-const createHealthArray = (number, type) => {
+const createHealthArray = (number:number, type:Array<string>) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
-    const currValue = getRandomArray(prevValue, type);
+    const currValue = getRandomHealthItem(prevValue, type);
 
     return [currValue, ...prevValue];
   }, []);
-  console.log(healthArray.length, healthArray);
+
   return healthArray;
 };
 
-const getInitialState = () => {
+
+const getInitialState = (): State=> {
   return {
     gameState: "waitingStart",
     /* waitingStart ,
-      trownDice ,
-      clickArrow,
-      checkCellHasCard,
-        openHealthCard,
-      checkCellIsFinish,
-      changeManHealth,
-      changeHealthList
+      gameStarted.trownDice ,
+      gameStarted.clickArrow,
+      gameStarted.openHealthCard,
       endGame, */
     startCoord: { hor: 0, vert: 0 },
     endCoord: { hor: 9, vert: 9 },
@@ -101,7 +118,7 @@ const getInitialState = () => {
   };
 };
 
-const reducer = (state = getInitialState(), action) => {
+const reducer = (state = getInitialState(), action:{type:string,payload:string}) => {
   const [phaseOuter, phaseInner] = state.gameState.split(".");
 
   switch (phaseOuter) {
@@ -149,6 +166,8 @@ const reducer = (state = getInitialState(), action) => {
               );
               const nextCellCard = checkCell(nextManCoord, state.healthList);
               const nextCellHasCard = nextCellCard ? true : false;
+
+           
               const isNextCellFinish =
                 nextManCoord.hor === state.endCoord.hor &&
                 nextManCoord.vert === state.endCoord.vert;
@@ -157,6 +176,7 @@ const reducer = (state = getInitialState(), action) => {
                 case manInField: {
                   switch (true) {
                     case nextCellHasCard: {
+                    
                       return {
                         ...state,
                         dice: state.dice - 1,
@@ -213,22 +233,29 @@ const reducer = (state = getInitialState(), action) => {
         case "openHealthCard": {
           switch (action.type) {
             case "needOpenHealthCard": {
-              return {
-                ...state,
-                healthList: openHealthItemList(
-                  state.cardInteract,
-                  state.healthList
-                ),
-              };
+              if(state.cardInteract!=false
+                /* typeof state.cardInteract.kind===Object */ ){
+                return {
+                  ...state,
+                  healthList: openHealthItemList(
+                    state.cardInteract,
+                    state.healthList
+                  ),
+                };
+              }
+              
             }
             case "changeManHealth": {
-              return {
-                ...state,
-                manHealth: changeHealth(
-                  state.cardInteract.type,
-                  state.manHealth
-                ),
-              };
+              if(state.cardInteract!=false){
+                return {
+                  ...state,
+                  manHealth: changeHealth(
+                    ( state.cardInteract).type  ,
+                    state.manHealth
+                  ),
+                };
+              }
+             
             }
             case "changeHealthList": {
               const isManLive = state.manHealth > 0;
@@ -238,41 +265,46 @@ const reducer = (state = getInitialState(), action) => {
                   const isNextTrowLast = state.dice === 0;
                   switch (true) {
                     case isNextTrowLast: {
+                      if(state.cardInteract!=false){ 
                       return {
                         ...state,
                         healthList: changeHealthList(
-                          state.cardInteract,
+                          state.cardInteract ,
                           state.healthList
                         ),
                         gameState: "gameStarted.trownDice",
                         cardInteract: false,
-                      };
+                      }};
                     }
 
                     case !isNextTrowLast: {
-                      return {
-                        ...state,
-                        healthList: changeHealthList(
-                          state.cardInteract,
-                          state.healthList
-                        ),
-                        cardInteract: false,
-                        gameState: "gameStarted.clickArrow",
-                      };
+                      if(state.cardInteract!=false){
+                        return {
+                          ...state,
+                          healthList: changeHealthList(
+                            state.cardInteract ,
+                            state.healthList
+                          ),
+                          cardInteract: false,
+                          gameState: "gameStarted.clickArrow",
+                        };
+                      }
+                      
                     }
                   }
                 }
                 case !isManLive: {
+                  if(state.cardInteract!=false){
                   return {
                     ...state,
                     healthList: changeHealthList(
-                      state.cardInteract,
+                      state.cardInteract ,
                       state.healthList
                     ),
                     cardInteract: false,
                     gameState: "endGame",
                     gameResult: "Вы проиграли",
-                  };
+                  }};
                 }
               }
             }
@@ -302,7 +334,7 @@ const reducer = (state = getInitialState(), action) => {
   }
 };
 
-const checkCanMove = (direction, startCoord, endCoord, manCoord) => {
+const checkCanMove = (direction:string, startCoord:CoordItem, endCoord:CoordItem, manCoord:CoordItem) => {
   switch (direction) {
     case "top":
       if (manCoord.vert <= endCoord.vert) {
@@ -325,7 +357,7 @@ const checkCanMove = (direction, startCoord, endCoord, manCoord) => {
   }
 };
 
-const changeCoord = (state, direction) => {
+const changeCoord = (state:State, direction:string) => {
   const currManVert = state.manCoord.vert;
   const currManHor = state.manCoord.hor;
   const nextManVert = currManVert + 1;
@@ -363,7 +395,7 @@ const changeCoord = (state, direction) => {
   }
 };
 
-const checkCell = (nextManCoord, healthList) => {
+const checkCell = (nextManCoord:CoordItem, healthList:Array<HealthItem>) => {
   const index = healthList.findIndex((item) => {
     return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
   });
@@ -374,7 +406,7 @@ const checkCell = (nextManCoord, healthList) => {
   } else return false;
 };
 
-const changeHealth = (sign, manHealth) => {
+const changeHealth = (sign:string, manHealth:number) => {
   switch (sign) {
     case "increment":
       return manHealth + 1;
@@ -384,13 +416,13 @@ const changeHealth = (sign, manHealth) => {
       break;
   }
 };
-const changeHealthList = (coord, healthList) => {
+const changeHealthList = (coord:HealthItem, healthList:Array<HealthItem>) => {
   return healthList.filter((item) => {
     return !(coord.hor === item.hor && coord.vert === item.vert);
   });
 };
 
-const openHealthItemList = (card, healthList) => {
+const openHealthItemList = (card:HealthItem, healthList:Array<HealthItem>) => {
   return healthList.map((item, index) => {
     if (card.hor === item.hor && card.vert === item.vert) {
       card.apperance = "open";
@@ -410,7 +442,7 @@ function App() {
     manHealth,
     gameResult,
     cardInteract,
-  ] = useSelector((state) => [
+  ] = useSelector((state:State) => [
     state.gameState,
     state.manCoord.hor,
     state.manCoord.vert,
@@ -446,7 +478,7 @@ function App() {
               }),
             1000
           );
-          const timerChangeManHealth = setTimeout(
+          const timerChangeManHealth= setTimeout(
             () =>
               dispatch({
                 type: "changeManHealth",
@@ -460,10 +492,16 @@ function App() {
               }),
             2000
           );
-          return () =>
+          return ():void =>
             clearTimeout(
-              timerOpen,
-              timerChangeManHealth,
+              timerOpen
+            );
+            clearTimeout(
+             
+              timerChangeManHealth
+           
+            );
+            clearTimeout(
               timerChangeHealthList
             );
         }
@@ -521,10 +559,19 @@ function App() {
 
   return <Game>{getGameScreen()}</Game>;
 }
-
+/* 
 const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+); */
+
+
+
+const store = createStore(
+  reducer,
+ /*  initialState, */
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 ReactDOM.render(

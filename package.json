@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack --mode production" 
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,9 @@
     "@babel/preset-react": "^7.9.4",
     "@types/react": "^16.9.38",
     "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/redux": "^3.6.0",
+    "@types/styled-components": "^5.1.0",
     "autoprefixer": "^9.7.6",
     "babel-loader": "^8.1.0",
     "babel-plugin-styled-components": "^1.10.7",
