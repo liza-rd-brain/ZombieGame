@@ -130,10 +130,10 @@ const getRandomHealthItem = (
           type: type[randomType],
           apperance: "closed",
         };
-      } else return getRandomHealthItem(arr, type , forbidenCell);
+      } else return getRandomHealthItem(arr, type, forbidenCell);
     }
     case forbiddenCondition: {
-      return getRandomHealthItem(arr, type , forbidenCell);
+      return getRandomHealthItem(arr, type, forbidenCell);
     }
     default:
       return null;
@@ -309,6 +309,7 @@ const reducer = (state = getInitialState(), action: ActionType) => {
                 };
               } else return { ...state };
             }
+
             case "changeHealthList": {
               debugger;
               const isManLive = state.manHealth > 0;
@@ -316,7 +317,20 @@ const reducer = (state = getInitialState(), action: ActionType) => {
               switch (true) {
                 case isManLive: {
                   const isNextTrowLast = state.dice === 0;
-                  switch (true) {
+                  /*взял карточку -закончен ход! */
+                  if (state.cardInteract != false) {
+                    return {
+                      ...state,
+                      healthList: changeHealthList(
+                        state.cardInteract,
+                        state.healthList
+                      ),
+                      gameState: "gameStarted.trownDice",
+                      dice:null,
+                      cardInteract: false,
+                    };
+                  } else return { ...state };
+                  /* switch (true) {
                     case isNextTrowLast: {
                       if (state.cardInteract != false) {
                         return {
@@ -344,7 +358,7 @@ const reducer = (state = getInitialState(), action: ActionType) => {
                         };
                       } else return { ...state };
                     }
-                  }
+                  } */
                 }
                 case !isManLive: {
                   if (state.cardInteract != false) {
