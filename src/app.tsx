@@ -100,39 +100,53 @@ type DiceThrownAction = { type: "diceThrown"; payload: number };
 
 const getRandomHealthItem = (
   arr: Array<HealthItem>,
-  type: ["increment", "decrement"]
+  type: ["increment", "decrement"],
+  forbidenCell?: CoordItem
 ): HealthItem => {
   let hor = Math.floor(Math.random() * 9);
   let vert = Math.floor(Math.random() * 9);
   let randomType = Math.floor(Math.random() * 2);
 
-  if (arr.length === 0) {
-    return {
-      hor: hor,
-      vert: vert,
-      type: type[randomType],
-      apperance: "closed",
-    };
-  } else if (
-    !arr.find((item) => {
-      return item && item.hor === hor && item.vert === vert;
-    })
-  ) {
-    return {
-      hor: hor,
-      vert: vert,
-      type: type[randomType],
-      apperance: "closed",
-    };
-  } else return getRandomHealthItem(arr, type);
+  let forbiddenCondition =
+    forbidenCell.hor === hor && forbidenCell.vert === vert;
+
+  switch (true) {
+    case !forbiddenCondition: {
+      if (arr.length === 0) {
+        return {
+          hor: hor,
+          vert: vert,
+          type: type[randomType],
+          apperance: "closed",
+        };
+      } else if (
+        !arr.find((item) => {
+          return item && item.hor === hor && item.vert === vert;
+        })
+      ) {
+        return {
+          hor: hor,
+          vert: vert,
+          type: type[randomType],
+          apperance: "closed",
+        };
+      } else return getRandomHealthItem(arr, type , forbidenCell);
+    }
+    case forbiddenCondition: {
+      return getRandomHealthItem(arr, type , forbidenCell);
+    }
+    default:
+      return null;
+  }
 };
 
 const createHealthArray = (
   number: number,
-  type: ["increment", "decrement"]
+  type: ["increment", "decrement"],
+  forbidenCell?: CoordItem
 ) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
-    const currValue = getRandomHealthItem(prevValue, type);
+    const currValue = getRandomHealthItem(prevValue, type, forbidenCell);
 
     return [currValue, ...prevValue];
   }, []);
@@ -140,10 +154,12 @@ const createHealthArray = (
   return healthArray;
 };
 
+const startCell = { hor: 0, vert: 0 };
+
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
-    startCoord: { hor: 0, vert: 0 },
+    startCoord: startCell,
     endCoord: { hor: 9, vert: 9 },
     manCoord: {
       hor: 0,
@@ -153,7 +169,7 @@ const getInitialState = (): State => {
     dice: null,
     healthCards: 10,
     cardInteract: false,
-    healthList: createHealthArray(30, ["increment", "decrement"]),
+    healthList: createHealthArray(30, ["increment", "decrement"], startCell),
     gameResult: "",
   };
 };
@@ -544,7 +560,6 @@ function App() {
               clearTimeout(timerChangeManHealth),
               clearTimeout(timerChangeHealthList);
           };
-
         }
         default:
           break;
