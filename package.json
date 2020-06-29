@@ -4,6 +4,7 @@
   "description": "Zombie-Game",
   "main": "index.js",
   "dependencies": {
+    "@types/chrome": "0.0.117",
     "@types/html-webpack-plugin": "^3.2.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -2,10 +2,13 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-const Arrow = styled.div`
-  /* width: 10px;
-  height: 10px; */
-  /*  margin: 10px; */
+import { MoveDirection} from "./../app";
+
+type ArrowProps = {
+  direction: MoveDirection;
+};
+
+const Arrow = styled.div<ArrowProps>`
   text-align: center;
   vertical-align: middle;
   border: 1px solid lightgrey;
@@ -17,7 +20,7 @@ const Arrow = styled.div`
     color: red;
   }
   transform: ${(props) => {
-    switch (props.type) {
+    switch (props.direction) {
       case "top":
         return "rotate(-90deg)";
       case "bottom":
@@ -27,7 +30,7 @@ const Arrow = styled.div`
     }
   }};
   grid-area: ${(props) => {
-    switch (props.type) {
+    switch (props.direction) {
       case "top":
         return "arrow_top;";
       case "bottom":
@@ -48,19 +51,17 @@ const ArrowContainer = styled.div`
     ". arrow_bottom . ";
   width: 50px;
   height: 50px;
-  /*   border: 1px solid lightgrey; */
 `;
 
 function Arrows() {
-  const [arrowState] = useSelector((state) => [state.arrowState]);
   const dispatch = useDispatch();
 
-  const renderArrow = (direction) => {
+  const renderArrow = (direction: MoveDirection) => {
     return (
       <Arrow
-        type={direction}
+        direction={direction}
         onClick={() => {
-          dispatch({ type: "arrowPressed", payload: direction })
+          dispatch({ type: "arrowPressed", payload: direction });
         }}
       >
         &gt;

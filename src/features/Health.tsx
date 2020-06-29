@@ -2,7 +2,11 @@ import React from "react";
 
 import styled from "styled-components";
 
-const HealthItem = styled.div`
+import { HealthItem } from "./../app";
+
+
+
+const HealthItem = styled.div<HealthItem>`
   border: 10px solid;
 
   background-color: ${(props) => {
@@ -43,7 +47,7 @@ const HealthItem = styled.div`
   left: 0px;
 `;
 
-function Health(props) {
+function Health(props: HealthItem) {
   return (
     <HealthItem
       key={`${props.hor}${props.vert}`}

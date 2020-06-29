@@ -2,7 +2,9 @@ import React from "react";
 
 import styled from "styled-components";
 
-const ManItem = styled.div`
+import { HealthItem, CoordItem } from "./../app";
+
+const ManItem = styled.div<CoordItem>`
   border: 10px solid red;
   border-radius: 50%;
   width: 7px;
@@ -14,7 +16,7 @@ const ManItem = styled.div`
   z-index: 1;
 `;
 
-function Man(props) {
+function Man(props: HealthItem) {
   return <ManItem hor={props.hor} vert={props.vert}></ManItem>;
 }
 

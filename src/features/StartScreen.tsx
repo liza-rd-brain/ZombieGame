@@ -1,13 +1,13 @@
 import React from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import styled, { ThemeProvider } from "styled-components";
-import { useReducer } from "react";
+
 
 const StartButton = styled.button`
   margin: 100px;
 `;
 
-function StartScreen(props) {
+function StartScreen() {
   const dispatch = useDispatch();
   return (
     <>

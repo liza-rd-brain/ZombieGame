@@ -4,7 +4,13 @@ import styled from "styled-components";
 import Man from "./Man";
 import Health from "./Health";
 
-const GridItem = styled.div`
+import { State, HealthItem } from "./../app";
+
+type GridProps = {
+  vert: number;
+};
+
+const GridItem = styled.div<GridProps>`
   border: 2px solid red;
   margin: 0 auto;
   width: 100%;
@@ -28,7 +34,15 @@ const CellItem = styled.div`
   color: lightgrey;
 `;
 
-function Cell(props) {
+function Cell(props: {
+  children: string;
+  hor: number;
+  vert: number;
+  key: string;
+  manHor: number;
+  manVert: number;
+  healthList: Array<HealthItem>;
+}) {
   const hasMan = props.manHor === props.hor && props.manVert === props.vert;
   const health = props.healthList.find((item, index) => {
     return item.hor === props.hor && item.vert === props.vert;
@@ -77,7 +91,14 @@ function Cell(props) {
     }
   }
 }
-function getArray(manHor, manVert, width, height, healthList) {
+
+function getArray(
+  manHor: number,
+  manVert: number,
+  width: number,
+  height: number,
+  healthList: Array<HealthItem>
+) {
   return new Array(height)
     .fill(0)
     .map((itemVert, indexVert) =>
@@ -99,14 +120,14 @@ function getArray(manHor, manVert, width, height, healthList) {
     .reverse();
 }
 
-function Grid(props) {
+function Grid() {
   const [
     manHor,
     manVert,
     maxHor,
     maxVert,
     healthList,
-  ] = useSelector((state) => [
+  ] = useSelector((state: State) => [
     state.manCoord.hor,
     state.manCoord.vert,
     state.endCoord.hor,
