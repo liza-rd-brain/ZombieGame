@@ -149,7 +149,7 @@ const getInitialState = (): State => {
       hor: 0,
       vert: 0,
     },
-    manHealth: 1,
+    manHealth: 3,
     dice: null,
     healthCards: 10,
     cardInteract: false,
@@ -539,10 +539,12 @@ function App() {
               }),
             2000
           );
-          /* return (): void => clearTimeout(timerOpen); */
-          clearTimeout(timerOpen);
-          clearTimeout(timerChangeManHealth);
-          clearTimeout(timerChangeHealthList);
+          return (): void => {
+            clearTimeout(timerOpen),
+              clearTimeout(timerChangeManHealth),
+              clearTimeout(timerChangeHealthList);
+          };
+
         }
         default:
           break;
