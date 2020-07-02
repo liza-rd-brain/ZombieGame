@@ -14,7 +14,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new webpack.SourceMapDevToolPlugin({}),
+/*  конфликт с typeScript
+   new webpack.SourceMapDevToolPlugin({}), */
   ],
   mode: "production",
   module: {

@@ -38,7 +38,9 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-type HealthItemType = "increment" | "decrement";
+type HealthItemType = "increment" | "decrement" | undefined;
+
+type HealthItemTypeArr = ["increment", "decrement"];
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 
 export type HealthItem = {
@@ -84,7 +86,7 @@ type ActionType =
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 type DiceThrownAction = { type: "diceThrown"; payload: number };
 
-/* для конкретного акшена конкретный пэйлоад */
+/* для конкретного экшена конкретный пэйлоад */
 
 // type Card = HealthItem | { kind: "no-card" };
 // const card: Card = { kind: "no-card" };
@@ -98,55 +100,46 @@ type DiceThrownAction = { type: "diceThrown"; payload: number };
 
 // }
 
-const getRandomHealthItem = (
-  arr: Array<HealthItem>,
-  type: ["increment", "decrement"],
-  forbidenCell?: CoordItem
-): HealthItem => {
+/*может мне все-таки нужна общая функция getRandomCell?!
+получаем рандомную клетку, а потом уже проверяем ее на соответствие условиям
+здоровье, враги, целевые карточки прогонять через нее */
+
+const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
   let hor = Math.floor(Math.random() * 9);
   let vert = Math.floor(Math.random() * 9);
-  let randomType = Math.floor(Math.random() * 2);
+  let randomType: HealthItemType =
+    healthItemTypeArr[Math.floor(Math.random() * 2)];
 
-  let forbiddenCondition =
-    forbidenCell.hor === hor && forbidenCell.vert === vert;
+  let crossStartCell = startCell.hor === hor && startCell.vert === vert;
 
-  switch (true) {
-    case !forbiddenCondition: {
-      if (arr.length === 0) {
-        return {
-          hor: hor,
-          vert: vert,
-          type: type[randomType],
-          apperance: "closed",
-        };
-      } else if (
-        !arr.find((item) => {
-          return item && item.hor === hor && item.vert === vert;
-        })
-      ) {
-        return {
-          hor: hor,
-          vert: vert,
-          type: type[randomType],
-          apperance: "closed",
-        };
-      } else return getRandomHealthItem(arr, type, forbidenCell);
-    }
-    case forbiddenCondition: {
-      return getRandomHealthItem(arr, type, forbidenCell);
-    }
-    default:
-      return null;
+  if (!crossStartCell) {
+    if (arr.length === 0) {
+      return {
+        hor: hor,
+        vert: vert,
+        type: randomType,
+        apperance: "closed",
+      };
+    } else if (
+      !arr.find((item) => {
+        return item && item.hor === hor && item.vert === vert;
+      })
+    ) {
+      return {
+        hor: hor,
+        vert: vert,
+        type: randomType,
+        apperance: "closed",
+      };
+    } else return getRandomHealthItem(arr);
+  } else {
+    return getRandomHealthItem(arr);
   }
 };
 
-const createHealthArray = (
-  number: number,
-  type: ["increment", "decrement"],
-  forbidenCell?: CoordItem
-) => {
+const createHealthArray = (number: number) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
-    const currValue = getRandomHealthItem(prevValue, type, forbidenCell);
+    const currValue = getRandomHealthItem(prevValue);
 
     return [currValue, ...prevValue];
   }, []);
@@ -155,7 +148,7 @@ const createHealthArray = (
 };
 
 const startCell = { hor: 0, vert: 0 };
-
+const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
@@ -169,12 +162,12 @@ const getInitialState = (): State => {
     dice: null,
     healthCards: 10,
     cardInteract: false,
-    healthList: createHealthArray(30, ["increment", "decrement"], startCell),
+    healthList: createHealthArray(30),
     gameResult: "",
   };
 };
 
-const reducer = (state = getInitialState(), action: ActionType) => {
+const reducer = (state = getInitialState(), action: ActionType): State => {
   const [phaseOuter, phaseInner] = state.gameState.split(".");
 
   switch (phaseOuter) {
@@ -231,42 +224,50 @@ const reducer = (state = getInitialState(), action: ActionType) => {
                 case manInField: {
                   switch (true) {
                     case nextCellHasCard: {
-                      return {
-                        ...state,
-                        dice: state.dice - 1,
-                        manCoord: nextManCoord,
-                        cardInteract: nextCellCard,
-                        gameState: "gameStarted.openHealthCard",
-                      };
+                      if (state.dice != null) {
+                        return {
+                          ...state,
+                          dice: state.dice - 1,
+                          manCoord: nextManCoord,
+                          cardInteract: nextCellCard,
+                          gameState: "gameStarted.openHealthCard",
+                        };
+                      } else return { ...state };
                     }
                     case !nextCellHasCard: {
                       switch (true) {
                         case isNextCellFinish: {
-                          return {
-                            ...state,
-                            dice: state.dice - 1,
-                            manCoord: nextManCoord,
-                            gameState: "endGame",
-                            gameResult: "Вы выиграли",
-                          };
+                          if (state.dice != null) {
+                            return {
+                              ...state,
+                              dice: state.dice - 1,
+                              manCoord: nextManCoord,
+                              gameState: "endGame",
+                              gameResult: "Вы выиграли",
+                            };
+                          } else return { ...state };
                         }
                         case !isNextCellFinish: {
                           switch (true) {
                             case isNextTrowLast: {
-                              return {
-                                ...state,
-                                dice: state.dice - 1,
-                                manCoord: nextManCoord,
-                                gameState: "gameStarted.trownDice",
-                              };
+                              if (state.dice != null) {
+                                return {
+                                  ...state,
+                                  dice: state.dice - 1,
+                                  manCoord: nextManCoord,
+                                  gameState: "gameStarted.trownDice",
+                                };
+                              } else return { ...state };
                             }
                             case !isNextTrowLast: {
-                              return {
-                                ...state,
-                                dice: state.dice - 1,
-                                manCoord: nextManCoord,
-                                gameState: "gameStarted.clickArrow",
-                              };
+                              if (state.dice != null) {
+                                return {
+                                  ...state,
+                                  dice: state.dice - 1,
+                                  manCoord: nextManCoord,
+                                  gameState: "gameStarted.clickArrow",
+                                };
+                              } else return { ...state };
                             }
                           }
                         }
@@ -326,7 +327,7 @@ const reducer = (state = getInitialState(), action: ActionType) => {
                         state.healthList
                       ),
                       gameState: "gameStarted.trownDice",
-                      dice:null,
+                      dice: null,
                       cardInteract: false,
                     };
                   } else return { ...state };
@@ -377,11 +378,11 @@ const reducer = (state = getInitialState(), action: ActionType) => {
               }
             }
             default:
-              return state;
+              return { ...state };
           }
         }
         default:
-          return state;
+          return { ...state };
       }
     }
 
@@ -398,7 +399,7 @@ const reducer = (state = getInitialState(), action: ActionType) => {
       }
     }
     default:
-      return state;
+      return { ...state };
   }
 };
 
@@ -463,8 +464,14 @@ const changeCoord = (state: State, direction: MoveDirection) => {
         vert: currManVert,
       };
     }
+
+    /*пока оставила как компромис*/
+
     default:
-      break;
+      return {
+        hor: currManHor,
+        vert: currManVert,
+      };
   }
 };
 
@@ -486,7 +493,7 @@ const changeHealth = (sign: HealthItemType, manHealth: number) => {
     case "decrement":
       return manHealth - 1;
     default:
-      break;
+      return manHealth;
   }
 };
 const changeHealthList = (coord: HealthItem, healthList: Array<HealthItem>) => {
@@ -498,7 +505,7 @@ const changeHealthList = (coord: HealthItem, healthList: Array<HealthItem>) => {
 const openHealthItemList = (
   card: HealthItem,
   healthList: Array<HealthItem>
-) => {
+): Array<HealthItem> => {
   return healthList.map((item, index) => {
     if (card.hor === item.hor && card.vert === item.vert) {
       card.apperance = "open";
@@ -517,14 +524,12 @@ function App() {
     manVert,
     manHealth,
     gameResult,
-    cardInteract,
   ] = useSelector((state: State) => [
     state.gameState,
     state.manCoord.hor,
     state.manCoord.vert,
     state.manHealth,
     state.gameResult,
-    state.cardInteract,
   ]);
 
   const dispatch = useDispatch();

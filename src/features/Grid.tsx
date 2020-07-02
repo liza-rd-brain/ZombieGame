@@ -51,17 +51,19 @@ function Cell(props: {
   const hasManAndHealth = hasHealth && hasMan;
   switch (true) {
     case hasManAndHealth: {
-      return (
-        <CellItem>
-          <Man hor={props.manHor} vert={props.manVert} />
-          <Health
-            hor={health.hor}
-            vert={health.vert}
-            type={health.type}
-            apperance={health.apperance}
-          />
-        </CellItem>
-      );
+      if (health != undefined) {
+        return (
+          <CellItem>
+            <Man hor={props.manHor} vert={props.manVert} />
+            <Health
+              hor={health.hor}
+              vert={health.vert}
+              type={health.type}
+              apperance={health.apperance}
+            />
+          </CellItem>
+        );
+      } else return null;
     }
     case !hasManAndHealth: {
       switch (true) {
@@ -73,22 +75,26 @@ function Cell(props: {
           );
         }
         case hasHealth: {
-          return (
-            <CellItem>
-              <Health
-                hor={health.hor}
-                vert={health.vert}
-                type={health.type}
-                apperance={health.apperance}
-              />
-            </CellItem>
-          );
+          if (health != undefined) {
+            return (
+              <CellItem>
+                <Health
+                  hor={health.hor}
+                  vert={health.vert}
+                  type={health.type}
+                  apperance={health.apperance}
+                />
+              </CellItem>
+            );
+          } else return null;
         }
         default: {
           return <CellItem />;
         }
       }
     }
+    default:
+      return null;
   }
 }
 
