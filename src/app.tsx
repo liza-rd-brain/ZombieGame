@@ -10,6 +10,12 @@ import Dice from "./features/Dice";
 import StartScreen from "./features/StartScreen";
 import EndScreen from "./features/EndScreen";
 
+import waitingStartPhase from "./phases/waitingStart";
+import trownDice from "./phases/gameStarted/trownDice";
+import clickArrow from "./phases/gameStarted/clickArrow";
+import openHealthCard from "./phases/gameStarted/openHealthCard"
+import endGame from "./phases/endGame"
+
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -38,9 +44,9 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-type HealthItemType = "increment" | "decrement" | undefined;
+export type HealthItemType = "increment" | "decrement" | undefined;
 
-type HealthItemTypeArr = ["increment", "decrement"];
+export type HealthItemTypeArr = ["increment", "decrement"];
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 
 export type HealthItem = {
@@ -74,7 +80,7 @@ export type State = {
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
 };
 
-type ActionType =
+export type ActionType =
   | { type: "clickStartButton" }
   | DiceThrownAction
   | ArrowPressAction
@@ -172,234 +178,32 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 
   switch (phaseOuter) {
     case "waitingStart": {
-      switch (action.type) {
-        case "clickStartButton": {
-          return {
-            ...state,
-            gameState: "gameStarted.trownDice",
-          };
-        }
-        default:
-          return state;
-      }
+      return waitingStartPhase(action, state);
     }
 
     case "gameStarted": {
       switch (phaseInner) {
         case "trownDice": {
-          switch (action.type) {
-            case "diceThrown": {
-              return {
-                ...state,
-                dice: action.payload,
-                gameState: "gameStarted.clickArrow",
-              };
-            }
-            default:
-              return state;
-          }
+          return trownDice(action, state);
         }
 
         case "clickArrow": {
-          switch (action.type) {
-            case "arrowPressed": {
-              const direction = action.payload;
-              const nextManCoord = changeCoord(state, direction);
-              const isNextTrowLast = state.dice === 1;
-
-              const manInField = checkCanMove(
-                direction,
-                state.startCoord,
-                state.endCoord,
-                nextManCoord
-              );
-              const nextCellCard = checkCell(nextManCoord, state.healthList);
-              const nextCellHasCard = nextCellCard ? true : false;
-
-              const isNextCellFinish =
-                nextManCoord.hor === state.endCoord.hor &&
-                nextManCoord.vert === state.endCoord.vert;
-
-              switch (true) {
-                case manInField: {
-                  switch (true) {
-                    case nextCellHasCard: {
-                      if (state.dice != null) {
-                        return {
-                          ...state,
-                          dice: state.dice - 1,
-                          manCoord: nextManCoord,
-                          cardInteract: nextCellCard,
-                          gameState: "gameStarted.openHealthCard",
-                        };
-                      } else return { ...state };
-                    }
-                    case !nextCellHasCard: {
-                      switch (true) {
-                        case isNextCellFinish: {
-                          if (state.dice != null) {
-                            return {
-                              ...state,
-                              dice: state.dice - 1,
-                              manCoord: nextManCoord,
-                              gameState: "endGame",
-                              gameResult: "Вы выиграли",
-                            };
-                          } else return { ...state };
-                        }
-                        case !isNextCellFinish: {
-                          switch (true) {
-                            case isNextTrowLast: {
-                              if (state.dice != null) {
-                                return {
-                                  ...state,
-                                  dice: state.dice - 1,
-                                  manCoord: nextManCoord,
-                                  gameState: "gameStarted.trownDice",
-                                };
-                              } else return { ...state };
-                            }
-                            case !isNextTrowLast: {
-                              if (state.dice != null) {
-                                return {
-                                  ...state,
-                                  dice: state.dice - 1,
-                                  manCoord: nextManCoord,
-                                  gameState: "gameStarted.clickArrow",
-                                };
-                              } else return { ...state };
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                case !manInField: {
-                  return { ...state };
-                }
-              }
-            }
-            default:
-              return state;
-          }
+          return clickArrow(action, state);
         }
 
         case "openHealthCard": {
-          switch (action.type) {
-            case "needOpenHealthCard": {
-              if (state.cardInteract != false) {
-                console.log(state.cardInteract);
-                return {
-                  ...state,
-                  healthList: openHealthItemList(
-                    state.cardInteract,
-                    state.healthList
-                  ),
-                };
-              } else return { ...state };
-            }
-            case "changeManHealth": {
-              if (state.cardInteract != false) {
-                return {
-                  ...state,
-                  manHealth: changeHealth(
-                    state.cardInteract.type,
-                    state.manHealth
-                  ),
-                };
-              } else return { ...state };
-            }
-
-            case "changeHealthList": {
-              debugger;
-              const isManLive = state.manHealth > 0;
-
-              switch (true) {
-                case isManLive: {
-                  const isNextTrowLast = state.dice === 0;
-                  /*взял карточку -закончен ход! */
-                  if (state.cardInteract != false) {
-                    return {
-                      ...state,
-                      healthList: changeHealthList(
-                        state.cardInteract,
-                        state.healthList
-                      ),
-                      gameState: "gameStarted.trownDice",
-                      dice: null,
-                      cardInteract: false,
-                    };
-                  } else return { ...state };
-                  /* switch (true) {
-                    case isNextTrowLast: {
-                      if (state.cardInteract != false) {
-                        return {
-                          ...state,
-                          healthList: changeHealthList(
-                            state.cardInteract,
-                            state.healthList
-                          ),
-                          gameState: "gameStarted.trownDice",
-                          cardInteract: false,
-                        };
-                      } else return { ...state };
-                    }
-
-                    case !isNextTrowLast: {
-                      if (state.cardInteract != false) {
-                        return {
-                          ...state,
-                          healthList: changeHealthList(
-                            state.cardInteract,
-                            state.healthList
-                          ),
-                          cardInteract: false,
-                          gameState: "gameStarted.clickArrow",
-                        };
-                      } else return { ...state };
-                    }
-                  } */
-                }
-                case !isManLive: {
-                  if (state.cardInteract != false) {
-                    return {
-                      ...state,
-                      healthList: changeHealthList(
-                        state.cardInteract,
-                        state.healthList
-                      ),
-                      cardInteract: false,
-                      gameState: "endGame",
-                      gameResult: "Вы проиграли",
-                    };
-                  } else return { ...state };
-                }
-              }
-            }
-            default:
-              return { ...state };
-          }
-        }
-        default:
-          return { ...state };
-      }
-    }
-
-    case "endGame": {
-      switch (action.type) {
-        case "getEndScreen": {
-          return {
-            ...state,
-            gameState: "getEndScreen",
-          };
+          return openHealthCard(action, state);
         }
         default:
           return state;
       }
     }
+
+    case "endGame": {
+      endGame(action, state)
+    }
     default:
-      return { ...state };
+      return state;
   }
 };
 
@@ -464,9 +268,6 @@ const changeCoord = (state: State, direction: MoveDirection) => {
         vert: currManVert,
       };
     }
-
-    /*пока оставила как компромис*/
-
     default:
       return {
         hor: currManHor,
