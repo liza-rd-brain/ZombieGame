@@ -195,71 +195,76 @@ const getGameList = (
 
   const healthList: Array<HealthItem> = createHealthArray(30);
 
-  return new Array(height).fill(0).map((itemVert, vert) =>
-    new Array(width).fill({}).map((itemHor, hor) => {
-      const hasMan = manCoord.hor === hor && manCoord.vert === vert;
-      const health = healthList.find((item, index) => {
-        return item.hor === hor && item.vert === vert;
-      });
-      const hasHealth = health ? true : false;
-      const hasManAndHealth = hasHealth && hasMan;
-      const wallCell = wallList.find((item) => {
-        return item.hor === hor && item.vert === vert;
-      });
+  return new Array(height)
+    .fill(0)
+    .map(
+      (itemVert, hor) =>
+        new Array(width).fill({}).map((itemHor, vert) => {
+          const hasMan = manCoord.hor === hor && manCoord.vert === vert;
+          const health = healthList.find((item, index) => {
+            return item.hor === hor && item.vert === vert;
+          });
+          const hasHealth = health ? true : false;
+          const hasManAndHealth = hasHealth && hasMan;
+          const wallCell = wallList.find((item) => {
+            return item.hor === hor && item.vert === vert;
+          });
 
-      const hasWall = wallCell ? true : false;
+          const hasWall = wallCell ? true : false;
 
-      switch (true) {
-        case hasWall: {
-          return {
-            hor: hor,
-            vert: vert,
-            wall: true,
-          };
-        }
-        case !hasWall: {
           switch (true) {
-            case hasManAndHealth: {
-              if (health != undefined) {
-                return {
-                  hor: hor,
-                  vert: vert,
-                  health: {
-                    type: health.type,
-                    apperance: health.apperance,
-                  },
-                  /*  в этом поле потом можно будет хранить здоровье человека */
-                  man: true,
-                };
-              } else return null;
-            }
-            case hasMan: {
+            case hasWall: {
               return {
                 hor: hor,
                 vert: vert,
-                man: true,
+                wall: true,
               };
             }
-            case hasHealth: {
-              if (health != undefined) {
-                return {
-                  hor: hor,
-                  vert: vert,
-                  health: {
-                    type: health.type,
-                    apperance: health.apperance,
-                  },
-                };
-              } else return null;
+            case !hasWall: {
+              switch (true) {
+                case hasManAndHealth: {
+                  if (health != undefined) {
+                    return {
+                      hor: hor,
+                      vert: vert,
+                      health: {
+                        type: health.type,
+                        apperance: health.apperance,
+                      },
+                      /*  в этом поле потом можно будет хранить здоровье человека */
+                      man: true,
+                    };
+                  } else return null;
+                }
+                case hasMan: {
+                  return {
+                    hor: hor,
+                    vert: vert,
+                    man: true,
+                  };
+                }
+                case hasHealth: {
+                  if (health != undefined) {
+                    return {
+                      hor: hor,
+                      vert: vert,
+                      health: {
+                        type: health.type,
+                        apperance: health.apperance,
+                      },
+                    };
+                  } else return null;
+                }
+              }
             }
+            default:
+              return { hor: hor, vert: vert };
           }
-        }
-        default:
-          return null;
-      }
-      /*     return []; */
-    })
-  );
+          /*     return []; */
+        })
+      
+    )
+    .reverse();
 
   /*стены
 cardItem:HealthItem|Man

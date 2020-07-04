@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Man from "./Man";
 import Health from "./Health";
-
+import Wall from "./Wall";
 import { State, HealthItem } from "./../app";
 
 type GridProps = {
@@ -126,6 +126,80 @@ function getArray(
     .reverse();
 }
 
+type cellItem = {
+  hor: number;
+  vert: number;
+  man?: boolean;
+  wall?: boolean;
+  health?: any;
+};
+function getFullArray(gameList: Array<any>) {
+  return gameList.map((item: any, index: number) => {
+    return item.map((item: any, index: number) => {
+      const hasMan = /* item && */ item.man ? true : false;
+      const hasHealth = item.health ? true : false;
+      const hasWall = item.wall ? true : false;
+
+      const hasManAndHealth = hasMan && hasHealth;
+      switch (true) {
+        case hasManAndHealth: {
+          return (
+            <CellItem>
+              <Man hor={item.hor} vert={item.vert} />
+              <Health
+                hor={item.hor}
+                vert={item.vert}
+                type={item.health.type}
+                apperance={item.shealth.apperance}
+              />
+            </CellItem>
+          );
+        }
+        case hasMan: {
+          return (
+            <CellItem>
+              {`${item.hor}${item.vert}`}
+              <Man hor={item.hor} vert={item.vert} />
+            </CellItem>
+          );
+        }
+        case hasHealth: {
+          return (
+            <CellItem>
+              <Health
+                hor={item.hor}
+                vert={item.vert}
+                type={item.health.type}
+                apperance={item.health.apperance}
+              />
+            </CellItem>
+          );
+        }
+        case hasWall: {
+          return (
+            <CellItem>
+              <Wall hor={item.hor} vert={item.vert}></Wall>
+            </CellItem>
+          );
+        }
+        /*  case !hasMan: {
+          return (
+            <CellItem
+              key={`${item.hor}${item.vert}`}
+            >{`${item.hor}${item.vert}`}</CellItem>
+          );
+        } */
+        default:
+          return (
+            <CellItem
+              key={`${item.hor}${item.vert}`}
+            >{`${item.hor}${item.vert}`}</CellItem>
+          );
+      }
+    });
+  });
+}
+
 function Grid() {
   const [
     manHor,
@@ -133,20 +207,25 @@ function Grid() {
     maxHor,
     maxVert,
     healthList,
+    gameList,
   ] = useSelector((state: State) => [
     state.manCoord.hor,
     state.manCoord.vert,
     state.endCoord.hor,
     state.endCoord.vert,
     state.healthList,
+    state.gameList,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
+  console.log(getFullArray(gameList));
+
   return (
     <GridItem vert={width}>
-      {getArray(manHor, manVert, width, height, healthList)}
+      {getFullArray(gameList)}
+      {/*   {getArray(manHor, manVert, width, height, healthList)} */}
     </GridItem>
   );
 }
