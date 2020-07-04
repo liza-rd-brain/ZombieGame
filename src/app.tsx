@@ -106,9 +106,7 @@ const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
     return item && item.hor === hor && item.vert === vert;
   });
 
-  const crossWall = wallCell
-    ? wallCell.hor === hor && wallCell.vert === vert
-    : false;
+  const crossWall = wallCell ? true : false;
 
   const hasIntersection = crossWall || crossStartCell;
 
@@ -189,21 +187,88 @@ const createHealthArray = (number: number) => {
 const getGameList = (
   numberHelthItem: number,
   wallList: Array<CoordItem>,
-  endCell: CoordItem
+  endCell: CoordItem,
+  manCoord: CoordItem
 ): Array<any> => {
   const width = endCell.hor + 1;
   const height = endCell.vert + 1;
 
   const healthList: Array<HealthItem> = createHealthArray(30);
 
-  return new Array(height).fill(0).map((itemVert, indexVert) =>
-    new Array(width).fill({}).map((itemHor, indexHor) => {
-      return [];
+  return new Array(height).fill(0).map((itemVert, vert) =>
+    new Array(width).fill({}).map((itemHor, hor) => {
+      const hasMan = manCoord.hor === hor && manCoord.vert === vert;
+      const health = healthList.find((item, index) => {
+        return item.hor === hor && item.vert === vert;
+      });
+      const hasHealth = health ? true : false;
+      const hasManAndHealth = hasHealth && hasMan;
+      const wallCell = wallList.find((item) => {
+        return item.hor === hor && item.vert === vert;
+      });
+
+      const hasWall = wallCell ? true : false;
+
+      switch (true) {
+        case hasWall: {
+          return {
+            hor: hor,
+            vert: vert,
+            wall: true,
+          };
+        }
+        case !hasWall: {
+          switch (true) {
+            case hasManAndHealth: {
+              if (health != undefined) {
+                return {
+                  hor: hor,
+                  vert: vert,
+                  health: {
+                    type: health.type,
+                    apperance: health.apperance,
+                  },
+                  /*  в этом поле потом можно будет хранить здоровье человека */
+                  man: true,
+                };
+              } else return null;
+            }
+            case hasMan: {
+              return {
+                hor: hor,
+                vert: vert,
+                man: true,
+              };
+            }
+            case hasHealth: {
+              if (health != undefined) {
+                return {
+                  hor: hor,
+                  vert: vert,
+                  health: {
+                    type: health.type,
+                    apperance: health.apperance,
+                  },
+                };
+              } else return null;
+            }
+          }
+        }
+        default:
+          return null;
+      }
+      /*     return []; */
     })
   );
 
   /*стены
+cardItem:HealthItem|Man
+{
+  hor: number;
+  vert: number;
+  content:wall|cardItem
 
+}
     карточки здоровья (не могут пересекаться со стенами)
     человек
   */
@@ -227,20 +292,21 @@ const wallList: Array<CoordItem> = [
   { hor: 4, vert: 4 },
 ];
 
+const manCoord: CoordItem = {
+  hor: 0,
+  vert: 0,
+};
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
     startCoord: startCell,
     endCoord: endCell,
-    manCoord: {
-      hor: 0,
-      vert: 0,
-    },
+    manCoord: manCoord,
     manHealth: 3,
     dice: null,
     cardInteract: false,
     healthList: createHealthArray(30),
-    gameList: getGameList(30, wallList, endCell),
+    gameList: getGameList(30, wallList, endCell, manCoord),
     gameResult: "",
   };
 };
