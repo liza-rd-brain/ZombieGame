@@ -13,8 +13,8 @@ import EndScreen from "./features/EndScreen";
 import waitingStartPhase from "./phases/waitingStart";
 import trownDice from "./phases/gameStarted/trownDice";
 import clickArrow from "./phases/gameStarted/clickArrow";
-import openHealthCard from "./phases/gameStarted/openHealthCard"
-import endGame from "./phases/endGame"
+import openHealthCard from "./phases/gameStarted/openHealthCard";
+import endGame from "./phases/endGame";
 
 const Field = styled.div`
   position: relative;
@@ -54,7 +54,6 @@ export type HealthItem = {
   vert: number;
   type?: HealthItemType;
   apperance?: "closed" | "open";
-  /* kind: "health-item"; */
 };
 
 export type CoordItem = { hor: number; vert: number };
@@ -74,10 +73,10 @@ export type State = {
   manCoord: CoordItem;
   manHealth: number;
   dice: null | number;
-  healthCards: number;
   cardInteract: HealthItem | false;
   healthList: Array<HealthItem>;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
+  gameList: Array<any>;
 };
 
 export type ActionType =
@@ -92,33 +91,68 @@ export type ActionType =
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 type DiceThrownAction = { type: "diceThrown"; payload: number };
 
-/* для конкретного экшена конкретный пэйлоад */
-
-// type Card = HealthItem | { kind: "no-card" };
-// const card: Card = { kind: "no-card" };
-// function checkCard(c: Card) {
-//   if (c.kind === "health-item") {
-//     return console.log(c)
-//   }
-//   if (c.kind === "no-card") {
-//     return console.log(c)
-//   }
-
-// }
-
 /*может мне все-таки нужна общая функция getRandomCell?!
 получаем рандомную клетку, а потом уже проверяем ее на соответствие условиям
 здоровье, враги, целевые карточки прогонять через нее */
 
 const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
-  let hor = Math.floor(Math.random() * 9);
-  let vert = Math.floor(Math.random() * 9);
-  let randomType: HealthItemType =
+  const hor = Math.floor(Math.random() * 9);
+  const vert = Math.floor(Math.random() * 9);
+  const randomType: HealthItemType =
     healthItemTypeArr[Math.floor(Math.random() * 2)];
 
-  let crossStartCell = startCell.hor === hor && startCell.vert === vert;
+  const crossStartCell = startCell.hor === hor && startCell.vert === vert;
+  const wallCell = wallList.find((item) => {
+    return item && item.hor === hor && item.vert === vert;
+  });
 
-  if (!crossStartCell) {
+  const crossWall = wallCell
+    ? wallCell.hor === hor && wallCell.vert === vert
+    : false;
+
+  const hasIntersection = crossWall || crossStartCell;
+
+  const healthRepetition = arr.find((item) => {
+    return item && item.hor === hor && item.vert === vert;
+  });
+
+  const hasHealthRepitition = healthRepetition
+    ? healthRepetition.hor === hor && healthRepetition.vert === vert
+    : false;
+  const firstElement = arr.length === 0;
+
+  switch (true) {
+    case hasIntersection: {
+      return getRandomHealthItem(arr);
+    }
+    case !crossStartCell: {
+      switch (true) {
+        case firstElement: {
+          return {
+            hor: hor,
+            vert: vert,
+            type: randomType,
+            apperance: "closed",
+          };
+        }
+        case !hasHealthRepitition: {
+          return {
+            hor: hor,
+            vert: vert,
+            type: randomType,
+            apperance: "closed",
+          };
+        }
+        case hasHealthRepitition: {
+          return getRandomHealthItem(arr);
+        }
+      }
+    }
+    default:
+      return getRandomHealthItem(arr);
+  }
+
+  /*  if (!crossStartCell) {
     if (arr.length === 0) {
       return {
         hor: hor,
@@ -140,35 +174,73 @@ const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
     } else return getRandomHealthItem(arr);
   } else {
     return getRandomHealthItem(arr);
-  }
+  } */
 };
 
 const createHealthArray = (number: number) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
     const currValue = getRandomHealthItem(prevValue);
-
     return [currValue, ...prevValue];
   }, []);
 
   return healthArray;
 };
 
+const getGameList = (
+  numberHelthItem: number,
+  wallList: Array<CoordItem>,
+  endCell: CoordItem
+): Array<any> => {
+  const width = endCell.hor + 1;
+  const height = endCell.vert + 1;
+
+  const healthList: Array<HealthItem> = createHealthArray(30);
+
+  return new Array(height).fill(0).map((itemVert, indexVert) =>
+    new Array(width).fill({}).map((itemHor, indexHor) => {
+      return [];
+    })
+  );
+
+  /*стены
+
+    карточки здоровья (не могут пересекаться со стенами)
+    человек
+  */
+
+  /* return []; */
+};
+
 const startCell = { hor: 0, vert: 0 };
+const endCell = { hor: 9, vert: 9 };
+
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
+
+const wallList: Array<CoordItem> = [
+  { hor: 2, vert: 2 },
+  { hor: 3, vert: 2 },
+  { hor: 4, vert: 2 },
+  { hor: 2, vert: 3 },
+  { hor: 4, vert: 3 },
+  { hor: 2, vert: 4 },
+  { hor: 3, vert: 4 },
+  { hor: 4, vert: 4 },
+];
+
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
     startCoord: startCell,
-    endCoord: { hor: 9, vert: 9 },
+    endCoord: endCell,
     manCoord: {
       hor: 0,
       vert: 0,
     },
     manHealth: 3,
     dice: null,
-    healthCards: 10,
     cardInteract: false,
     healthList: createHealthArray(30),
+    gameList: getGameList(30, wallList, endCell),
     gameResult: "",
   };
 };
@@ -200,7 +272,7 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
     }
 
     case "endGame": {
-      endGame(action, state)
+      endGame(action, state);
     }
     default:
       return state;

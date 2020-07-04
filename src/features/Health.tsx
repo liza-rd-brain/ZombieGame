@@ -7,7 +7,7 @@ import { HealthItem } from "./../app";
 
 
 const HealthItem = styled.div<HealthItem>`
-  border: 10px solid;
+  border: 5px solid;
 
   background-color: ${(props) => {
     if (props.apperance === "closed") {
@@ -43,8 +43,8 @@ const HealthItem = styled.div<HealthItem>`
   height: 10px;
 
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 5px;
+  left: 5px;
 `;
 
 function Health(props: HealthItem) {
