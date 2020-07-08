@@ -56,6 +56,15 @@ export type HealthItem = {
   apperance?: "closed" | "open";
 };
 
+export type CurrentHealthItem = {
+  hor: number;
+  vert: number;
+  health: {
+    type: HealthItemType;
+    apperance: "closed" | "open";
+  };
+};
+
 export type CoordItem = { hor: number; vert: number };
 
 type GameState =
@@ -74,7 +83,7 @@ export type State = {
   manHealth: number;
   dice: null | number;
   cardInteract: HealthItem | false;
-/*   healthList: Array<HealthItem>; */
+  /*   healthList: Array<HealthItem>; */
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: Array<any>;
 };
@@ -198,8 +207,8 @@ const getGameList = (
   return new Array(height)
     .fill(0)
     .map(
-      (itemVert, hor) =>
-        new Array(width).fill({}).map((itemHor, vert) => {
+      (itemVert, vert) =>
+        new Array(width).fill({}).map((itemHor, hor) => {
           const hasMan = manCoord.hor === hor && manCoord.vert === vert;
           const health = healthList.find((item, index) => {
             return item.hor === hor && item.vert === vert;
@@ -262,7 +271,7 @@ const getGameList = (
           }
           /*     return []; */
         })
-      
+      /*  .reverse() */
     )
     .reverse();
 
@@ -299,7 +308,7 @@ const wallList: Array<CoordItem> = [
 
 const manCoord: CoordItem = {
   hor: 0,
-  vert: 0,
+  vert: 9,
 };
 const getInitialState = (): State => {
   return {
@@ -310,7 +319,7 @@ const getInitialState = (): State => {
     manHealth: 3,
     dice: null,
     cardInteract: false,
-/*     healthList: createHealthArray(30), */
+    /*     healthList: createHealthArray(30), */
     gameList: getGameList(30, wallList, endCell, manCoord),
     gameResult: "",
   };
@@ -349,7 +358,6 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
       return state;
   }
 };
-
 
 function App() {
   const [
