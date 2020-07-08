@@ -19,7 +19,7 @@ function clickArrow(action: ActionType, state: State): State {
         state.endCoord,
         nextManCoord
       );
-      const nextCellCard = checkCell(nextManCoord, state.healthList);
+      const nextCellCard = checkCell(nextManCoord, state.gameList);
       const nextCellHasCard = nextCellCard ? true : false;
 
       const isNextCellFinish =
@@ -160,14 +160,43 @@ const checkCanMove = (
   }
 };
 
-const checkCell = (nextManCoord: CoordItem, healthList: Array<HealthItem>) => {
-  const index = healthList.findIndex((item) => {
+const checkCell = (nextManCoord: CoordItem, gameList: Array<any>) => {
+  /*ищем item в грядущей клетке */
+   return gameList.find((item: Array<any>) => {
+    if (Array.isArray(item)) {
+      if (
+        item.some((item) => {
+          return item.health === true;
+        })
+      ) {
+        return item;
+      } else {
+        checkCell(nextManCoord, item);
+      }
+    }
+    /* else {return null}; */
+  });
+
+  /*   const element = gameList
+    .find((item) => {
+      return item.find((item: any) => {
+        return item.health === true;
+      });
+    })
+    .find((item: any) => {
+      return item.health === true;
+    });
+
+  return checkCell;
+  console.log(element);
+ */
+  /*  const index = healthList.findIndex((item) => {
     return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
   });
 
   if (index != -1) {
     const currItem = healthList[index];
     return currItem;
-  } else return false;
+  } else return false; */
 };
 export default clickArrow;

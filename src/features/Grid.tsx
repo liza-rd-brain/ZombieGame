@@ -34,7 +34,6 @@ const CellItem = styled.div`
   color: lightgrey;
 `;
 
-
 type CellItem = {
   hor: number;
   vert: number;
@@ -66,7 +65,7 @@ function getFullArray(gameList: Array<any>) {
         }
         case hasMan: {
           return (
-            <CellItem  key={`${item.hor}${item.vert}`}>
+            <CellItem key={`${item.hor}${item.vert}`}>
               {`${item.hor}${item.vert}`}
               <Man hor={item.hor} vert={item.vert} />
             </CellItem>
@@ -116,27 +115,23 @@ function Grid() {
     manVert,
     maxHor,
     maxVert,
-    healthList,
+   /*  healthList, */
     gameList,
   ] = useSelector((state: State) => [
     state.manCoord.hor,
     state.manCoord.vert,
     state.endCoord.hor,
     state.endCoord.vert,
-    state.healthList,
+/*     state.healthList, */
     state.gameList,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  console.log(getFullArray(gameList));
+  console.log(gameList);
 
-  return (
-    <GridItem vert={width}>
-      {getFullArray(gameList)}
-    </GridItem>
-  );
+  return <GridItem vert={width}>{getFullArray(gameList)}</GridItem>;
 }
 
 export default Grid;

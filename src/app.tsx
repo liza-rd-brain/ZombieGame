@@ -74,7 +74,7 @@ export type State = {
   manHealth: number;
   dice: null | number;
   cardInteract: HealthItem | false;
-  healthList: Array<HealthItem>;
+/*   healthList: Array<HealthItem>; */
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: Array<any>;
 };
@@ -96,8 +96,8 @@ type DiceThrownAction = { type: "diceThrown"; payload: number };
 здоровье, враги, целевые карточки прогонять через нее */
 
 const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
-  const hor = Math.floor(Math.random() * 9);
-  const vert = Math.floor(Math.random() * 9);
+  const hor = Math.floor(Math.random() * 10);
+  const vert = Math.floor(Math.random() * 10);
   const randomType: HealthItemType =
     healthItemTypeArr[Math.floor(Math.random() * 2)];
 
@@ -310,7 +310,7 @@ const getInitialState = (): State => {
     manHealth: 3,
     dice: null,
     cardInteract: false,
-    healthList: createHealthArray(30),
+/*     healthList: createHealthArray(30), */
     gameList: getGameList(30, wallList, endCell, manCoord),
     gameResult: "",
   };

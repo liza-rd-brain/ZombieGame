@@ -7,7 +7,7 @@ function openHealthCard(action: ActionType, state: State): State {
         console.log(state.cardInteract);
         return {
           ...state,
-          healthList: openHealthItemList(state.cardInteract, state.healthList),
+          gameList: openHealthItemList(state.cardInteract, state.gameList),
         };
       } else return { ...state };
     }
@@ -31,10 +31,7 @@ function openHealthCard(action: ActionType, state: State): State {
           if (state.cardInteract != false) {
             return {
               ...state,
-              healthList: changeHealthList(
-                state.cardInteract,
-                state.healthList
-              ),
+              gameList: changeHealthList(state.cardInteract, state.gameList),
               gameState: "gameStarted.trownDice",
               dice: null,
               cardInteract: false,
@@ -74,9 +71,9 @@ function openHealthCard(action: ActionType, state: State): State {
           if (state.cardInteract != false) {
             return {
               ...state,
-              healthList: changeHealthList(
+              gameList: changeHealthList(
                 state.cardInteract,
-                state.healthList
+                state.gameList
               ),
               cardInteract: false,
               gameState: "endGame",
@@ -93,23 +90,32 @@ function openHealthCard(action: ActionType, state: State): State {
 
 const openHealthItemList = (
   card: HealthItem,
-  healthList: Array<HealthItem>
+  gameList: Array<any>
 ): Array<HealthItem> => {
-  return healthList.map((item, index) => {
-    if (card.hor === item.hor && card.vert === item.vert) {
-      card.apperance = "open";
-      return {
-        ...card,
-        apperance: "open",
-      };
-    } else return item;
+  return gameList.map((item: any, index) => {
+    return item.map((item: any) => {
+      if (card.hor === item.hor && card.vert === item.vert) {
+        card.apperance = "open";
+        return {
+          ...card,
+          apperance: "open",
+        };
+      } else return item;
+    });
   });
 };
 
-const changeHealthList = (coord: HealthItem, healthList: Array<HealthItem>) => {
-  return healthList.filter((item) => {
-    return !(coord.hor === item.hor && coord.vert === item.vert);
+const changeHealthList = (coord: HealthItem, gameList: Array<any>) => {
+  return gameList.map((item) => {
+    return item.filter((item:any) => {
+      return !(coord.hor === item.hor && coord.vert === item.vert);
+    });
   });
+  /* удаляем карточку*/
+
+  /* return healthList.filter((item) => {
+    return !(coord.hor === item.hor && coord.vert === item.vert);
+  }); */
 };
 
 const changeHealth = (sign: HealthItemType, manHealth: number) => {
