@@ -323,7 +323,7 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
     case "waitingStart": {
       return waitingStartPhase(action, state);
     }
-
+/* 
     case "gameStarted": {
       switch (phaseInner) {
         case "trownDice": {
@@ -340,7 +340,7 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
         default:
           return state;
       }
-    }
+    } */
 
     case "endGame": {
       endGame(action, state);
@@ -454,10 +454,10 @@ function App() {
               <Grid />
             </Field>
             <LeftPanel>
-              <Status>{textPhase()}</Status>
+          {/*     <Status>{textPhase()}</Status>
               <Status>{`координаты: ${manHor}${manVert}`}</Status>
               <Status>{`здоровье: ${manHealth}`}</Status>
-
+ */}
               <Dice />
               <Arrows />
             </LeftPanel>
