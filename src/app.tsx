@@ -84,10 +84,8 @@ export type State = {
   gameState: GameState;
   startCoord: CoordItem;
   endCoord: CoordItem;
-  /*  manCoord: CoordItem; */
   manHealth: number;
   dice: null | number;
-  cardInteract: CurrentHealthItem | false;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: Array<any>;
 };
@@ -103,10 +101,6 @@ export type ActionType =
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 type DiceThrownAction = { type: "diceThrown"; payload: number };
-
-/*может мне все-таки нужна общая функция getRandomCell?!
-получаем рандомную клетку, а потом уже проверяем ее на соответствие условиям
-здоровье, враги, целевые карточки прогонять через нее */
 
 const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
   const hor = Math.floor(Math.random() * 10);
@@ -295,7 +289,7 @@ cardItem:HealthItem|Man
 };
 
 const startCell = { hor: 0, vert: 0 };
-const endCell = { hor: 3, vert: 3 };
+const endCell = { hor: 9, vert: 9 };
 
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
 
@@ -323,7 +317,7 @@ const getInitialState = (): State => {
     /*  manCoord: manCoord, */
     manHealth: 3,
     dice: null,
-    cardInteract: false,
+    /*  cardInteract: false, */
 
     gameList: getGameList(30, wallList, endCell, manCoord),
     gameResult: "",

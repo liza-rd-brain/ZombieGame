@@ -38,7 +38,7 @@ function clickArrow(action: ActionType, state: State): State {
                   dice: state.dice - 1,
                   /* manCoord: nextManCoord, */
                   gameList: gameListManMoved,
-                  cardInteract: nextCellCard,
+            /*       cardInteract: nextCellCard, */
                   gameState: "gameStarted.openHealthCard",
                 };
               } else return { ...state };
