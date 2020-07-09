@@ -44,6 +44,9 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
+export const StartCell = { hor: 0, vert: 0 };
+export const EndCell = { hor: 9, vert: 9 };
+
 export type HealthItemType = "increment" | "decrement" | undefined;
 
 export type HealthItemTypeArr = ["increment", "decrement"];
@@ -82,8 +85,6 @@ type GameState =
 
 export type State = {
   gameState: GameState;
-  startCoord: CoordItem;
-  endCoord: CoordItem;
   manHealth: number;
   dice: null | number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
@@ -108,7 +109,7 @@ const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
   const randomType: HealthItemType =
     healthItemTypeArr[Math.floor(Math.random() * 2)];
 
-  const crossStartCell = startCell.hor === hor && startCell.vert === vert;
+  const crossStartCell = StartCell.hor === hor && StartCell.vert === vert;
   const wallCell = wallList.find((item) => {
     return item && item.hor === hor && item.vert === vert;
   });
@@ -156,30 +157,6 @@ const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
     default:
       return getRandomHealthItem(arr);
   }
-
-  /*  if (!crossStartCell) {
-    if (arr.length === 0) {
-      return {
-        hor: hor,
-        vert: vert,
-        type: randomType,
-        apperance: "closed",
-      };
-    } else if (
-      !arr.find((item) => {
-        return item && item.hor === hor && item.vert === vert;
-      })
-    ) {
-      return {
-        hor: hor,
-        vert: vert,
-        type: randomType,
-        apperance: "closed",
-      };
-    } else return getRandomHealthItem(arr);
-  } else {
-    return getRandomHealthItem(arr);
-  } */
 };
 
 const createHealthArray = (number: number) => {
@@ -288,9 +265,6 @@ cardItem:HealthItem|Man
   /* return []; */
 };
 
-const startCell = { hor: 0, vert: 0 };
-const endCell = { hor: 9, vert: 9 };
-
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
 
 const wallList: Array<CoordItem> = [
@@ -312,14 +286,11 @@ const manCoord: CoordItem = {
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
-    startCoord: startCell,
-    endCoord: endCell,
-    /*  manCoord: manCoord, */
+
     manHealth: 3,
     dice: null,
-    /*  cardInteract: false, */
 
-    gameList: getGameList(30, wallList, endCell, manCoord),
+    gameList: getGameList(30, wallList, EndCell, manCoord),
     gameResult: "",
   };
 };
@@ -359,16 +330,9 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 };
 
 function App() {
-  const [
-    gameState,
-    /*     manHor,
-    manVert, */
-    manHealth,
-    gameResult,
-  ] = useSelector((state: State) => [
+  const [gameState, manHealth, gameResult] = useSelector((state: State) => [
     state.gameState,
-    /* state.manCoord.hor,
-    state.manCoord.vert, */
+
     state.manHealth,
     state.gameResult,
   ]);

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Man from "./Man";
 import Health from "./Health";
 import Wall from "./Wall";
-import { State, HealthItem } from "./../app";
+import { State, StartCell, EndCell } from "./../app";
 
 type GridProps = {
   vert: number;
@@ -45,7 +45,7 @@ type CellItem = {
 function getFullArray(gameList: Array<any>) {
   return gameList.map((item: any) => {
     return item.map((item: any) => {
-      const hasMan = /* item && */ item.man ? true : false;
+      const hasMan = item.man ? true : false;
       const hasHealth = item.health ? true : false;
       const hasWall = item.wall ? true : false;
 
@@ -92,13 +92,7 @@ function getFullArray(gameList: Array<any>) {
             </CellItem>
           );
         }
-        /*  case !hasMan: {
-          return (
-            <CellItem
-              key={`${item.hor}${item.vert}`}
-            >{`${item.hor}${item.vert}`}</CellItem>
-          );
-        } */
+
         default:
           return (
             <CellItem
@@ -111,19 +105,10 @@ function getFullArray(gameList: Array<any>) {
 }
 
 function Grid() {
-  const [
- /*    manHor,
-    manVert, */
-    maxHor,
-    maxVert,
-   /*  healthList, */
-    gameList,
-  ] = useSelector((state: State) => [
-   /*  state.manCoord.hor,
-    state.manCoord.vert, */
-    state.endCoord.hor,
-    state.endCoord.vert,
-/*     state.healthList, */
+  const [maxHor, maxVert, gameList] = useSelector((state: State) => [
+    EndCell.hor,
+    EndCell.vert,
+
     state.gameList,
   ]);
 

@@ -5,6 +5,8 @@ import {
   CoordItem,
   CurrentHealthItem,
   ManItem,
+  StartCell,
+  EndCell,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
@@ -17,16 +19,16 @@ function clickArrow(action: ActionType, state: State): State {
 
       const manInField = checkCanMove(
         direction,
-        state.startCoord,
-        state.endCoord,
+        StartCell,
+        EndCell,
         nextManCoord
       );
       const nextCellCard = checkCell(nextManCoord, state.gameList);
       const nextCellHasCard = nextCellCard ? true : false;
 
       const isNextCellFinish =
-        nextManCoord.hor === state.endCoord.hor &&
-        nextManCoord.vert === state.endCoord.vert;
+        nextManCoord.hor === EndCell.hor &&
+        nextManCoord.vert === EndCell.vert;
 
       switch (true) {
         case manInField: {
@@ -38,7 +40,7 @@ function clickArrow(action: ActionType, state: State): State {
                   dice: state.dice - 1,
                   /* manCoord: nextManCoord, */
                   gameList: gameListManMoved,
-            /*       cardInteract: nextCellCard, */
+                  /*       cardInteract: nextCellCard, */
                   gameState: "gameStarted.openHealthCard",
                 };
               } else return { ...state };
