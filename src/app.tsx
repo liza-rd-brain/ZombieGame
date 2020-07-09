@@ -64,6 +64,11 @@ export type CurrentHealthItem = {
     apperance: "closed" | "open";
   };
 };
+export type ManItem = {
+  hor: number;
+  vert: number;
+  man: true;
+};
 
 export type CoordItem = { hor: number; vert: number };
 
@@ -79,7 +84,7 @@ export type State = {
   gameState: GameState;
   startCoord: CoordItem;
   endCoord: CoordItem;
-  manCoord: CoordItem;
+  /*  manCoord: CoordItem; */
   manHealth: number;
   dice: null | number;
   cardInteract: CurrentHealthItem | false;
@@ -290,7 +295,7 @@ cardItem:HealthItem|Man
 };
 
 const startCell = { hor: 0, vert: 0 };
-const endCell = { hor: 9, vert: 9 };
+const endCell = { hor: 3, vert: 3 };
 
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
 
@@ -315,7 +320,7 @@ const getInitialState = (): State => {
     gameState: "waitingStart",
     startCoord: startCell,
     endCoord: endCell,
-    manCoord: manCoord,
+    /*  manCoord: manCoord, */
     manHealth: 3,
     dice: null,
     cardInteract: false,
@@ -362,14 +367,14 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 function App() {
   const [
     gameState,
-    manHor,
-    manVert,
+    /*     manHor,
+    manVert, */
     manHealth,
     gameResult,
   ] = useSelector((state: State) => [
     state.gameState,
-    state.manCoord.hor,
-    state.manCoord.vert,
+    /* state.manCoord.hor,
+    state.manCoord.vert, */
     state.manHealth,
     state.gameResult,
   ]);
@@ -463,8 +468,8 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              <Status>{`координаты: ${manHor}${manVert}`}</Status>
-              <Status>{`здоровье: ${manHealth}`}</Status>
+              {/*   <Status>{`координаты: ${manHor}${manVert}`}</Status>
+              <Status>{`здоровье: ${manHealth}`}</Status> */}
 
               <Dice />
               <Arrows />

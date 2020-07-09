@@ -41,6 +41,7 @@ type CellItem = {
   wall?: boolean;
   health?: any;
 };
+
 function getFullArray(gameList: Array<any>) {
   return gameList.map((item: any) => {
     return item.map((item: any) => {
@@ -58,7 +59,7 @@ function getFullArray(gameList: Array<any>) {
                 hor={item.hor}
                 vert={item.vert}
                 type={item.health.type}
-                apperance={item.shealth.apperance}
+                apperance={item.health.apperance}
               />
             </CellItem>
           );
@@ -111,15 +112,15 @@ function getFullArray(gameList: Array<any>) {
 
 function Grid() {
   const [
-    manHor,
-    manVert,
+ /*    manHor,
+    manVert, */
     maxHor,
     maxVert,
    /*  healthList, */
     gameList,
   ] = useSelector((state: State) => [
-    state.manCoord.hor,
-    state.manCoord.vert,
+   /*  state.manCoord.hor,
+    state.manCoord.vert, */
     state.endCoord.hor,
     state.endCoord.vert,
 /*     state.healthList, */

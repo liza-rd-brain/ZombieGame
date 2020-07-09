@@ -4,13 +4,15 @@ import {
   MoveDirection,
   CoordItem,
   CurrentHealthItem,
+  ManItem,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-      const nextManCoord = changeCoord(state, direction);
+      const nextManCoord = changeCoord(state.gameList, direction);
+      const gameListManMoved: any = moveMan(state.gameList, nextManCoord);
       const isNextTrowLast = state.dice === 1;
 
       const manInField = checkCanMove(
@@ -34,7 +36,8 @@ function clickArrow(action: ActionType, state: State): State {
                 return {
                   ...state,
                   dice: state.dice - 1,
-                  manCoord: nextManCoord,
+                  /* manCoord: nextManCoord, */
+                  gameList: gameListManMoved,
                   cardInteract: nextCellCard,
                   gameState: "gameStarted.openHealthCard",
                 };
@@ -47,7 +50,8 @@ function clickArrow(action: ActionType, state: State): State {
                     return {
                       ...state,
                       dice: state.dice - 1,
-                      manCoord: nextManCoord,
+                      /* manCoord: nextManCoord, */
+                      gameList: gameListManMoved,
                       gameState: "endGame",
                       gameResult: "Вы выиграли",
                     };
@@ -60,7 +64,8 @@ function clickArrow(action: ActionType, state: State): State {
                         return {
                           ...state,
                           dice: state.dice - 1,
-                          manCoord: nextManCoord,
+                          /* manCoord: nextManCoord, */
+                          gameList: gameListManMoved,
                           gameState: "gameStarted.trownDice",
                         };
                       } else return { ...state };
@@ -70,7 +75,8 @@ function clickArrow(action: ActionType, state: State): State {
                         return {
                           ...state,
                           dice: state.dice - 1,
-                          manCoord: nextManCoord,
+                          /*     manCoord: nextManCoord, */
+                          gameList: gameListManMoved,
                           gameState: "gameStarted.clickArrow",
                         };
                       } else return { ...state };
@@ -91,9 +97,15 @@ function clickArrow(action: ActionType, state: State): State {
   }
 }
 
-const changeCoord = (state: State, direction: MoveDirection) => {
-  const currManVert = state.manCoord.vert;
-  const currManHor = state.manCoord.hor;
+const changeCoord = (
+  gameList: Array<any>,
+  direction: MoveDirection
+): ManItem => {
+  const currManCoord = gameList.flat().find((item: any) => {
+    return item.man;
+  });
+  const currManVert = currManCoord.vert;
+  const currManHor = currManCoord.hor;
   const nextManVert = currManVert + 1;
   const nextManHor = currManHor + 1;
   const prevManVert = currManVert - 1;
@@ -104,32 +116,50 @@ const changeCoord = (state: State, direction: MoveDirection) => {
       return {
         hor: currManHor,
         vert: nextManVert,
+        man: true,
       };
     }
     case "bottom": {
       return {
         hor: currManHor,
         vert: prevManVert,
+        man: true,
       };
     }
     case "left": {
       return {
         hor: prevManHor,
         vert: currManVert,
+        man: true,
       };
     }
     case "right": {
       return {
         hor: nextManHor,
         vert: currManVert,
+        man: true,
       };
     }
     default:
       return {
         hor: currManHor,
         vert: currManVert,
+        man: true,
       };
   }
+};
+const moveMan = (gameList: Array<any>, coord: CoordItem) => {
+  return gameList.map((item) => {
+    return item.map((item: any) => {
+      if (item.man) {
+        delete item.man;
+        return item;
+      } else if (item.hor === coord.hor && item.vert === coord.vert) {
+        item.man = true;
+        return item;
+      } else return item;
+    });
+  });
 };
 
 const checkCanMove = (
@@ -160,15 +190,11 @@ const checkCanMove = (
   }
 };
 
-const checkCell = (
-  nextManCoord: CoordItem,
-  gameList: any 
-): any => {
-
-
+const checkCell = (nextManCoord: CoordItem, gameList: any): any => {
   return gameList.flat().find((item: any) => {
-    return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
+    if (item.hor === nextManCoord.hor && item.vert === nextManCoord.vert) {
+      return item.health ? item : false;
+    } else return false;
   });
-
 };
 export default clickArrow;
