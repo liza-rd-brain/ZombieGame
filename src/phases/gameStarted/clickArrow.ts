@@ -3,7 +3,7 @@ import {
   ActionType,
   MoveDirection,
   CoordItem,
-  HealthItem,
+  CurrentHealthItem,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
@@ -160,43 +160,15 @@ const checkCanMove = (
   }
 };
 
-const checkCell = (nextManCoord: CoordItem, gameList: Array<any>) => {
-  /*ищем item в грядущей клетке */
-   return gameList.find((item: Array<any>) => {
-    if (Array.isArray(item)) {
-      if (
-        item.some((item) => {
-          return item.health === true;
-        })
-      ) {
-        return item;
-      } else {
-        checkCell(nextManCoord, item);
-      }
-    }
-    /* else {return null}; */
-  });
+const checkCell = (
+  nextManCoord: CoordItem,
+  gameList: any 
+): any => {
 
-  /*   const element = gameList
-    .find((item) => {
-      return item.find((item: any) => {
-        return item.health === true;
-      });
-    })
-    .find((item: any) => {
-      return item.health === true;
-    });
 
-  return checkCell;
-  console.log(element);
- */
-  /*  const index = healthList.findIndex((item) => {
+  return gameList.flat().find((item: any) => {
     return item.hor === nextManCoord.hor && item.vert === nextManCoord.vert;
   });
 
-  if (index != -1) {
-    const currItem = healthList[index];
-    return currItem;
-  } else return false; */
 };
 export default clickArrow;
