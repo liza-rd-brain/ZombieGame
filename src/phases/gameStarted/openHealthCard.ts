@@ -1,4 +1,10 @@
-import { State, ActionType, HealthItem, HealthItemType } from "./../../app";
+import {
+  State,
+  ActionType,
+  HealthItem,
+  HealthItemType,
+  CurrentHealthItem,
+} from "./../../app";
 
 function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
@@ -15,7 +21,7 @@ function openHealthCard(action: ActionType, state: State): State {
       if (state.cardInteract != false) {
         return {
           ...state,
-          manHealth: changeHealth(state.cardInteract.type, state.manHealth),
+          manHealth: changeHealth(state.cardInteract.health.type, state.manHealth),
         };
       } else return { ...state };
     }
@@ -37,44 +43,12 @@ function openHealthCard(action: ActionType, state: State): State {
               cardInteract: false,
             };
           } else return { ...state };
-          /* switch (true) {
-                case isNextTrowLast: {
-                  if (state.cardInteract != false) {
-                    return {
-                      ...state,
-                      healthList: changeHealthList(
-                        state.cardInteract,
-                        state.healthList
-                      ),
-                      gameState: "gameStarted.trownDice",
-                      cardInteract: false,
-                    };
-                  } else return { ...state };
-                }
-
-                case !isNextTrowLast: {
-                  if (state.cardInteract != false) {
-                    return {
-                      ...state,
-                      healthList: changeHealthList(
-                        state.cardInteract,
-                        state.healthList
-                      ),
-                      cardInteract: false,
-                      gameState: "gameStarted.clickArrow",
-                    };
-                  } else return { ...state };
-                }
-              } */
         }
         case !isManLive: {
           if (state.cardInteract != false) {
             return {
               ...state,
-              gameList: changeHealthList(
-                state.cardInteract,
-                state.gameList
-              ),
+              gameList: changeHealthList(state.cardInteract, state.gameList),
               cardInteract: false,
               gameState: "endGame",
               gameResult: "Вы проиграли",
@@ -89,16 +63,19 @@ function openHealthCard(action: ActionType, state: State): State {
 }
 
 const openHealthItemList = (
-  card: HealthItem,
+  card: CurrentHealthItem,
   gameList: Array<any>
-): Array<HealthItem> => {
+): Array<CurrentHealthItem> => {
   return gameList.map((item: any, index) => {
     return item.map((item: any) => {
       if (card.hor === item.hor && card.vert === item.vert) {
-        card.apperance = "open";
+        /* card.health.apperance = "open"; */
         return {
           ...card,
-          apperance: "open",
+          health: {
+            ...card.health,
+            apperance: "open",
+          },
         };
       } else return item;
     });
@@ -107,8 +84,12 @@ const openHealthItemList = (
 
 const changeHealthList = (coord: HealthItem, gameList: Array<any>) => {
   return gameList.map((item) => {
-    return item.filter((item:any) => {
-      return !(coord.hor === item.hor && coord.vert === item.vert);
+    return item.map((item: any) => {
+      if (coord.hor === item.hor && coord.vert === item.vert) {
+        delete item.health;
+        return item;
+      } else return item;
+      /* return !(coord.hor === item.hor && coord.vert === item.vert); */
     });
   });
   /* удаляем карточку*/

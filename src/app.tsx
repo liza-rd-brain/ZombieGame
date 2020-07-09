@@ -82,8 +82,7 @@ export type State = {
   manCoord: CoordItem;
   manHealth: number;
   dice: null | number;
-  cardInteract: HealthItem | false;
-  /*   healthList: Array<HealthItem>; */
+  cardInteract: CurrentHealthItem | false;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: Array<any>;
 };
@@ -308,8 +307,9 @@ const wallList: Array<CoordItem> = [
 
 const manCoord: CoordItem = {
   hor: 0,
-  vert: 9,
+  vert: 0,
 };
+
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
@@ -319,7 +319,7 @@ const getInitialState = (): State => {
     manHealth: 3,
     dice: null,
     cardInteract: false,
-    /*     healthList: createHealthArray(30), */
+
     gameList: getGameList(30, wallList, endCell, manCoord),
     gameResult: "",
   };
