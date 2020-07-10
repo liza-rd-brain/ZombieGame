@@ -4,7 +4,19 @@ import styled from "styled-components";
 import Man from "./Man";
 import Health from "./Health";
 import Wall from "./Wall";
-import { State, StartCell, EndCell } from "./../app";
+import {
+  State,
+  StartCell,
+  EndCell,
+  GameList,
+  CellType,
+  ManItem,
+  HealthItem,
+  WallItem,
+  CoordItem,
+  FieldItem,
+  CardInteract,
+} from "./../app";
 
 type GridProps = {
   vert: number;
@@ -25,7 +37,7 @@ const GridItem = styled.div<GridProps>`
   grid-gap: 0px;
 `;
 
-const CellItem = styled.div`
+const CellItem = styled.div<CoordItem>`
   position: relative;
   border: 1px solid #000;
   box-sizing: content-box;
@@ -34,71 +46,53 @@ const CellItem = styled.div`
   color: lightgrey;
 `;
 
-type CellItem = {
-  hor: number;
-  vert: number;
-  man?: boolean;
-  wall?: boolean;
-  health?: any;
-};
+/* function Cell(props: any) {
+  return <CellItem hor={props.hor} vert={props.vert}></CellItem>;
+} */
 
-function getFullArray(gameList: Array<any>) {
-  return gameList.map((item: any) => {
-    return item.map((item: any) => {
-      const hasMan = item.man ? true : false;
-      const hasHealth = item.health ? true : false;
-      const hasWall = item.wall ? true : false;
+function getCell(cell: FieldItem) {
+  return cell.cardItem.map((item: CardInteract) => {
+    switch (item.name) {
+      case "man":
+        return <Man />;
+      case "health":
+        return (
+          <Health name="health" type={item.type} apperance={item.apperance} />
+        );
+      default:
+        return null;
+    }
+  });
+}
 
-      const hasManAndHealth = hasMan && hasHealth;
-      switch (true) {
-        case hasManAndHealth: {
-          return (
-            <CellItem>
-              <Man hor={item.hor} vert={item.vert} />
-              <Health
-                hor={item.hor}
-                vert={item.vert}
-                type={item.health.type}
-                apperance={item.health.apperance}
-              />
-            </CellItem>
-          );
-        }
-        case hasMan: {
-          return (
-            <CellItem key={`${item.hor}${item.vert}`}>
-              {`${item.hor}${item.vert}`}
-              <Man hor={item.hor} vert={item.vert} />
-            </CellItem>
-          );
-        }
-        case hasHealth: {
-          return (
-            <CellItem>
-              <Health
-                key={`${item.hor}${item.vert}`}
-                hor={item.hor}
-                vert={item.vert}
-                type={item.health.type}
-                apperance={item.health.apperance}
-              />
-            </CellItem>
-          );
-        }
-        case hasWall: {
-          return (
-            <CellItem key={`${item.hor}${item.vert}`}>
-              <Wall hor={item.hor} vert={item.vert}></Wall>
-            </CellItem>
-          );
-        }
-
-        default:
+function getFullArray(gameList: GameList) {
+  return gameList.map((item: CellType[]) => {
+    return item.map((cell: CellType) => {
+      switch (cell.name) {
+        case "field": {
           return (
             <CellItem
-              key={`${item.hor}${item.vert}`}
-            >{`${item.hor}${item.vert}`}</CellItem>
+              key={`${cell.hor}${cell.vert}`}
+              hor={cell.hor}
+              vert={cell.vert}
+            >
+              {getCell(cell)}
+            </CellItem>
           );
+        }
+        case "wall": {
+          return (
+            <CellItem
+              key={`${cell.hor}${cell.vert}`}
+              hor={cell.hor}
+              vert={cell.vert}
+            >
+              <Wall></Wall>
+            </CellItem>
+          );
+        }
+        default:
+          return null;
       }
     });
   });
@@ -114,7 +108,7 @@ function Grid() {
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  console.log(gameList);
+  console.log(getFullArray(gameList));
 
   return <GridItem vert={width}>{getFullArray(gameList)}</GridItem>;
 }

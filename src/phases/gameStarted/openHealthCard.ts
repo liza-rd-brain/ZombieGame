@@ -1,10 +1,4 @@
-import {
-  State,
-  ActionType,
-  HealthItem,
-  HealthItemType,
-  CurrentHealthItem,
-} from "./../../app";
+import { State, ActionType, HealthItem, HealthItemType,GameList } from "./../../app";
 
 function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
@@ -52,7 +46,7 @@ function openHealthCard(action: ActionType, state: State): State {
   }
 }
 
-const openHealthItemList = (gameList: Array<any>): Array<CurrentHealthItem> => {
+const openHealthItemList = (gameList: GameList): GameList => {
   return gameList.map((item: any, index) => {
     return item.map((item: any) => {
       if (item.man) {

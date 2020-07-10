@@ -3,10 +3,11 @@ import {
   ActionType,
   MoveDirection,
   CoordItem,
-  CurrentHealthItem,
-  ManItem,
+  FieldItem,
   StartCell,
   EndCell,
+  CellType,
+  GameList,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
@@ -27,8 +28,7 @@ function clickArrow(action: ActionType, state: State): State {
       const nextCellHasCard = nextCellCard ? true : false;
 
       const isNextCellFinish =
-        nextManCoord.hor === EndCell.hor &&
-        nextManCoord.vert === EndCell.vert;
+        nextManCoord.hor === EndCell.hor && nextManCoord.vert === EndCell.vert;
 
       switch (true) {
         case manInField: {
@@ -102,9 +102,14 @@ function clickArrow(action: ActionType, state: State): State {
 const changeCoord = (
   gameList: Array<any>,
   direction: MoveDirection
-): ManItem => {
-  const currManCoord = gameList.flat().find((item: any) => {
-    return item.man;
+): FieldItem => {
+  const currManCoord = gameList.flat().find((item: FieldItem) => {
+    switch (item.name) {
+      case "field":
+        return item.cardItem.find((item) => item.name === "man");
+      default:
+        return null;
+    }
   });
   const currManVert = currManCoord.vert;
   const currManHor = currManCoord.hor;
@@ -118,48 +123,90 @@ const changeCoord = (
       return {
         hor: currManHor,
         vert: nextManVert,
-        man: true,
+        name: "field",
+        cardItem: [
+          {
+            name: "man",
+          },
+        ],
       };
     }
     case "bottom": {
       return {
         hor: currManHor,
         vert: prevManVert,
-        man: true,
+        name: "field",
+        cardItem: [
+          {
+            name: "man",
+          },
+        ],
       };
     }
     case "left": {
       return {
         hor: prevManHor,
         vert: currManVert,
-        man: true,
+        name: "field",
+        cardItem: [
+          {
+            name: "man",
+          },
+        ],
       };
     }
     case "right": {
       return {
         hor: nextManHor,
         vert: currManVert,
-        man: true,
+        name: "field",
+        cardItem: [
+          {
+            name: "man",
+          },
+        ],
       };
     }
     default:
       return {
         hor: currManHor,
         vert: currManVert,
-        man: true,
+        name: "field",
+        cardItem: [
+          {
+            name: "man",
+          },
+        ],
       };
   }
 };
-const moveMan = (gameList: Array<any>, coord: CoordItem) => {
-  return gameList.map((item) => {
-    return item.map((item: any) => {
-      if (item.man) {
-        delete item.man;
-        return item;
-      } else if (item.hor === coord.hor && item.vert === coord.vert) {
-        item.man = true;
-        return item;
-      } else return item;
+
+const moveMan = (gameList: GameList, coord: CoordItem) => {
+  return gameList.map((item: CellType[]) => {
+    return item.map((item: CellType) => {
+      const isNewCoord = item.hor === coord.hor && item.vert === coord.vert;
+
+      switch (item.name) {
+        case "field": {
+          const isOldCell =
+            item.cardItem.some((item) => item.name === "man") && !isNewCoord;
+          const isNewCell = item.hor === coord.hor && item.vert === coord.vert;
+          switch (true) {
+            case isOldCell: {
+              return {
+                ...item,
+                cardItem: item.cardItem.filter((item) => item.name != "man"),
+              };
+            }
+            case isNewCell: {
+              return { ...item, cardItem: [...item.cardItem, { name: "man" }] };
+            }
+          }
+        }
+
+        default:
+          return item;
+      }
     });
   });
 };

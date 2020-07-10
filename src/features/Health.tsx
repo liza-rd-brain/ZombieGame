@@ -4,8 +4,6 @@ import styled from "styled-components";
 
 import { HealthItem } from "./../app";
 
-
-
 const HealthItem = styled.div<HealthItem>`
   border: 5px solid;
 
@@ -50,9 +48,7 @@ const HealthItem = styled.div<HealthItem>`
 function Health(props: HealthItem) {
   return (
     <HealthItem
-      key={`${props.hor}${props.vert}`}
-      hor={props.hor}
-      vert={props.vert}
+      name="health"
       type={props.type}
       apperance={props.apperance}
     ></HealthItem>
