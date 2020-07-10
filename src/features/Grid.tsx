@@ -108,7 +108,6 @@ function Grid() {
   const [maxHor, maxVert, gameList] = useSelector((state: State) => [
     EndCell.hor,
     EndCell.vert,
-
     state.gameList,
   ]);
 

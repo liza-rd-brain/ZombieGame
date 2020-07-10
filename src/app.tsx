@@ -47,48 +47,49 @@ const Status = styled.div`
 export const StartCell = { hor: 0, vert: 0 };
 export const EndCell = { hor: 9, vert: 9 };
 
-export type HealthItemType = "increment" | "decrement" | undefined;
-
-export type HealthItemTypeArr = ["increment", "decrement"];
-export type MoveDirection = "top" | "bottom" | "left" | "right";
-
-export type HealthItem = {
-  hor: number;
-  vert: number;
-  type?: HealthItemType;
-  apperance?: "closed" | "open";
-};
-
-export type CurrentHealthItem = {
-  hor: number;
-  vert: number;
-  health: {
-    type: HealthItemType;
-    apperance: "closed" | "open";
-  };
-};
-export type ManItem = {
-  hor: number;
-  vert: number;
-  man: true;
-};
-
 export type CoordItem = { hor: number; vert: number };
 
-type GameState =
-  | "waitingStart"
-  | "gameStarted.trownDice"
-  | "gameStarted.clickArrow"
-  | "gameStarted.openHealthCard"
-  | "endGame"
-  | "getEndScreen";
+export type HealthItemType = "increment" | "decrement";
+
+export type HealthItemTypeArr = ["increment", "decrement"];
+
+export type MoveDirection = "top" | "bottom" | "left" | "right";
+
+export type WallItem = {
+  hor: number;
+  vert: number;
+  name: "wall";
+};
+
+export type ManItem = {
+  name: "man";
+};
+
+export type HealthItem = {
+  name: "health";
+  type: HealthItemType;
+  apperance: "closed" | "open";
+};
+
+export type CardInteract = ManItem | HealthItem;
+
+export type FieldItem = {
+  hor: number;
+  vert: number;
+  name: "field";
+  cardItem: CardInteract[];
+};
+
+export type CellType = FieldItem | WallItem;
+
+export type GameList = CellType[][];
 
 export type State = {
   gameState: GameState;
   manHealth: number;
   dice: null | number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  gameList: Array<any>;
+  gameList: /*  Array<any> */ GameList;
 };
 
 export type ActionType =
@@ -100,10 +101,19 @@ export type ActionType =
   | { type: "changeHealthList" }
   | { type: "getEndScreen" };
 
+type GameState =
+  | "waitingStart"
+  | "gameStarted.trownDice"
+  | "gameStarted.clickArrow"
+  | "gameStarted.openHealthCard"
+  | "endGame"
+  | "getEndScreen";
+
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
+
 type DiceThrownAction = { type: "diceThrown"; payload: number };
 
-const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
+const getRandomHealthItem = (arr: Array<FieldItem>): FieldItem => {
   const hor = Math.floor(Math.random() * 10);
   const vert = Math.floor(Math.random() * 10);
   const randomType: HealthItemType =
@@ -137,16 +147,20 @@ const getRandomHealthItem = (arr: Array<HealthItem>): HealthItem => {
           return {
             hor: hor,
             vert: vert,
-            type: randomType,
-            apperance: "closed",
+            name: "field",
+            cardItem: [
+              { name: "health", type: randomType, apperance: "closed" },
+            ],
           };
         }
         case !hasHealthRepitition: {
           return {
             hor: hor,
             vert: vert,
-            type: randomType,
-            apperance: "closed",
+            name: "field",
+            cardItem: [
+              { name: "health", type: randomType, apperance: "closed" },
+            ],
           };
         }
         case hasHealthRepitition: {
@@ -171,20 +185,19 @@ const createHealthArray = (number: number) => {
 const getGameList = (
   numberHelthItem: number,
   wallList: Array<CoordItem>,
-  endCell: CoordItem,
-  manCoord: CoordItem
+  endCell: CoordItem
 ): Array<any> => {
   const width = endCell.hor + 1;
   const height = endCell.vert + 1;
 
-  const healthList: Array<HealthItem> = createHealthArray(30);
+  const healthList: Array<FieldItem> = createHealthArray(30);
 
   return new Array(height)
     .fill(0)
     .map(
       (itemVert, vert) =>
         new Array(width).fill({}).map((itemHor, hor) => {
-          const hasMan = manCoord.hor === hor && manCoord.vert === vert;
+          const hasMan = StartCell.hor === hor && StartCell.vert === vert;
           const health = healthList.find((item, index) => {
             return item.hor === hor && item.vert === vert;
           });
@@ -201,7 +214,7 @@ const getGameList = (
               return {
                 hor: hor,
                 vert: vert,
-                wall: true,
+                name: "wall",
               };
             }
             case !hasWall: {
@@ -209,14 +222,8 @@ const getGameList = (
                 case hasManAndHealth: {
                   if (health != undefined) {
                     return {
-                      hor: hor,
-                      vert: vert,
-                      health: {
-                        type: health.type,
-                        apperance: health.apperance,
-                      },
-                      /*  в этом поле потом можно будет хранить здоровье человека */
-                      man: true,
+                      ...health,
+                      cardItem: [...health.cardItem, { name: "man" }],
                     };
                   } else return null;
                 }
@@ -224,45 +231,25 @@ const getGameList = (
                   return {
                     hor: hor,
                     vert: vert,
-                    man: true,
+                    name: "field",
+                    cardItem: [{ name: "man" }],
                   };
                 }
                 case hasHealth: {
                   if (health != undefined) {
-                    return {
-                      hor: hor,
-                      vert: vert,
-                      health: {
-                        type: health.type,
-                        apperance: health.apperance,
-                      },
-                    };
+                    return health;
                   } else return null;
                 }
               }
             }
             default:
-              return { hor: hor, vert: vert };
+              return { hor: hor, vert: vert, name: "field", cardItem: [] };
           }
           /*     return []; */
         })
       /*  .reverse() */
     )
     .reverse();
-
-  /*стены
-cardItem:HealthItem|Man
-{
-  hor: number;
-  vert: number;
-  content:wall|cardItem
-
-}
-    карточки здоровья (не могут пересекаться со стенами)
-    человек
-  */
-
-  /* return []; */
 };
 
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
@@ -286,11 +273,9 @@ const manCoord: CoordItem = {
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
-
     manHealth: 3,
     dice: null,
-
-    gameList: getGameList(30, wallList, EndCell, manCoord),
+    gameList: getGameList(30, wallList, EndCell),
     gameResult: "",
   };
 };
