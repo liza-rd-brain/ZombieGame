@@ -1,11 +1,16 @@
-import { State, ActionType, HealthItem, HealthItemType,GameList } from "./../../app";
+import {
+  State, ActionType, HealthItem,
+  HealthItemType, GameList, CellType, CardInteract
+} from "./../../app";
 
 function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
     case "needOpenHealthCard": {
+      const newList = openHealthItemList(state.gameList)
+      console.log(newList)
       return {
         ...state,
-        gameList: openHealthItemList(state.gameList),
+        gameList: /* openHealthItemList(state.gameList), */newList
       };
     }
     case "changeManHealth": {
@@ -47,20 +52,53 @@ function openHealthCard(action: ActionType, state: State): State {
 }
 
 const openHealthItemList = (gameList: GameList): GameList => {
-  return gameList.map((item: any, index) => {
-    return item.map((item: any) => {
-      if (item.man) {
-        return {
-          ...item,
-          health: {
-            ...item.health,
-            apperance: "open",
-          },
-        };
-      } else return item;
+
+  return gameList.map((item: CellType[]) => {
+    return item.map((item: CellType) => {
+      switch (item.name) {
+
+        case "field": {
+          const helthCell = item.cardItem.some(item => item.name === "man")
+          if (helthCell) {
+            return {
+              ...item,
+              cardItem: item.cardItem.map((item) => {
+                switch (item.name) {
+                  case "health": {
+                    return { ...item, apperance:"open"/* : !item.apperance  *//* , item.apperance: "open"  */ }
+                  }
+                  case "man": return item
+                }
+              })
+
+            }
+            /*  ищем поле, где есть человек
+             в этом поле в кардАйтэм меняем вид клетки здоровья */
+
+            /*  return {
+               ...item,
+               cardItem: item.cardItem.find(item => {
+                 item.name = "man"
+               }) ? item.cardItem.map(item => {
+                 item.name === "health" ?
+                   { ...item, apperance: "open" } : item
+               }) : item
+             } */
+            /*найдем карточку где стоит человек и в ней меняем apperance */
+          }
+          else { return item };
+        }
+        case "wall": {
+          return item;
+        }
+
+      }
+
     });
-  });
-};
+
+  })
+}
+
 
 const changeHealthList = (gameList: Array<any>) => {
   return gameList.map((item) => {

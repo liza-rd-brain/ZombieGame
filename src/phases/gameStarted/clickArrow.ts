@@ -199,7 +199,8 @@ const moveMan = (gameList: GameList, coord: CoordItem) => {
               };
             }
             case isNewCell: {
-              return { ...item, cardItem: [...item.cardItem, { name: "man" }] };
+              return { ...item, 
+                cardItem: [...item.cardItem, { name: "man" }] };
             }
           }
         }
@@ -239,10 +240,20 @@ const checkCanMove = (
   }
 };
 
-const checkCell = (nextManCoord: CoordItem, gameList: any): any => {
-  return gameList.flat().find((item: any) => {
+const checkCell = (nextManCoord: CoordItem, gameList: GameList): any => {
+  return gameList.flat().find((item: CellType) => {
     if (item.hor === nextManCoord.hor && item.vert === nextManCoord.vert) {
-      return item.health ? item : false;
+
+      switch (item.name) {
+        case "field": {
+          return item.cardItem.find(item => {
+            return item.name === "health"
+          })
+        }
+        case "wall": {
+          return item
+        }
+      }
     } else return false;
   });
 };

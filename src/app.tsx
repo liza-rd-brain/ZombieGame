@@ -74,8 +74,7 @@ export type HealthItem = {
 export type CardInteract = ManItem | HealthItem;
 
 export type FieldItem = {
-  hor: number;
-  vert: number;
+  hor: number;  vert: number;
   name: "field";
   cardItem: CardInteract[];
 };
