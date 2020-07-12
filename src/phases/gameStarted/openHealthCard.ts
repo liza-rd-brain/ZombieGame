@@ -1,16 +1,22 @@
 import {
-  State, ActionType, HealthItem,
-  HealthItemType, GameList, CellType, CardInteract
+  State,
+  ActionType,
+  HealthItem,
+  HealthItemType,
+  GameList,
+  CellType,
+  CardInteract,
+  FieldItem,
 } from "./../../app";
 
 function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
     case "needOpenHealthCard": {
-      const newList = openHealthItemList(state.gameList)
-      console.log(newList)
+      const newList = openHealthItemList(state.gameList);
+      console.log(newList);
       return {
         ...state,
-        gameList: /* openHealthItemList(state.gameList), */newList
+        gameList: /* openHealthItemList(state.gameList), */ newList,
       };
     }
     case "changeManHealth": {
@@ -52,69 +58,88 @@ function openHealthCard(action: ActionType, state: State): State {
 }
 
 const openHealthItemList = (gameList: GameList): GameList => {
-
   return gameList.map((item: CellType[]) => {
     return item.map((item: CellType) => {
       switch (item.name) {
-
         case "field": {
-          const helthCell = item.cardItem.some(item => item.name === "man")
+          const helthCell = item.cardItem.some((item) => item.name === "man");
           if (helthCell) {
             return {
               ...item,
               cardItem: item.cardItem.map((item) => {
                 switch (item.name) {
                   case "health": {
-                    return { ...item, apperance:"open"/* : !item.apperance  *//* , item.apperance: "open"  */ }
+                    return {
+                      ...item,
+                      apperance: "open",
+                    };
                   }
-                  case "man": return item
+                  case "man":
+                    return item;
                 }
-              })
-
-            }
-            /*  ищем поле, где есть человек
-             в этом поле в кардАйтэм меняем вид клетки здоровья */
-
-            /*  return {
-               ...item,
-               cardItem: item.cardItem.find(item => {
-                 item.name = "man"
-               }) ? item.cardItem.map(item => {
-                 item.name === "health" ?
-                   { ...item, apperance: "open" } : item
-               }) : item
-             } */
-            /*найдем карточку где стоит человек и в ней меняем apperance */
+              }),
+            };
+          } else {
+            return item;
           }
-          else { return item };
         }
         case "wall": {
           return item;
         }
-
       }
-
-    });
-
-  })
-}
-
-
-const changeHealthList = (gameList: Array<any>) => {
-  return gameList.map((item) => {
-    return item.map((item: any) => {
-      if (item.man) {
-        delete item.health;
-        return item;
-      } else return item;
     });
   });
 };
 
-const changeHealth = (gameList: any, manHealth: number) => {
-  const sign = gameList.flat().find((item: any) => {
-    item.man ? item.health.type : false;
+const changeHealthList = (gameList: GameList) => {
+  /*удалить клетку со здоровьем там, где стоит человек  и вернуть массив*/
+  return gameList.map((item: CellType[]) => {
+    return item.map((item: CellType) => {
+      switch (item.name) {
+        case "field": {
+          const helthCell = item.cardItem.some((item) => item.name === "man");
+          if (helthCell) {
+            return {
+              ...item,
+              cardItem: item.cardItem.filter((item) => item.name != "health"),
+            };
+          } else return item;
+        }
+        default:
+          return item;
+      }
+
+      /*    if (item.man) {
+        delete item.health;
+        return item;
+      } else return item; */
+    });
   });
+};
+
+const changeHealth = (gameList: GameList, manHealth: number) => {
+  /*можно попробовать отдать общий state */
+  let sign = "";
+  const newList = gameList.flat().forEach((item: CellType) => {
+    switch (item.name) {
+      case "field": {
+        const hasMan = item.cardItem.find((item) => item.name === "man");
+
+        if (hasMan) {
+          item.cardItem.filter((item) => {
+            switch (item.name) {
+              case "health":
+                sign = item.type;
+            }
+          });
+        } else return false;
+      }
+      default:
+        return false;
+    }
+  });
+
+  console.log(newList);
 
   switch (sign) {
     case "increment":

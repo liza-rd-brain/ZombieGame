@@ -74,7 +74,8 @@ export type HealthItem = {
 export type CardInteract = ManItem | HealthItem;
 
 export type FieldItem = {
-  hor: number;  vert: number;
+  hor: number;
+  vert: number;
   name: "field";
   cardItem: CardInteract[];
 };
@@ -314,11 +315,17 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 };
 
 function App() {
-  const [gameState, manHealth, gameResult] = useSelector((state: State) => [
+  const [
+    gameState,
+    manHealth,
+    gameResult,
+    gameList,
+  ] = useSelector((state: State) => [
     state.gameState,
 
     state.manHealth,
     state.gameResult,
+    state.gameList,
   ]);
 
   const dispatch = useDispatch();
@@ -410,6 +417,17 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
+              <Status>{`здоровье: ${manHealth}`}</Status>
+              {/* <Status>{`здоровье: ${gameList.flat().find(item=>{
+                switch(item.name){
+                  case "wall":{
+                    return false
+                  }
+                  case "field":{
+                    item.cardItem
+                  }
+                }
+              })}`}</Status> */}
               {/*   <Status>{`координаты: ${manHor}${manVert}`}</Status>
               <Status>{`здоровье: ${manHealth}`}</Status> */}
 

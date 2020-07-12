@@ -38,9 +38,9 @@ function clickArrow(action: ActionType, state: State): State {
                 return {
                   ...state,
                   dice: state.dice - 1,
-                  /* manCoord: nextManCoord, */
+
                   gameList: gameListManMoved,
-                  /*       cardInteract: nextCellCard, */
+
                   gameState: "gameStarted.openHealthCard",
                 };
               } else return { ...state };
@@ -52,7 +52,7 @@ function clickArrow(action: ActionType, state: State): State {
                     return {
                       ...state,
                       dice: state.dice - 1,
-                      /* manCoord: nextManCoord, */
+
                       gameList: gameListManMoved,
                       gameState: "endGame",
                       gameResult: "Вы выиграли",
@@ -66,7 +66,7 @@ function clickArrow(action: ActionType, state: State): State {
                         return {
                           ...state,
                           dice: state.dice - 1,
-                          /* manCoord: nextManCoord, */
+
                           gameList: gameListManMoved,
                           gameState: "gameStarted.trownDice",
                         };
@@ -77,7 +77,7 @@ function clickArrow(action: ActionType, state: State): State {
                         return {
                           ...state,
                           dice: state.dice - 1,
-                          /*     manCoord: nextManCoord, */
+
                           gameList: gameListManMoved,
                           gameState: "gameStarted.clickArrow",
                         };
@@ -199,8 +199,7 @@ const moveMan = (gameList: GameList, coord: CoordItem) => {
               };
             }
             case isNewCell: {
-              return { ...item, 
-                cardItem: [...item.cardItem, { name: "man" }] };
+              return { ...item, cardItem: [...item.cardItem, { name: "man" }] };
             }
           }
         }
@@ -243,15 +242,14 @@ const checkCanMove = (
 const checkCell = (nextManCoord: CoordItem, gameList: GameList): any => {
   return gameList.flat().find((item: CellType) => {
     if (item.hor === nextManCoord.hor && item.vert === nextManCoord.vert) {
-
       switch (item.name) {
         case "field": {
-          return item.cardItem.find(item => {
-            return item.name === "health"
-          })
+          return item.cardItem.find((item) => {
+            return item.name === "health";
+          });
         }
         case "wall": {
-          return item
+          return item;
         }
       }
     } else return false;

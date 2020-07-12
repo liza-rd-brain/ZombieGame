@@ -108,8 +108,6 @@ function Grid() {
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  console.log(getFullArray(gameList));
-
   return <GridItem vert={width}>{getFullArray(gameList)}</GridItem>;
 }
 
