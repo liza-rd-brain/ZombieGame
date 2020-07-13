@@ -92,7 +92,13 @@ function getFullArray(gameList: GameList) {
           );
         }
         default:
-          return null;
+          return (
+            <CellItem
+              key={`${cell.hor}${cell.vert}`}
+              hor={cell.hor}
+              vert={cell.vert}
+            ></CellItem>
+          );
       }
     });
   });

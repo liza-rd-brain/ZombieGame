@@ -13,10 +13,10 @@ function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
     case "needOpenHealthCard": {
       const newList = openHealthItemList(state.gameList);
-      console.log(newList);
+
       return {
         ...state,
-        gameList: /* openHealthItemList(state.gameList), */ newList,
+        gameList: newList,
       };
     }
     case "changeManHealth": {
@@ -38,7 +38,7 @@ function openHealthCard(action: ActionType, state: State): State {
             ...state,
             gameList: changeHealthList(state.gameList),
             gameState: "gameStarted.trownDice",
-            dice: null,
+            dice: 0,
           };
         }
         case !isManLive: {
@@ -83,7 +83,7 @@ const openHealthItemList = (gameList: GameList): GameList => {
             return item;
           }
         }
-        case "wall": {
+        default: {
           return item;
         }
       }
@@ -108,11 +108,6 @@ const changeHealthList = (gameList: GameList) => {
         default:
           return item;
       }
-
-      /*    if (item.man) {
-        delete item.health;
-        return item;
-      } else return item; */
     });
   });
 };
@@ -120,7 +115,8 @@ const changeHealthList = (gameList: GameList) => {
 const changeHealth = (gameList: GameList, manHealth: number) => {
   /*можно попробовать отдать общий state */
   let sign = "";
-  const newList = gameList.flat().forEach((item: CellType) => {
+
+  const newList = gameList.flat().map((item: CellType) => {
     switch (item.name) {
       case "field": {
         const hasMan = item.cardItem.find((item) => item.name === "man");
@@ -138,8 +134,6 @@ const changeHealth = (gameList: GameList, manHealth: number) => {
         return false;
     }
   });
-
-  console.log(newList);
 
   switch (sign) {
     case "increment":

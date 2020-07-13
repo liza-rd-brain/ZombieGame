@@ -14,84 +14,71 @@ function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
+
+      /* получили содержимое клетки, делаем по нему switch*/
+
+      const isNextTrowLast = state.dice === 1;
+      const nextCell = getNextCell(state.gameList, direction);
+      
+      /*пока оставила nextManCoord для изменения листа при движении человека */
       const nextManCoord = changeCoord(state.gameList, direction);
       const gameListManMoved: any = moveMan(state.gameList, nextManCoord);
-      const isNextTrowLast = state.dice === 1;
 
-      const manInField = checkCanMove(
-        direction,
-        StartCell,
-        EndCell,
-        nextManCoord
-      );
-      const nextCellCard = checkCell(nextManCoord, state.gameList);
-      const nextCellHasCard = nextCellCard ? true : false;
-
-      const isNextCellFinish =
-        nextManCoord.hor === EndCell.hor && nextManCoord.vert === EndCell.vert;
-
-      switch (true) {
-        case manInField: {
-          switch (true) {
-            case nextCellHasCard: {
-              if (state.dice != null) {
-                return {
-                  ...state,
-                  dice: state.dice - 1,
-
-                  gameList: gameListManMoved,
-
-                  gameState: "gameStarted.openHealthCard",
-                };
-              } else return { ...state };
+      switch (nextCell) {
+        case undefined: {
+          return state;
+        }
+        default:
+          switch (nextCell.name) {
+            case "finish": {
+              return {
+                ...state,
+                dice: state.dice /* as number */ - 1,
+                gameList: gameListManMoved,
+                gameState: "endGame",
+                gameResult: "Вы выиграли",
+              };
             }
-            case !nextCellHasCard: {
-              switch (true) {
-                case isNextCellFinish: {
-                  if (state.dice != null) {
-                    return {
-                      ...state,
-                      dice: state.dice - 1,
-
-                      gameList: gameListManMoved,
-                      gameState: "endGame",
-                      gameResult: "Вы выиграли",
-                    };
-                  } else return { ...state };
-                }
-                case !isNextCellFinish: {
+            case "wall": {
+              return state;
+            }
+            case "field": {
+              const nameCell = nextCell.cardItem.find((item) => item.name);
+              switch (nameCell) {
+                case undefined: {
                   switch (true) {
                     case isNextTrowLast: {
-                      if (state.dice != null) {
-                        return {
-                          ...state,
-                          dice: state.dice - 1,
-
-                          gameList: gameListManMoved,
-                          gameState: "gameStarted.trownDice",
-                        };
-                      } else return { ...state };
+                      return {
+                        ...state,
+                        dice: state.dice - 1,
+                        gameList: gameListManMoved,
+                        gameState: "gameStarted.trownDice",
+                      };
                     }
                     case !isNextTrowLast: {
-                      if (state.dice != null) {
-                        return {
-                          ...state,
-                          dice: state.dice - 1,
-
-                          gameList: gameListManMoved,
-                          gameState: "gameStarted.clickArrow",
-                        };
-                      } else return { ...state };
+                      return {
+                        ...state,
+                        dice: state.dice - 1,
+                        gameList: gameListManMoved,
+                        gameState: "gameStarted.clickArrow",
+                      };
                     }
                   }
                 }
+                default: {
+                  return {
+                    ...state,
+                    dice: state.dice - 1,
+                    gameList: gameListManMoved,
+                    gameState: "gameStarted.openHealthCard",
+                  };
+                }
               }
             }
+            default: {
+              return state;
+            }
           }
-        }
-        case !manInField: {
-          return { ...state };
-        }
       }
     }
     default:
@@ -104,6 +91,7 @@ const changeCoord = (
   direction: MoveDirection
 ): FieldItem => {
   const currManCoord = gameList.flat().find((item: FieldItem) => {
+    /*  return item.cardItem.find((item) => item.name === "man"); */
     switch (item.name) {
       case "field":
         return item.cardItem.find((item) => item.name === "man");
@@ -179,6 +167,52 @@ const changeCoord = (
         ],
       };
   }
+};
+
+const getNextCell = (
+  gameList: GameList,
+  direction: MoveDirection
+) /* : CellType */ => {
+  const newManCell = gameList
+    .flat()
+    .filter((item: CellType) => {
+      switch (item.name) {
+        case "field":
+          return item.cardItem.find((item) => item.name === "man");
+        default:
+          return null;
+      }
+    })
+    .pop();
+
+  if (newManCell) {
+    const currManVert = newManCell.vert;
+    const currManHor = newManCell.hor;
+    const nextManVert = currManVert + 1;
+    const nextManHor = currManHor + 1;
+    const prevManVert = currManVert - 1;
+    const prevManHor = currManHor - 1;
+
+    return gameList
+      .flat()
+      .filter((item) => {
+        switch (direction) {
+          case "top": {
+            return item.hor === currManHor && item.vert === nextManVert;
+          }
+          case "bottom": {
+            return item.hor === currManHor && item.vert === prevManVert;
+          }
+          case "left": {
+            return item.hor === prevManHor && item.vert === currManVert;
+          }
+          case "right": {
+            return item.hor === nextManHor && item.vert === currManVert;
+          }
+        }
+      })
+      .pop();
+  } else return undefined;
 };
 
 const moveMan = (gameList: GameList, coord: CoordItem) => {

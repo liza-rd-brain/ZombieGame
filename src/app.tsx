@@ -65,6 +65,12 @@ export type ManItem = {
   name: "man";
 };
 
+export type FinishCell = {
+  hor: number;
+  vert: number;
+  name: "finish";
+};
+
 export type HealthItem = {
   name: "health";
   type: HealthItemType;
@@ -80,14 +86,14 @@ export type FieldItem = {
   cardItem: CardInteract[];
 };
 
-export type CellType = FieldItem | WallItem;
+export type CellType = FieldItem | WallItem | FinishCell;
 
 export type GameList = CellType[][];
 
 export type State = {
   gameState: GameState;
   manHealth: number;
-  dice: null | number;
+  dice: /* null | */ number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: /*  Array<any> */ GameList;
 };
@@ -198,6 +204,8 @@ const getGameList = (
       (itemVert, vert) =>
         new Array(width).fill({}).map((itemHor, hor) => {
           const hasMan = StartCell.hor === hor && StartCell.vert === vert;
+          const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
+
           const health = healthList.find((item, index) => {
             return item.hor === hor && item.vert === vert;
           });
@@ -233,6 +241,13 @@ const getGameList = (
                     vert: vert,
                     name: "field",
                     cardItem: [{ name: "man" }],
+                  };
+                }
+                case hasFinish: {
+                  return {
+                    hor: hor,
+                    vert: vert,
+                    name: "finish",
                   };
                 }
                 case hasHealth: {
@@ -274,12 +289,13 @@ const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
     manHealth: 3,
-    dice: null,
+    dice: 0,
     gameList: getGameList(30, wallList, EndCell),
     gameResult: "",
   };
 };
 
+console.log();
 const reducer = (state = getInitialState(), action: ActionType): State => {
   const [phaseOuter, phaseInner] = state.gameState.split(".");
 
