@@ -46,6 +46,7 @@ const Status = styled.div`
 
 export const StartCell = { hor: 0, vert: 0 };
 export const EndCell = { hor: 9, vert: 9 };
+const initialManHealth = 3;
 
 export type CoordItem = { hor: number; vert: number };
 
@@ -63,6 +64,7 @@ export type WallItem = {
 
 export type ManItem = {
   name: "man";
+  health: number;
 };
 
 export type FinishCell = {
@@ -95,7 +97,7 @@ export type State = {
   manHealth: number;
   dice: /* null | */ number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  gameList: /*  Array<any> */ GameList;
+  gameList: GameList;
 };
 
 export type ActionType =
@@ -192,79 +194,95 @@ const getGameList = (
   numberHelthItem: number,
   wallList: Array<CoordItem>,
   endCell: CoordItem
-): Array<any> => {
+): GameList => {
   const width = endCell.hor + 1;
   const height = endCell.vert + 1;
 
   const healthList: Array<FieldItem> = createHealthArray(30);
 
-  return new Array(height)
+  const gameArray = new Array(height)
     .fill(0)
-    .map(
-      (itemVert, vert) =>
-        new Array(width).fill({}).map((itemHor, hor) => {
-          const hasMan = StartCell.hor === hor && StartCell.vert === vert;
-          const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
+    .map((itemVert, vert) =>
+      new Array(width).fill({}).map((itemHor, hor) => {
+        const hasMan = StartCell.hor === hor && StartCell.vert === vert;
+        const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
 
-          const health = healthList.find((item, index) => {
-            return item.hor === hor && item.vert === vert;
-          });
-          const hasHealth = health ? true : false;
-          const hasManAndHealth = hasHealth && hasMan;
-          const wallCell = wallList.find((item) => {
-            return item.hor === hor && item.vert === vert;
-          });
+        const health = healthList.find((item, index) => {
+          return item.hor === hor && item.vert === vert;
+        });
 
-          const hasWall = wallCell ? true : false;
+        const hasHealth = health ? true : false;
+        const hasManAndHealth = hasHealth && hasMan;
+        const wallCell = wallList.find((item) => {
+          return item.hor === hor && item.vert === vert;
+        });
 
-          switch (true) {
-            case hasWall: {
-              return {
-                hor: hor,
-                vert: vert,
-                name: "wall",
-              };
-            }
-            case !hasWall: {
-              switch (true) {
-                case hasManAndHealth: {
-                  if (health != undefined) {
-                    return {
-                      ...health,
-                      cardItem: [...health.cardItem, { name: "man" }],
-                    };
-                  } else return null;
-                }
-                case hasMan: {
-                  return {
-                    hor: hor,
-                    vert: vert,
-                    name: "field",
-                    cardItem: [{ name: "man" }],
-                  };
-                }
-                case hasFinish: {
-                  return {
-                    hor: hor,
-                    vert: vert,
-                    name: "finish",
-                  };
-                }
-                case hasHealth: {
-                  if (health != undefined) {
-                    return health;
-                  } else return null;
-                }
-              }
-            }
-            default:
-              return { hor: hor, vert: vert, name: "field", cardItem: [] };
+        const hasWall = wallCell ? true : false;
+
+        const emptyFieldItem: FieldItem = {
+          hor: hor,
+          vert: vert,
+          name: "field",
+          cardItem: [],
+        };
+
+        switch (true) {
+          case hasWall: {
+            const wallItem: WallItem = {
+              hor: hor,
+              vert: vert,
+              name: "wall",
+            };
+            return wallItem;
           }
-          /*     return []; */
-        })
-      /*  .reverse() */
+          case !hasWall: {
+            switch (true) {
+              case hasManAndHealth: {
+                if (health != undefined) {
+                  const fieldItem: FieldItem = {
+                    ...health,
+                    cardItem: [
+                      ...health.cardItem,
+                      { name: "man", health: initialManHealth },
+                    ],
+                  };
+                  return fieldItem;
+                } else return emptyFieldItem;
+              }
+              case hasMan: {
+                const fieldItem: FieldItem = {
+                  hor: hor,
+                  vert: vert,
+                  name: "field",
+                  cardItem: [{ name: "man", health: initialManHealth }],
+                };
+                return fieldItem;
+              }
+              case hasFinish: {
+                const finishCell: FinishCell = {
+                  hor: hor,
+                  vert: vert,
+                  name: "finish",
+                };
+                return finishCell ;
+              }
+              case hasHealth: {
+                if (health != undefined) {
+                  return health as FieldItem;
+                } else return emptyFieldItem;
+              }
+              default:
+                return emptyFieldItem;
+            }
+          }
+          default:
+            return emptyFieldItem;
+        }
+      })
     )
     .reverse();
+
+  return gameArray;
 };
 
 const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
@@ -295,7 +313,6 @@ const getInitialState = (): State => {
   };
 };
 
-console.log();
 const reducer = (state = getInitialState(), action: ActionType): State => {
   const [phaseOuter, phaseInner] = state.gameState.split(".");
 

@@ -19,7 +19,7 @@ function clickArrow(action: ActionType, state: State): State {
 
       const isNextTrowLast = state.dice === 1;
       const nextCell = getNextCell(state.gameList, direction);
-      
+
       /*пока оставила nextManCoord для изменения листа при движении человека */
       const nextManCoord = changeCoord(state.gameList, direction);
       const gameListManMoved: any = moveMan(state.gameList, nextManCoord);
@@ -90,7 +90,7 @@ const changeCoord = (
   gameList: Array<any>,
   direction: MoveDirection
 ): FieldItem => {
-  const currManCoord = gameList.flat().find((item: FieldItem) => {
+  const currManCoord: FieldItem = gameList.flat().find((item: FieldItem) => {
     /*  return item.cardItem.find((item) => item.name === "man"); */
     switch (item.name) {
       case "field":
@@ -109,63 +109,22 @@ const changeCoord = (
   switch (direction) {
     case "top": {
       return {
+        ...currManCoord,
         hor: currManHor,
         vert: nextManVert,
-        name: "field",
-        cardItem: [
-          {
-            name: "man",
-          },
-        ],
       };
     }
     case "bottom": {
-      return {
-        hor: currManHor,
-        vert: prevManVert,
-        name: "field",
-        cardItem: [
-          {
-            name: "man",
-          },
-        ],
-      };
+      return { ...currManCoord, hor: currManHor, vert: prevManVert };
     }
     case "left": {
-      return {
-        hor: prevManHor,
-        vert: currManVert,
-        name: "field",
-        cardItem: [
-          {
-            name: "man",
-          },
-        ],
-      };
+      return { ...currManCoord, hor: prevManHor, vert: currManVert };
     }
     case "right": {
-      return {
-        hor: nextManHor,
-        vert: currManVert,
-        name: "field",
-        cardItem: [
-          {
-            name: "man",
-          },
-        ],
-      };
+      return { ...currManCoord, hor: nextManHor, vert: currManVert };
     }
     default:
-      return {
-        hor: currManHor,
-        vert: currManVert,
-        name: "field",
-        cardItem: [
-          {
-            name: "man",
-          },
-        ],
-      };
+      return { ...currManCoord, hor: currManHor, vert: currManVert };
   }
 };
 
