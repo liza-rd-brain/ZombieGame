@@ -298,10 +298,10 @@ const wallList: Array<CoordItem> = [
   { hor: 4, vert: 4 },
 ];
 
-const manCoord: CoordItem = {
+/* const manCoord: CoordItem = {
   hor: 0,
   vert: 0,
-};
+}; */
 
 const getInitialState = (): State => {
   return {

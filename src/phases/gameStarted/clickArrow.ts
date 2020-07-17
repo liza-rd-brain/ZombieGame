@@ -8,21 +8,23 @@ import {
   EndCell,
   CellType,
   GameList,
+  ManItem,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-
-      /* получили содержимое клетки, делаем по нему switch*/
-
       const isNextTrowLast = state.dice === 1;
       const nextCell = getNextCell(state.gameList, direction);
 
       /*пока оставила nextManCoord для изменения листа при движении человека */
       const nextManCoord = changeCoord(state.gameList, direction);
-      const gameListManMoved: any = moveMan(state.gameList, nextManCoord);
+
+      const gameListManMoved =
+        nextManCoord != null
+          ? moveMan(state.gameList, nextManCoord)
+          : state.gameList;
 
       switch (nextCell) {
         case undefined: {
@@ -33,7 +35,7 @@ function clickArrow(action: ActionType, state: State): State {
             case "finish": {
               return {
                 ...state,
-                dice: state.dice /* as number */ - 1,
+                dice: state.dice - 1,
                 gameList: gameListManMoved,
                 gameState: "endGame",
                 gameResult: "Вы выиграли",
@@ -87,10 +89,10 @@ function clickArrow(action: ActionType, state: State): State {
 }
 
 const changeCoord = (
-  gameList: Array<any>,
+  gameList: GameList,
   direction: MoveDirection
-): FieldItem => {
-  const currManCoord: FieldItem = gameList.flat().find((item: FieldItem) => {
+): FieldItem | null => {
+  const currManCoord = gameList.flat().find((item) => {
     /*  return item.cardItem.find((item) => item.name === "man"); */
     switch (item.name) {
       case "field":
@@ -99,40 +101,39 @@ const changeCoord = (
         return null;
     }
   });
-  const currManVert = currManCoord.vert;
-  const currManHor = currManCoord.hor;
-  const nextManVert = currManVert + 1;
-  const nextManHor = currManHor + 1;
-  const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1;
+  if (currManCoord != undefined && currManCoord.name === "field") {
+    const currManVert = currManCoord.vert;
+    const currManHor = currManCoord.hor;
+    const nextManVert = currManVert + 1;
+    const nextManHor = currManHor + 1;
+    const prevManVert = currManVert - 1;
+    const prevManHor = currManHor - 1;
 
-  switch (direction) {
-    case "top": {
-      return {
-        ...currManCoord,
-        hor: currManHor,
-        vert: nextManVert,
-      };
+    switch (direction) {
+      case "top": {
+        return {
+          ...currManCoord,
+          hor: currManHor,
+          vert: nextManVert,
+        };
+      }
+      case "bottom": {
+        return { ...currManCoord, hor: currManHor, vert: prevManVert };
+      }
+      case "left": {
+        return { ...currManCoord, hor: prevManHor, vert: currManVert };
+      }
+      case "right": {
+        return { ...currManCoord, hor: nextManHor, vert: currManVert };
+      }
+      default:
+        return { ...currManCoord, hor: currManHor, vert: currManVert };
     }
-    case "bottom": {
-      return { ...currManCoord, hor: currManHor, vert: prevManVert };
-    }
-    case "left": {
-      return { ...currManCoord, hor: prevManHor, vert: currManVert };
-    }
-    case "right": {
-      return { ...currManCoord, hor: nextManHor, vert: currManVert };
-    }
-    default:
-      return { ...currManCoord, hor: currManHor, vert: currManVert };
-  }
+  } else return null;
 };
 
-const getNextCell = (
-  gameList: GameList,
-  direction: MoveDirection
-) /* : CellType */ => {
-  const newManCell = gameList
+const getNextCell = (gameList: GameList, direction: MoveDirection) => {
+  const currManCell = gameList
     .flat()
     .filter((item: CellType) => {
       switch (item.name) {
@@ -144,9 +145,9 @@ const getNextCell = (
     })
     .pop();
 
-  if (newManCell) {
-    const currManVert = newManCell.vert;
-    const currManHor = newManCell.hor;
+  if (currManCell) {
+    const currManVert = currManCell.vert;
+    const currManHor = currManCell.hor;
     const nextManVert = currManVert + 1;
     const nextManHor = currManHor + 1;
     const prevManVert = currManVert - 1;
@@ -174,25 +175,36 @@ const getNextCell = (
   } else return undefined;
 };
 
-const moveMan = (gameList: GameList, coord: CoordItem) => {
+const moveMan = (gameList: GameList, newCoord: FieldItem) => {
   return gameList.map((item: CellType[]) => {
     return item.map((item: CellType) => {
-      const isNewCoord = item.hor === coord.hor && item.vert === coord.vert;
+      const isNewCoord =
+        item.hor === newCoord.hor && item.vert === newCoord.vert;
 
       switch (item.name) {
         case "field": {
+          /*  const manItem = item.cardItem.find((item) => item.name === "man"); */
           const isOldCell =
             item.cardItem.some((item) => item.name === "man") && !isNewCoord;
-          const isNewCell = item.hor === coord.hor && item.vert === coord.vert;
+          const isNewCell =
+            item.hor === newCoord.hor && item.vert === newCoord.vert;
+
           switch (true) {
             case isOldCell: {
-              return {
+              const cellWithoutMan: FieldItem = {
                 ...item,
                 cardItem: item.cardItem.filter((item) => item.name != "man"),
               };
+              return cellWithoutMan;
             }
+
             case isNewCell: {
-              return { ...item, cardItem: [...item.cardItem, { name: "man" }] };
+              const newCellWithMan: FieldItem = {
+                ...item,
+                cardItem: [...item.cardItem, ...newCoord.cardItem],
+              };
+
+              return newCellWithMan;
             }
           }
         }
@@ -204,48 +216,4 @@ const moveMan = (gameList: GameList, coord: CoordItem) => {
   });
 };
 
-const checkCanMove = (
-  direction: MoveDirection,
-  startCoord: CoordItem,
-  endCoord: CoordItem,
-  manCoord: CoordItem
-) => {
-  switch (direction) {
-    case "top":
-      if (manCoord.vert <= endCoord.vert) {
-        return true;
-      } else return false;
-    case "bottom":
-      if (manCoord.vert >= startCoord.vert) {
-        return true;
-      } else return false;
-    case "right":
-      if (manCoord.hor <= endCoord.hor) {
-        return true;
-      } else return false;
-    case "left":
-      if (manCoord.hor >= startCoord.hor) {
-        return true;
-      } else return false;
-    default:
-      return false;
-  }
-};
-
-const checkCell = (nextManCoord: CoordItem, gameList: GameList): any => {
-  return gameList.flat().find((item: CellType) => {
-    if (item.hor === nextManCoord.hor && item.vert === nextManCoord.vert) {
-      switch (item.name) {
-        case "field": {
-          return item.cardItem.find((item) => {
-            return item.name === "health";
-          });
-        }
-        case "wall": {
-          return item;
-        }
-      }
-    } else return false;
-  });
-};
 export default clickArrow;

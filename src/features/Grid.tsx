@@ -46,9 +46,7 @@ const CellItem = styled.div<CoordItem>`
   color: lightgrey;
 `;
 
-/* function Cell(props: any) {
-  return <CellItem hor={props.hor} vert={props.vert}></CellItem>;
-} */
+
 
 function getCell(cell: FieldItem) {
   return cell.cardItem.map((item: CardInteract) => {
