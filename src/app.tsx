@@ -13,7 +13,9 @@ import EndScreen from "./features/EndScreen";
 import waitingStartPhase from "./phases/waitingStart";
 import trownDice from "./phases/gameStarted/trownDice";
 import clickArrow from "./phases/gameStarted/clickArrow";
-import openHealthCard from "./phases/gameStarted/openHealthCard";
+import openHealthCard, {
+  getManHealth,
+} from "./phases/gameStarted/openHealthCard";
 import endGame from "./phases/endGame";
 
 const Field = styled.div`
@@ -94,7 +96,7 @@ export type GameList = CellType[][];
 
 export type State = {
   gameState: GameState;
-  manHealth: number;
+  /*  manHealth: number; */
   dice: /* null | */ number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   gameList: GameList;
@@ -264,7 +266,7 @@ const getGameList = (
                   vert: vert,
                   name: "finish",
                 };
-                return finishCell ;
+                return finishCell;
               }
               case hasHealth: {
                 if (health != undefined) {
@@ -298,15 +300,10 @@ const wallList: Array<CoordItem> = [
   { hor: 4, vert: 4 },
 ];
 
-/* const manCoord: CoordItem = {
-  hor: 0,
-  vert: 0,
-}; */
-
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
-    manHealth: 3,
+    /*   manHealth: 3, */
     dice: 0,
     gameList: getGameList(30, wallList, EndCell),
     gameResult: "",
@@ -350,13 +347,13 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 function App() {
   const [
     gameState,
-    manHealth,
+
     gameResult,
     gameList,
   ] = useSelector((state: State) => [
     state.gameState,
 
-    state.manHealth,
+
     state.gameResult,
     state.gameList,
   ]);
@@ -450,7 +447,7 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              <Status>{`здоровье: ${manHealth}`}</Status>
+              <Status>{`здоровье: ${getManHealth(gameList)}`}</Status>
               {/* <Status>{`здоровье: ${gameList.flat().find(item=>{
                 switch(item.name){
                   case "wall":{
