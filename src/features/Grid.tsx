@@ -6,13 +6,9 @@ import Health from "./Health";
 import Wall from "./Wall";
 import {
   State,
-  StartCell,
   EndCell,
   GameList,
   CellType,
-  ManItem,
-  HealthItem,
-  WallItem,
   CoordItem,
   FieldItem,
   CardInteract,
@@ -26,7 +22,7 @@ const GridItem = styled.div<GridProps>`
   border: 2px solid red;
   margin: 0 auto;
   width: 100%;
-
+  transform: rotate(270deg);
   display: grid;
   grid-column-start: -1;
   /*параметризирую по ширине поля*/
@@ -45,8 +41,6 @@ const CellItem = styled.div<CoordItem>`
   height: 30px;
   color: lightgrey;
 `;
-
-
 
 function getCell(cell: FieldItem) {
   return cell.cardItem.map((item: CardInteract) => {

@@ -77,17 +77,6 @@ function openHealthCard(action: ActionType, state: State): State {
     }
 
     case "changeHealthList": {
-      /*  const manItem=state.gameList.find().map(item=>
-        switch(item.name){
-          case "field":{
-            const hasMan = item.cardItem.find((item) => item.name === "man");
-          }
-          else return false;
-        }
-        )
-      const manHealth; */
-
-      /* const isManLive = state.manHealth > 0; */
       const isManLive = getManHealth(state.gameList) > 0;
 
       switch (true) {
@@ -171,39 +160,6 @@ const changeHealthList = (gameList: GameList) => {
     });
   });
 };
-
-/* const changeHealth = (gameList: GameList, manHealth: number) => {
-
-  let sign = "";
-
-  const newList = gameList.flat().map((item: CellType) => {
-    switch (item.name) {
-      case "field": {
-        const hasMan = item.cardItem.find((item) => item.name === "man");
-
-        if (hasMan) {
-          item.cardItem.filter((item) => {
-            switch (item.name) {
-              case "health":
-                sign = item.type;
-            }
-          });
-        } else return false;
-      }
-      default:
-        return false;
-    }
-  });
-
-  switch (sign) {
-    case "increment":
-      return manHealth + 1;
-    case "decrement":
-      return manHealth - 1;
-    default:
-      return manHealth;
-  }
-}; */
 
 const changeManHealth = (gameList: GameList) => {
   return gameList.map((item: CellType[]) => {

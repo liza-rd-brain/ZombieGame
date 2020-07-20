@@ -2,16 +2,15 @@ import {
   State,
   ActionType,
   MoveDirection,
-  CoordItem,
   FieldItem,
-  StartCell,
-  EndCell,
   CellType,
   GameList,
   ManItem,
 } from "./../../app";
 
 function clickArrow(action: ActionType, state: State): State {
+  const currentManIndex = state.cardInteractIndex;
+
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
@@ -19,8 +18,12 @@ function clickArrow(action: ActionType, state: State): State {
       const nextCell = getNextCell(state.gameList, direction);
 
       /*пока оставила nextManCoord для изменения листа при движении человека */
-      const nextManCoord = changeCoord(state.gameList, direction);
-
+      const nextManCoord = changManCoord(state.gameList, direction);
+      const newNextManCoord = newChangManCoord(
+        state.cardInteractIndex,
+        direction
+      );
+      console.log(newNextManCoord);
       const gameListManMoved =
         nextManCoord != null
           ? moveMan(state.gameList, nextManCoord)
@@ -39,6 +42,7 @@ function clickArrow(action: ActionType, state: State): State {
                 gameList: gameListManMoved,
                 gameState: "endGame",
                 gameResult: "Вы выиграли",
+                cardInteractIndex: newNextManCoord,
               };
             }
             case "wall": {
@@ -55,6 +59,7 @@ function clickArrow(action: ActionType, state: State): State {
                         dice: state.dice - 1,
                         gameList: gameListManMoved,
                         gameState: "gameStarted.trownDice",
+                        cardInteractIndex: newNextManCoord,
                       };
                     }
                     case !isNextTrowLast: {
@@ -63,6 +68,7 @@ function clickArrow(action: ActionType, state: State): State {
                         dice: state.dice - 1,
                         gameList: gameListManMoved,
                         gameState: "gameStarted.clickArrow",
+                        cardInteractIndex: newNextManCoord,
                       };
                     }
                   }
@@ -73,6 +79,7 @@ function clickArrow(action: ActionType, state: State): State {
                     dice: state.dice - 1,
                     gameList: gameListManMoved,
                     gameState: "gameStarted.openHealthCard",
+                    cardInteractIndex: newNextManCoord,
                   };
                 }
               }
@@ -88,7 +95,36 @@ function clickArrow(action: ActionType, state: State): State {
   }
 }
 
-const changeCoord = (
+const newChangManCoord = (currentIndex: string, direction: MoveDirection) => {
+  /*попробовать просто вернуть новую координату */
+  const currManCoord = currentIndex;
+
+  const currManHor = +(currManCoord[0] ? currManCoord[0] : 0);
+  const currManVert = +(currManCoord[1] ? currManCoord[1] : 0);
+  const nextManVert = currManVert + 1;
+  const nextManHor = currManHor + 1;
+  const prevManVert = currManVert - 1;
+  const prevManHor = currManHor - 1;
+
+  switch (direction) {
+    case "top": {
+      return `${currManHor}${nextManVert}`;
+    }
+    case "bottom": {
+      return `${currManHor}${prevManVert}`;
+    }
+    case "left": {
+      return `${prevManHor}${currManVert}`;
+    }
+    case "right": {
+      return `${nextManHor}${currManVert}`;
+    }
+    default:
+      return `${currManHor}${currManVert}`;
+  }
+};
+
+const changManCoord = (
   gameList: GameList,
   direction: MoveDirection
 ): FieldItem | null => {
@@ -183,7 +219,6 @@ const moveMan = (gameList: GameList, newCoord: FieldItem) => {
 
       switch (item.name) {
         case "field": {
-          /*  const manItem = item.cardItem.find((item) => item.name === "man"); */
           const isOldCell =
             item.cardItem.some((item) => item.name === "man") && !isNewCoord;
           const isNewCell =
