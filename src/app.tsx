@@ -282,7 +282,7 @@ const getGameList = (
             }
             case hasHealth: {
               if (health != undefined) {
-                return health as FieldItem;
+                return health;
               } else return emptyFieldItem;
             }
             default:
@@ -297,6 +297,7 @@ const getGameList = (
 
   return gameArray;
 };
+
 const getIndexWithMan = (gameList: GameList) => {
   const index = gameList
     .flat()
@@ -391,7 +392,6 @@ function App() {
 
   useEffect(
     function openCard() {
-      console.log("open");
       switch (gameState) {
         case "gameStarted.openHealthCard": {
           const timerOpen = setTimeout(
