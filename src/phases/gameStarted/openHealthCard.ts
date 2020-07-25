@@ -6,6 +6,7 @@ import {
   FieldItem,
   ManItem,
   HealthItem,
+  HealthItemType,
 } from "./../../app";
 
 export const getItemWithMan = (gameList: GameList) => {
@@ -71,8 +72,7 @@ function openHealthCard(action: ActionType, state: State): State {
     case "changeManHealth": {
       return {
         ...state,
-        gameList: changeManHealth(state.gameList),
-        /*      manHealth: changeHealth(state.gameList, state.manHealth), */
+        gameList: changeManHealth(gameList, manCoord),
       };
     }
 
@@ -123,8 +123,9 @@ const openHealthItemList = (gameList: GameList, manCoord: string): GameList => {
           cellNeedOpen.cardItem[healthItemIndex] = item;
         }
       });
-
       newList.flat()[parseInt(manCoord)] = cellNeedOpen;
+
+      console.log("newList", newList);
       return newList;
     }
     default:
@@ -153,64 +154,54 @@ const changeHealthList = (gameList: GameList) => {
   });
 };
 
-const changeManHealth = (gameList: GameList) => {
-  return gameList.map((item: CellType[]) => {
-    return item.map((item: CellType) => {
-      switch (item.name) {
-        case "field": {
-          const cardWithMan = item.cardItem.some((item) => {
-            return item.name === "man";
-          });
+const changeManHealth = (gameList: GameList, manCoord: string) => {
+  /* достать карточку с человечком и поменят здоровье!!!
+  знак здоровья лежит в клетке здоровья */
+  const newList = [...gameList];
+  const cellWithMan = newList.flat()[parseInt(manCoord)];
+  let sign: HealthItemType | "" = "";
 
-          if (cardWithMan) {
-            const newManItem: ManItem = {
-              name: "man",
-              health: getManHealth(gameList) + getHealthInc(gameList),
-            };
+  switch (cellWithMan.name) {
+    case "field": {
+      const manItemIndex = cellWithMan.cardItem.findIndex(
+        (item) => item.name === "man"
+      );
 
-            const newFieldItem: FieldItem = {
-              ...item,
-              cardItem: [...item.cardItem, newManItem],
-            };
-            return newFieldItem;
-          } else return item;
+      cellWithMan.cardItem.some((item) => {
+        if (item.name === "health") {
+          sign = item.type;
         }
-        default:
-          return item;
-      }
-    });
-  });
+      });
 
-  let sign = "";
-
-  const newList = gameList.flat().map((item: CellType) => {
-    switch (item.name) {
-      case "field": {
-        const hasMan = item.cardItem.find((item) => item.name === "man");
-
-        if (hasMan) {
-          item.cardItem.filter((item) => {
-            switch (item.name) {
-              case "health":
-                sign = item.type;
+      cellWithMan.cardItem.map((item) => {
+        switch (item.name) {
+          case "man": {
+            switch (sign) {
+              case "decrement": {
+                item.health = item.health - 1;
+                cellWithMan.cardItem[manItemIndex] = item;
+                break;
+              }
+              case "increment": {
+                item.health = item.health + 1;
+                cellWithMan.cardItem[manItemIndex] = item;
+                break;
+              }
+              default: {
+                cellWithMan.cardItem[manItemIndex] = item;
+              }
             }
-          });
-        } else return false;
-      }
-      default:
-        return false;
+          }
+        }
+      });
+      newList.flat()[parseInt(manCoord)] = cellWithMan;
+      console.log("cellWithMan", cellWithMan);
+      console.log(newList);
+      return newList;
     }
-  });
-
-  /*  switch (sign) {
-    case "increment":
-      return manHealth + 1;
-    case "decrement":
-      return manHealth - 1;
     default:
-      return manHealth;
-  } */
-  /* return gameList; */
+      return gameList;
+  }
 };
 
 export default openHealthCard;
