@@ -1,13 +1,11 @@
 import {
   State,
   ActionType,
-  HealthItem,
-  HealthItemType,
   GameList,
   CellType,
-  CardInteract,
   FieldItem,
   ManItem,
+  HealthItem,
 } from "./../../app";
 
 export const getItemWithMan = (gameList: GameList) => {
@@ -59,9 +57,11 @@ const getHealthInc = (gameList: GameList) => {
 };
 
 function openHealthCard(action: ActionType, state: State): State {
+  const gameList = state.gameList;
+  const manCoord = state.cardInteractIndex;
   switch (action.type) {
     case "needOpenHealthCard": {
-      const newList = openHealthItemList(state.gameList);
+      const newList = openHealthItemList(gameList, manCoord);
 
       return {
         ...state,
@@ -106,38 +106,30 @@ function openHealthCard(action: ActionType, state: State): State {
   }
 }
 
-const openHealthItemList = (gameList: GameList): GameList => {
-  return gameList.map((item: CellType[]) => {
-    return item.map((item: CellType) => {
-      switch (item.name) {
-        case "field": {
-          const helthCell = item.cardItem.some((item) => item.name === "man");
-          if (helthCell) {
-            return {
-              ...item,
-              cardItem: item.cardItem.map((item) => {
-                switch (item.name) {
-                  case "health": {
-                    return {
-                      ...item,
-                      apperance: "open",
-                    };
-                  }
-                  case "man":
-                    return item;
-                }
-              }),
-            };
-          } else {
-            return item;
-          }
+/* const getNew; */
+
+const openHealthItemList = (gameList: GameList, manCoord: string): GameList => {
+  const newList = [...gameList];
+  const cellNeedOpen = newList.flat()[parseInt(manCoord)];
+  switch (cellNeedOpen.name) {
+    case "field": {
+      const healthItemIndex = cellNeedOpen.cardItem.findIndex(
+        (item) => (item.name = "health")
+      );
+
+      cellNeedOpen.cardItem.find((item) => {
+        if (item.name === "health") {
+          item.apperance = "open";
+          cellNeedOpen.cardItem[healthItemIndex] = item;
         }
-        default: {
-          return item;
-        }
-      }
-    });
-  });
+      });
+
+      newList.flat()[parseInt(manCoord)] = cellNeedOpen;
+      return newList;
+    }
+    default:
+      return gameList;
+  }
 };
 
 const changeHealthList = (gameList: GameList) => {
