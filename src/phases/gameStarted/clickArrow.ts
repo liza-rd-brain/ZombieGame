@@ -13,7 +13,7 @@ function clickArrow(action: ActionType, state: State): State {
       const nextCell = gameList.flat()[parseInt(newManCoord)];
 
       const newGameList = moveManInArray(gameList, newManCoord, prevManCoord);
-
+      const forbiddenMove = newManCoord === prevManCoord ? true : false;
       switch (nextCell.name) {
         case "finish": {
           return {
@@ -82,8 +82,11 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManVert = +(currentIndex[1] ? currentIndex[1] : 0);
   const nextManVert = currManVert + 1;
   const nextManHor = currManHor + 1;
-  const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1;
+  /*   const prevManVert = currManVert - 1;
+  const prevManHor = currManHor - 1; */
+  /* */
+  const prevManVert = currManVert - 1 > 0 ? currManVert - 1 : currManVert;
+  const prevManHor = currManHor - 1 > 0 ? currManHor - 1 : currManHor;
 
   switch (direction) {
     case "top": {
@@ -108,6 +111,7 @@ const moveManInArray = (
   newIndex: string,
   prevIndex: string
 ) => {
+  /*условие для которого человек не двигается */
   const prevCell = gameList.flat()[parseInt(prevIndex)];
   const nextCell = gameList.flat()[parseInt(newIndex)];
 

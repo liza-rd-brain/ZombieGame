@@ -367,11 +367,17 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 };
 
 function App() {
-  const [gameState, gameResult, gameList] = useSelector((state: State) => [
+  const [
+    gameState,
+    gameResult,
+    gameList,
+    cardInteractIndex,
+  ] = useSelector((state: State) => [
     state.gameState,
 
     state.gameResult,
     state.gameList,
+    state.cardInteractIndex,
   ]);
 
   const dispatch = useDispatch();
@@ -462,7 +468,10 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              <Status>{`здоровье: ${getManHealth(gameList)}`}</Status>
+              <Status>{`здоровье: ${getManHealth(
+                gameList,
+                cardInteractIndex
+              )}`}</Status>
               {/*   <Status>{`координаты: ${manHor}${manVert}`}</Status>
               <Status>{`здоровье: ${manHealth}`}</Status> */}
 
