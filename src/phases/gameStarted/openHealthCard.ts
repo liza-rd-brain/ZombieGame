@@ -45,7 +45,7 @@ function openHealthCard(action: ActionType, state: State): State {
     case "changeHealthList": {
       const isManLive = getManHealth(gameList, manCoord) > 0;
 
-      console.log(isManLive);
+      /*   console.log(isManLive); */
 
       switch (true) {
         case isManLive: {
@@ -107,7 +107,7 @@ const changeHealthList = (gameList: GameList, manCoord: string) => {
       );
 
       newList.flat()[parseInt(manCoord)] = cellNeedDeleteHealth;
-      console.log(newList);
+      /*  console.log(newList); */
       return newList;
     }
     default:
