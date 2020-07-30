@@ -16,6 +16,7 @@ import {
   ObjCellType,
   ObjFieldItem,
   HealthItem,
+  FinishCell,
 } from "./../app";
 
 type GridProps = {
@@ -49,26 +50,40 @@ const CellItem = styled.div<CoordItem>`
   color: lightgrey;
 `;
 
-function getCell(cell: ObjFieldItem) {
-  switch (true) {
-    case cell.cardItem.manItem != undefined: {
-      return <Man />;
+function getCell(cell: ObjFieldItem | FinishCell) {
+  switch (cell.name) {
+    case "field": {
+      switch (true) {
+        case cell.cardItem.manItem != undefined: {
+          return <Man />;
+        }
+        case cell.cardItem.hasOwnProperty("healthItem") &&
+          cell.cardItem.healthItem != undefined: {
+          /*Промежуточное решение */
+          const health: HealthItem = cell.cardItem.healthItem as HealthItem;
+          cell.cardItem.healthItem;
+          return (
+            <Health
+              name={health.name}
+              type={health.type}
+              apperance={health.apperance}
+            />
+          );
+        }
+        default:
+          return null;
+      }
     }
-    case cell.cardItem.hasOwnProperty("healthItem") &&
-      cell.cardItem.healthItem != undefined: {
-      /*Промежуточное решение */
-      const health: HealthItem = cell.cardItem.healthItem as HealthItem;
-      cell.cardItem.healthItem;
-      return (
-        <Health
-          name={health.name}
-          type={health.type}
-          apperance={health.apperance}
-        />
-      );
+    case "finish": {
+      switch (true) {
+        case cell.cardItem.manItem != undefined: {
+          return <Man />;
+        }
+        default: {
+          return null;
+        }
+      }
     }
-    default:
-      return null;
   }
 }
 
@@ -103,6 +118,19 @@ function getFullArray(objGameList: ObjGameList) {
           </CellItem>
         );
       }
+      case "finish": {
+        return (
+          <CellItem
+            key={`${cell.hor}${cell.vert}`}
+            hor={cell.hor}
+            vert={cell.vert}
+          >
+            {getCell(cell)}
+            {cell.hor}
+            {cell.vert}
+          </CellItem>
+        );
+      }
       case "wall": {
         return (
           <CellItem
@@ -114,17 +142,6 @@ function getFullArray(objGameList: ObjGameList) {
           </CellItem>
         );
       }
-      default:
-        return (
-          <CellItem
-            key={`${cell.hor}${cell.vert}`}
-            hor={cell.hor}
-            vert={cell.vert}
-          >
-            {cell.hor}
-            {cell.vert}
-          </CellItem>
-        );
     }
   });
 }

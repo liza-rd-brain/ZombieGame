@@ -6,13 +6,12 @@ import {
   ObjGameList,
 } from "./../../app";
 
-
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = +(currentIndex[0] ? currentIndex[0] : 0);
   const currManVert = +(currentIndex[1] ? currentIndex[1] : 0);
   const nextManVert = currManVert + 1;
   const nextManHor = currManHor + 1;
- 
+
   const prevManVert = currManVert - 1;
   const prevManHor = currManHor - 1;
 
@@ -34,8 +33,7 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   }
 };
 
-
-const moveManInArrayObj = (
+const moveManInArray = (
   objGameList: ObjGameList,
   newIndex: string,
   prevIndex: string
@@ -45,11 +43,29 @@ const moveManInArrayObj = (
   const nextCell = objGameList[newIndex];
   console.log(prevCell, nextCell);
 
-  /*удаляем человека из предыдущей клетки*/
+  const cellName = nextCell.name;
   if (nextCell && prevCell.name === "field" && nextCell.name === "field") {
     const man = prevCell.cardItem.manItem;
     delete prevCell.cardItem.manItem;
-    nextCell.cardItem.manItem = man;
+    nextCell.cardItem = {
+      ...nextCell.cardItem,
+      manItem: man,
+    };
+
+    const obj = { ...objGameList, [prevIndex]: prevCell, [newIndex]: nextCell };
+    console.log(obj);
+    return obj;
+  } else if (
+    nextCell &&
+    prevCell.name === "field" &&
+    nextCell.name === "finish"
+  ) {
+    const man = prevCell.cardItem.manItem;
+    delete prevCell.cardItem.manItem;
+    nextCell.cardItem = {
+      ...nextCell.cardItem,
+      manItem: man,
+    };
 
     const obj = { ...objGameList, [prevIndex]: prevCell, [newIndex]: nextCell };
     console.log(obj);
@@ -71,12 +87,10 @@ function clickArrow(action: ActionType, state: State): State {
 
       const newManCoord = сhangeManCoord(prevManCoord, direction);
 
-      /*    const nextCell = gameList.flat()[parseInt(newManCoord)]; */
       const nextCell = objGameList[newManCoord];
       const hasNextCell = nextCell ? true : false;
-      /* const newGameList = moveManInArray(gameList, newManCoord, prevManCoord); */
 
-      const newGameListObj = moveManInArrayObj(
+      const newGameList = moveManInArray(
         objGameList,
         newManCoord,
         prevManCoord
@@ -94,7 +108,7 @@ function clickArrow(action: ActionType, state: State): State {
                 ...state,
                 dice: state.dice - 1,
 
-                objGameList: newGameListObj,
+                objGameList: newGameList,
                 gameState: "endGame",
                 gameResult: "Вы выиграли",
                 cardInteractIndex: newManCoord,
@@ -118,7 +132,7 @@ function clickArrow(action: ActionType, state: State): State {
                         ...state,
                         dice: state.dice - 1,
 
-                        objGameList: newGameListObj,
+                        objGameList: newGameList,
                         gameState: "gameStarted.trownDice",
                         cardInteractIndex: newManCoord,
                       };
@@ -128,7 +142,7 @@ function clickArrow(action: ActionType, state: State): State {
                         ...state,
                         dice: state.dice - 1,
 
-                        objGameList: newGameListObj,
+                        objGameList: newGameList,
                         gameState: "gameStarted.clickArrow",
                         cardInteractIndex: newManCoord,
                       };
@@ -140,7 +154,7 @@ function clickArrow(action: ActionType, state: State): State {
                     ...state,
                     dice: state.dice - 1,
 
-                    objGameList: newGameListObj,
+                    objGameList: newGameList,
                     gameState: "gameStarted.openHealthCard",
                     cardInteractIndex: newManCoord,
                   };

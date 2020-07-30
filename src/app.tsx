@@ -50,7 +50,7 @@ const Status = styled.div`
 
 export const StartCell = { hor: 0, vert: 0 };
 
-export const EndCell = { hor: 3, vert: 3 };
+export const EndCell = { hor: 6, vert: 6 };
 const initialManHealth = 3;
 const amountHealthItems = 3;
 
@@ -89,6 +89,7 @@ export type FinishCell = {
   hor: number;
   vert: number;
   name: "finish";
+  cardItem: { manItem?: ManItem };
 };
 
 export type HealthItem = {
@@ -357,6 +358,7 @@ const getObjGameList = (
                   hor: hor,
                   vert: vert,
                   name: "finish",
+                  cardItem: {},
                 };
                 return finishCell;
               }
@@ -482,6 +484,7 @@ const getGameList = (
                 hor: hor,
                 vert: vert,
                 name: "finish",
+                cardItem: {},
               };
               return finishCell;
             }
