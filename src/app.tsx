@@ -46,7 +46,6 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-
 /** параметризируемые переменные  **/
 
 export const StartCell = { hor: 0, vert: 0 };
@@ -308,8 +307,8 @@ const getObjGameList = (
   wallList: Array<CoordItem>,
   endCell: CoordItem
 ) => {
-  const width = EndCell.hor + 1;
-  const height = EndCell.vert + 1;
+  const width = EndCell.hor+1;
+  const height = EndCell.vert+1;
 
   const healthList: Array<ObjFieldItem> = createHealthArrayObj(
     amountHealthItems
@@ -325,7 +324,7 @@ const getObjGameList = (
       const health = healthList.find((item, index) => {
         return item.hor === hor && item.vert === vert;
       });
-   
+
       const hasHealth = health ? true : false;
       const hasManAndHealth = hasHealth && hasMan;
 
@@ -400,8 +399,9 @@ const getObjGameList = (
             return emptyObjFieldItem;
         }
       };
-/*для каждого индеккса вызываем функцию
- */
+      /*для каждого индеккса вызываем функцию
+       */
+
       gameArray[`${hor}${vert}`] = getCell();
     }
   }
@@ -674,11 +674,11 @@ function App() {
               <Grid />
             </Field>
             <LeftPanel>
-              <Status>{textPhase()}</Status>
+              {/* <Status>{textPhase()}</Status>
               <Status>{`здоровье: ${getManHealth(
                 gameList,
                 cardInteractIndex
-              )}`}</Status>
+              )}`}</Status> */}
               {/*   <Status>{`координаты: ${manHor}${manVert}`}</Status>
               <Status>{`здоровье: ${manHealth}`}</Status> */}
 
