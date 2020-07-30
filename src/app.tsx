@@ -50,7 +50,7 @@ const Status = styled.div`
 
 export const StartCell = { hor: 0, vert: 0 };
 
-export const EndCell = { hor: 2, vert: 5 };
+export const EndCell = { hor: 3, vert: 3 };
 const initialManHealth = 3;
 const amountHealthItems = 3;
 
@@ -307,8 +307,8 @@ const getObjGameList = (
   wallList: Array<CoordItem>,
   endCell: CoordItem
 ) => {
-  const width = EndCell.hor+1;
-  const height = EndCell.vert+1;
+  const width = EndCell.hor; /* + 1 */
+  const height = EndCell.vert; /* + 1 */
 
   const healthList: Array<ObjFieldItem> = createHealthArrayObj(
     amountHealthItems
@@ -352,6 +352,14 @@ const getObjGameList = (
           }
           case !hasWall: {
             switch (true) {
+              case hasFinish: {
+                const finishCell: FinishCell = {
+                  hor: hor,
+                  vert: vert,
+                  name: "finish",
+                };
+                return finishCell;
+              }
               case hasManAndHealth: {
                 if (health != undefined) {
                   const fieldItem: ObjFieldItem = {
@@ -383,14 +391,7 @@ const getObjGameList = (
                 };
                 return fieldItem;
               }
-              case hasFinish: {
-                const finishCell: FinishCell = {
-                  hor: hor,
-                  vert: vert,
-                  name: "finish",
-                };
-                return finishCell;
-              }
+
               default:
                 return emptyObjFieldItem;
             }

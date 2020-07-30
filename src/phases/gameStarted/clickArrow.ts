@@ -1,92 +1,20 @@
-import { State, ActionType, MoveDirection, GameList } from "./../../app";
+import {
+  State,
+  ActionType,
+  MoveDirection,
+  GameList,
+  ObjGameList,
+} from "./../../app";
 
-function clickArrow(action: ActionType, state: State): State {
-  switch (action.type) {
-    case "arrowPressed": {
-      const direction = action.payload;
-      const gameList = state.gameList;
-      const prevManCoord = state.cardInteractIndex;
-      const isNextTrowLast = state.dice === 1;
-
-      const newManCoord = сhangeManCoord(prevManCoord, direction);
-
-      const nextCell = gameList.flat()[parseInt(newManCoord)];
-
-      const newGameList = moveManInArray(gameList, newManCoord, prevManCoord);
-      const forbiddenMove = newManCoord === prevManCoord ? true : false;
-      switch (nextCell.name) {
-        case "finish": {
-          return {
-            ...state,
-            dice: state.dice - 1,
-            gameList: newGameList,
-            gameState: "endGame",
-            gameResult: "Вы выиграли",
-            cardInteractIndex: newManCoord,
-          };
-        }
-        case "wall": {
-          return state;
-        }
-        case "field": {
-          const hasHealthInteract = nextCell.cardItem.find(
-            (item) => item.name === "health"
-          );
-
-          switch (hasHealthInteract) {
-            case undefined: {
-              switch (true) {
-                case isNextTrowLast: {
-                  return {
-                    ...state,
-                    dice: state.dice - 1,
-                    gameList: newGameList,
-                    gameState: "gameStarted.trownDice",
-                    cardInteractIndex: newManCoord,
-                  };
-                }
-                case !isNextTrowLast: {
-                  return {
-                    ...state,
-                    dice: state.dice - 1,
-                    gameList: newGameList,
-                    gameState: "gameStarted.clickArrow",
-                    cardInteractIndex: newManCoord,
-                  };
-                }
-              }
-            }
-            default: {
-              return {
-                ...state,
-                dice: state.dice - 1,
-                gameList: newGameList,
-                gameState: "gameStarted.openHealthCard",
-                cardInteractIndex: newManCoord,
-              };
-            }
-          }
-        }
-        default: {
-          return state;
-        }
-      }
-    }
-    default:
-      return state;
-  }
-}
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = +(currentIndex[0] ? currentIndex[0] : 0);
   const currManVert = +(currentIndex[1] ? currentIndex[1] : 0);
   const nextManVert = currManVert + 1;
   const nextManHor = currManHor + 1;
-  /*   const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1; */
-  /* */
-  const prevManVert = currManVert - 1 > 0 ? currManVert - 1 : currManVert;
-  const prevManHor = currManHor - 1 > 0 ? currManHor - 1 : currManHor;
+ 
+  const prevManVert = currManVert - 1;
+  const prevManHor = currManHor - 1;
 
   switch (direction) {
     case "top": {
@@ -106,47 +34,133 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   }
 };
 
-const moveManInArray = (
-  gameList: GameList,
+
+const moveManInArrayObj = (
+  objGameList: ObjGameList,
   newIndex: string,
   prevIndex: string
 ) => {
-  /*условие для которого человек не двигается */
-  const prevCell = gameList.flat()[parseInt(prevIndex)];
-  const nextCell = gameList.flat()[parseInt(newIndex)];
+  /* const prevCell = objGameList[parseInt(prevIndex)]; */
+  const prevCell = objGameList[prevIndex];
+  const nextCell = objGameList[newIndex];
+  console.log(prevCell, nextCell);
 
-  if (prevCell.name === "field" && nextCell.name === "field") {
-    const changingPrevCell =
-      prevCell.name === "field"
-        ? prevCell.cardItem.filter((item) => {
-            return item.name != "man";
-          })
-        : [];
+  /*удаляем человека из предыдущей клетки*/
+  if (nextCell && prevCell.name === "field" && nextCell.name === "field") {
+    const man = prevCell.cardItem.manItem;
+    delete prevCell.cardItem.manItem;
+    nextCell.cardItem.manItem = man;
 
-    const healthItem =
-      prevCell.name === "field"
-        ? prevCell.cardItem.find((item) => item.name === "man")
-        : null;
-
-    const changingNextCell =
-      nextCell.name === "field" && healthItem != null
-        ? (nextCell.cardItem = [...nextCell.cardItem, healthItem])
-        : [];
-
-    prevCell.cardItem = changingPrevCell;
-    nextCell.cardItem = changingNextCell;
-
-    const outerPrevIndex = parseInt(prevIndex[0]);
-    const outerNextIndex = parseInt(newIndex[0]);
-    const innerPrevIndex = parseInt(prevIndex[1]);
-    const innerNextIndex = parseInt(newIndex[1]);
-
-    const newArray = [...gameList];
-    newArray[outerPrevIndex][innerPrevIndex] = prevCell;
-    newArray[outerNextIndex][innerNextIndex] = nextCell;
-
-    return newArray;
-  } else return gameList;
+    const obj = { ...objGameList, [prevIndex]: prevCell, [newIndex]: nextCell };
+    console.log(obj);
+    return obj;
+  } else return objGameList;
 };
+
+function clickArrow(action: ActionType, state: State): State {
+  switch (action.type) {
+    case "arrowPressed": {
+      const direction = action.payload;
+
+      const gameList = state.gameList;
+      const objGameList = state.objGameList;
+      const prevManCoordIndex = state.cardInteractIndex;
+
+      const prevManCoord = state.cardInteractIndex;
+      const isNextTrowLast = state.dice === 1;
+
+      const newManCoord = сhangeManCoord(prevManCoord, direction);
+
+      /*    const nextCell = gameList.flat()[parseInt(newManCoord)]; */
+      const nextCell = objGameList[newManCoord];
+      const hasNextCell = nextCell ? true : false;
+      /* const newGameList = moveManInArray(gameList, newManCoord, prevManCoord); */
+
+      const newGameListObj = moveManInArrayObj(
+        objGameList,
+        newManCoord,
+        prevManCoord
+      );
+
+      const forbiddenMove = newManCoord === prevManCoord ? true : false;
+      switch (hasNextCell) {
+        case false: {
+          return state;
+        }
+        case true: {
+          switch (nextCell.name) {
+            case "finish": {
+              return {
+                ...state,
+                dice: state.dice - 1,
+
+                objGameList: newGameListObj,
+                gameState: "endGame",
+                gameResult: "Вы выиграли",
+                cardInteractIndex: newManCoord,
+              };
+            }
+            case "wall": {
+              return state;
+            }
+            case "field": {
+              const hasHealthInteract =
+                nextCell.cardItem.healthItem != undefined;
+              /*   const hasHealthInteract = nextCell.cardItem.find(
+              (item) => item.name === "health"
+            ); */
+
+              switch (hasHealthInteract) {
+                case false: {
+                  switch (true) {
+                    case isNextTrowLast: {
+                      return {
+                        ...state,
+                        dice: state.dice - 1,
+
+                        objGameList: newGameListObj,
+                        gameState: "gameStarted.trownDice",
+                        cardInteractIndex: newManCoord,
+                      };
+                    }
+                    case !isNextTrowLast: {
+                      return {
+                        ...state,
+                        dice: state.dice - 1,
+
+                        objGameList: newGameListObj,
+                        gameState: "gameStarted.clickArrow",
+                        cardInteractIndex: newManCoord,
+                      };
+                    }
+                  }
+                }
+                default: {
+                  return {
+                    ...state,
+                    dice: state.dice - 1,
+
+                    objGameList: newGameListObj,
+                    gameState: "gameStarted.openHealthCard",
+                    cardInteractIndex: newManCoord,
+                  };
+                }
+              }
+            }
+            default: {
+              return state;
+            }
+          }
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+    default: {
+      return state;
+    }
+  }
+}
 
 export default clickArrow;

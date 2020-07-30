@@ -49,7 +49,7 @@ const CellItem = styled.div<CoordItem>`
   color: lightgrey;
 `;
 
-function getCellObj(cell: ObjFieldItem) {
+function getCell(cell: ObjFieldItem) {
   switch (true) {
     case cell.cardItem.manItem != undefined: {
       return <Man />;
@@ -72,7 +72,7 @@ function getCellObj(cell: ObjFieldItem) {
   }
 }
 
-function getFullArrayObj(objGameList: ObjGameList) {
+function getFullArray(objGameList: ObjGameList) {
   /*из объекта сделать массив?!*/
   const gridArray = Object.values(objGameList).sort(function (prev, next) {
     /*может нужна потом сортировака и по вертикали */
@@ -88,7 +88,6 @@ function getFullArrayObj(objGameList: ObjGameList) {
     }
   });
 
-  console.log(gridArray);
   return gridArray.map((cell: ObjCellType) => {
     switch (cell.name) {
       case "field": {
@@ -98,7 +97,7 @@ function getFullArrayObj(objGameList: ObjGameList) {
             hor={cell.hor}
             vert={cell.vert}
           >
-            {getCellObj(cell)}
+            {getCell(cell)}
             {cell.hor}
             {cell.vert}
           </CellItem>
@@ -143,10 +142,10 @@ function Grid() {
     state.objGameList,
   ]);
 
-  const width = maxHor + 2;
-  const height = maxVert + 2;
+  const width = maxHor + 1;
+  const height = maxVert + 1;
 
-  return <GridItem vert={height}>{getFullArrayObj(objGameList)}</GridItem>;
+  return <GridItem vert={height}>{getFullArray(objGameList)}</GridItem>;
 }
 
 export default Grid;
