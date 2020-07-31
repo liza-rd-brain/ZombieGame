@@ -14,7 +14,7 @@ import waitingStartPhase from "./phases/waitingStart";
 import trownDice from "./phases/gameStarted/trownDice";
 import clickArrow from "./phases/gameStarted/clickArrow";
 import openHealthCard, {
-  getManHealth,
+  getManHealthObj,
 } from "./phases/gameStarted/openHealthCard";
 import endGame from "./phases/endGame";
 
@@ -50,9 +50,9 @@ const Status = styled.div`
 
 export const StartCell = { hor: 0, vert: 0 };
 
-export const EndCell = { hor: 1, vert: 1 };
+export const EndCell = { hor: 9, vert: 9 };
 const initialManHealth = 3;
-const amountHealthItems = 3;
+const amountHealthItems = 30;
 
 const wallList: Array<CoordItem> = [
   { hor: 2, vert: 2 },
@@ -100,6 +100,7 @@ export type HealthItem = {
 
 export type CardInteract = ManItem | HealthItem;
 
+/*нужен для рисования массива здоровья */
 export type FieldItem = {
   hor: number;
   vert: number;
@@ -116,20 +117,17 @@ export type ObjFieldItem = {
 };
 export type ObjCellType = ObjFieldItem | WallItem | FinishCell;
 
-export type ObjGameList = { [key: string]: ObjCellType /* number */ };
+export type GameList = { [key: string]: ObjCellType /* number */ };
 
 /*______________________________________________________________________________ */
-export type CellType = FieldItem | WallItem | FinishCell;
-
-export type GameList = CellType[][];
 
 export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  gameList: GameList;
+
   cardInteractIndex: string;
-  objGameList: ObjGameList;
+  gameList: GameList;
 };
 
 export type ActionType =
@@ -153,7 +151,7 @@ export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 export type DiceThrownAction = { type: "diceThrown"; payload: number };
 export const healthItemTypeArr: HealthItemTypeArr = ["increment", "decrement"];
 
-const getRandomHealthItem = (arr: Array<FieldItem>): FieldItem => {
+const getRandomHealthItem = (arr: Array<FieldItem>): ObjFieldItem => {
   const hor = Math.floor(Math.random() * (EndCell.hor + 1));
   const vert = Math.floor(Math.random() * (EndCell.vert + 1));
   const randomType: HealthItemType =
@@ -188,9 +186,13 @@ const getRandomHealthItem = (arr: Array<FieldItem>): FieldItem => {
             hor: hor,
             vert: vert,
             name: "field",
-            cardItem: [
-              { name: "health", type: randomType, apperance: "closed" },
-            ],
+            cardItem: {
+              healthItem: {
+                name: "health",
+                type: randomType,
+                apperance: "closed",
+              },
+            },
           };
         }
         case !hasHealthRepitition: {
@@ -198,9 +200,13 @@ const getRandomHealthItem = (arr: Array<FieldItem>): FieldItem => {
             hor: hor,
             vert: vert,
             name: "field",
-            cardItem: [
-              { name: "health", type: randomType, apperance: "closed" },
-            ],
+            cardItem: {
+              healthItem: {
+                name: "health",
+                type: randomType,
+                apperance: "closed",
+              },
+            },
           };
         }
         case hasHealthRepitition: {
@@ -213,78 +219,6 @@ const getRandomHealthItem = (arr: Array<FieldItem>): FieldItem => {
   }
 };
 
-const getRandomHealthItemObj = (arr: Array<FieldItem>): ObjFieldItem => {
-  const hor = Math.floor(Math.random() * (EndCell.hor + 1));
-  const vert = Math.floor(Math.random() * (EndCell.vert + 1));
-  const randomType: HealthItemType =
-    healthItemTypeArr[Math.floor(Math.random() * 2)];
-
-  const crossStartCell = StartCell.hor === hor && StartCell.vert === vert;
-  const wallCell = wallList.find((item) => {
-    return item && item.hor === hor && item.vert === vert;
-  });
-
-  const crossWall = wallCell ? true : false;
-
-  const hasIntersection = crossWall || crossStartCell;
-
-  const healthRepetition = arr.find((item) => {
-    return item && item.hor === hor && item.vert === vert;
-  });
-
-  const hasHealthRepitition = healthRepetition
-    ? healthRepetition.hor === hor && healthRepetition.vert === vert
-    : false;
-  const firstElement = arr.length === 0;
-
-  switch (true) {
-    case hasIntersection: {
-      return getRandomHealthItemObj(arr);
-    }
-    case !crossStartCell: {
-      switch (true) {
-        case firstElement: {
-          return {
-            hor: hor,
-            vert: vert,
-            name: "field",
-            cardItem: {
-              healthItem: {
-                name: "health",
-                type: randomType,
-                apperance: "closed",
-              },
-            },
-
-            /* cardItem: [
-              { name: "health", type: randomType, apperance: "closed" },
-            ], */
-          };
-        }
-        case !hasHealthRepitition: {
-          return {
-            hor: hor,
-            vert: vert,
-            name: "field",
-            cardItem: {
-              healthItem: {
-                name: "health",
-                type: randomType,
-                apperance: "closed",
-              },
-            },
-          };
-        }
-        case hasHealthRepitition: {
-          return getRandomHealthItemObj(arr);
-        }
-      }
-    }
-    default:
-      return getRandomHealthItemObj(arr);
-  }
-};
-
 const createHealthArray = (number: number) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
     const currValue = getRandomHealthItem(prevValue);
@@ -294,16 +228,7 @@ const createHealthArray = (number: number) => {
   return healthArray;
 };
 
-const createHealthArrayObj = (number: number) => {
-  let healthArray = new Array(number).fill(0).reduce((prevValue) => {
-    const currValue = getRandomHealthItemObj(prevValue);
-    return [currValue, ...prevValue];
-  }, []);
-  console.log(healthArray);
-  return healthArray;
-};
-
-const getObjGameList = (
+const getGameList = (
   amountHealthItems: number,
   wallList: Array<CoordItem>,
   endCell: CoordItem
@@ -311,11 +236,9 @@ const getObjGameList = (
   const width = EndCell.hor; /* + 1 */
   const height = EndCell.vert; /* + 1 */
 
-  const healthList: Array<ObjFieldItem> = createHealthArrayObj(
-    amountHealthItems
-  );
+  const healthList: Array<ObjFieldItem> = createHealthArray(amountHealthItems);
 
-  const gameArray: ObjGameList = {};
+  const gameArray: GameList = {};
 
   for (let vert = 0; vert <= height; vert++) {
     for (let hor = 0; hor <= width; hor++) {
@@ -412,134 +335,15 @@ const getObjGameList = (
   return gameArray;
 };
 
-const getGameList = (
-  amountHealthItems: number,
-  wallList: Array<CoordItem>,
-  endCell: CoordItem
-): GameList => {
-  const width = endCell.hor + 1;
-  const height = endCell.vert + 1;
-
-  const healthList: Array<FieldItem> = createHealthArray(amountHealthItems);
-
-  const gameArray = new Array(height).fill(0).map((itemVert, hor) =>
-    new Array(width).fill({}).map((itemHor, vert) => {
-      const hasMan = StartCell.hor === hor && StartCell.vert === vert;
-      const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
-
-      const health = healthList.find((item, index) => {
-        return item.hor === hor && item.vert === vert;
-      });
-
-      const hasHealth = health ? true : false;
-      const hasManAndHealth = hasHealth && hasMan;
-
-      const wallCell = wallList.find((item) => {
-        return item.hor === hor && item.vert === vert;
-      });
-
-      const hasWall = wallCell ? true : false;
-
-      const emptyFieldItem: FieldItem = {
-        hor: hor,
-        vert: vert,
-        name: "field",
-        cardItem: [],
-      };
-
-      switch (true) {
-        case hasWall: {
-          const wallItem: WallItem = {
-            hor: hor,
-            vert: vert,
-            name: "wall",
-          };
-          return wallItem;
-        }
-        case !hasWall: {
-          switch (true) {
-            case hasManAndHealth: {
-              if (health != undefined) {
-                const fieldItem: FieldItem = {
-                  ...health,
-                  cardItem: [
-                    ...health.cardItem,
-                    { name: "man", health: initialManHealth },
-                  ],
-                };
-                return fieldItem;
-              } else return emptyFieldItem;
-            }
-            case hasMan: {
-              const fieldItem: FieldItem = {
-                hor: hor,
-                vert: vert,
-                name: "field",
-                cardItem: [{ name: "man", health: initialManHealth }],
-              };
-              return fieldItem;
-            }
-            case hasFinish: {
-              const finishCell: FinishCell = {
-                hor: hor,
-                vert: vert,
-                name: "finish",
-                cardItem: {},
-              };
-              return finishCell;
-            }
-            case hasHealth: {
-              if (health != undefined) {
-                return health;
-              } else return emptyFieldItem;
-            }
-            default:
-              return emptyFieldItem;
-          }
-        }
-        default:
-          return emptyFieldItem;
-      }
-    })
-  );
-
-  return gameArray;
-};
-
-const getIndexWithMan = (gameList: GameList) => {
-  const index = gameList
-    .flat()
-    .findIndex((item, index) => {
-      switch (item.name) {
-        case "field": {
-          return item.cardItem.find((item, index) => item.name === "man");
-        }
-        default:
-          return null;
-      }
-    })
-    .toString();
-  if (index === "0") {
-    return "00";
-  } else return index;
-};
-
 const initialGameList = getGameList(amountHealthItems, wallList, EndCell);
-
-const initialObjGameList = getObjGameList(amountHealthItems, wallList, EndCell);
-
-const indexWithMan = getIndexWithMan(initialGameList);
-/* console.log(indexWithMan);
-console.log(initialGameList.flat()); */
 
 const getInitialState = (): State => {
   return {
     gameState: "waitingStart",
     dice: 0,
-    gameList: initialGameList,
     gameResult: "",
-    cardInteractIndex: indexWithMan,
-    objGameList: initialObjGameList,
+    cardInteractIndex: `${StartCell.hor}${StartCell.vert}` /* indexWithMan, */,
+    gameList: initialGameList,
   };
 };
 
@@ -581,14 +385,13 @@ function App() {
   const [
     gameState,
     gameResult,
-    gameList,
     cardInteractIndex,
+    gameList,
   ] = useSelector((state: State) => [
     state.gameState,
-
     state.gameResult,
-    state.gameList,
     state.cardInteractIndex,
+    state.gameList,
   ]);
 
   const dispatch = useDispatch();
@@ -678,13 +481,12 @@ function App() {
               <Grid />
             </Field>
             <LeftPanel>
-              {/* <Status>{textPhase()}</Status>
-              <Status>{`здоровье: ${getManHealth(
+              <Status>{textPhase()}</Status>
+              <Status>{`здоровье: ${getManHealthObj(
                 gameList,
                 cardInteractIndex
-              )}`}</Status> */}
-              {/*   <Status>{`координаты: ${manHor}${manVert}`}</Status>
-              <Status>{`здоровье: ${manHealth}`}</Status> */}
+              )}`}</Status>
+              <Status>{`координаты: ${cardInteractIndex}`}</Status>
 
               <Dice />
               <Arrows />

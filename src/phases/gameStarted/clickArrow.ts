@@ -1,10 +1,4 @@
-import {
-  State,
-  ActionType,
-  MoveDirection,
-  GameList,
-  ObjGameList,
-} from "./../../app";
+import { State, ActionType, MoveDirection, GameList } from "./../../app";
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = +(currentIndex[0] ? currentIndex[0] : 0);
@@ -34,16 +28,14 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
 };
 
 const moveManInArray = (
-  objGameList: ObjGameList,
+  gameList: GameList,
   newIndex: string,
   prevIndex: string
 ) => {
-  
-  const prevCell = objGameList[prevIndex];
-  const nextCell = objGameList[newIndex];
+  const prevCell = gameList[prevIndex];
+  const nextCell = gameList[newIndex];
   console.log(prevCell, nextCell);
 
- 
   if (nextCell && prevCell.name === "field" && nextCell.name === "field") {
     const man = prevCell.cardItem.manItem;
     delete prevCell.cardItem.manItem;
@@ -52,7 +44,7 @@ const moveManInArray = (
       manItem: man,
     };
 
-    const obj = { ...objGameList, [prevIndex]: prevCell, [newIndex]: nextCell };
+    const obj = { ...gameList, [prevIndex]: prevCell, [newIndex]: nextCell };
     console.log(obj);
     return obj;
   } else if (
@@ -67,35 +59,32 @@ const moveManInArray = (
       manItem: man,
     };
 
-    const obj = { ...objGameList, [prevIndex]: prevCell, [newIndex]: nextCell };
+    const obj = { ...gameList, [prevIndex]: prevCell, [newIndex]: nextCell };
     console.log(obj);
     return obj;
-  } else return objGameList;
+  } else return gameList;
 };
 
 function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-
       const gameList = state.gameList;
-      const objGameList = state.objGameList;
       const prevManCoordIndex = state.cardInteractIndex;
 
-      const prevManCoord = state.cardInteractIndex;
+      /* const prevManCoord = state.cardInteractIndex; */
       const isNextTrowLast = state.dice === 1;
 
-      const newManCoord = сhangeManCoord(prevManCoord, direction);
+      const newManCoord = сhangeManCoord(prevManCoordIndex, direction);
 
-      const nextCell = objGameList[newManCoord];
+      const nextCell = gameList[newManCoord];
       const hasNextCell = nextCell ? true : false;
 
       const newGameList = moveManInArray(
-        objGameList,
+        gameList,
         newManCoord,
-        prevManCoord
+        prevManCoordIndex
       );
-
 
       switch (hasNextCell) {
         case false: {
@@ -108,7 +97,7 @@ function clickArrow(action: ActionType, state: State): State {
                 ...state,
                 dice: state.dice - 1,
 
-                objGameList: newGameList,
+                gameList: newGameList,
                 gameState: "endGame",
                 gameResult: "Вы выиграли",
                 cardInteractIndex: newManCoord,
@@ -132,7 +121,7 @@ function clickArrow(action: ActionType, state: State): State {
                         ...state,
                         dice: state.dice - 1,
 
-                        objGameList: newGameList,
+                        gameList: newGameList,
                         gameState: "gameStarted.trownDice",
                         cardInteractIndex: newManCoord,
                       };
@@ -142,7 +131,7 @@ function clickArrow(action: ActionType, state: State): State {
                         ...state,
                         dice: state.dice - 1,
 
-                        objGameList: newGameList,
+                        gameList: newGameList,
                         gameState: "gameStarted.clickArrow",
                         cardInteractIndex: newManCoord,
                       };
@@ -154,7 +143,7 @@ function clickArrow(action: ActionType, state: State): State {
                     ...state,
                     dice: state.dice - 1,
 
-                    objGameList: newGameList,
+                    gameList: newGameList,
                     gameState: "gameStarted.openHealthCard",
                     cardInteractIndex: newManCoord,
                   };

@@ -8,7 +8,7 @@ import {
   State,
   EndCell,
   CoordItem,
-  ObjGameList,
+  GameList,
   ObjCellType,
   ObjFieldItem,
   HealthItem,
@@ -49,25 +49,39 @@ const CellItem = styled.div<CoordItem>`
 function getCell(cell: ObjFieldItem | FinishCell) {
   switch (cell.name) {
     case "field": {
+      const hasHealth = cell.cardItem.healthItem != undefined;
+      const hasMan = cell.cardItem.manItem != undefined;
+      const hasManAndHealth = hasMan && hasHealth;
+
       switch (true) {
-        case cell.cardItem.manItem != undefined: {
+        case hasManAndHealth: {
+          if (cell.cardItem.healthItem && cell.cardItem.manItem) {
+            return (
+              <>
+                <Man />
+                <Health
+                  name={cell.cardItem.healthItem.name}
+                  type={cell.cardItem.healthItem.type}
+                  apperance={cell.cardItem.healthItem.apperance}
+                />
+              </>
+            );
+          } else return null;
+        }
+        case hasMan: {
           return <Man />;
         }
-        case cell.cardItem.hasOwnProperty("healthItem") &&
-          cell.cardItem.healthItem != undefined: {
-          /*Промежуточное решение */
-          const health: HealthItem = cell.cardItem.healthItem as HealthItem;
-          cell.cardItem.healthItem;
-          return (
-            <Health
-              name={health.name}
-              type={health.type}
-              apperance={health.apperance}
-            />
-          );
+        case hasHealth: {
+          if (cell.cardItem.healthItem) {
+            return (
+              <Health
+                name={cell.cardItem.healthItem.name}
+                type={cell.cardItem.healthItem.type}
+                apperance={cell.cardItem.healthItem.apperance}
+              />
+            );
+          } else return null;
         }
-        default:
-          return null;
       }
     }
     case "finish": {
@@ -83,9 +97,8 @@ function getCell(cell: ObjFieldItem | FinishCell) {
   }
 }
 
-function getFullArray(objGameList: ObjGameList) {
- 
-  const gridArray = Object.values(objGameList).sort(function (prev, next) {
+function getFullArray(gameList: GameList) {
+  const gridArray = Object.values(gameList).sort(function (prev, next) {
     /*может нужна потом сортировака и по вертикали */
     switch (true) {
       case prev.hor < next.hor: {
@@ -143,22 +156,17 @@ function getFullArray(objGameList: ObjGameList) {
 }
 
 function Grid() {
-  const [
-    maxHor,
-    maxVert,
-    gameList,
-    objGameList,
-  ] = useSelector((state: State) => [
+  const [maxHor, maxVert, gameList] = useSelector((state: State) => [
     EndCell.hor,
     EndCell.vert,
+
     state.gameList,
-    state.objGameList,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  return <GridItem vert={height}>{getFullArray(objGameList)}</GridItem>;
+  return <GridItem vert={height}>{getFullArray(gameList)}</GridItem>;
 }
 
 export default Grid;
