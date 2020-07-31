@@ -17,7 +17,7 @@ const HealthItem = styled.div<HealthItem>`
         case "decrement":
           return "orange";
         default:
-          break;
+          return "black";
       }
     }
   }};

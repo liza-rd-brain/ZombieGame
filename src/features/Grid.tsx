@@ -7,11 +7,7 @@ import Wall from "./Wall";
 import {
   State,
   EndCell,
-  GameList,
-  CellType,
   CoordItem,
-  FieldItem,
-  CardInteract,
   ObjGameList,
   ObjCellType,
   ObjFieldItem,
@@ -88,7 +84,7 @@ function getCell(cell: ObjFieldItem | FinishCell) {
 }
 
 function getFullArray(objGameList: ObjGameList) {
-  /*из объекта сделать массив?!*/
+ 
   const gridArray = Object.values(objGameList).sort(function (prev, next) {
     /*может нужна потом сортировака и по вертикали */
     switch (true) {

@@ -50,7 +50,7 @@ const Status = styled.div`
 
 export const StartCell = { hor: 0, vert: 0 };
 
-export const EndCell = { hor: 6, vert: 6 };
+export const EndCell = { hor: 1, vert: 1 };
 const initialManHealth = 3;
 const amountHealthItems = 3;
 

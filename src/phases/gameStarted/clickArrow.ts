@@ -38,12 +38,12 @@ const moveManInArray = (
   newIndex: string,
   prevIndex: string
 ) => {
-  /* const prevCell = objGameList[parseInt(prevIndex)]; */
+  
   const prevCell = objGameList[prevIndex];
   const nextCell = objGameList[newIndex];
   console.log(prevCell, nextCell);
 
-  const cellName = nextCell.name;
+ 
   if (nextCell && prevCell.name === "field" && nextCell.name === "field") {
     const man = prevCell.cardItem.manItem;
     delete prevCell.cardItem.manItem;
@@ -96,7 +96,7 @@ function clickArrow(action: ActionType, state: State): State {
         prevManCoord
       );
 
-      const forbiddenMove = newManCoord === prevManCoord ? true : false;
+
       switch (hasNextCell) {
         case false: {
           return state;

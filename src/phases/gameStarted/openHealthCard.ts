@@ -7,10 +7,11 @@ import {
   ManItem,
   HealthItem,
   HealthItemType,
+  ObjGameList,
 } from "./../../app";
 
-export const getManHealth = (gameList: GameList, manCoord: string) => {
-  const cellWithMan = gameList.flat()[parseInt(manCoord)];
+export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
+  const cellWithMan = gameList.flat()[parseInt(manCoordIndex)];
 
   if (cellWithMan.name === "field") {
     let health = 0;
@@ -23,43 +24,66 @@ export const getManHealth = (gameList: GameList, manCoord: string) => {
   } else return 0;
 };
 
+export const getManHealthObj = (
+  gameList: ObjGameList,
+  manCoordIndex: string
+) => {
+  const cellWithMan = gameList[manCoordIndex];
+
+  if (cellWithMan.name === "field") {
+    if (cellWithMan.cardItem.manItem) {
+      return cellWithMan.cardItem.manItem.health;
+    } else return 0;
+  } else return 0;
+};
+
 function openHealthCard(action: ActionType, state: State): State {
   const gameList = state.gameList;
-  const manCoord = state.cardInteractIndex;
+  const objGameList = state.objGameList;
+  const manCoordIndex = state.cardInteractIndex;
   switch (action.type) {
     case "needOpenHealthCard": {
-      const newList = openHealthItemList(gameList, manCoord);
+      const newListObj = openHealthItemListObj(objGameList, manCoordIndex);
+      console.log(newListObj);
+      const newList = openHealthItemList(gameList, manCoordIndex);
 
       return {
         ...state,
         gameList: newList,
+        objGameList: newListObj,
       };
     }
+
     case "changeManHealth": {
+      const objResult = changeManHealthObj(objGameList, manCoordIndex);
+      console.log(objResult);
       return {
         ...state,
-        gameList: changeManHealth(gameList, manCoord),
+        gameList: changeManHealth(gameList, manCoordIndex),
+        objGameList: objResult,
       };
     }
 
     case "changeHealthList": {
-      const isManLive = getManHealth(gameList, manCoord) > 0;
+      const isManLive = getManHealth(gameList, manCoordIndex) > 0;
 
-      /*   console.log(isManLive); */
+      const isManLiveObj = getManHealthObj(objGameList, manCoordIndex) > 0;
 
       switch (true) {
-        case isManLive: {
+        case isManLiveObj: {
           return {
             ...state,
-            gameList: changeHealthList(gameList, manCoord),
+            gameList: changeHealthList(gameList, manCoordIndex),
+            objGameList: changeHealthListObj(objGameList, manCoordIndex),
             gameState: "gameStarted.trownDice",
             dice: 0,
           };
         }
-        case !isManLive: {
+        case !isManLiveObj: {
           return {
             ...state,
-            gameList: changeHealthList(gameList, manCoord),
+            gameList: changeHealthList(gameList, manCoordIndex),
+            objGameList: changeHealthListObj(objGameList, manCoordIndex),
 
             gameState: "endGame",
             gameResult: "Вы проиграли",
@@ -72,9 +96,12 @@ function openHealthCard(action: ActionType, state: State): State {
   }
 }
 
-const openHealthItemList = (gameList: GameList, manCoord: string): GameList => {
+const openHealthItemList = (
+  gameList: GameList,
+  manCoordIndex: string
+): GameList => {
   const newList = [...gameList];
-  const cellNeedOpen = newList.flat()[parseInt(manCoord)];
+  const cellNeedOpen = newList.flat()[parseInt(manCoordIndex)];
   switch (cellNeedOpen.name) {
     case "field": {
       const healthItemIndex = cellNeedOpen.cardItem.findIndex(
@@ -87,7 +114,7 @@ const openHealthItemList = (gameList: GameList, manCoord: string): GameList => {
           cellNeedOpen.cardItem[healthItemIndex] = item;
         }
       });
-      newList.flat()[parseInt(manCoord)] = cellNeedOpen;
+      newList.flat()[parseInt(manCoordIndex)] = cellNeedOpen;
 
       return newList;
     }
@@ -96,9 +123,36 @@ const openHealthItemList = (gameList: GameList, manCoord: string): GameList => {
   }
 };
 
-const changeHealthList = (gameList: GameList, manCoord: string) => {
+const openHealthItemListObj = (
+  gameList: ObjGameList,
+  manCoordIndex: string
+): ObjGameList => {
+  const cardNeedOpen = gameList[manCoordIndex];
+  switch (cardNeedOpen.name) {
+    case "field": {
+      if (cardNeedOpen.cardItem.healthItem) {
+        return {
+          ...gameList,
+          [manCoordIndex]: {
+            ...cardNeedOpen,
+            cardItem: {
+              ...cardNeedOpen.cardItem,
+              healthItem: {
+                ...cardNeedOpen.cardItem.healthItem,
+                apperance: "open",
+              },
+            },
+          },
+        };
+      } else return gameList;
+    }
+    default:
+      return gameList;
+  }
+};
+const changeHealthList = (gameList: GameList, manCoordIndex: string) => {
   const newList = [...gameList];
-  const cellNeedDeleteHealth = newList.flat()[parseInt(manCoord)];
+  const cellNeedDeleteHealth = newList.flat()[parseInt(manCoordIndex)];
 
   switch (cellNeedDeleteHealth.name) {
     case "field": {
@@ -106,7 +160,7 @@ const changeHealthList = (gameList: GameList, manCoord: string) => {
         (item) => item.name != "health"
       );
 
-      newList.flat()[parseInt(manCoord)] = cellNeedDeleteHealth;
+      newList.flat()[parseInt(manCoordIndex)] = cellNeedDeleteHealth;
       /*  console.log(newList); */
       return newList;
     }
@@ -115,9 +169,29 @@ const changeHealthList = (gameList: GameList, manCoord: string) => {
   }
 };
 
-const changeManHealth = (gameList: GameList, manCoord: string) => {
+const changeHealthListObj = (gameList: ObjGameList, manCoordIndex: string) => {
+  const cellNeedDeleteHealth = gameList[manCoordIndex];
+  switch (cellNeedDeleteHealth.name) {
+    case "field": {
+      delete cellNeedDeleteHealth.cardItem.healthItem;
+
+      const objResult = {
+        ...gameList,
+        [manCoordIndex]: {
+          ...cellNeedDeleteHealth,
+        },
+      };
+      console.log(objResult);
+      return objResult;
+    }
+    default:
+      return gameList;
+  }
+};
+
+const changeManHealth = (gameList: GameList, manCoordIndex: string) => {
   const newList = [...gameList];
-  const cellWithMan = newList.flat()[parseInt(manCoord)];
+  const cellWithMan = newList.flat()[parseInt(manCoordIndex)];
   let sign: HealthItemType | "" = "";
 
   switch (cellWithMan.name) {
@@ -153,12 +227,64 @@ const changeManHealth = (gameList: GameList, manCoord: string) => {
           }
         }
       });
-      newList.flat()[parseInt(manCoord)] = cellWithMan;
+      newList.flat()[parseInt(manCoordIndex)] = cellWithMan;
 
       return newList;
     }
     default:
       return gameList;
+  }
+};
+
+const changeManHealthObj = (
+  gameList: ObjGameList,
+  manCoordIndex: string
+): ObjGameList => {
+  const cellWithMan = gameList[manCoordIndex];
+  switch (cellWithMan.name) {
+    case "field": {
+      const sign = cellWithMan.cardItem.healthItem?.type;
+      if (cellWithMan.cardItem.healthItem && cellWithMan.cardItem.manItem) {
+        switch (sign) {
+          case "decrement": {
+            return {
+              ...gameList,
+              [manCoordIndex]: {
+                ...cellWithMan,
+                cardItem: {
+                  ...cellWithMan.cardItem,
+                  manItem: {
+                    ...cellWithMan.cardItem.manItem,
+                    health: cellWithMan.cardItem.manItem.health - 1,
+                  },
+                },
+              },
+            };
+          }
+          case "increment": {
+            return {
+              ...gameList,
+              [manCoordIndex]: {
+                ...cellWithMan,
+                cardItem: {
+                  ...cellWithMan.cardItem,
+                  manItem: {
+                    ...cellWithMan.cardItem.manItem,
+                    health: cellWithMan.cardItem.manItem.health + 1,
+                  },
+                },
+              },
+            };
+          }
+          default: {
+            return gameList;
+          }
+        }
+      } else return gameList;
+    }
+    default: {
+      return gameList;
+    }
   }
 };
 
