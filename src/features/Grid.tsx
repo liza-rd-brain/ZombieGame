@@ -12,7 +12,7 @@ import {
   ObjFieldItem,
   HealthItem,
   FinishCell,
-  GameListMap,
+  GameList,
 } from "./../app";
 
 type GridProps = {
@@ -97,10 +97,9 @@ function getCell(cell: ObjCellType) {
   }
 }
 
-function getFullArrayMap(gameList: GameListMap) {
+function getFullArrayMap(gameList: GameList) {
   const gridArray = Array.from(gameList);
 
-  console.log(gridArray);
 
   return gridArray.map((cell: [string, ObjCellType]) => {
     const index = cell[0];
@@ -142,17 +141,17 @@ function Grid() {
   const [
     maxHor,
     maxVert,
-    gameListMap,
+    GameList,
   ] = useSelector((state: State) => [
     EndCell.hor,
     EndCell.vert,
-    state.gameListMap,
+    state.GameList,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  return <GridItem vert={height}>{getFullArrayMap(gameListMap)}</GridItem>;
+  return <GridItem vert={height}>{getFullArrayMap(GameList)}</GridItem>;
 }
 
 export default Grid;

@@ -2,8 +2,8 @@ import {
   State,
   ActionType,
   MoveDirection,
+ 
   GameList,
-  GameListMap,
 } from "./../../app";
 
 /* const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
@@ -33,7 +33,7 @@ import {
   }
 }; */
 
-const сhangeManCoordMap = (currentIndex: string, direction: MoveDirection) => {
+const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
   const currManVert = parseInt(currentIndex.split(".")[1]);
 
@@ -61,8 +61,8 @@ const сhangeManCoordMap = (currentIndex: string, direction: MoveDirection) => {
   }
 };
 
-const moveManInArrayMap = (
-  gameList: GameListMap,
+const moveManInArray = (
+  gameList: GameList,
   newIndex: string,
   prevIndex: string
 ) => {
@@ -153,24 +153,24 @@ function clickArrow(action: ActionType, state: State): State {
       const direction = action.payload;
       /*  const gameList = state.gameList; */
 
-      const gameListMap = state.gameListMap;
+      const GameList = state.GameList;
 
       /*  const prevManCoordIndex = state.cardInteractIndex; */
 
-      const prevManCoordIndexMap = state.cardInteractIndexMap;
+      const prevManCoordIndex = state.cardInteractIndex;
 
       const isNextTrowLast = state.dice === 1;
 
       /* const newManCoord = сhangeManCoord(prevManCoordIndex, direction); */
 
-      const newManCoordMap = сhangeManCoordMap(prevManCoordIndexMap, direction);
+      const newManCoord = сhangeManCoord(prevManCoordIndex, direction);
 
       /*    const nextCell = gameList[newManCoord]; */
 
-      const nextCellMap = gameListMap.get(newManCoordMap);
-      console.log(nextCellMap);
+      const nextCell = GameList.get(newManCoord);
+      console.log(nextCell);
 
-      const hasNextCell = nextCellMap ? true : false;
+      const hasNextCell = nextCell ? true : false;
 
       /* const newGameList = moveManInArray(
         gameList,
@@ -178,30 +178,30 @@ function clickArrow(action: ActionType, state: State): State {
         prevManCoordIndex
       ); */
 
-      const newGameListMap = moveManInArrayMap(
-        gameListMap,
-        newManCoordMap,
-        prevManCoordIndexMap
+      const newGameList = moveManInArray(
+        GameList,
+        newManCoord,
+        prevManCoordIndex
       );
-      console.log(newGameListMap);
+      console.log(newGameList);
 
       switch (hasNextCell) {
         case false: {
           return state;
         }
         case true: {
-          if (nextCellMap) {
-            switch (nextCellMap.name) {
+          if (nextCell) {
+            switch (nextCell.name) {
               case "finish": {
                 return {
                   ...state,
                   dice: state.dice - 1,
                   /* gameList: newGameList, */
-                  gameListMap: newGameListMap,
+                  GameList: newGameList,
                   gameState: "endGame",
                   gameResult: "Вы выиграли",
                   /*   cardInteractIndex: newManCoord, */
-                  cardInteractIndexMap: newManCoordMap,
+                  cardInteractIndex: newManCoord,
                 };
               }
               case "wall": {
@@ -209,8 +209,8 @@ function clickArrow(action: ActionType, state: State): State {
               }
               case "field": {
                 const hasHealthInteract =
-                  nextCellMap != undefined &&
-                  nextCellMap.cardItem.healthItem != undefined;
+                  nextCell != undefined &&
+                  nextCell.cardItem.healthItem != undefined;
                 /*   const hasHealthInteract = nextCell.cardItem.find(
               (item) => item.name === "health"
             ); */
@@ -223,10 +223,10 @@ function clickArrow(action: ActionType, state: State): State {
                           ...state,
                           dice: state.dice - 1,
                           /* gameList: newGameList, */
-                          gameListMap: newGameListMap,
+                          GameList: newGameList,
                           gameState: "gameStarted.trownDice",
                           /*  cardInteractIndex: newManCoord, */
-                          cardInteractIndexMap: newManCoordMap,
+                          cardInteractIndex: newManCoord,
                         };
                       }
                       case !isNextTrowLast: {
@@ -234,10 +234,10 @@ function clickArrow(action: ActionType, state: State): State {
                           ...state,
                           dice: state.dice - 1,
                           /*  gameList: newGameList, */
-                          gameListMap: newGameListMap,
+                          GameList: newGameList,
                           gameState: "gameStarted.clickArrow",
                           /*  cardInteractIndex: newManCoord, */
-                          cardInteractIndexMap: newManCoordMap,
+                          cardInteractIndex: newManCoord,
                         };
                       }
                     }
@@ -247,10 +247,10 @@ function clickArrow(action: ActionType, state: State): State {
                       ...state,
                       dice: state.dice - 1,
                       /*  gameList: newGameList, */
-                      gameListMap: newGameListMap,
+                      GameList: newGameList,
                       gameState: "gameStarted.openHealthCard",
                       /*  cardInteractIndex: newManCoord, */
-                      cardInteractIndexMap: newManCoordMap,
+                      cardInteractIndex: newManCoord,
                     };
                   }
                 }
