@@ -21,7 +21,7 @@ function openHealthCard(action: ActionType, state: State): State {
   switch (action.type) {
     case "needOpenHealthCard": {
       const newListObj = openHealthItemListObj(gameList, manCoordIndex);
-      console.log(newListObj);
+     
 
       return {
         ...state,
@@ -31,7 +31,7 @@ function openHealthCard(action: ActionType, state: State): State {
 
     case "changeManHealth": {
       const objResult = changeManHealthObj(gameList, manCoordIndex);
-      console.log(objResult);
+    
       return {
         ...state,
         gameList: objResult,
@@ -105,7 +105,7 @@ const changeHealthListObj = (gameList: GameList, manCoordIndex: string) => {
           ...cellNeedDeleteHealth,
         },
       };
-      console.log(objResult);
+      
       return objResult;
     }
     default:

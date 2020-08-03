@@ -119,15 +119,19 @@ export type ObjCellType = ObjFieldItem | WallItem | FinishCell;
 
 export type GameList = { [key: string]: ObjCellType /* number */ };
 
+/*_____________________типы Map */
+
+export type GameListMap = Map<string, ObjCellType>;
 /*______________________________________________________________________________ */
 
 export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-
   cardInteractIndex: string;
+  cardInteractIndexMap: string;
   gameList: GameList;
+  gameListMap: GameListMap;
 };
 
 export type ActionType =
@@ -224,7 +228,7 @@ const createHealthArray = (number: number) => {
     const currValue = getRandomHealthItem(prevValue);
     return [currValue, ...prevValue];
   }, []);
-  console.log(healthArray);
+
   return healthArray;
 };
 
@@ -257,7 +261,7 @@ const getGameList = (
       });
       const hasWall = wallCell ? true : false;
 
-      const emptyObjFieldItem: ObjFieldItem = {
+      const emptyFieldItem: ObjFieldItem = {
         hor: hor,
         vert: vert,
         name: "field",
@@ -298,12 +302,12 @@ const getGameList = (
                     },
                   };
                   return fieldItem;
-                } else return emptyObjFieldItem;
+                } else return emptyFieldItem;
               }
               case hasHealth: {
                 if (health != undefined) {
                   return health;
-                } else return emptyObjFieldItem;
+                } else return emptyFieldItem;
               }
               case hasMan: {
                 const fieldItem: ObjFieldItem = {
@@ -318,11 +322,11 @@ const getGameList = (
               }
 
               default:
-                return emptyObjFieldItem;
+                return emptyFieldItem;
             }
           }
           default:
-            return emptyObjFieldItem;
+            return emptyFieldItem;
         }
       };
       /*для каждого индеккса вызываем функцию
@@ -331,11 +335,119 @@ const getGameList = (
       gameArray[`${hor}${vert}`] = getCell();
     }
   }
-  console.log("gameArray:", gameArray);
+
   return gameArray;
 };
 
+const getGameListMap = (
+  amountHealthItems: number,
+  wallList: Array<CoordItem>,
+  endCell: CoordItem
+) => {
+  const width = EndCell.hor;
+  const height = EndCell.vert;
+
+  const healthList: Array<ObjFieldItem> = createHealthArray(amountHealthItems);
+
+  const gameArrayMap: GameListMap = new Map();
+
+  for (let vert = 0; vert <= height; vert++) {
+    for (let hor = 0; hor <= width; hor++) {
+      const hasMan = StartCell.hor === hor && StartCell.vert === vert;
+      const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
+
+      const health = healthList.find((item, index) => {
+        return item.hor === hor && item.vert === vert;
+      });
+
+      const hasHealth = health ? true : false;
+      const hasManAndHealth = hasHealth && hasMan;
+
+      const wallCell = wallList.find((item) => {
+        return item.hor === hor && item.vert === vert;
+      });
+      const hasWall = wallCell ? true : false;
+
+      const emptyFieldItem: ObjFieldItem = {
+        hor: hor,
+        vert: vert,
+        name: "field",
+        cardItem: {},
+      };
+
+      const getCell = () => {
+        switch (true) {
+          case hasWall: {
+            const wallItem: WallItem = {
+              hor: hor,
+              vert: vert,
+              name: "wall",
+            };
+            return wallItem;
+          }
+          case !hasWall: {
+            switch (true) {
+              case hasFinish: {
+                const finishCell: FinishCell = {
+                  hor: hor,
+                  vert: vert,
+                  name: "finish",
+                  cardItem: {},
+                };
+                return finishCell;
+              }
+              case hasManAndHealth: {
+                if (health != undefined) {
+                  const fieldItem: ObjFieldItem = {
+                    ...health,
+                    cardItem: {
+                      manItem: {
+                        name: "man",
+                        health: initialManHealth,
+                      },
+                      healthItem: health.cardItem.healthItem,
+                    },
+                  };
+                  return fieldItem;
+                } else return emptyFieldItem;
+              }
+              case hasHealth: {
+                if (health != undefined) {
+                  return health;
+                } else return emptyFieldItem;
+              }
+              case hasMan: {
+                const fieldItem: ObjFieldItem = {
+                  hor: hor,
+                  vert: vert,
+                  name: "field",
+                  cardItem: {
+                    manItem: { name: "man", health: initialManHealth },
+                  },
+                };
+                return fieldItem;
+              }
+
+              default:
+                return emptyFieldItem;
+            }
+          }
+          default:
+            return emptyFieldItem;
+        }
+      };
+
+      gameArrayMap.set(`${hor}.${vert}`, getCell());
+    }
+  }
+
+  return gameArrayMap;
+};
+
 const initialGameList = getGameList(amountHealthItems, wallList, EndCell);
+
+const initialGameListMap = getGameListMap(amountHealthItems, wallList, EndCell);
+console.log(initialGameListMap);
 
 const getInitialState = (): State => {
   return {
@@ -343,7 +455,9 @@ const getInitialState = (): State => {
     dice: 0,
     gameResult: "",
     cardInteractIndex: `${StartCell.hor}${StartCell.vert}` /* indexWithMan, */,
+    cardInteractIndexMap: `${StartCell.hor}.${StartCell.vert}`,
     gameList: initialGameList,
+    gameListMap: initialGameListMap,
   };
 };
 
