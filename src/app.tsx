@@ -351,8 +351,8 @@ const getGameListMap = (
 
   const gameArrayMap: GameListMap = new Map();
 
-  for (let vert = 0; vert <= height; vert++) {
-    for (let hor = 0; hor <= width; hor++) {
+  for (let hor = 0; hor <= width; hor++) {
+    for (let vert = 0; vert <= height; vert++) {
       const hasMan = StartCell.hor === hor && StartCell.vert === vert;
       const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
 

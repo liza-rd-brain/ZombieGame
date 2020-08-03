@@ -8,11 +8,11 @@ import {
   State,
   EndCell,
   CoordItem,
-  GameList,
   ObjCellType,
   ObjFieldItem,
   HealthItem,
   FinishCell,
+  GameListMap,
 } from "./../app";
 
 type GridProps = {
@@ -46,7 +46,7 @@ const CellItem = styled.div<CoordItem>`
   color: lightgrey;
 `;
 
-function getCell(cell: ObjFieldItem | FinishCell) {
+function getCell(cell: ObjCellType) {
   switch (cell.name) {
     case "field": {
       const hasHealth = cell.cardItem.healthItem != undefined;
@@ -97,76 +97,62 @@ function getCell(cell: ObjFieldItem | FinishCell) {
   }
 }
 
-function getFullArray(gameList: GameList) {
-  const gridArray = Object.values(gameList).sort(function (prev, next) {
-    /*может нужна потом сортировака и по вертикали */
-    switch (true) {
-      case prev.hor < next.hor: {
-        return -1;
-      }
-      case prev.hor > next.hor: {
-        return 1;
-      }
-      default:
-        return 0;
-    }
-  });
+function getFullArrayMap(gameList: GameListMap) {
+  const gridArray = Array.from(gameList);
 
-  return gridArray.map((cell: ObjCellType) => {
-    switch (cell.name) {
+  console.log(gridArray);
+
+  return gridArray.map((cell: [string, ObjCellType]) => {
+    const index = cell[0];
+    const objItem = cell[1];
+    const hor = parseInt(index.split(".")[0]);
+    const vert = parseInt(index.split(".")[1]);
+    switch (objItem.name) {
       case "field": {
         return (
-          <CellItem
-            key={`${cell.hor}${cell.vert}`}
-            hor={cell.hor}
-            vert={cell.vert}
-          >
-            {getCell(cell)}
-            {cell.hor}
-            {cell.vert}
+          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
+            {getCell(objItem)}
+            {hor}
+            {vert}
           </CellItem>
         );
       }
       case "finish": {
         return (
-          <CellItem
-            key={`${cell.hor}${cell.vert}`}
-            hor={cell.hor}
-            vert={cell.vert}
-          >
-            {getCell(cell)}
-            {cell.hor}
-            {cell.vert}
+          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
+            {getCell(objItem)}
+            {hor}
+            {vert}
           </CellItem>
         );
       }
       case "wall": {
         return (
-          <CellItem
-            key={`${cell.hor}${cell.vert}`}
-            hor={cell.hor}
-            vert={cell.vert}
-          >
+          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
             <Wall></Wall>
           </CellItem>
         );
       }
     }
   });
+  return 0;
 }
 
 function Grid() {
-  const [maxHor, maxVert, gameList] = useSelector((state: State) => [
+  const [
+    maxHor,
+    maxVert,
+    gameListMap,
+  ] = useSelector((state: State) => [
     EndCell.hor,
     EndCell.vert,
-
-    state.gameList,
+    state.gameListMap,
   ]);
 
   const width = maxHor + 1;
   const height = maxVert + 1;
 
-  return <GridItem vert={height}>{getFullArray(gameList)}</GridItem>;
+  return <GridItem vert={height}>{getFullArrayMap(gameListMap)}</GridItem>;
 }
 
 export default Grid;
