@@ -6,32 +6,7 @@ import {
   GameList,
 } from "./../../app";
 
-/* const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
-  const currManHor = +(currentIndex[0] ? currentIndex[0] : 0);
-  const currManVert = +(currentIndex[1] ? currentIndex[1] : 0);
-  const nextManVert = currManVert + 1;
-  const nextManHor = currManHor + 1;
 
-  const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1;
-
-  switch (direction) {
-    case "top": {
-      return `${currManHor}${nextManVert}`;
-    }
-    case "bottom": {
-      return `${currManHor}${prevManVert}`;
-    }
-    case "left": {
-      return `${prevManHor}${currManVert}`;
-    }
-    case "right": {
-      return `${nextManHor}${currManVert}`;
-    }
-    default:
-      return `${currManHor}${currManVert}`;
-  }
-}; */
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
@@ -77,6 +52,7 @@ const moveManInArray = (
     nextCell.name === "field"
   ) {
     const man = prevCell.cardItem.manItem;
+    /*убрать мутацию */
     delete prevCell.cardItem.manItem;
     nextCell.cardItem = {
       ...nextCell.cardItem,
@@ -110,43 +86,7 @@ const moveManInArray = (
   } else return gameList;
 };
 
-/* const moveManInArray = (
-  gameList: GameList,
-  newIndex: string,
-  prevIndex: string
-) => {
-  const prevCell = gameList[prevIndex];
-  const nextCell = gameList[newIndex];
 
-  if (nextCell && prevCell.name === "field" && nextCell.name === "field") {
-    const man = prevCell.cardItem.manItem;
-    delete prevCell.cardItem.manItem;
-    nextCell.cardItem = {
-      ...nextCell.cardItem,
-      manItem: man,
-    };
-
-    const obj = { ...gameList, [prevIndex]: prevCell, [newIndex]: nextCell };
-
-    return obj;
-  } else if (
-    nextCell &&
-    prevCell.name === "field" &&
-    nextCell.name === "finish"
-  ) {
-    const man = prevCell.cardItem.manItem;
-    delete prevCell.cardItem.manItem;
-    nextCell.cardItem = {
-      ...nextCell.cardItem,
-      manItem: man,
-    };
-
-    const obj = { ...gameList, [prevIndex]: prevCell, [newIndex]: nextCell };
-
-    return obj;
-  } else return gameList;
-};
- */
 function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {

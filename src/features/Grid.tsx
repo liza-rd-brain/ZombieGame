@@ -37,7 +37,7 @@ const GridItem = styled.div<GridProps>`
   }
 `;
 
-const CellItem = styled.div<CoordItem>`
+const CellItem = styled.div`
   position: relative;
   border: 1px solid #000;
   box-sizing: content-box;
@@ -100,7 +100,6 @@ function getCell(cell: ObjCellType) {
 function getFullArrayMap(gameList: GameList) {
   const gridArray = Array.from(gameList);
 
-
   return gridArray.map((cell: [string, ObjCellType]) => {
     const index = cell[0];
     const objItem = cell[1];
@@ -109,7 +108,7 @@ function getFullArrayMap(gameList: GameList) {
     switch (objItem.name) {
       case "field": {
         return (
-          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
+          <CellItem key={`${hor}${vert}`}>
             {getCell(objItem)}
             {hor}
             {vert}
@@ -118,7 +117,7 @@ function getFullArrayMap(gameList: GameList) {
       }
       case "finish": {
         return (
-          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
+          <CellItem key={`${hor}${vert}`}>
             {getCell(objItem)}
             {hor}
             {vert}
@@ -127,7 +126,7 @@ function getFullArrayMap(gameList: GameList) {
       }
       case "wall": {
         return (
-          <CellItem key={`${hor}${vert}`} hor={hor} vert={vert}>
+          <CellItem key={`${hor}${vert}`}>
             <Wall></Wall>
           </CellItem>
         );
@@ -138,11 +137,7 @@ function getFullArrayMap(gameList: GameList) {
 }
 
 function Grid() {
-  const [
-    maxHor,
-    maxVert,
-    GameList,
-  ] = useSelector((state: State) => [
+  const [maxHor, maxVert, GameList] = useSelector((state: State) => [
     EndCell.hor,
     EndCell.vert,
     state.GameList,
