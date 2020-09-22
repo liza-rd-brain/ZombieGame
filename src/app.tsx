@@ -49,7 +49,6 @@ const Status = styled.div`
 /** параметризируемые переменные  **/
 
 export const StartCell = { hor: 0, vert: 0 };
-
 export const EndCell = { hor: 9, vert: 9 };
 const initialManHealth = 3;
 const amountHealthItems = 30;
@@ -75,8 +74,6 @@ export type HealthItemTypeArr = ["increment", "decrement"];
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 
 export type WallItem = {
-  /*  hor: number;
-  vert: number; */
   name: "wall";
 };
 
@@ -86,8 +83,6 @@ export type ManItem = {
 };
 
 export type FinishCell = {
-  /*  hor: number;
-  vert: number; */
   name: "finish";
   cardItem: { manItem?: ManItem };
 };
@@ -117,8 +112,6 @@ export type ObjHealthItem = {
 
 /*_____________________новые типы  для объекта начинаются с приписки Obj_______________________*/
 export type ObjFieldItem = {
-  /*  hor: number;
-  vert: number; */
   name: "field";
   cardItem: { manItem?: ManItem; healthItem?: HealthItem };
 };
@@ -131,9 +124,7 @@ export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-
   cardInteractIndex: string;
-
   GameList: GameList;
 };
 
@@ -225,7 +216,7 @@ const getRandomHealthItem = (arr: Array<FieldItem>): ObjHealthItem => {
   }
 };
 
-const getRandomHealthItemMap = (arr: Array<FieldItem>): ObjHealthItem => {
+/* const getRandomHealthItemMap = (arr: Array<FieldItem>): ObjHealthItem => {
   const hor = Math.floor(Math.random() * (EndCell.hor + 1));
   const vert = Math.floor(Math.random() * (EndCell.vert + 1));
   const randomType: HealthItemType =
@@ -289,13 +280,7 @@ const getRandomHealthItemMap = (arr: Array<FieldItem>): ObjHealthItem => {
     default:
       return getRandomHealthItem(arr);
   }
-};
-
-const getRandomCoord = () => {
-  const hor = Math.floor(Math.random() * (EndCell.hor + 1));
-  const vert = Math.floor(Math.random() * (EndCell.vert + 1));
-  return `${hor}.${vert}`
-};
+}; */
 
 const createHealthArray = (number: number) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
@@ -306,22 +291,17 @@ const createHealthArray = (number: number) => {
   return healthArray;
 };
 
-const createHealthMap = (number: number) => {
+/* const createHealthMap = (number: number) => {
   let healthArray = new Map();
-  /*есть длинна - number */
+
   for (let i = 0; i <= number; i++) {
     const randomCoord = getRandomCoord;
-   /*1. проверяем, не было ли уже этой коррдинаты 
-   2. не пересекается ли со стеной
-   */
-   
-
-
   
   }
-  
+
   return healthArray;
 };
+ */
 
 const getGameList = (
   amountHealthItems: number,
@@ -330,15 +310,12 @@ const getGameList = (
 ) => {
   const width = EndCell.hor;
   const height = EndCell.vert;
-
   const healthList: Array<ObjHealthItem> = createHealthArray(amountHealthItems);
-
   const gameArray: GameList = new Map();
 
   for (let hor = 0; hor <= width; hor++) {
     for (let vert = 0; vert <= height; vert++) {
-
-      const hasMan = StartCell.hor === hor && StartCell.vert === vert;
+      const hasManInStart = StartCell.hor === hor && StartCell.vert === vert;
       const hasFinish = EndCell.hor === hor && EndCell.vert === vert;
 
       const health = healthList.find((item, index) => {
@@ -347,7 +324,7 @@ const getGameList = (
       });
 
       const hasHealth = health ? true : false;
-      const hasManAndHealth = hasHealth && hasMan;
+      const hasManAndHealth = hasHealth && hasManInStart;
 
       const wallCell = wallList.find((item) => {
         return item.hor === hor && item.vert === vert;
@@ -379,7 +356,7 @@ const getGameList = (
               case hasManAndHealth: {
                 if (health != undefined) {
                   const fieldItem: ObjFieldItem = {
-                    name:health.name,
+                    name: health.name,
                     /* ...health, */
                     cardItem: {
                       manItem: {
@@ -397,7 +374,7 @@ const getGameList = (
                   return health;
                 } else return emptyFieldItem;
               }
-              case hasMan: {
+              case hasManInStart: {
                 const fieldItem: ObjFieldItem = {
                   name: "field",
                   cardItem: {
@@ -468,17 +445,12 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
 };
 
 function App() {
-  const [
+  const {
     gameState,
     gameResult,
     cardInteractIndex,
     GameList,
-  ] = useSelector((state: State) => [
-    state.gameState,
-    state.gameResult,
-    state.cardInteractIndex,
-    state.GameList,
-  ]);
+  } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
   const textPhase = () => {

@@ -53,37 +53,20 @@ function getCell(cell: ObjCellType) {
       const hasMan = cell.cardItem.manItem != undefined;
       const hasManAndHealth = hasMan && hasHealth;
 
-      switch (true) {
-        case hasManAndHealth: {
-          if (cell.cardItem.healthItem && cell.cardItem.manItem) {
-            return (
-              <>
-                <Man />
-                <Health
-                  name={cell.cardItem.healthItem.name}
-                  type={cell.cardItem.healthItem.type}
-                  apperance={cell.cardItem.healthItem.apperance}
-                />
-              </>
-            );
-          } else return null;
-        }
-        case hasMan: {
-          return <Man />;
-        }
-        case hasHealth: {
-          if (cell.cardItem.healthItem) {
-            return (
-              <Health
-                name={cell.cardItem.healthItem.name}
-                type={cell.cardItem.healthItem.type}
-                apperance={cell.cardItem.healthItem.apperance}
-              />
-            );
-          } else return null;
-        }
-      }
+      return (
+        <>
+          {cell.cardItem.manItem ? <Man /> : null}
+          {cell.cardItem.healthItem ? (
+            <Health
+              name={cell.cardItem.healthItem.name}
+              type={cell.cardItem.healthItem.type}
+              apperance={cell.cardItem.healthItem.apperance}
+            />
+          ) : null}
+        </>
+      );
     }
+    
     case "finish": {
       switch (true) {
         case cell.cardItem.manItem != undefined: {
@@ -137,11 +120,10 @@ function getFullArrayMap(gameList: GameList) {
 }
 
 function Grid() {
-  const [maxHor, maxVert, GameList] = useSelector((state: State) => [
-    EndCell.hor,
-    EndCell.vert,
-    state.GameList,
-  ]);
+  const { GameList } = useSelector((state: State) => ({
+    ...state,
+  }));
+  const { hor: maxHor, vert: maxVert } = EndCell;
 
   const width = maxHor + 1;
   const height = maxVert + 1;
