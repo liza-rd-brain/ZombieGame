@@ -2,7 +2,7 @@ import {
   State,
   ActionType,
   MoveDirection,
- 
+  ObjCellType,
   GameList,
 } from "./../../app";
 
@@ -38,52 +38,40 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
 
 const moveManInArray = (
   gameList: GameList,
-  newIndex: string,
+  nextIndex: string,
   prevIndex: string
 ) => {
   const prevCell = gameList.get(prevIndex);
-
-  const nextCell = gameList.get(newIndex);
-
+  const nextCell = gameList.get(nextIndex);
+  //если ячейки есть?! и это поля, в смысле не стены?!?
   if (
     prevCell &&
     nextCell &&
     prevCell.name === "field" &&
-    nextCell.name === "field"
+    (nextCell.name === "field"|| nextCell.name === "finish")
+   
   ) {
-    const man = prevCell.cardItem.manItem;
-    /*убрать мутацию */
-    delete prevCell.cardItem.manItem;
-    nextCell.cardItem = {
-      ...nextCell.cardItem,
-      manItem: man,
-    };
+    const {manItem:man,...otherCardItem}={...prevCell.cardItem}
+    const newPrevCell={...prevCell,cardItem:otherCardItem}
+    const newNextCell={ ...nextCell,cardItem:{...nextCell.cardItem,manItem: man}}
 
-    const obj = new Map(gameList);
-    obj.set(prevIndex, prevCell);
-    obj.set(newIndex, nextCell);
+    const newGameList:[string,ObjCellType][]=Array.from(gameList).map((item)=>{
+      const [index,elem]=item
+      switch(index){
+        case prevIndex:{
+          return [index,newPrevCell];
+        }
+        case nextIndex:{
+          return [index,newNextCell];
+        }
+        default:{return item};
+      }
+    })
 
-    return obj;
-  } else if (
-    /*проверка на финиш*/
-    nextCell &&
-    prevCell &&
-    prevCell.name === "field" &&
-    nextCell.name === "finish"
-  ) {
-    const man = prevCell.cardItem.manItem;
-    delete prevCell.cardItem.manItem;
-    nextCell.cardItem = {
-      ...nextCell.cardItem,
-      manItem: man,
-    };
+    const newMap = new Map(newGameList);
 
-    const obj = new Map(gameList);
-    obj.set(prevIndex, prevCell);
-    obj.set(newIndex, nextCell);
-
-    return obj;
-  } else return gameList;
+    return newMap;
+  }  else return gameList;
 };
 
 
@@ -91,32 +79,14 @@ function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-      /*  const gameList = state.gameList; */
-
       const GameList = state.GameList;
-
-      /*  const prevManCoordIndex = state.cardInteractIndex; */
-
       const prevManCoordIndex = state.cardInteractIndex;
-
       const isNextTrowLast = state.dice === 1;
-
-      /* const newManCoord = сhangeManCoord(prevManCoordIndex, direction); */
 
       const newManCoord = сhangeManCoord(prevManCoordIndex, direction);
 
-      /*    const nextCell = gameList[newManCoord]; */
-
       const nextCell = GameList.get(newManCoord);
-      console.log(nextCell);
-
       const hasNextCell = nextCell ? true : false;
-
-      /* const newGameList = moveManInArray(
-        gameList,
-        newManCoord,
-        prevManCoordIndex
-      ); */
 
       const newGameList = moveManInArray(
         GameList,

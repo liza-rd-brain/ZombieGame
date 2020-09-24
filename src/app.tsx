@@ -110,7 +110,6 @@ export type ObjHealthItem = {
   cardItem: { healthItem: HealthItem };
 };
 
-/*_____________________новые типы  для объекта начинаются с приписки Obj_______________________*/
 export type ObjFieldItem = {
   name: "field";
   cardItem: { manItem?: ManItem; healthItem?: HealthItem };
@@ -118,7 +117,7 @@ export type ObjFieldItem = {
 export type ObjCellType = ObjFieldItem | WallItem | FinishCell;
 
 export type GameList = Map<string, ObjCellType>;
-/*______________________________________________________________________________ */
+
 
 export type State = {
   gameState: GameState;
