@@ -1,17 +1,12 @@
 import {
   State,
   ActionType,
- 
+  ObjCellType,
   GameList,
   ObjFieldItem,
 } from "./../../app";
 
-
-
-export const getManHealth = (
-  gameList: GameList,
-  manCoordIndex: string
-) => {
+export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
   const cellWithMan = gameList.get(manCoordIndex);
 
   if (cellWithMan && cellWithMan.name === "field") {
@@ -22,8 +17,6 @@ export const getManHealth = (
 };
 
 function openHealthCard(action: ActionType, state: State): State {
-
-
   const GameList = state.GameList;
   const manCoordIndex = state.cardInteractIndex;
   switch (action.type) {
@@ -72,18 +65,17 @@ function openHealthCard(action: ActionType, state: State): State {
   }
 }
 
-
 const openHealthItemList = (
   gameList: GameList,
   manCoordIndex: string
 ): GameList => {
   const cardNeedOpen = gameList.get(manCoordIndex);
-
+  //  в clickArrows мы уже проверили что карточка с healthItem!!!!
+  //карточка которую нужно открыть  - где стоит человек,т.е. там точно будет field
   if (cardNeedOpen) {
     switch (cardNeedOpen.name) {
       case "field": {
         if (cardNeedOpen.cardItem.healthItem) {
-          const mapWithOpenCards = new Map(gameList);
           const openedItem: ObjFieldItem = {
             ...cardNeedOpen,
             cardItem: {
@@ -94,8 +86,17 @@ const openHealthItemList = (
               },
             },
           };
-          mapWithOpenCards.set(manCoordIndex, openedItem);
 
+          const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+            (item) => {
+              const [index, elem] = item;
+              if (index === manCoordIndex) {
+                return [index, openedItem];
+              } else return item;
+            }
+          );
+          const mapWithOpenCards = new Map(newGameList);
+          console.log("mapWithOpenCards", mapWithOpenCards);
           return mapWithOpenCards;
         } else return gameList;
       }
@@ -105,79 +106,70 @@ const openHealthItemList = (
   } else return gameList;
 };
 
-
-
 const changeHealthList = (gameList: GameList, manCoordIndex: string) => {
   const cellNeedDeleteHealth = gameList.get(manCoordIndex);
-  if (cellNeedDeleteHealth) {
-    switch (cellNeedDeleteHealth.name) {
-      case "field": {
-        delete cellNeedDeleteHealth.cardItem.healthItem;
 
-        const objResult = new Map(gameList);
-        objResult.set(manCoordIndex, cellNeedDeleteHealth);
+  if (cellNeedDeleteHealth && cellNeedDeleteHealth.name === "field") {
+    const { healthItem, ...otherCardItem } = cellNeedDeleteHealth.cardItem;
+    const cellWithoutHealth: ObjCellType = {
+      ...cellNeedDeleteHealth,
+      cardItem: { ...otherCardItem },
+    };
 
-        return objResult;
+    const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+      (item) => {
+        const [index, elem] = item;
+        if (index === manCoordIndex) {
+          return [index, cellWithoutHealth];
+        } else return item;
       }
-      default:
-        return gameList;
-    }
+    );
+    const newMap = new Map(newGameList);
+    return newMap;
   } else return gameList;
 };
-
 
 const changeManHealth = (
   gameList: GameList,
   manCoordIndex: string
 ): GameList => {
   const cellWithMan = gameList.get(manCoordIndex);
-  if (cellWithMan) {
-    switch (cellWithMan.name) {
-      case "field": {
-        const sign = cellWithMan.cardItem.healthItem?.type;
-        if (cellWithMan.cardItem.healthItem && cellWithMan.cardItem.manItem) {
-          switch (sign) {
-            case "decrement": {
-              const mapWithChangedHealth = new Map(gameList);
-              const chagedHelthItem: ObjFieldItem = {
-                ...cellWithMan,
-                cardItem: {
-                  ...cellWithMan.cardItem,
-                  manItem: {
-                    ...cellWithMan.cardItem.manItem,
-                    health: cellWithMan.cardItem.manItem.health - 1,
-                  },
-                },
-              };
-              mapWithChangedHealth.set(manCoordIndex, chagedHelthItem);
+  //по идее уже сразу должна получить клетку с человеком!
+  //написать отд тип для клетки с человеком?!
+  if (
+    cellWithMan &&
+    cellWithMan.name === "field" &&
+    cellWithMan.cardItem.healthItem &&
+    cellWithMan.cardItem.manItem
+  ) {
+    const sign = cellWithMan.cardItem.healthItem.type;
+    const currHealth = cellWithMan.cardItem.manItem.health;
 
-              return mapWithChangedHealth;
-            }
-            case "increment": {
-              const mapWithChangedHealth = new Map(gameList);
-              const chagedHelthItem: ObjFieldItem = {
-                ...cellWithMan,
-                cardItem: {
-                  ...cellWithMan.cardItem,
-                  manItem: {
-                    ...cellWithMan.cardItem.manItem,
-                    health: cellWithMan.cardItem.manItem.health + 1,
-                  },
-                },
-              };
-              mapWithChangedHealth.set(manCoordIndex, chagedHelthItem);
-              return mapWithChangedHealth;
-            }
-            default: {
-              return gameList;
-            }
-          }
-        } else return gameList;
+    const incHealth = currHealth + 1;
+    const decHealth = currHealth - 1;
+
+    const chagedManItem:  ObjFieldItem = {
+      ...cellWithMan,
+      cardItem: {
+        ...cellWithMan.cardItem,
+        manItem: {
+          ...cellWithMan.cardItem.manItem,
+          health: sign === "decrement" ? decHealth : incHealth,
+        },
+      },
+    };
+
+    const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+      (item) => {
+        const [index, elem] = item;
+        if (index === manCoordIndex) {
+          return [index, chagedManItem];
+        } else return item;
       }
-      default: {
-        return gameList;
-      }
-    }
+    );
+    console.log(newGameList);
+    const newMap = new Map(newGameList);
+    return newMap;
   } else return gameList;
 };
 

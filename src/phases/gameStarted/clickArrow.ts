@@ -94,87 +94,71 @@ function clickArrow(action: ActionType, state: State): State {
         prevManCoordIndex
       );
       console.log(newGameList);
+     
 
-      switch (hasNextCell) {
-        case false: {
-          return state;
-        }
-        case true: {
-          if (nextCell) {
-            switch (nextCell.name) {
-              case "finish": {
+
+       //упрощение - все равно выглядит как портянка
+       //если есть следующая ячейка
+       if(nextCell){
+        switch (nextCell.name) {
+          case "finish": {
+            return {
+              ...state,
+              dice: state.dice - 1,
+              GameList: newGameList,
+              gameState: "endGame",
+              gameResult: "Вы выиграли",
+              cardInteractIndex: newManCoord,
+            };
+          }
+          case "wall": {
+            return state;
+          }
+          case "field": {
+            const hasHealthInteract =
+              nextCell.cardItem.healthItem != undefined;
+            
+            switch (hasHealthInteract) {
+              case true: {
                 return {
                   ...state,
                   dice: state.dice - 1,
-                  /* gameList: newGameList, */
                   GameList: newGameList,
-                  gameState: "endGame",
-                  gameResult: "Вы выиграли",
-                  /*   cardInteractIndex: newManCoord, */
+                  gameState: "gameStarted.openHealthCard",
                   cardInteractIndex: newManCoord,
                 };
               }
-              case "wall": {
-                return state;
-              }
-              case "field": {
-                const hasHealthInteract =
-                  nextCell != undefined &&
-                  nextCell.cardItem.healthItem != undefined;
-                /*   const hasHealthInteract = nextCell.cardItem.find(
-              (item) => item.name === "health"
-            ); */
-
-                switch (hasHealthInteract) {
-                  case false: {
-                    switch (true) {
-                      case isNextTrowLast: {
-                        return {
-                          ...state,
-                          dice: state.dice - 1,
-                          /* gameList: newGameList, */
-                          GameList: newGameList,
-                          gameState: "gameStarted.trownDice",
-                          /*  cardInteractIndex: newManCoord, */
-                          cardInteractIndex: newManCoord,
-                        };
-                      }
-                      case !isNextTrowLast: {
-                        return {
-                          ...state,
-                          dice: state.dice - 1,
-                          /*  gameList: newGameList, */
-                          GameList: newGameList,
-                          gameState: "gameStarted.clickArrow",
-                          /*  cardInteractIndex: newManCoord, */
-                          cardInteractIndex: newManCoord,
-                        };
-                      }
-                    }
-                  }
-                  default: {
+              case false: {
+                switch (isNextTrowLast) {
+                  case true: {
                     return {
                       ...state,
                       dice: state.dice - 1,
-                      /*  gameList: newGameList, */
                       GameList: newGameList,
-                      gameState: "gameStarted.openHealthCard",
-                      /*  cardInteractIndex: newManCoord, */
+                      gameState: "gameStarted.trownDice",
+                      cardInteractIndex: newManCoord,
+                    };
+                  }
+                  case false: {
+                    return {
+                      ...state,
+                      dice: state.dice - 1,
+                      GameList: newGameList,
+                      gameState: "gameStarted.clickArrow",
                       cardInteractIndex: newManCoord,
                     };
                   }
                 }
               }
-              default: {
-                return state;
-              }
+           
             }
-          } else return state;
+          }
+          default: {
+            return state;
+          }
         }
-        default: {
-          return state;
-        }
-      }
+       }
+       else {return state}
     }
     default: {
       return state;
