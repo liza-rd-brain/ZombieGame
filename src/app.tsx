@@ -118,6 +118,11 @@ export type ObjCellType = ObjFieldItem | WallItem | FinishCell;
 
 export type GameList = Map<string, ObjCellType>;
 
+export type TypeEffect =
+  | { type: "!needOpenHealthCard" }
+  | { type: "!changeManHealth" }
+  | { type: "!changeHealthList" }
+  | null;
 
 export type State = {
   gameState: GameState;
@@ -125,15 +130,16 @@ export type State = {
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   cardInteractIndex: string;
   GameList: GameList;
+  doEffect: TypeEffect;
 };
 
 export type ActionType =
   | { type: "clickStartButton" }
   | DiceThrownAction
   | ArrowPressAction
-  | { type: "needOpenHealthCard" }
-  | { type: "changeManHealth" }
-  | { type: "changeHealthList" }
+  | { type: "openedHealthCard" }
+  | { type: "changedManHealth" }
+  | { type: "changedHealthList" }
   | { type: "getEndScreen" };
 
 export type GameState =
@@ -406,6 +412,7 @@ const getInitialState = (): State => {
     gameResult: "",
     cardInteractIndex: `${StartCell.hor}.${StartCell.vert}`,
     GameList: getGameList(amountHealthItems, wallList, EndCell),
+    doEffect: null,
   };
 };
 
@@ -449,6 +456,7 @@ function App() {
     gameResult,
     cardInteractIndex,
     GameList,
+    doEffect,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -469,40 +477,43 @@ function App() {
 
   useEffect(
     function openCard() {
-      switch (gameState) {
-        case "gameStarted.openHealthCard": {
+      switch (doEffect?.type) {
+        case "!needOpenHealthCard": {
           const timerOpen = setTimeout(
             () =>
               dispatch({
-                type: "needOpenHealthCard",
+                type: "openedHealthCard",
               }),
             1000
           );
+          break;
+        }
+        case "!changeManHealth": {
           const timerChangeManHealth = setTimeout(
             () =>
               dispatch({
-                type: "changeManHealth",
+                type: "changedManHealth",
               }),
-            1500
+            500
           );
+          break;
+        }
+        case "!changeHealthList": {
           const timerChangeHealthList = setTimeout(
             () =>
               dispatch({
-                type: "changeHealthList",
+                type: "changedHealthList",
               }),
-            2000
+            500
           );
-          return (): void => {
-            clearTimeout(timerOpen),
-              clearTimeout(timerChangeManHealth),
-              clearTimeout(timerChangeHealthList);
-          };
+          break;
         }
+
         default:
           break;
       }
     },
-    [gameState]
+    [doEffect]
   );
 
   useEffect(

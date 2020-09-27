@@ -6,8 +6,6 @@ import {
   GameList,
 } from "./../../app";
 
-
-
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
   const currManVert = parseInt(currentIndex.split(".")[1]);
@@ -48,32 +46,37 @@ const moveManInArray = (
     prevCell &&
     nextCell &&
     prevCell.name === "field" &&
-    (nextCell.name === "field"|| nextCell.name === "finish")
-   
+    (nextCell.name === "field" || nextCell.name === "finish")
   ) {
-    const {manItem:man,...otherCardItem}={...prevCell.cardItem}
-    const newPrevCell={...prevCell,cardItem:otherCardItem}
-    const newNextCell={ ...nextCell,cardItem:{...nextCell.cardItem,manItem: man}}
+    const { manItem: man, ...otherCardItem } = { ...prevCell.cardItem };
+    const newPrevCell = { ...prevCell, cardItem: otherCardItem };
+    const newNextCell = {
+      ...nextCell,
+      cardItem: { ...nextCell.cardItem, manItem: man },
+    };
 
-    const newGameList:[string,ObjCellType][]=Array.from(gameList).map((item)=>{
-      const [index,elem]=item
-      switch(index){
-        case prevIndex:{
-          return [index,newPrevCell];
+    const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+      (item) => {
+        const [index, elem] = item;
+        switch (index) {
+          case prevIndex: {
+            return [index, newPrevCell];
+          }
+          case nextIndex: {
+            return [index, newNextCell];
+          }
+          default: {
+            return item;
+          }
         }
-        case nextIndex:{
-          return [index,newNextCell];
-        }
-        default:{return item};
       }
-    })
+    );
 
     const newMap = new Map(newGameList);
 
     return newMap;
-  }  else return gameList;
+  } else return gameList;
 };
-
 
 function clickArrow(action: ActionType, state: State): State {
   switch (action.type) {
@@ -94,12 +97,10 @@ function clickArrow(action: ActionType, state: State): State {
         prevManCoordIndex
       );
       console.log(newGameList);
-     
 
-
-       //упрощение - все равно выглядит как портянка
-       //если есть следующая ячейка
-       if(nextCell){
+      //упрощение - все равно выглядит как портянка
+      //если есть следующая ячейка
+      if (nextCell) {
         switch (nextCell.name) {
           case "finish": {
             return {
@@ -115,9 +116,8 @@ function clickArrow(action: ActionType, state: State): State {
             return state;
           }
           case "field": {
-            const hasHealthInteract =
-              nextCell.cardItem.healthItem != undefined;
-            
+            const hasHealthInteract = nextCell.cardItem.healthItem != undefined;
+
             switch (hasHealthInteract) {
               case true: {
                 return {
@@ -125,6 +125,7 @@ function clickArrow(action: ActionType, state: State): State {
                   dice: state.dice - 1,
                   GameList: newGameList,
                   gameState: "gameStarted.openHealthCard",
+                  doEffect: { type: "!needOpenHealthCard" },
                   cardInteractIndex: newManCoord,
                 };
               }
@@ -150,15 +151,15 @@ function clickArrow(action: ActionType, state: State): State {
                   }
                 }
               }
-           
             }
           }
           default: {
             return state;
           }
         }
-       }
-       else {return state}
+      } else {
+        return state;
+      }
     }
     default: {
       return state;
