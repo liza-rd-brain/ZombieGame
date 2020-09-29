@@ -1,11 +1,13 @@
 import {
   State,
+  GameState,
   ActionType,
   ObjCellType,
   GameList,
   ObjFieldItem,
   ManItem,
   HealthItem,
+  TypeEffect,
 } from "./../../app";
 
 export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
@@ -30,9 +32,22 @@ type ManFieldItem = {
   cardItem: { manItem: ManItem };
 };
 
-function openHealthCard(action: ActionType, state: State): State {
-  const GameList = state.GameList;
+//приниметь не целый state, a его кусок
+function openHealthCard(
+  action: ActionType,
+  /*  gameList: GameList,
+  doEffect: TypeEffect,
+  gameState: GameState, */
+  state: State
+): State {
+    const GameList = state.GameList;
   const manCoordIndex = state.cardInteractIndex;
+  /*   const context =
+    state.gameState.type === "gameStarted.openHealthCard"
+      ? state.gameState.context.index
+      : null; */
+ /*  const context = gameState.context.index; */
+
   switch (action.type) {
     case "openedHealthCard": {
       const newList = openHealthItemList(GameList, manCoordIndex);
@@ -61,7 +76,7 @@ function openHealthCard(action: ActionType, state: State): State {
             ...state,
 
             GameList: changeHealthList(GameList, manCoordIndex),
-            gameState: "gameStarted.trownDice",
+            gameState: { type: "gameStarted.trownDice", context: {} },
             dice: 0,
             doEffect: null,
           };
@@ -71,7 +86,7 @@ function openHealthCard(action: ActionType, state: State): State {
             ...state,
 
             GameList: changeHealthList(GameList, manCoordIndex),
-            gameState: "endGame",
+            gameState: { type: "endGame", context: {} },
             gameResult: "Вы проиграли",
             doEffect: null,
           };
@@ -157,7 +172,7 @@ const changeManHealth = (
   manCoordIndex: string
 ): GameList => {
   const cellWithMan = gameList.get(manCoordIndex);
-  //по идее уже сразу должна получить клетку с человеком!
+  //по идее уже сразу должна получить клетку с человеком!b
   //написать отд тип для клетки с человеком?!
   if (
     cellWithMan &&

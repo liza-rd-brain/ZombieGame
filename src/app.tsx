@@ -143,12 +143,20 @@ export type ActionType =
   | { type: "getEndScreen" };
 
 export type GameState =
-  | "waitingStart"
-  | "gameStarted.trownDice"
-  | "gameStarted.clickArrow"
-  | "gameStarted.openHealthCard"
-  | "endGame"
-  | "getEndScreen";
+  | { type: "waitingStart" /* context: {}  */ }
+  | { type: "gameStarted.trownDice"; context: any }
+  | {
+      type: "gameStarted.clickArrow";
+      gameStartedContext: any;
+      context: any;
+    }
+  | {
+      type: "gameStarted.openHealthCard";
+      gameStartedContext: any;
+      context: any;
+    }
+  | { type: "endGame"; context: any }
+  | { type: "getEndScreen"; context: any };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 export type DiceThrownAction = { type: "diceThrown"; payload: number };
@@ -221,72 +229,6 @@ const getRandomHealthItem = (arr: Array<FieldItem>): ObjHealthItem => {
   }
 };
 
-/* const getRandomHealthItemMap = (arr: Array<FieldItem>): ObjHealthItem => {
-  const hor = Math.floor(Math.random() * (EndCell.hor + 1));
-  const vert = Math.floor(Math.random() * (EndCell.vert + 1));
-  const randomType: HealthItemType =
-    healthItemTypeArr[Math.floor(Math.random() * 2)];
-
-  const crossStartCell = StartCell.hor === hor && StartCell.vert === vert;
-  const wallCell = wallList.find((item) => {
-    return item && item.hor === hor && item.vert === vert;
-  });
-
-  const crossWall = wallCell ? true : false;
-  const hasIntersection = crossWall || crossStartCell;
-  const healthRepetition = arr.find((item) => {
-    return item && item.hor === hor && item.vert === vert;
-  });
-
-  const hasHealthRepitition = healthRepetition
-    ? healthRepetition.hor === hor && healthRepetition.vert === vert
-    : false;
-  const firstElement = arr.length === 0;
-
-  switch (true) {
-    case hasIntersection: {
-      return getRandomHealthItem(arr);
-    }
-    case !crossStartCell: {
-      switch (true) {
-        case firstElement: {
-          return {
-            hor: hor,
-            vert: vert,
-            name: "field",
-            cardItem: {
-              healthItem: {
-                name: "health",
-                type: randomType,
-                apperance: "closed",
-              },
-            },
-          };
-        }
-        case !hasHealthRepitition: {
-          return {
-            hor: hor,
-            vert: vert,
-            name: "field",
-            cardItem: {
-              healthItem: {
-                name: "health",
-                type: randomType,
-                apperance: "closed",
-              },
-            },
-          };
-        }
-        case hasHealthRepitition: {
-          return getRandomHealthItem(arr);
-        }
-      }
-    }
-    default:
-      return getRandomHealthItem(arr);
-  }
-}; */
-
 const createHealthArray = (number: number) => {
   let healthArray = new Array(number).fill(0).reduce((prevValue) => {
     const currValue = getRandomHealthItem(prevValue);
@@ -295,18 +237,6 @@ const createHealthArray = (number: number) => {
 
   return healthArray;
 };
-
-/* const createHealthMap = (number: number) => {
-  let healthArray = new Map();
-
-  for (let i = 0; i <= number; i++) {
-    const randomCoord = getRandomCoord;
-  
-  }
-
-  return healthArray;
-};
- */
 
 const getGameList = (
   amountHealthItems: number,
@@ -407,7 +337,7 @@ const getGameList = (
 
 const getInitialState = (): State => {
   return {
-    gameState: "waitingStart",
+    gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
     cardInteractIndex: `${StartCell.hor}.${StartCell.vert}`,
@@ -417,8 +347,11 @@ const getInitialState = (): State => {
 };
 
 const reducer = (state = getInitialState(), action: ActionType): State => {
-  const [phaseOuter, phaseInner] = state.gameState.split(".");
+  const [phaseOuter, phaseInner] = state.gameState.type.split(".");
 
+  const GameList = state.GameList;
+  const doEffect = state.doEffect;
+  const gameState = state.gameState;
   switch (phaseOuter) {
     case "waitingStart": {
       return waitingStartPhase(action, state);
@@ -435,7 +368,7 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
         }
 
         case "openHealthCard": {
-          return openHealthCard(action, state);
+          return openHealthCard(action,/*  GameList, doEffect, gameState, */ state);
         }
         default:
           return state;
@@ -461,7 +394,7 @@ function App() {
 
   const dispatch = useDispatch();
   const textPhase = () => {
-    switch (gameState) {
+    switch (gameState.type) {
       case "gameStarted.trownDice":
         return "бросить кубик";
       case "gameStarted.clickArrow":
@@ -518,7 +451,7 @@ function App() {
 
   useEffect(
     function getEndScreen() {
-      switch (gameState) {
+      switch (gameState.type) {
         case "endGame":
           const timer = setTimeout(
             () => dispatch({ type: "getEndScreen" }),
@@ -531,11 +464,11 @@ function App() {
           break;
       }
     },
-    [gameState]
+    [gameState.type]
   );
 
   const getGameScreen = () => {
-    switch (gameState) {
+    switch (gameState.type) {
       case "waitingStart":
         return <StartScreen />;
 

@@ -1,0 +1,35 @@
+interface BaseUser {
+    id: ID,
+    name: String
+
+    getName(): String
+}
+
+interface UserWithEmail {
+    email: Email
+}
+
+interface UserWithPhone {
+    phone: Phone
+}
+
+class User implements BaseUser, UserWithEmail, UserWithPhone {
+    id: ID,
+    name: String,
+    email: Email,
+    phone: Phone
+
+    constructor(props) {
+        this.id = props.id;
+        ....
+    }
+}
+
+const user: BaseUser = { id: "jhasjdhkas", name: "jshdsd" };
+
+type BaseUser = {
+    id: ID,
+    name: String
+}
+
+const user: BaseUser = ...

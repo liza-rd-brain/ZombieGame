@@ -1,10 +1,18 @@
+import Health from "../../features/Health";
 import {
   State,
   ActionType,
   MoveDirection,
   ObjCellType,
   GameList,
+  ManItem,
+  HealthItem,
 } from "./../../app";
+
+export type ManAndHealthFieldItem = {
+  name: "field";
+  cardItem: { manItem: ManItem; healthItem: HealthItem };
+};
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
@@ -98,16 +106,19 @@ function clickArrow(action: ActionType, state: State): State {
       );
       console.log(newGameList);
 
+      const newNextCell = newGameList.get(newManCoord);
+
       //упрощение - все равно выглядит как портянка
       //если есть следующая ячейка
-      if (nextCell) {
-        switch (nextCell.name) {
+      if (/* nextCell&& */ newNextCell) {
+        switch (newNextCell.name) {
           case "finish": {
             return {
               ...state,
               dice: state.dice - 1,
               GameList: newGameList,
-              gameState: "endGame",
+              //может нужно будет пробросить item для статистики  в конце игры
+              gameState: { type: "endGame", context: {} },
               gameResult: "Вы выиграли",
               cardInteractIndex: newManCoord,
             };
@@ -116,17 +127,33 @@ function clickArrow(action: ActionType, state: State): State {
             return state;
           }
           case "field": {
-            const hasHealthInteract = nextCell.cardItem.healthItem != undefined;
-
-            switch (hasHealthInteract) {
+            /*    const hasHealthInteract = nextCell.cardItem.healthItem != undefined; */
+            //можно брать ячейку уже из итогового массива
+            const manAndHealthCell = newNextCell;
+            const hasManAndHealthCell =
+              manAndHealthCell.cardItem.healthItem != undefined &&
+              manAndHealthCell.cardItem.manItem != undefined;
+            /*    const manAndHealthCell = newNextCell.cardItem.healthItem; */
+            switch (hasManAndHealthCell) {
               case true: {
                 return {
                   ...state,
                   dice: state.dice - 1,
                   GameList: newGameList,
-                  gameState: "gameStarted.openHealthCard",
+                  gameState: {
+                    type: "gameStarted.openHealthCard",
+                    gameStartedContext: {
+                      index: newManCoord,
+                      manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
+                    },
+                    context: {
+                      index: newManCoord,
+                      manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
+                    },
+                  },
                   doEffect: { type: "!needOpenHealthCard" },
                   cardInteractIndex: newManCoord,
+                  /* manAndHealthItemBuffer: { index, cell: ManAnd } */
                 };
               }
               case false: {
@@ -136,7 +163,7 @@ function clickArrow(action: ActionType, state: State): State {
                       ...state,
                       dice: state.dice - 1,
                       GameList: newGameList,
-                      gameState: "gameStarted.trownDice",
+                      gameState: { type: "gameStarted.trownDice", context: {} },
                       cardInteractIndex: newManCoord,
                     };
                   }
@@ -145,7 +172,11 @@ function clickArrow(action: ActionType, state: State): State {
                       ...state,
                       dice: state.dice - 1,
                       GameList: newGameList,
-                      gameState: "gameStarted.clickArrow",
+                      gameState: {
+                        type: "gameStarted.clickArrow",
+                        gameStartedContext: {},
+                        context: {},
+                      },
                       cardInteractIndex: newManCoord,
                     };
                   }

@@ -5,7 +5,7 @@ function endGame(action: ActionType, state: State): State {
     case "getEndScreen": {
       return {
         ...state,
-        gameState: "getEndScreen",
+        gameState: { type: "getEndScreen", context: {} },
       };
     }
     default:

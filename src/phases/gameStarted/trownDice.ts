@@ -6,7 +6,11 @@ function trownDice(action: ActionType, state: State): State {
       return {
         ...state,
         dice: action.payload,
-        gameState: "gameStarted.clickArrow",
+        gameState: {
+          type: "gameStarted.clickArrow",
+          gameStartedContext: {},
+          context: {},
+        },
       };
     }
     default:
