@@ -7,12 +7,8 @@ import {
   GameList,
   ManItem,
   HealthItem,
+  ManAndHealthFieldItem,
 } from "./../../app";
-
-export type ManAndHealthFieldItem = {
-  name: "field";
-  cardItem: { manItem: ManItem; healthItem: HealthItem };
-};
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
@@ -142,10 +138,10 @@ function clickArrow(action: ActionType, state: State): State {
                   GameList: newGameList,
                   gameState: {
                     type: "gameStarted.openHealthCard",
-                    gameStartedContext: {
+                    /*  gameStartedContext: {
                       index: newManCoord,
                       manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
-                    },
+                    }, */
                     context: {
                       index: newManCoord,
                       manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
@@ -174,7 +170,7 @@ function clickArrow(action: ActionType, state: State): State {
                       GameList: newGameList,
                       gameState: {
                         type: "gameStarted.clickArrow",
-                        gameStartedContext: {},
+                        /* gameStartedContext: {}, */
                         context: {},
                       },
                       cardInteractIndex: newManCoord,

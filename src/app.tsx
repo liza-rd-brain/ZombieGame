@@ -110,6 +110,11 @@ export type ObjHealthItem = {
   cardItem: { healthItem: HealthItem };
 };
 
+export type ManAndHealthFieldItem = {
+  name: "field";
+  cardItem: { manItem: ManItem; healthItem: HealthItem };
+};
+
 export type ObjFieldItem = {
   name: "field";
   cardItem: { manItem?: ManItem; healthItem?: HealthItem };
@@ -147,16 +152,18 @@ export type GameState =
   | { type: "gameStarted.trownDice"; context: any }
   | {
       type: "gameStarted.clickArrow";
-      gameStartedContext: any;
+      /*    gameStartedContext: any; */
       context: any;
     }
-  | {
-      type: "gameStarted.openHealthCard";
-      gameStartedContext: any;
-      context: any;
-    }
+  | openHealthCardType
   | { type: "endGame"; context: any }
   | { type: "getEndScreen"; context: any };
+
+export type openHealthCardType = {
+  type: "gameStarted.openHealthCard";
+  /*   gameStartedContext: any; */
+  context: any;
+};
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 export type DiceThrownAction = { type: "diceThrown"; payload: number };
@@ -352,6 +359,7 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
   const GameList = state.GameList;
   const doEffect = state.doEffect;
   const gameState = state.gameState;
+
   switch (phaseOuter) {
     case "waitingStart": {
       return waitingStartPhase(action, state);
@@ -368,7 +376,8 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
         }
 
         case "openHealthCard": {
-          return openHealthCard(action,/*  GameList, doEffect, gameState, */ state);
+          const gameState = state.gameState as openHealthCardType;
+          return openHealthCard(action, state, gameState);
         }
         default:
           return state;
@@ -483,12 +492,12 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
+              {/* вытащить здоровье из контекста?! */}
               <Status>{`здоровье: ${getManHealth(
                 GameList,
                 cardInteractIndex
               )}`}</Status>
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
-
               <Dice />
               <Arrows />
             </LeftPanel>
