@@ -1,3 +1,5 @@
 node_modules/
 *.ini
 dist
+example
+notice.txt

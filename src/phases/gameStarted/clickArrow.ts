@@ -46,6 +46,7 @@ const moveManInArray = (
   const prevCell = gameList.get(prevIndex);
   const nextCell = gameList.get(nextIndex);
   //если ячейки есть?! и это поля, в смысле не стены?!?
+  //мысль: перевести в объект уже здесь?!
   if (
     prevCell &&
     nextCell &&
@@ -137,7 +138,7 @@ function clickArrow(action: ActionType, state: State): State {
                   dice: state.dice - 1,
                   GameList: newGameList,
                   gameState: {
-                    type: "gameStarted.openHealthCard",
+                    type: "gameStarted.takeHealthCard",
                     /*  gameStartedContext: {
                       index: newManCoord,
                       manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,

@@ -13,9 +13,9 @@ import EndScreen from "./features/EndScreen";
 import waitingStartPhase from "./phases/waitingStart";
 import trownDice from "./phases/gameStarted/trownDice";
 import clickArrow from "./phases/gameStarted/clickArrow";
-import openHealthCard, {
+import takeHealthCard, {
   getManHealth,
-} from "./phases/gameStarted/openHealthCard";
+} from "./phases/gameStarted/takeHealthCard";
 import endGame from "./phases/endGame";
 
 const Field = styled.div`
@@ -160,7 +160,7 @@ export type GameState =
   | { type: "getEndScreen"; context: any };
 
 export type openHealthCardType = {
-  type: "gameStarted.openHealthCard";
+  type: "gameStarted.takeHealthCard";
   /*   gameStartedContext: any; */
   context: any;
 };
@@ -375,9 +375,9 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
           return clickArrow(action, state);
         }
 
-        case "openHealthCard": {
+        case "takeHealthCard": {
           const gameState = state.gameState as openHealthCardType;
-          return openHealthCard(action, state, gameState);
+          return takeHealthCard(action, state, gameState);
         }
         default:
           return state;
@@ -408,7 +408,7 @@ function App() {
         return "бросить кубик";
       case "gameStarted.clickArrow":
         return "сделать ход";
-      case "gameStarted.openHealthCard":
+      case "gameStarted.takeHealthCard":
         return "открываем карточку";
       case "endGame":
         return gameResult;
