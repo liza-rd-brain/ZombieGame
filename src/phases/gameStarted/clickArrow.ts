@@ -53,11 +53,11 @@ const moveManInArray = (
     prevCell.name === "field" &&
     (nextCell.name === "field" || nextCell.name === "finish")
   ) {
-    const { manItem: man, ...otherCardItem } = { ...prevCell.cardItem };
+    const { manList: man, ...otherCardItem } = { ...prevCell.cardItem };
     const newPrevCell = { ...prevCell, cardItem: otherCardItem };
     const newNextCell = {
       ...nextCell,
-      cardItem: { ...nextCell.cardItem, manItem: man },
+      cardItem: { ...nextCell.cardItem, manList: man },
     };
 
     const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
@@ -129,7 +129,7 @@ function clickArrow(action: ActionType, state: State): State {
             const manAndHealthCell = newNextCell;
             const hasManAndHealthCell =
               manAndHealthCell.cardItem.healthItem != undefined &&
-              manAndHealthCell.cardItem.manItem != undefined;
+              manAndHealthCell.cardItem.manList != undefined;
             /*    const manAndHealthCell = newNextCell.cardItem.healthItem; */
             switch (hasManAndHealthCell) {
               case true: {

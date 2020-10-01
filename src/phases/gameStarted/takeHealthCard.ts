@@ -17,8 +17,8 @@ export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
   const cellWithMan = gameList.get(manCoordIndex);
 
   if (cellWithMan && cellWithMan.name === "field") {
-    if (cellWithMan.cardItem.manItem) {
-      return cellWithMan.cardItem.manItem.health;
+    if (cellWithMan.cardItem.manList) {
+      return cellWithMan.cardItem.manList[0].health;
     } else return 0;
   } else return 0;
 };
@@ -76,7 +76,7 @@ function takeHealthCard(
 
     case "changedHealthList": {
       //проверка на потерю жизней
-      const isManLiveObj = manAndHealthCell.cardItem.manItem.health > 0;
+      const isManLiveObj = manAndHealthCell.cardItem.manList[0].health > 0;
       const cellWithoutHealth = changeHealthList(manAndHealthCell);
       const newGameList = changeGameList(
         GameList,
@@ -162,7 +162,7 @@ const changeManHealth = (
   manAndHealthCell: ManAndHealthFieldItem
 ): ManAndHealthFieldItem => {
   const sign = manAndHealthCell.cardItem.healthItem.type;
-  const currHealth = manAndHealthCell.cardItem.manItem.health;
+  const currHealth = manAndHealthCell.cardItem.manList[0].health;
 
   const incHealth = currHealth + 1;
   const decHealth = currHealth - 1;
@@ -171,10 +171,16 @@ const changeManHealth = (
     ...manAndHealthCell,
     cardItem: {
       ...manAndHealthCell.cardItem,
-      manItem: {
+      /*  manItem: {
         ...manAndHealthCell.cardItem.manItem,
         health: sign === "decrement" ? decHealth : incHealth,
-      },
+      }, */
+      manList: [
+        {
+          ...manAndHealthCell.cardItem.manList[0],
+          health: sign === "decrement" ? decHealth : incHealth,
+        },manAndHealthCell.cardItem.manList[1],
+      ],
     },
   };
   return chagedManItem;

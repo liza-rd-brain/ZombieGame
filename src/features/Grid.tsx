@@ -50,10 +50,12 @@ function getCell(cell: ObjCellType) {
   switch (cell.name) {
     case "field": {
       const hasHealth = cell.cardItem.healthItem != undefined;
-      const hasMan = cell.cardItem.manItem != undefined;
+      //один из man не undefined
+      // const hasMan = cell.cardItem.manItem != undefined;
+      const hasMan = cell.cardItem.manList?.length != 0;
       return (
         <>
-          {cell.cardItem.manItem ? <Man /> : null}
+          {cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null}
           {cell.cardItem.healthItem ? (
             <Health
               name={cell.cardItem.healthItem.name}
@@ -67,7 +69,9 @@ function getCell(cell: ObjCellType) {
 
     case "finish": {
       {
-        cell.cardItem.manItem ? <Man /> : null;
+        cell.cardItem.manList ? (
+          <Man list={cell.cardItem.manList} />
+        ) : null;
       }
     }
   }

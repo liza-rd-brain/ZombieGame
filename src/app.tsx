@@ -82,9 +82,14 @@ export type ManItem = {
   health: number;
 };
 
+export type ManList = ManItem[];
+
 export type FinishCell = {
   name: "finish";
-  cardItem: { manItem?: ManItem };
+
+  /* cardItem: { manItem?: ManItem }; */
+
+  cardItem: { manList?: ManList };
 };
 
 export type HealthItem = {
@@ -93,7 +98,7 @@ export type HealthItem = {
   apperance: "closed" | "open";
 };
 
-export type CardInteract = ManItem | HealthItem;
+export type CardInteract = ManList | HealthItem;
 
 /*нужен для рисования массива здоровья */
 export type FieldItem = {
@@ -112,12 +117,13 @@ export type ObjHealthItem = {
 
 export type ManAndHealthFieldItem = {
   name: "field";
-  cardItem: { manItem: ManItem; healthItem: HealthItem };
+  cardItem: { manList: ManList; healthItem: HealthItem };
 };
 
 export type ObjFieldItem = {
   name: "field";
-  cardItem: { manItem?: ManItem; healthItem?: HealthItem };
+  /*   cardItem: { manItem?: ManItem; healthItem?: HealthItem }; */
+  cardItem: { manList?: ManList; healthItem?: HealthItem };
 };
 export type ObjCellType = ObjFieldItem | WallItem | FinishCell;
 
@@ -295,22 +301,6 @@ const getGameList = (
                 };
                 return finishCell;
               }
-              case hasManAndHealth: {
-                if (health != undefined) {
-                  const fieldItem: ObjFieldItem = {
-                    name: health.name,
-                    /* ...health, */
-                    cardItem: {
-                      manItem: {
-                        name: "man",
-                        health: initialManHealth,
-                      },
-                      healthItem: health.cardItem.healthItem,
-                    },
-                  };
-                  return fieldItem;
-                } else return emptyFieldItem;
-              }
               case hasHealth: {
                 if (health != undefined) {
                   return health;
@@ -319,9 +309,16 @@ const getGameList = (
               case hasManInStart: {
                 const fieldItem: ObjFieldItem = {
                   name: "field",
+                  //пока грубо поставим 2 человечков
                   cardItem: {
-                    manItem: { name: "man", health: initialManHealth },
+                    manList: [
+                      { name: "man", health: initialManHealth },
+                      { name: "man", health: initialManHealth },
+                    ],
                   },
+                  /* cardItem: {
+                    manItem: { name: "man", health: initialManHealth },
+                  }, */
                 };
                 return fieldItem;
               }
@@ -355,10 +352,6 @@ const getInitialState = (): State => {
 
 const reducer = (state = getInitialState(), action: ActionType): State => {
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
-
-  const GameList = state.GameList;
-  const doEffect = state.doEffect;
-  const gameState = state.gameState;
 
   switch (phaseOuter) {
     case "waitingStart": {
