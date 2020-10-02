@@ -11,8 +11,8 @@ type ManArray = {
 const ManItem = styled.div`
   border: 5px solid red;
   border-radius: 50%;
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
   background-color: red;
   top: 2px;
   left: 1px;
@@ -23,6 +23,9 @@ const ManList = styled.div`
   display: flex;
   position: absolute;
   z-index: 1;
+  font-size: 10px;
+  font-color: green;
+  color: green;
 `;
 
 function Man(props: ManArray) {
@@ -30,7 +33,7 @@ function Man(props: ManArray) {
   return (
     <ManList>
       {manArray.map((item, index) => (
-        <ManItem>{index}</ManItem>
+        <ManItem key={index}>{index}</ManItem>
       ))}
     </ManList>
   );

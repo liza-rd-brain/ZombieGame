@@ -160,7 +160,14 @@ function clickArrow(action: ActionType, state: State): State {
                       ...state,
                       dice: state.dice - 1,
                       GameList: newGameList,
-                      gameState: { type: "gameStarted.trownDice", context: {} },
+                      gameState: {
+                        type: "gameStarted.getOrder",
+                        /*   gameStartedContext: {},
+                        context: {}, */
+                      },
+                      doEffect:{
+                        type:"!getNextMan"
+                      },
                       cardInteractIndex: newManCoord,
                     };
                   }
@@ -171,7 +178,7 @@ function clickArrow(action: ActionType, state: State): State {
                       GameList: newGameList,
                       gameState: {
                         type: "gameStarted.clickArrow",
-                        /* gameStartedContext: {}, */
+                        gameStartedContext: {},
                         context: {},
                       },
                       cardInteractIndex: newManCoord,

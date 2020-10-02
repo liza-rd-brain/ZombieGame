@@ -89,9 +89,16 @@ function takeHealthCard(
           return {
             ...state,
             GameList: newGameList,
-            gameState: { type: "gameStarted.trownDice", context: {} },
+            gameState: {
+              type: "gameStarted.getOrder",
+              /*               gameStartedContext: {},
+              context: {}, */
+            },
+            doEffect: {
+              type: "!getNextMan",
+            },
             dice: 0,
-            doEffect: null,
+            /*        doEffect: null, */
           };
         }
         case !isManLiveObj: {
@@ -179,7 +186,8 @@ const changeManHealth = (
         {
           ...manAndHealthCell.cardItem.manList[0],
           health: sign === "decrement" ? decHealth : incHealth,
-        },manAndHealthCell.cardItem.manList[1],
+        },
+        manAndHealthCell.cardItem.manList[1],
       ],
     },
   };

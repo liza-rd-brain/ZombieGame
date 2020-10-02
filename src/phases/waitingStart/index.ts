@@ -5,7 +5,11 @@ function waitingStart(action: ActionType, state: State): State {
     case "clickStartButton": {
       return {
         ...state,
-        gameState: { type: "gameStarted.trownDice", context: {} },
+        gameState: {
+          type: "gameStarted.trownDice",
+          gameStartedContext: {},
+          context: {},
+        },
       };
     }
     default:

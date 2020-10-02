@@ -16,6 +16,7 @@ import clickArrow from "./phases/gameStarted/clickArrow";
 import takeHealthCard, {
   getManHealth,
 } from "./phases/gameStarted/takeHealthCard";
+import getOrder from "./phases/gameStarted/getOrder";
 import endGame from "./phases/endGame";
 
 const Field = styled.div`
@@ -52,6 +53,8 @@ export const StartCell = { hor: 0, vert: 0 };
 export const EndCell = { hor: 9, vert: 9 };
 const initialManHealth = 3;
 const amountHealthItems = 30;
+export const amountMen = 2;
+export const minNumerbMan = 1;
 
 const wallList: Array<CoordItem> = [
   { hor: 2, vert: 2 },
@@ -86,9 +89,6 @@ export type ManList = ManItem[];
 
 export type FinishCell = {
   name: "finish";
-
-  /* cardItem: { manItem?: ManItem }; */
-
   cardItem: { manList?: ManList };
 };
 
@@ -133,6 +133,7 @@ export type TypeEffect =
   | { type: "!needOpenHealthCard" }
   | { type: "!changeManHealth" }
   | { type: "!changeHealthList" }
+  | { type: "!getNextMan" }
   | null;
 
 export type State = {
@@ -142,6 +143,7 @@ export type State = {
   cardInteractIndex: string;
   GameList: GameList;
   doEffect: TypeEffect;
+  numberOfMan: number;
 };
 
 export type ActionType =
@@ -151,17 +153,19 @@ export type ActionType =
   | { type: "openedHealthCard" }
   | { type: "changedManHealth" }
   | { type: "changedHealthList" }
+  | { type: "receivedNextMan" }
   | { type: "getEndScreen" };
 
 export type GameState =
   | { type: "waitingStart" /* context: {}  */ }
-  | { type: "gameStarted.trownDice"; context: any }
+  | { type: "gameStarted.trownDice"; context: any; gameStartedContext: any }
   | {
       type: "gameStarted.clickArrow";
-      /*    gameStartedContext: any; */
+      gameStartedContext: any;
       context: any;
     }
   | openHealthCardType
+  | { type: "gameStarted.getOrder" }
   | { type: "endGame"; context: any }
   | { type: "getEndScreen"; context: any };
 
@@ -347,6 +351,7 @@ const getInitialState = (): State => {
     cardInteractIndex: `${StartCell.hor}.${StartCell.vert}`,
     GameList: getGameList(amountHealthItems, wallList, EndCell),
     doEffect: null,
+    numberOfMan: 1,
   };
 };
 
@@ -359,6 +364,8 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
     }
 
     case "gameStarted": {
+      //для каждого человечка....
+
       switch (phaseInner) {
         case "trownDice": {
           return trownDice(action, state);
@@ -371,6 +378,9 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
         case "takeHealthCard": {
           const gameState = state.gameState as openHealthCardType;
           return takeHealthCard(action, state, gameState);
+        }
+        case "getOrder": {
+          return getOrder(action, state);
         }
         default:
           return state;
@@ -442,6 +452,9 @@ function App() {
             500
           );
           break;
+        }
+        case "!getNextMan": {
+          dispatch({ type: "receivedNextMan" });
         }
 
         default:

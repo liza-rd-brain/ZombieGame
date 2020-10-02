@@ -8,7 +8,7 @@ function trownDice(action: ActionType, state: State): State {
         dice: action.payload,
         gameState: {
           type: "gameStarted.clickArrow",
-          /* gameStartedContext: {}, */
+          gameStartedContext: {},
           context: {},
         },
       };
