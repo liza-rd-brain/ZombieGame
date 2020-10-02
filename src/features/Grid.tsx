@@ -52,7 +52,7 @@ function getCell(cell: ObjCellType) {
       const hasHealth = cell.cardItem.healthItem != undefined;
       //один из man не undefined
       // const hasMan = cell.cardItem.manItem != undefined;
-      const hasMan = cell.cardItem.manList?.length != 0;
+  /*     const hasMan = cell.cardItem.manList?.length != 0; */
       return (
         <>
           {cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null}

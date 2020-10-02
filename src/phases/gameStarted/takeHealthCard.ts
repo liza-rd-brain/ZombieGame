@@ -98,7 +98,7 @@ function takeHealthCard(
               type: "!getNextMan",
             },
             dice: 0,
-            /*        doEffect: null, */
+     /*        doEffect: null, */
           };
         }
         case !isManLiveObj: {

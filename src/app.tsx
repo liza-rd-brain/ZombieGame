@@ -83,6 +83,7 @@ export type WallItem = {
 export type ManItem = {
   name: "man";
   health: number;
+  orderNumber: number;
 };
 
 export type ManList = ManItem[];
@@ -140,7 +141,7 @@ export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  cardInteractIndex: string;
+  cardInteractIndex: string[];
   GameList: GameList;
   doEffect: TypeEffect;
   numberOfMan: number;
@@ -315,10 +316,13 @@ const getGameList = (
                   name: "field",
                   //пока грубо поставим 2 человечков
                   cardItem: {
-                    manList: [
-                      { name: "man", health: initialManHealth },
-                      { name: "man", health: initialManHealth },
-                    ],
+                    manList: new Array(amountMen).fill(0).map((item, index) => {
+                      return {
+                        name: "man",
+                        health: initialManHealth,
+                        orderNumber: index,
+                      };
+                    }),
                   },
                   /* cardItem: {
                     manItem: { name: "man", health: initialManHealth },
@@ -339,7 +343,7 @@ const getGameList = (
       gameArray.set(`${hor}.${vert}`, getCell());
     }
   }
-
+  console.log(gameArray);
   return gameArray;
 };
 
@@ -348,10 +352,13 @@ const getInitialState = (): State => {
     gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
-    cardInteractIndex: `${StartCell.hor}.${StartCell.vert}`,
+    cardInteractIndex: [
+      `${StartCell.hor}.${StartCell.vert}`,
+      `${StartCell.hor}.${StartCell.vert}`,
+    ],
     GameList: getGameList(amountHealthItems, wallList, EndCell),
     doEffect: null,
-    numberOfMan: 1,
+    numberOfMan: 0,
   };
 };
 
@@ -364,8 +371,6 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
     }
 
     case "gameStarted": {
-      //для каждого человечка....
-
       switch (phaseInner) {
         case "trownDice": {
           return trownDice(action, state);
@@ -499,10 +504,11 @@ function App() {
             <LeftPanel>
               <Status>{textPhase()}</Status>
               {/* вытащить здоровье из контекста?! */}
-              <Status>{`здоровье: ${getManHealth(
+              {/*  дополнительно отдавать контекст */}
+              {/*     <Status>{`здоровье: ${getManHealth(
                 GameList,
                 cardInteractIndex
-              )}`}</Status>
+              )}`}</Status> */}
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
               <Dice />
               <Arrows />

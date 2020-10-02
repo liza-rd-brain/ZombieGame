@@ -41,12 +41,16 @@ const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
 const moveManInArray = (
   gameList: GameList,
   nextIndex: string,
-  prevIndex: string
+  prevIndex: string,
+  orderManIndex: number
 ) => {
   const prevCell = gameList.get(prevIndex);
   const nextCell = gameList.get(nextIndex);
   //если ячейки есть?! и это поля, в смысле не стены?!?
   //мысль: перевести в объект уже здесь?!
+
+  //здесь перекладываем только одного человека
+  //выбираем по индексу
   if (
     prevCell &&
     nextCell &&
@@ -54,10 +58,29 @@ const moveManInArray = (
     (nextCell.name === "field" || nextCell.name === "finish")
   ) {
     const { manList: man, ...otherCardItem } = { ...prevCell.cardItem };
-    const newPrevCell = { ...prevCell, cardItem: otherCardItem };
-    const newNextCell = {
+
+    const newCellMan =
+      man?.filter((item, index) => {
+        return index === orderManIndex;
+      }) || [];
+
+    const prevCellMan =
+      man?.filter((item, index) => {
+        return index != orderManIndex;
+      }) || [];
+    //нужно изавлечь только одного человека
+
+    const newPrevCell = {
+      ...prevCell,
+      cardItem: { ...otherCardItem, manList: prevCellMan },
+    };
+
+    const newNextCell: ObjCellType = {
       ...nextCell,
-      cardItem: { ...nextCell.cardItem, manList: man },
+      cardItem: {
+        ...nextCell.cardItem,
+        manList: newCellMan,
+      },
     };
 
     const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
@@ -88,18 +111,20 @@ function clickArrow(action: ActionType, state: State): State {
     case "arrowPressed": {
       const direction = action.payload;
       const GameList = state.GameList;
-      const prevManCoordIndex = state.cardInteractIndex;
+      const orderManIndex = state.numberOfMan;
+      const prevManCoordIndex = state.cardInteractIndex[orderManIndex];
       const isNextTrowLast = state.dice === 1;
 
       const newManCoord = сhangeManCoord(prevManCoordIndex, direction);
 
       const nextCell = GameList.get(newManCoord);
-      const hasNextCell = nextCell ? true : false;
+      /*       const hasNextCell = nextCell ? true : false; */
 
       const newGameList = moveManInArray(
         GameList,
         newManCoord,
-        prevManCoordIndex
+        prevManCoordIndex,
+        state.numberOfMan
       );
       console.log(newGameList);
 
@@ -117,7 +142,12 @@ function clickArrow(action: ActionType, state: State): State {
               //может нужно будет пробросить item для статистики  в конце игры
               gameState: { type: "endGame", context: {} },
               gameResult: "Вы выиграли",
-              cardInteractIndex: newManCoord,
+              /*      cardInteractIndex: newManCoord, */
+              cardInteractIndex: state.cardInteractIndex.map((item, index) => {
+                if (index === state.numberOfMan) {
+                  return newManCoord;
+                } else return item;
+              }),
             };
           }
           case "wall": {
@@ -149,7 +179,13 @@ function clickArrow(action: ActionType, state: State): State {
                     },
                   },
                   doEffect: { type: "!needOpenHealthCard" },
-                  cardInteractIndex: newManCoord,
+                  cardInteractIndex: state.cardInteractIndex.map(
+                    (item, index) => {
+                      if (index === state.numberOfMan) {
+                        return newManCoord;
+                      } else return item;
+                    }
+                  ),
                   /* manAndHealthItemBuffer: { index, cell: ManAnd } */
                 };
               }
@@ -165,10 +201,16 @@ function clickArrow(action: ActionType, state: State): State {
                         /*   gameStartedContext: {},
                         context: {}, */
                       },
-                      doEffect:{
-                        type:"!getNextMan"
+                      doEffect: {
+                        type: "!getNextMan",
                       },
-                      cardInteractIndex: newManCoord,
+                      cardInteractIndex: state.cardInteractIndex.map(
+                        (item, index) => {
+                          if (index === state.numberOfMan) {
+                            return newManCoord;
+                          } else return item;
+                        }
+                      ),
                     };
                   }
                   case false: {
@@ -181,7 +223,13 @@ function clickArrow(action: ActionType, state: State): State {
                         gameStartedContext: {},
                         context: {},
                       },
-                      cardInteractIndex: newManCoord,
+                      cardInteractIndex: state.cardInteractIndex.map(
+                        (item, index) => {
+                          if (index === state.numberOfMan) {
+                            return newManCoord;
+                          } else return item;
+                        }
+                      ),
                     };
                   }
                 }

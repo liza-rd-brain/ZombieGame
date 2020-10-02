@@ -1,8 +1,10 @@
-import { State, ActionType, amountMen, minNumerbMan } from "./../../app";
+import { State, ActionType, amountMen /* , minNumerbMan */ } from "./../../app";
 
 function getOrder(action: ActionType, state: State): State {
+  //индексы начинаются с нуля
   const currentNumber = state.numberOfMan;
-  const maxNumber = amountMen;
+  const maxNumber = amountMen - 1;
+  const minNumerbMan = 0;
   const nextNumber =
     currentNumber + 1 > maxNumber ? minNumerbMan : currentNumber + 1;
   //проверяем сколько всего

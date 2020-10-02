@@ -33,7 +33,7 @@ function Man(props: ManArray) {
   return (
     <ManList>
       {manArray.map((item, index) => (
-        <ManItem key={index}>{index}</ManItem>
+        <ManItem key={index}>{item.orderNumber}</ManItem>
       ))}
     </ManList>
   );
