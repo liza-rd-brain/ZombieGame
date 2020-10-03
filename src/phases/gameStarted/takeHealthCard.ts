@@ -34,6 +34,7 @@ function takeHealthCard(
   const manAndHealthCell: ManAndHealthFieldItem =
     gameState.context.manAndHealthCell;
 
+  const orderManIndex = state.numberOfMan;
   switch (action.type) {
     case "openedHealthCard": {
       const newCardInteract = openHealthCard(manAndHealthCell);
@@ -56,7 +57,7 @@ function takeHealthCard(
     }
 
     case "changedManHealth": {
-      const newCardInteract = changeManHealth(manAndHealthCell);
+      const newCardInteract = changeManHealth(manAndHealthCell, orderManIndex);
 
       const newGameList = changeGameList(
         GameList,
@@ -91,14 +92,11 @@ function takeHealthCard(
             GameList: newGameList,
             gameState: {
               type: "gameStarted.getOrder",
-              /*               gameStartedContext: {},
-              context: {}, */
             },
             doEffect: {
               type: "!getNextMan",
             },
             dice: 0,
-     /*        doEffect: null, */
           };
         }
         case !isManLiveObj: {
@@ -122,8 +120,6 @@ const changeGameList = (
   manCoordIndex: string,
   manAndHealthCell: ManAndHealthFieldItem | ObjFieldItem
 ) => {
-  //будем принимать измененную ячейку, а отдавать GameList
-  //т.к в принципе в этой фаззе изменения проходят в ячейке взаимодействия
   const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
     (item) => {
       const [index, elem] = item;
@@ -133,7 +129,7 @@ const changeGameList = (
     }
   );
   const mapWithOpenCards = new Map(newGameList);
-  /* console.log(mapWithOpenCards); */
+
   return mapWithOpenCards;
 };
 
@@ -150,7 +146,6 @@ const openHealthCard = (
       },
     },
   };
-  /*  console.log(openedItem); */
   return openedItem;
 };
 
@@ -166,7 +161,8 @@ const changeHealthList = (
 };
 
 const changeManHealth = (
-  manAndHealthCell: ManAndHealthFieldItem
+  manAndHealthCell: ManAndHealthFieldItem,
+  orderManIndex: number
 ): ManAndHealthFieldItem => {
   const sign = manAndHealthCell.cardItem.healthItem.type;
   const currHealth = manAndHealthCell.cardItem.manList[0].health;
@@ -178,16 +174,15 @@ const changeManHealth = (
     ...manAndHealthCell,
     cardItem: {
       ...manAndHealthCell.cardItem,
-      /*  manItem: {
-        ...manAndHealthCell.cardItem.manItem,
-        health: sign === "decrement" ? decHealth : incHealth,
-      }, */
+
+      // в ячейку с карточкой здоровья может прийти только один игрок
+      //т.к. после этого он карточку заберет
+      //пока условно оставила нулевую ячейку
       manList: [
         {
           ...manAndHealthCell.cardItem.manList[0],
           health: sign === "decrement" ? decHealth : incHealth,
         },
-        manAndHealthCell.cardItem.manList[1],
       ],
     },
   };

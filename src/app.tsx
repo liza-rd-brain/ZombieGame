@@ -53,7 +53,7 @@ export const StartCell = { hor: 0, vert: 0 };
 export const EndCell = { hor: 9, vert: 9 };
 const initialManHealth = 3;
 const amountHealthItems = 30;
-/* export const amountMen = 3; */
+/* export const amountMen = 4; */
 export const amountMen = 2;
 export const minNumerbMan = 1;
 
