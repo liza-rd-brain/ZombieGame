@@ -400,6 +400,24 @@ const reducer = (state = getInitialState(), action: ActionType): State => {
   }
 };
 
+const showManListHealth = (
+  gameList: GameList,
+  cardInteractIndex: string[]
+): (null | number)[] => {
+  //мы точно знаем, что в cardInteractIndex - индексы ячеек с людьми
+  const healthArray = cardInteractIndex.map((orderNumber, index) => {
+    const elem = gameList.get(orderNumber);
+    if (elem && elem.name != "wall" && elem.cardItem.manList) {
+      const manElem = elem.cardItem.manList.find((item) => {
+        return item.orderNumber === index;
+      });
+      return manElem ? manElem?.health : null;
+    } else return null;
+  });
+  console.log(healthArray);
+
+  return healthArray;
+};
 function App() {
   const {
     gameState,
@@ -505,10 +523,12 @@ function App() {
               <Status>{textPhase()}</Status>
               {/* вытащить здоровье из контекста?! */}
               {/*  дополнительно отдавать контекст */}
-              {/*     <Status>{`здоровье: ${getManHealth(
-                GameList,
-                cardInteractIndex
-              )}`}</Status> */}
+              {
+                <Status>{`здоровье: ${showManListHealth(
+                  GameList,
+                  cardInteractIndex
+                ).toString()}`}</Status>
+              }
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
               <Dice />
               <Arrows />
