@@ -53,6 +53,7 @@ export const StartCell = { hor: 0, vert: 0 };
 export const EndCell = { hor: 9, vert: 9 };
 const initialManHealth = 3;
 const amountHealthItems = 30;
+/* export const amountMen = 3; */
 export const amountMen = 2;
 export const minNumerbMan = 1;
 
@@ -352,10 +353,9 @@ const getInitialState = (): State => {
     gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
-    cardInteractIndex: [
-      `${StartCell.hor}.${StartCell.vert}`,
-      `${StartCell.hor}.${StartCell.vert}`,
-    ],
+    cardInteractIndex: new Array(amountMen).fill(0).map((item, index) => {
+      return `${StartCell.hor}.${StartCell.vert}`;
+    }),
     GameList: getGameList(amountHealthItems, wallList, EndCell),
     doEffect: null,
     numberOfMan: 0,

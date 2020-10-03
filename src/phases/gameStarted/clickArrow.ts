@@ -61,25 +61,30 @@ const moveManInArray = (
 
     const newCellMan =
       man?.filter((item, index) => {
-        return index === orderManIndex;
+        return item.orderNumber === orderManIndex;
       }) || [];
 
     const prevCellMan =
       man?.filter((item, index) => {
-        return index != orderManIndex;
+        return item.orderNumber != orderManIndex;
       }) || [];
-    //нужно изавлечь только одного человека
+    //нужно извлечь только одного человека
 
+    // в предыдущей ячейке могут остаться любые Man кроме того, который передвигаем
     const newPrevCell = {
       ...prevCell,
       cardItem: { ...otherCardItem, manList: prevCellMan },
     };
 
+    //в текущую ячейку складываем все что было + новый Man 
     const newNextCell: ObjCellType = {
       ...nextCell,
       cardItem: {
         ...nextCell.cardItem,
-        manList: newCellMan,
+        /* manList: newCellMan, */
+        manList: nextCell.cardItem.manList
+          ? nextCell.cardItem.manList?.concat(newCellMan)
+          : newCellMan,
       },
     };
 
