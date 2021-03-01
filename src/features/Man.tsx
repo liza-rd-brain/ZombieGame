@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { ManItem, CoordItem, ManList } from "./../app";
+import { ManItem, CoordItem, ManList } from "../business/types";
 
 type ManArray = {
   list: ManList;

@@ -1,14 +1,15 @@
-import Health from "../../features/Health";
+import Health from "../../../features/Health";
 import {
-  State,
-  ActionType,
   MoveDirection,
   ObjCellType,
   GameList,
   ManItem,
   HealthItem,
   ManAndHealthFieldItem,
-} from "./../../app";
+  State,
+} from "../../types";
+
+import { ActionType } from "../../reducer";
 
 const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
   const currManHor = parseInt(currentIndex.split(".")[0]);
@@ -76,7 +77,7 @@ const moveManInArray = (
       cardItem: { ...otherCardItem, manList: prevCellMan },
     };
 
-    //в текущую ячейку складываем все что было + новый Man 
+    //в текущую ячейку складываем все что было + новый Man
     const newNextCell: ObjCellType = {
       ...nextCell,
       cardItem: {

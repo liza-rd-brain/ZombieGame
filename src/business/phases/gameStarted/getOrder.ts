@@ -1,4 +1,6 @@
-import { State, ActionType, amountMen /* , minNumerbMan */ } from "./../../app";
+import { amountMen } from "../../initialState";
+import { State } from "../../types";
+import { ActionType } from "../../reducer";
 
 function getOrder(action: ActionType, state: State): State {
   //индексы начинаются с нуля

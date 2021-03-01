@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { MoveDirection} from "./../app";
+import { MoveDirection} from "../business/types";
 
 type ArrowProps = {
   direction: MoveDirection;

@@ -1,5 +1,5 @@
-import { State, ActionType } from "./../../app";
-
+import { State  } from "../../types";
+import { ActionType } from "../../reducer";
 function endGame(action: ActionType, state: State): State {
   switch (action.type) {
     case "getEndScreen": {

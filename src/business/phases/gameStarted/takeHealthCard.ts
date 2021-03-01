@@ -1,7 +1,5 @@
 import {
-  State,
   GameState,
-  ActionType,
   ObjCellType,
   GameList,
   ObjFieldItem,
@@ -10,10 +8,13 @@ import {
   TypeEffect,
   openHealthCardType,
   ManAndHealthFieldItem,
-} from "../../app";
+  State,
+} from "../../types";
+
+import { ActionType } from "../../reducer";
 
 //пока нужно для вывода здоровья на экране
-export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
+/* export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
   const cellWithMan = gameList.get(manCoordIndex);
 
   if (cellWithMan && cellWithMan.name === "field") {
@@ -21,7 +22,7 @@ export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
       return cellWithMan.cardItem.manList[0].health;
     } else return 0;
   } else return 0;
-};
+}; */
 
 //переименовать в takeHealthCard-?!
 function takeHealthCard(

@@ -1,4 +1,5 @@
-import { State, ActionType } from "./../../app";
+import { State } from "../../types";
+import { ActionType } from "../../reducer";
 
 function waitingStart(action: ActionType, state: State): State {
   switch (action.type) {

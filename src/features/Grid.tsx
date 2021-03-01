@@ -5,15 +5,15 @@ import Man from "./Man";
 import Health from "./Health";
 import Wall from "./Wall";
 import {
-  State,
-  EndCell,
   CoordItem,
   ObjCellType,
   ObjFieldItem,
   HealthItem,
   FinishCell,
   GameList,
-} from "./../app";
+} from "../business/types";
+import { endCell } from "../business/initialState";
+import { State } from "../business/types";
 
 type GridProps = {
   vert: number;
@@ -52,7 +52,7 @@ function getCell(cell: ObjCellType) {
       const hasHealth = cell.cardItem.healthItem != undefined;
       //один из man не undefined
       // const hasMan = cell.cardItem.manItem != undefined;
-  /*     const hasMan = cell.cardItem.manList?.length != 0; */
+      /*     const hasMan = cell.cardItem.manList?.length != 0; */
       return (
         <>
           {cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null}
@@ -69,9 +69,7 @@ function getCell(cell: ObjCellType) {
 
     case "finish": {
       {
-        cell.cardItem.manList ? (
-          <Man list={cell.cardItem.manList} />
-        ) : null;
+        cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null;
       }
     }
   }
@@ -120,7 +118,7 @@ function Grid() {
   const { GameList } = useSelector((state: State) => ({
     ...state,
   }));
-  const { hor: maxHor, vert: maxVert } = EndCell;
+  const { hor: maxHor, vert: maxVert } = endCell;
 
   const width = maxHor + 1;
   const height = maxVert + 1;
