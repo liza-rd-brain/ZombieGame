@@ -1,17 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import styled from "styled-components";
-import { Player } from "./Player";
-import { Health } from "./Health";
-import { Wall } from "./Wall";
-import {
-  CoordItem,
-  ObjCellType,
-  ObjFieldItem,
-  HealthItem,
-  FinishCell,
-  GameList,
-} from "../business/types";
+
+import { Player, Health, Wall } from "../components";
+import { ObjCellType, GameList } from "../business/types";
 import { End_Coord } from "../business/initialState";
 import { State } from "../business/types";
 
@@ -26,7 +19,7 @@ const GridItem = styled.div<GridProps>`
   transform: rotate(270deg);
   display: grid;
   grid-column-start: -1;
-  /*параметризирую по ширине поля*/
+  //параметризирую по ширине поля
   grid-template-columns: ${(props) => {
     return `repeat(${props.vert} ,30px)`;
   }};
@@ -49,7 +42,6 @@ const CellItem = styled.div`
 function getCell(cell: ObjCellType) {
   switch (cell.name) {
     case "field": {
-      const hasHealth = cell.cardItem.healthItem != undefined;
       return (
         <>
           {cell.cardItem.playerList ? (
@@ -78,10 +70,8 @@ function getCell(cell: ObjCellType) {
 
 function getFullArrayMap(gameList: GameList) {
   const gridArray = Array.from(gameList);
-
   return gridArray.map((cell: [string, ObjCellType]) => {
-    const index = cell[0];
-    const objItem = cell[1];
+    const [index, objItem] = cell;
     const hor = parseInt(index.split(".")[0]);
     const vert = parseInt(index.split(".")[1]);
     switch (objItem.name) {
@@ -94,6 +84,7 @@ function getFullArrayMap(gameList: GameList) {
           </CellItem>
         );
       }
+
       case "finish": {
         return (
           <CellItem key={`${hor}${vert}`}>
@@ -103,6 +94,7 @@ function getFullArrayMap(gameList: GameList) {
           </CellItem>
         );
       }
+
       case "wall": {
         return (
           <CellItem key={`${hor}${vert}`}>
@@ -114,16 +106,12 @@ function getFullArrayMap(gameList: GameList) {
   });
 }
 
-function Grid() {
+export const PlayGrid = () => {
   const { GameList } = useSelector((state: State) => ({
     ...state,
   }));
   const { hor: maxHor, vert: maxVert } = End_Coord;
-
-  const width = maxHor + 1;
   const height = maxVert + 1;
 
   return <GridItem vert={height}>{getFullArrayMap(GameList)}</GridItem>;
-}
-
-export default Grid;
+};

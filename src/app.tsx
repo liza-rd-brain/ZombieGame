@@ -1,18 +1,12 @@
 import React, { useEffect, useMemo, forwardRef } from "react";
 import ReactDOM from "react-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
+
 import styled, { ThemeProvider } from "styled-components";
 
-import Grid from "./features/Grid";
-import {Arrows} from "./features/Arrows";
-import {Dice} from "./features/Dice";
-import {StartScreen} from "./features/StartScreen";
-import {EndScreen} from "./features/EndScreen";
-
-import { endGame } from "./business/phases/endGame";
-import { reducer } from "./business/reducer";
-import { State } from "./business/types";
-import { GameList, CoordItem } from "./business/types";
+import { PlayGrid, MoveControls, Dice } from "./features";
+import { StartScreen, EndScreen } from "./pages";
+import { State, GameList } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -57,7 +51,9 @@ const showPlayerListHealth = (
         return item.orderNumber === index;
       });
       return playerElem ? playerElem?.health : null;
-    } else return null;
+    } else {
+      return null;
+    }
   });
   return healthArray;
 };
@@ -162,7 +158,7 @@ function App() {
         return (
           <>
             <Field>
-              <Grid />
+              <PlayGrid />
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
@@ -174,7 +170,7 @@ function App() {
               }
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
               <Dice />
-              <Arrows />
+              <MoveControls />
             </LeftPanel>
           </>
         );

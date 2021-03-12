@@ -1,8 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import styled from "styled-components";
 
 import { State } from "../business/types";
+
 const DiceWrap = styled.div`
   border: 1px solid lightgray;
   width: 100px;

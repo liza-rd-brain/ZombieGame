@@ -95,7 +95,9 @@ const takeItemForCard = (lenght: number, maxNumber: number): Number[] => {
     const number = getRandomNumber(prev);
     if (prev) {
       return [number, ...prev];
-    } else return [number];
+    } else {
+      return [number];
+    }
 
     function getRandomNumber(arr: Number[]): Number {
       const number = Math.floor(Math.random() * maxNumber);
@@ -103,7 +105,9 @@ const takeItemForCard = (lenght: number, maxNumber: number): Number[] => {
         prev && prev.find((item: Number) => item === number) >= 0;
       if (repeat) {
         return getRandomNumber(prev);
-      } else return number;
+      } else {
+        return number;
+      }
     }
   });
 };
@@ -135,6 +139,7 @@ const spreadCards = (initialField: GameList) => {
 
     if (cardWithHealth) {
       const [index, value] = item;
+
       if (value.name === "field") {
         const healthCell: ObjCellType = {
           ...value,

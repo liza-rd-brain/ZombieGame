@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { PlayerItem, CoordItem, PlayerList } from "../business/types";
+import { PlayerItem, PlayerList } from "../business/types";
 
 type PlayerArray = {
   list: PlayerList;

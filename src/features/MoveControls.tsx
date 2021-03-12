@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
 import styled from "styled-components";
 
 import { MoveDirection } from "../business/types";
@@ -56,7 +57,7 @@ const ArrowContainer = styled.div`
   height: 50px;
 `;
 
-export const Arrows = () => {
+export const MoveControls = () => {
   const dispatch = useDispatch();
 
   const renderArrow = (direction: MoveDirection) => {

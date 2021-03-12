@@ -7,8 +7,7 @@ import {
   getOrder,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State } from "./types";
-import { openHealthCardType } from "./types";
+import { MoveDirection, State, openHealthCardType } from "./types";
 
 export type ActionType =
   | { type: "clickStartButton" }

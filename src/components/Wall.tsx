@@ -1,6 +1,6 @@
 import React from "react";
+
 import styled from "styled-components";
-import { CoordItem } from "../business/types";
 
 const WallItem = styled.div/* <CoordItem> */ `
   border: 5px solid;
