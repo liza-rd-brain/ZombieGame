@@ -1,8 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { MoveDirection} from "../business/types";
+import { MoveDirection } from "../business/types";
 
 type ArrowProps = {
   direction: MoveDirection;
@@ -16,9 +16,11 @@ const Arrow = styled.div<ArrowProps>`
   &:hover {
     color: pink;
   }
+
   &:active {
     color: red;
   }
+
   transform: ${(props) => {
     switch (props.direction) {
       case "top":
@@ -29,6 +31,7 @@ const Arrow = styled.div<ArrowProps>`
         return "rotate(-180deg)";
     }
   }};
+
   grid-area: ${(props) => {
     switch (props.direction) {
       case "top":
@@ -53,7 +56,7 @@ const ArrowContainer = styled.div`
   height: 50px;
 `;
 
-function Arrows() {
+export const Arrows = () => {
   const dispatch = useDispatch();
 
   const renderArrow = (direction: MoveDirection) => {
@@ -77,6 +80,4 @@ function Arrows() {
       {renderArrow("bottom")}
     </ArrowContainer>
   );
-}
-
-export default Arrows;
+};

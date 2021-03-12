@@ -4,16 +4,17 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import styled, { ThemeProvider } from "styled-components";
 
 import Grid from "./features/Grid";
-import Arrows from "./features/Arrows";
-import Dice from "./features/Dice";
-import StartScreen from "./features/StartScreen";
-import EndScreen from "./features/EndScreen";
+import {Arrows} from "./features/Arrows";
+import {Dice} from "./features/Dice";
+import {StartScreen} from "./features/StartScreen";
+import {EndScreen} from "./features/EndScreen";
 
-import endGame from "./business/phases/endGame";
+import { endGame } from "./business/phases/endGame";
 import { reducer } from "./business/reducer";
 import { State } from "./business/types";
 import { GameList, CoordItem } from "./business/types";
 import { store } from "./business/store";
+
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -35,6 +36,7 @@ const LeftPanel = styled.div`
   align-items: center;
   flex-grow: 0;
 `;
+
 const Status = styled.div`
   border: 1px dotted red;
   color: red;
@@ -42,23 +44,21 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-
-
-const showManListHealth = (
+const showPlayerListHealth = (
   gameList: GameList,
   cardInteractIndex: string[]
 ): (null | number)[] => {
-  //мы точно знаем, что в cardInteractIndex - индексы ячеек с людьми
+  //TODO:не сразу понятно, что делает функция, постоянно перезапускается
   const healthArray = cardInteractIndex.map((orderNumber, index) => {
-    const elem = gameList.get(orderNumber);
-    if (elem && elem.name != "wall" && elem.cardItem.manList) {
-      const manElem = elem.cardItem.manList.find((item) => {
+    const cardElem = gameList.get(orderNumber);
+
+    if (cardElem && cardElem.name != "wall" && cardElem.cardItem.playerList) {
+      const playerElem = cardElem.cardItem.playerList.find((item) => {
         return item.orderNumber === index;
       });
-      return manElem ? manElem?.health : null;
+      return playerElem ? playerElem?.health : null;
     } else return null;
   });
-
   return healthArray;
 };
 
@@ -101,11 +101,11 @@ function App() {
           );
           break;
         }
-        case "!changeManHealth": {
-          const timerChangeManHealth = setTimeout(
+        case "!changePlayerHealth": {
+          const timerChangePlayerHealth = setTimeout(
             () =>
               dispatch({
-                type: "changedManHealth",
+                type: "changedPlayerHealth",
               }),
             500
           );
@@ -121,8 +121,8 @@ function App() {
           );
           break;
         }
-        case "!getNextMan": {
-          dispatch({ type: "receivedNextMan" });
+        case "!getNextPlayer": {
+          dispatch({ type: "receivedNextPlayer" });
         }
 
         default:
@@ -166,10 +166,8 @@ function App() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              {/* вытащить здоровье из контекста?! */}
-              {/*  дополнительно отдавать контекст */}
               {
-                <Status>{`здоровье: ${showManListHealth(
+                <Status>{`здоровье: ${showPlayerListHealth(
                   GameList,
                   cardInteractIndex
                 ).toString()}`}</Status>

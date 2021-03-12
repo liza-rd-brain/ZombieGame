@@ -1,22 +1,21 @@
-import { amountMen } from "../../initialState";
+import { Amount_Players } from "../../initialState";
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
-function getOrder(action: ActionType, state: State): State {
-  //индексы начинаются с нуля
-  const currentNumber = state.numberOfMan;
-  const maxNumber = amountMen - 1;
-  const minNumerbMan = 0;
-  const nextNumber =
-    currentNumber + 1 > maxNumber ? minNumerbMan : currentNumber + 1;
-  //проверяем сколько всего
-  //возвращать нужно типа  по порядку
-  console.log(nextNumber);
+export const getOrder = (action: ActionType, state: State): State => {
+  const numberCurrPlayer = state.numberOfPlayer;
+  const maxPlayersNumber = Amount_Players - 1;
+  const minPlayersNumber = 0;
+  const nextPlayersNumber =
+    numberCurrPlayer + 1 > maxPlayersNumber
+      ? minPlayersNumber
+      : numberCurrPlayer + 1;
+
   switch (action.type) {
-    case "receivedNextMan": {
+    case "receivedNextPlayer": {
       return {
         ...state,
-        numberOfMan: nextNumber,
+        numberOfPlayer: nextPlayersNumber,
         gameState: {
           type: "gameStarted.trownDice",
           gameStartedContext: {},
@@ -24,9 +23,8 @@ function getOrder(action: ActionType, state: State): State {
         },
       };
     }
+
     default:
       return state;
   }
-}
-
-export default getOrder;
+};

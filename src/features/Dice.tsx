@@ -21,7 +21,7 @@ const DiceNumber = styled.div`
 
 const maxNumber = 4;
 
-function Dice() {
+export const Dice = () => {
   const dispath = useDispatch();
   const [diceNumber] = useSelector((state: State) => [state.dice]);
   const getNumber = () => {
@@ -43,6 +43,4 @@ function Dice() {
       </DiceButton>
     </DiceWrap>
   );
-}
-
-export default Dice;
+};

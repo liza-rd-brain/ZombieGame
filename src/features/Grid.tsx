@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import Man from "./Man";
-import Health from "./Health";
-import Wall from "./Wall";
+import { Player } from "./Player";
+import { Health } from "./Health";
+import { Wall } from "./Wall";
 import {
   CoordItem,
   ObjCellType,
@@ -12,7 +12,7 @@ import {
   FinishCell,
   GameList,
 } from "../business/types";
-import { endCell } from "../business/initialState";
+import { End_Coord } from "../business/initialState";
 import { State } from "../business/types";
 
 type GridProps = {
@@ -50,12 +50,11 @@ function getCell(cell: ObjCellType) {
   switch (cell.name) {
     case "field": {
       const hasHealth = cell.cardItem.healthItem != undefined;
-      //один из man не undefined
-      // const hasMan = cell.cardItem.manItem != undefined;
-      /*     const hasMan = cell.cardItem.manList?.length != 0; */
       return (
         <>
-          {cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null}
+          {cell.cardItem.playerList ? (
+            <Player list={cell.cardItem.playerList} />
+          ) : null}
           {cell.cardItem.healthItem ? (
             <Health
               name={cell.cardItem.healthItem.name}
@@ -69,7 +68,9 @@ function getCell(cell: ObjCellType) {
 
     case "finish": {
       {
-        cell.cardItem.manList ? <Man list={cell.cardItem.manList} /> : null;
+        cell.cardItem.playerList ? (
+          <Player list={cell.cardItem.playerList} />
+        ) : null;
       }
     }
   }
@@ -111,14 +112,13 @@ function getFullArrayMap(gameList: GameList) {
       }
     }
   });
-  return 0;
 }
 
 function Grid() {
   const { GameList } = useSelector((state: State) => ({
     ...state,
   }));
-  const { hor: maxHor, vert: maxVert } = endCell;
+  const { hor: maxHor, vert: maxVert } = End_Coord;
 
   const width = maxHor + 1;
   const height = maxVert + 1;

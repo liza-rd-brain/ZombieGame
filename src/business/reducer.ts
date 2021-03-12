@@ -1,10 +1,12 @@
 import { initialState } from "./initialState";
-import waitingStartPhase from "./phases/waitingStart";
-import trownDice from "./phases/gameStarted/trownDice";
-import clickArrow from "./phases/gameStarted/clickArrow";
-import takeHealthCard from "./phases/gameStarted/takeHealthCard";
-import getOrder from "./phases/gameStarted/getOrder";
-import endGame from "./phases/endGame";
+import { waitingStart } from "./phases/waitingStart";
+import {
+  trownDice,
+  clickArrow,
+  takeHealthCard,
+  getOrder,
+} from "./phases/gameStarted";
+import { endGame } from "./phases/endGame";
 import { MoveDirection, State } from "./types";
 import { openHealthCardType } from "./types";
 
@@ -13,9 +15,9 @@ export type ActionType =
   | DiceThrownAction
   | ArrowPressAction
   | { type: "openedHealthCard" }
-  | { type: "changedManHealth" }
+  | { type: "changedPlayerHealth" }
   | { type: "changedHealthList" }
-  | { type: "receivedNextMan" }
+  | { type: "receivedNextPlayer" }
   | { type: "getEndScreen" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
@@ -30,7 +32,7 @@ export const reducer = (
 
   switch (phaseOuter) {
     case "waitingStart": {
-      return waitingStartPhase(action, state);
+      return waitingStart(action, state);
     }
 
     case "gameStarted": {
@@ -47,9 +49,11 @@ export const reducer = (
           const gameState = state.gameState as openHealthCardType;
           return takeHealthCard(action, state, gameState);
         }
+
         case "getOrder": {
           return getOrder(action, state);
         }
+
         default:
           return state;
       }
@@ -58,6 +62,7 @@ export const reducer = (
     case "endGame": {
       endGame(action, state);
     }
+
     default:
       return state;
   }

@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { CoordItem } from "../business/types";
 
-const WallItem = styled.div/* <CoordItem> */`
+const WallItem = styled.div/* <CoordItem> */ `
   border: 5px solid;
   width: 5px;
-  height:5px;
+  height: 5px;
   position: absolute;
   top: 5px;
   left: 5px;
@@ -13,7 +13,6 @@ const WallItem = styled.div/* <CoordItem> */`
   background-color: orange;
 `;
 
-function Wall(/* props: CoordItem */) {
-  return <WallItem /* hor={props.hor} vert={props.vert} */></WallItem>;
-}
-export default Wall;
+export const Wall = () => {
+  return <WallItem></WallItem>;
+};

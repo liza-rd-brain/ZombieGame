@@ -1,97 +1,87 @@
-import Health from "../../../features/Health";
 import {
   MoveDirection,
   ObjCellType,
   GameList,
-  ManItem,
-  HealthItem,
-  ManAndHealthFieldItem,
+  PlayerAndHealthFieldItem,
   State,
 } from "../../types";
-
 import { ActionType } from "../../reducer";
 
-const сhangeManCoord = (currentIndex: string, direction: MoveDirection) => {
-  const currManHor = parseInt(currentIndex.split(".")[0]);
-  const currManVert = parseInt(currentIndex.split(".")[1]);
-
-  const nextManVert = currManVert + 1;
-  const nextManHor = currManHor + 1;
-
-  const prevManVert = currManVert - 1;
-  const prevManHor = currManHor - 1;
+const сhangePlayerCoord = (currentIndex: string, direction: MoveDirection) => {
+  const currPlayerHor = parseInt(currentIndex.split(".")[0]);
+  const currPlayerVert = parseInt(currentIndex.split(".")[1]);
+  const nextPlayerVert = currPlayerVert + 1;
+  const nextPlayerHor = currPlayerHor + 1;
+  const prevPlayerVert = currPlayerVert - 1;
+  const prevPlayerHor = currPlayerHor - 1;
 
   switch (direction) {
     case "top": {
-      return `${currManHor}.${nextManVert}`;
+      return `${currPlayerHor}.${nextPlayerVert}`;
     }
+
     case "bottom": {
-      return `${currManHor}.${prevManVert}`;
+      return `${currPlayerHor}.${prevPlayerVert}`;
     }
+
     case "left": {
-      return `${prevManHor}.${currManVert}`;
+      return `${prevPlayerHor}.${currPlayerVert}`;
     }
+
     case "right": {
-      return `${nextManHor}.${currManVert}`;
+      return `${nextPlayerHor}.${currPlayerVert}`;
     }
+
     default:
-      return `${currManHor}.${currManVert}`;
+      return `${currPlayerHor}.${currPlayerVert}`;
   }
 };
 
-const moveManInArray = (
+const movePlayerInArray = (
   gameList: GameList,
   nextIndex: string,
   prevIndex: string,
-  orderManIndex: number
+  orderPlayerIndex: number
 ) => {
   const prevCell = gameList.get(prevIndex);
   const nextCell = gameList.get(nextIndex);
-  //если ячейки есть?! и это поля, в смысле не стены?!?
-  //мысль: перевести в объект уже здесь?!
-
-  //здесь перекладываем только одного человека
-  //выбираем по индексу
+  //TODO: исправить сложное нечитаемое условие
   if (
     prevCell &&
     nextCell &&
     prevCell.name === "field" &&
     (nextCell.name === "field" || nextCell.name === "finish")
   ) {
-    const { manList: man, ...otherCardItem } = { ...prevCell.cardItem };
-
-    const newCellMan =
-      man?.filter((item, index) => {
-        return item.orderNumber === orderManIndex;
+    const { playerList, ...otherCardItem } = { ...prevCell.cardItem };
+    const newCellPlayer =
+      playerList?.filter((player) => {
+        return player.orderNumber === orderPlayerIndex;
       }) || [];
 
-    const prevCellMan =
-      man?.filter((item, index) => {
-        return item.orderNumber != orderManIndex;
+    const prevCellPlayer =
+      playerList?.filter((player) => {
+        return player.orderNumber != orderPlayerIndex;
       }) || [];
-    //нужно извлечь только одного человека
 
-    // в предыдущей ячейке могут остаться любые Man кроме того, который передвигаем
     const newPrevCell = {
       ...prevCell,
-      cardItem: { ...otherCardItem, manList: prevCellMan },
+      cardItem: { ...otherCardItem, playerList: prevCellPlayer },
     };
 
-    //в текущую ячейку складываем все что было + новый Man
+    //в текущую ячейку складываем все что было + новый Player
     const newNextCell: ObjCellType = {
       ...nextCell,
       cardItem: {
         ...nextCell.cardItem,
-        /* manList: newCellMan, */
-        manList: nextCell.cardItem.manList
-          ? nextCell.cardItem.manList?.concat(newCellMan)
-          : newCellMan,
+        playerList: nextCell.cardItem.playerList
+          ? nextCell.cardItem.playerList?.concat(newCellPlayer)
+          : newCellPlayer,
       },
     };
 
     const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
-      (item) => {
-        const [index, elem] = item;
+      (cell) => {
+        const [index, elem] = cell;
         switch (index) {
           case prevIndex: {
             return [index, newPrevCell];
@@ -100,74 +90,63 @@ const moveManInArray = (
             return [index, newNextCell];
           }
           default: {
-            return item;
+            return cell;
           }
         }
       }
     );
 
-    const newMap = new Map(newGameList);
-
-    return newMap;
+    return new Map(newGameList);
   } else return gameList;
 };
 
-function clickArrow(action: ActionType, state: State): State {
+export const clickArrow = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
       const GameList = state.GameList;
-      const orderManIndex = state.numberOfMan;
-      const prevManCoordIndex = state.cardInteractIndex[orderManIndex];
+      const orderPlayerIndex = state.numberOfPlayer;
+      const prevPlayerCoordIndex = state.cardInteractIndex[orderPlayerIndex];
       const isNextTrowLast = state.dice === 1;
 
-      const newManCoord = сhangeManCoord(prevManCoordIndex, direction);
-
-      const nextCell = GameList.get(newManCoord);
-      /*       const hasNextCell = nextCell ? true : false; */
-
-      const newGameList = moveManInArray(
+      const newPlayerCoord = сhangePlayerCoord(prevPlayerCoordIndex, direction);
+      const newGameList = movePlayerInArray(
         GameList,
-        newManCoord,
-        prevManCoordIndex,
-        state.numberOfMan
+        newPlayerCoord,
+        prevPlayerCoordIndex,
+        state.numberOfPlayer
       );
-      console.log(newGameList);
+      const newNextCell = newGameList.get(newPlayerCoord);
+      const cardInteractIndex = state.cardInteractIndex.map((coord, index) => {
+        if (index === state.numberOfPlayer) {
+          return newPlayerCoord;
+        } else return coord;
+      });
 
-      const newNextCell = newGameList.get(newManCoord);
-
-      //упрощение - все равно выглядит как портянка
-      //если есть следующая ячейка
-      if (/* nextCell&& */ newNextCell) {
+      if (newNextCell) {
         switch (newNextCell.name) {
           case "finish": {
             return {
               ...state,
               dice: state.dice - 1,
               GameList: newGameList,
-              //может нужно будет пробросить item для статистики  в конце игры
               gameState: { type: "endGame", context: {} },
               gameResult: "Вы выиграли",
-              /*      cardInteractIndex: newManCoord, */
-              cardInteractIndex: state.cardInteractIndex.map((item, index) => {
-                if (index === state.numberOfMan) {
-                  return newManCoord;
-                } else return item;
-              }),
+              cardInteractIndex: cardInteractIndex,
             };
           }
+
           case "wall": {
             return state;
           }
+
           case "field": {
-            /*    const hasHealthInteract = nextCell.cardItem.healthItem != undefined; */
-            //можно брать ячейку уже из итогового массива
-            const manAndHealthCell = newNextCell;
-            const hasManAndHealthCell =
-              manAndHealthCell.cardItem.healthItem != undefined &&
-              manAndHealthCell.cardItem.manList != undefined;
-            /*    const manAndHealthCell = newNextCell.cardItem.healthItem; */
-            switch (hasManAndHealthCell) {
+            const playerAndHealthCell = newNextCell;
+            const hasPlayerAndHealthCell =
+              playerAndHealthCell.cardItem.healthItem != undefined &&
+              playerAndHealthCell.cardItem.playerList != undefined;
+
+            switch (hasPlayerAndHealthCell) {
               case true: {
                 return {
                   ...state,
@@ -175,26 +154,17 @@ function clickArrow(action: ActionType, state: State): State {
                   GameList: newGameList,
                   gameState: {
                     type: "gameStarted.takeHealthCard",
-                    /*  gameStartedContext: {
-                      index: newManCoord,
-                      manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
-                    }, */
                     context: {
-                      index: newManCoord,
-                      manAndHealthCell: manAndHealthCell as ManAndHealthFieldItem,
+                      index: newPlayerCoord,
+                      //TODO:уйти от assertion
+                      playerAndHealthCell: playerAndHealthCell as PlayerAndHealthFieldItem,
                     },
                   },
                   doEffect: { type: "!needOpenHealthCard" },
-                  cardInteractIndex: state.cardInteractIndex.map(
-                    (item, index) => {
-                      if (index === state.numberOfMan) {
-                        return newManCoord;
-                      } else return item;
-                    }
-                  ),
-                  /* manAndHealthItemBuffer: { index, cell: ManAnd } */
+                  cardInteractIndex: cardInteractIndex,
                 };
               }
+
               case false: {
                 switch (isNextTrowLast) {
                   case true: {
@@ -204,21 +174,14 @@ function clickArrow(action: ActionType, state: State): State {
                       GameList: newGameList,
                       gameState: {
                         type: "gameStarted.getOrder",
-                        /*   gameStartedContext: {},
-                        context: {}, */
                       },
                       doEffect: {
-                        type: "!getNextMan",
+                        type: "!getNextPlayer",
                       },
-                      cardInteractIndex: state.cardInteractIndex.map(
-                        (item, index) => {
-                          if (index === state.numberOfMan) {
-                            return newManCoord;
-                          } else return item;
-                        }
-                      ),
+                      cardInteractIndex: cardInteractIndex,
                     };
                   }
+
                   case false: {
                     return {
                       ...state,
@@ -229,19 +192,14 @@ function clickArrow(action: ActionType, state: State): State {
                         gameStartedContext: {},
                         context: {},
                       },
-                      cardInteractIndex: state.cardInteractIndex.map(
-                        (item, index) => {
-                          if (index === state.numberOfMan) {
-                            return newManCoord;
-                          } else return item;
-                        }
-                      ),
+                      cardInteractIndex: cardInteractIndex,
                     };
                   }
                 }
               }
             }
           }
+
           default: {
             return state;
           }
@@ -250,10 +208,9 @@ function clickArrow(action: ActionType, state: State): State {
         return state;
       }
     }
+
     default: {
       return state;
     }
   }
-}
-
-export default clickArrow;
+};

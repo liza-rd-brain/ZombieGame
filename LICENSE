@@ -48,7 +48,7 @@ changed, so that their problems will not be attributed erroneously to
 authors of previous versions.
 
   Some devices are designed to deny users access to install or run
-modified versions of the software inside them, although the manufacturer
+modified versions of the software inside them, although the playerufacturer
 can do so.  This is fundamentally incompatible with the aim of
 protecting users' freedom to change the software.  The systematic
 pattern of such abuse occurs in the area of products for individuals to
@@ -106,7 +106,7 @@ feature that (1) displays an appropriate copyright notice, and (2)
 tells the user that there is no warranty for the work (except to the
 extent that warranties are provided), that licensees may convey the
 work under this License, and how to view a copy of this License.  If
-the interface presents a list of user commands or options, such as a
+the interface presents a list of user complayerds or options, such as a
 menu, a prominent item in the list meets this criterion.
 
   1. Source Code.
@@ -415,12 +415,12 @@ paragraph of section 11).
   However, if you cease all violation of this License, then your
 license from a particular copyright holder is reinstated (a)
 provisionally, unless and until the copyright holder explicitly and
-finally terminates your license, and (b) permanently, if the copyright
+finally terminates your license, and (b) perplayerently, if the copyright
 holder fails to notify you of the violation by some reasonable means
 prior to 60 days after the cessation.
 
   Moreover, your license from a particular copyright holder is
-reinstated permanently if the copyright holder notifies you of the
+reinstated perplayerently if the copyright holder notifies you of the
 violation by some reasonable means, this is the first time you have
 received notice of violation of this License (for any work) from that
 copyright holder, and you cure the violation prior to 30 days after
@@ -428,7 +428,7 @@ your receipt of the notice.
 
   Termination of your rights under this section does not terminate the
 licenses of parties who have received copies or rights from you under
-this License.  If your rights have been terminated and not permanently
+this License.  If your rights have been terminated and not perplayerently
 reinstated, you do not qualify to receive new licenses for the same
 material under section 10.
 
@@ -476,12 +476,12 @@ work thus licensed is called the contributor's "contributor version".
 
   A contributor's "essential patent claims" are all patent claims
 owned or controlled by the contributor, whether already acquired or
-hereafter acquired, that would be infringed by some manner, permitted
+hereafter acquired, that would be infringed by some playerner, permitted
 by this License, of making, using, or selling its contributor version,
 but do not include claims that would be infringed only as a
 consequence of further modification of the contributor version.  For
 purposes of this definition, "control" includes the right to grant
-patent sublicenses in a manner consistent with the requirements of
+patent sublicenses in a playerner consistent with the requirements of
 this License.
 
   Each contributor grants you a non-exclusive, worldwide, royalty-free
@@ -502,7 +502,7 @@ to copy, free of charge and under the terms of this License, through a
 publicly available network server or other readily accessible means,
 then you must either (1) cause the Corresponding Source to be so
 available, or (2) arrange to deprive yourself of the benefit of the
-patent license for this particular work, or (3) arrange, in a manner
+patent license for this particular work, or (3) arrange, in a playerner
 consistent with the requirements of this License, to extend the patent
 license to downstream recipients.  "Knowingly relying" means you have
 actual knowledge that, but for the patent license, your conveying the
@@ -578,7 +578,7 @@ by the Free Software Foundation.
 
   If the Program specifies that a proxy can decide which future
 versions of the GNU General Public License can be used, that proxy's
-public statement of acceptance of a version permanently authorizes you
+public statement of acceptance of a version perplayerently authorizes you
 to choose that version for the Program.
 
   Later license versions may give you additional or different
@@ -657,8 +657,8 @@ notice like this when it starts in an interactive mode:
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
 
-The hypothetical commands `show w' and `show c' should show the appropriate
-parts of the General Public License.  Of course, your program's commands
+The hypothetical complayerds `show w' and `show c' should show the appropriate
+parts of the General Public License.  Of course, your program's complayerds
 might be different; for a GUI interface, you would use an "about box".
 
   You should also get your employer (if you work as a programmer) or school,

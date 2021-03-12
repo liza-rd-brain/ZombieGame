@@ -45,7 +45,7 @@ const HealthItem = styled.div<HealthItem>`
   left: 5px;
 `;
 
-function Health(props: HealthItem) {
+export const Health = (props: HealthItem) => {
   return (
     <HealthItem
       name="health"
@@ -53,6 +53,4 @@ function Health(props: HealthItem) {
       apperance={props.apperance}
     ></HealthItem>
   );
-}
-
-export default Health;
+};

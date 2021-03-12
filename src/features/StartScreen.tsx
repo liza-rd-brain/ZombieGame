@@ -2,12 +2,11 @@ import React from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import styled, { ThemeProvider } from "styled-components";
 
-
 const StartButton = styled.button`
   margin: 100px;
 `;
 
-function StartScreen() {
+export const StartScreen = () => {
   const dispatch = useDispatch();
   return (
     <>
@@ -21,6 +20,4 @@ function StartScreen() {
       </StartButton>
     </>
   );
-}
-
-export default StartScreen;
+};

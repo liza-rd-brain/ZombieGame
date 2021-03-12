@@ -1,7 +1,7 @@
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
-function waitingStart(action: ActionType, state: State): State {
+export const waitingStart=(action: ActionType, state: State): State=> {
   switch (action.type) {
     case "clickStartButton": {
       return {
@@ -17,5 +17,3 @@ function waitingStart(action: ActionType, state: State): State {
       return state;
   }
 }
-
-export default waitingStart;

@@ -1,93 +1,85 @@
 import {
-  GameState,
   ObjCellType,
   GameList,
   ObjFieldItem,
-  ManItem,
-  HealthItem,
-  TypeEffect,
   openHealthCardType,
-  ManAndHealthFieldItem,
+  PlayerAndHealthFieldItem,
   State,
 } from "../../types";
 
 import { ActionType } from "../../reducer";
 
-//пока нужно для вывода здоровья на экране
-/* export const getManHealth = (gameList: GameList, manCoordIndex: string) => {
-  const cellWithMan = gameList.get(manCoordIndex);
-
-  if (cellWithMan && cellWithMan.name === "field") {
-    if (cellWithMan.cardItem.manList) {
-      return cellWithMan.cardItem.manList[0].health;
-    } else return 0;
-  } else return 0;
-}; */
-
-//переименовать в takeHealthCard-?!
-function takeHealthCard(
+export const takeHealthCard = (
   action: ActionType,
   state: State,
   gameState: openHealthCardType
-): State {
+): State => {
   const GameList = state.GameList;
-  const manCoordIndex = gameState.context.index;
-  const manAndHealthCell: ManAndHealthFieldItem =
-    gameState.context.manAndHealthCell;
+  const playerCoordIndex = gameState.context.index;
+  const playerAndHealthCell: PlayerAndHealthFieldItem =
+    gameState.context.playerAndHealthCell;
 
-  const orderManIndex = state.numberOfMan;
+  const orderPlayerIndex = state.numberOfPlayer;
+
   switch (action.type) {
     case "openedHealthCard": {
-      const newCardInteract = openHealthCard(manAndHealthCell);
+      const newCardInteract = openHealthCard(playerAndHealthCell);
 
       const newGameList = changeGameList(
         GameList,
-        manCoordIndex,
+        playerCoordIndex,
         newCardInteract
       );
 
       return {
         ...state,
         GameList: newGameList,
-        doEffect: { type: "!changeManHealth" },
+        doEffect: { type: "!changePlayerHealth" },
         gameState: {
           ...gameState,
-          context: { ...gameState.context, manAndHealthCell: newCardInteract },
+          context: {
+            ...gameState.context,
+            playerAndHealthCell: newCardInteract,
+          },
         },
       };
     }
 
-    case "changedManHealth": {
-      const newCardInteract = changeManHealth(manAndHealthCell, orderManIndex);
+    case "changedPlayerHealth": {
+      const newCardInteract = changePlayerHealth(playerAndHealthCell);
 
       const newGameList = changeGameList(
         GameList,
-        manCoordIndex,
+        playerCoordIndex,
         newCardInteract
       );
+
       return {
         ...state,
         GameList: newGameList,
         doEffect: { type: "!changeHealthList" },
         gameState: {
           ...gameState,
-          context: { ...gameState.context, manAndHealthCell: newCardInteract },
+          context: {
+            ...gameState.context,
+            playerAndHealthCell: newCardInteract,
+          },
         },
       };
     }
 
     case "changedHealthList": {
-      //проверка на потерю жизней
-      const isManLiveObj = manAndHealthCell.cardItem.manList[0].health > 0;
-      const cellWithoutHealth = changeHealthList(manAndHealthCell);
+      const isPlayerAlive =
+        playerAndHealthCell.cardItem.playerList[0].health > 0;
+      const cellWithoutHealth = changeHealthList(playerAndHealthCell);
       const newGameList = changeGameList(
         GameList,
-        manCoordIndex,
+        playerCoordIndex,
         cellWithoutHealth
       );
 
       switch (true) {
-        case isManLiveObj: {
+        case isPlayerAlive: {
           return {
             ...state,
             GameList: newGameList,
@@ -95,12 +87,13 @@ function takeHealthCard(
               type: "gameStarted.getOrder",
             },
             doEffect: {
-              type: "!getNextMan",
+              type: "!getNextPlayer",
             },
             dice: 0,
           };
         }
-        case !isManLiveObj: {
+
+        case !isPlayerAlive: {
           return {
             ...state,
             GameList: newGameList,
@@ -111,83 +104,85 @@ function takeHealthCard(
         }
       }
     }
+
     default:
       return { ...state };
   }
-}
+};
 
 const changeGameList = (
   gameList: GameList,
-  manCoordIndex: string,
-  manAndHealthCell: ManAndHealthFieldItem | ObjFieldItem
+  playerCoordIndex: string,
+  playerAndHealthCell: PlayerAndHealthFieldItem | ObjFieldItem
 ) => {
   const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
-    (item) => {
-      const [index, elem] = item;
-      if (index === manCoordIndex) {
-        return [index, manAndHealthCell];
-      } else return item;
+    (cell) => {
+      const [index, elem] = cell;
+      if (index === playerCoordIndex) {
+        return [index, playerAndHealthCell];
+      } else return cell;
     }
   );
-  const mapWithOpenCards = new Map(newGameList);
 
+  const mapWithOpenCards = new Map(newGameList);
   return mapWithOpenCards;
 };
 
 const openHealthCard = (
-  manAndHealthCell: ManAndHealthFieldItem
-): ManAndHealthFieldItem => {
-  const openedItem: ManAndHealthFieldItem = {
-    ...manAndHealthCell,
+  playerAndHealthCell: PlayerAndHealthFieldItem
+): PlayerAndHealthFieldItem => {
+  const openedItem: PlayerAndHealthFieldItem = {
+    ...playerAndHealthCell,
     cardItem: {
-      ...manAndHealthCell.cardItem,
+      ...playerAndHealthCell.cardItem,
       healthItem: {
-        ...manAndHealthCell.cardItem.healthItem,
+        ...playerAndHealthCell.cardItem.healthItem,
         apperance: "open",
       },
     },
   };
+
   return openedItem;
 };
 
 const changeHealthList = (
-  manAndHealthCell: ManAndHealthFieldItem
+  playerAndHealthCell: PlayerAndHealthFieldItem
 ): ObjFieldItem => {
-  const { healthItem, ...otherCardItem } = manAndHealthCell.cardItem;
+  const { healthItem, ...otherCardItem } = playerAndHealthCell.cardItem;
   const cellWithoutHealth: ObjCellType = {
-    ...manAndHealthCell,
+    ...playerAndHealthCell,
     cardItem: { ...otherCardItem },
   };
   return cellWithoutHealth;
 };
 
-const changeManHealth = (
-  manAndHealthCell: ManAndHealthFieldItem,
-  orderManIndex: number
-): ManAndHealthFieldItem => {
-  const sign = manAndHealthCell.cardItem.healthItem.type;
-  const currHealth = manAndHealthCell.cardItem.manList[0].health;
+const changePlayerHealth = (
+  playerAndHealthCell: PlayerAndHealthFieldItem
+): PlayerAndHealthFieldItem => {
+  const sign = playerAndHealthCell.cardItem.healthItem.type;
+  const currHealth = playerAndHealthCell.cardItem.playerList[0].health;
 
   const incHealth = currHealth + 1;
   const decHealth = currHealth - 1;
 
-  const chagedManItem: ManAndHealthFieldItem = {
-    ...manAndHealthCell,
+  const chagedPlayerItem: PlayerAndHealthFieldItem = {
+    ...playerAndHealthCell,
     cardItem: {
-      ...manAndHealthCell.cardItem,
+      ...playerAndHealthCell.cardItem,
 
-      // в ячейку с карточкой здоровья может прийти только один игрок
-      //т.к. после этого он карточку заберет
-      //пока условно оставила нулевую ячейку
-      manList: [
+      //TODO: разобраться с комментарием ниже + с самим кодом, неочевидный нулевой индекс!
+
+      //  в ячейку с карточкой здоровья может прийти только один игрок
+      //   т.к. после этого он карточку заберет
+      //  пока условно оставила нулевую ячейку
+
+      playerList: [
         {
-          ...manAndHealthCell.cardItem.manList[0],
+          ...playerAndHealthCell.cardItem.playerList[0],
           health: sign === "decrement" ? decHealth : incHealth,
         },
       ],
     },
   };
-  return chagedManItem;
+  return chagedPlayerItem;
 };
-
-export default takeHealthCard;
