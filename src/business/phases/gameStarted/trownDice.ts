@@ -1,6 +1,7 @@
-import { State, ActionType } from "./../../app";
+import { State } from "../../types";
+import { ActionType } from "../../reducer";
 
-function trownDice(action: ActionType, state: State): State {
+export const trownDice = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "diceThrown": {
       return {
@@ -16,6 +17,4 @@ function trownDice(action: ActionType, state: State): State {
     default:
       return state;
   }
-}
-
-export default trownDice;
+};

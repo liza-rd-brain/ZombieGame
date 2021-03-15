@@ -1,6 +1,7 @@
-import { State, ActionType } from "./../../app";
+import { State } from "../../types";
+import { ActionType } from "../../reducer";
 
-function endGame(action: ActionType, state: State): State {
+export const endGame = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "getEndScreen": {
       return {
@@ -8,8 +9,8 @@ function endGame(action: ActionType, state: State): State {
         gameState: { type: "getEndScreen", context: {} },
       };
     }
+
     default:
       return state;
   }
-}
-export default endGame;
+};
