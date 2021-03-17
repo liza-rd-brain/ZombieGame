@@ -51,6 +51,8 @@ export type CellType = СommonCell | WallItem | FinishCell | StartCell;
 
 export type GameList = Map<string, CellType>;
 
+export type GameField = { [key: string]: CellType };
+
 export type TypeEffect =
   | { type: "!needOpenHealthCard" }
   | { type: "!changePlayerHealth" }

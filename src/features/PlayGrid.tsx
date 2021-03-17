@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { Player, Health, Wall } from "../components";
 import { CellType, GameList } from "../business/types";
-import { END_COORD } from "../business/initialState";
+import { FINISH_COORD } from "../business/initialState";
 import { State } from "../business/types";
 
 type GridProps = {
@@ -112,7 +112,7 @@ export const PlayGrid = () => {
   const { GameList } = useSelector((state: State) => ({
     ...state,
   }));
-  const { hor: maxHor, vert: maxVert } = END_COORD;
+  const { hor: maxHor, vert: maxVert } = FINISH_COORD ;
   const height = maxVert + 1;
 
   return <GridItem vert={height}>{getFullArrayMap(GameList)}</GridItem>;
