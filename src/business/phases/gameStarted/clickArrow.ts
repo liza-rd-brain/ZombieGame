@@ -1,8 +1,8 @@
 import {
   MoveDirection,
-  ObjCellType,
+  CellType,
   GameList,
-  PlayerAndHealthFieldItem,
+  PlayerAndHealthCell,
   State,
 } from "../../types";
 import { ActionType } from "../../reducer";
@@ -49,8 +49,8 @@ const movePlayerInArray = (
   if (
     prevCell &&
     nextCell &&
-    prevCell.name === "field" &&
-    (nextCell.name === "field" || nextCell.name === "finish")
+    prevCell.name === "commonCell" &&
+    (nextCell.name === "commonCell" || nextCell.name === "finish")
   ) {
     const { playerList, ...otherCardItem } = { ...prevCell.cardItem };
     const newCellPlayer =
@@ -69,7 +69,7 @@ const movePlayerInArray = (
     };
 
     //в текущую ячейку складываем все что было + новый Player
-    const newNextCell: ObjCellType = {
+    const newNextCell: CellType = {
       ...nextCell,
       cardItem: {
         ...nextCell.cardItem,
@@ -79,7 +79,7 @@ const movePlayerInArray = (
       },
     };
 
-    const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+    const newGameList: [string, CellType][] = Array.from(gameList).map(
       (cell) => {
         const [index, elem] = cell;
         switch (index) {
@@ -140,7 +140,7 @@ export const clickArrow = (action: ActionType, state: State): State => {
             return state;
           }
 
-          case "field": {
+          case "commonCell": {
             const playerAndHealthCell = newNextCell;
             const hasPlayerAndHealthCell =
               playerAndHealthCell.cardItem.healthItem != undefined &&
@@ -157,7 +157,7 @@ export const clickArrow = (action: ActionType, state: State): State => {
                     context: {
                       index: newPlayerCoord,
                       //TODO:уйти от assertion
-                      playerAndHealthCell: playerAndHealthCell as PlayerAndHealthFieldItem,
+                      playerAndHealthCell: playerAndHealthCell as PlayerAndHealthCell,
                     },
                   },
                   doEffect: { type: "!needOpenHealthCard" },

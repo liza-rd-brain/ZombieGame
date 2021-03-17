@@ -1,9 +1,9 @@
 import {
-  ObjCellType,
+  CellType,
   GameList,
-  ObjFieldItem,
+  СommonCell,
   openHealthCardType,
-  PlayerAndHealthFieldItem,
+  PlayerAndHealthCell,
   State,
 } from "../../types";
 
@@ -16,7 +16,7 @@ export const takeHealthCard = (
 ): State => {
   const GameList = state.GameList;
   const playerCoordIndex = gameState.context.index;
-  const playerAndHealthCell: PlayerAndHealthFieldItem =
+  const playerAndHealthCell: PlayerAndHealthCell =
     gameState.context.playerAndHealthCell;
 
   const orderPlayerIndex = state.numberOfPlayer;
@@ -116,9 +116,9 @@ export const takeHealthCard = (
 const changeGameList = (
   gameList: GameList,
   playerCoordIndex: string,
-  playerAndHealthCell: PlayerAndHealthFieldItem | ObjFieldItem
+  playerAndHealthCell: PlayerAndHealthCell | СommonCell
 ) => {
-  const newGameList: [string, ObjCellType][] = Array.from(gameList).map(
+  const newGameList: [string, CellType][] = Array.from(gameList).map(
     (cell) => {
       const [index, elem] = cell;
       if (index === playerCoordIndex) {
@@ -132,9 +132,9 @@ const changeGameList = (
 };
 
 const openHealthCard = (
-  playerAndHealthCell: PlayerAndHealthFieldItem
-): PlayerAndHealthFieldItem => {
-  const openedItem: PlayerAndHealthFieldItem = {
+  playerAndHealthCell: PlayerAndHealthCell
+): PlayerAndHealthCell => {
+  const openedItem: PlayerAndHealthCell = {
     ...playerAndHealthCell,
     cardItem: {
       ...playerAndHealthCell.cardItem,
@@ -149,10 +149,10 @@ const openHealthCard = (
 };
 
 const changeHealthList = (
-  playerAndHealthCell: PlayerAndHealthFieldItem
-): ObjFieldItem => {
+  playerAndHealthCell: PlayerAndHealthCell
+): СommonCell => {
   const { healthItem, ...otherCardItem } = playerAndHealthCell.cardItem;
-  const cellWithoutHealth: ObjCellType = {
+  const cellWithoutHealth: CellType = {
     ...playerAndHealthCell,
     cardItem: { ...otherCardItem },
   };
@@ -160,15 +160,15 @@ const changeHealthList = (
 };
 
 const changePlayerHealth = (
-  playerAndHealthCell: PlayerAndHealthFieldItem
-): PlayerAndHealthFieldItem => {
+  playerAndHealthCell: PlayerAndHealthCell
+): PlayerAndHealthCell => {
   const sign = playerAndHealthCell.cardItem.healthItem.type;
   const currHealth = playerAndHealthCell.cardItem.playerList[0].health;
 
   const incHealth = currHealth + 1;
   const decHealth = currHealth - 1;
 
-  const chagedPlayerItem: PlayerAndHealthFieldItem = {
+  const chagedPlayerItem: PlayerAndHealthCell = {
     ...playerAndHealthCell,
     cardItem: {
       ...playerAndHealthCell.cardItem,

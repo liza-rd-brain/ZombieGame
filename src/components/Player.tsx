@@ -2,10 +2,10 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { PlayerItem, PlayerList } from "../business/types";
+import { PlayersCard, PlayersCardList } from "../business/types";
 
 type PlayerArray = {
-  list: PlayerList;
+  list: PlayersCardList;
 };
 
 const PlayerCard = styled.div`

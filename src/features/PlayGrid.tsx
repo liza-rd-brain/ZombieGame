@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { Player, Health, Wall } from "../components";
-import { ObjCellType, GameList } from "../business/types";
-import { End_Coord } from "../business/initialState";
+import { CellType, GameList } from "../business/types";
+import { END_COORD } from "../business/initialState";
 import { State } from "../business/types";
 
 type GridProps = {
@@ -39,9 +39,9 @@ const CellItem = styled.div`
   color: lightgrey;
 `;
 
-function getCell(cell: ObjCellType) {
+function getCell(cell: CellType) {
   switch (cell.name) {
-    case "field": {
+    case "commonCell": {
       return (
         <>
           {cell.cardItem.playerList ? (
@@ -72,12 +72,12 @@ function getCell(cell: ObjCellType) {
 
 function getFullArrayMap(gameList: GameList) {
   const gridArray = Array.from(gameList);
-  return gridArray.map((cell: [string, ObjCellType]) => {
+  return gridArray.map((cell: [string, CellType]) => {
     const [index, objItem] = cell;
     const hor = parseInt(index.split(".")[0]);
     const vert = parseInt(index.split(".")[1]);
     switch (objItem.name) {
-      case "field": {
+      case "commonCell": {
         return (
           <CellItem key={`${hor}${vert}`}>
             {getCell(objItem)}
@@ -112,7 +112,7 @@ export const PlayGrid = () => {
   const { GameList } = useSelector((state: State) => ({
     ...state,
   }));
-  const { hor: maxHor, vert: maxVert } = End_Coord;
+  const { hor: maxHor, vert: maxVert } = END_COORD;
   const height = maxVert + 1;
 
   return <GridItem vert={height}>{getFullArrayMap(GameList)}</GridItem>;

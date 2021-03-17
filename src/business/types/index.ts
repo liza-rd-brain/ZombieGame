@@ -10,52 +10,46 @@ export type WallItem = {
   name: "wall";
 };
 
-export type PlayerItem = {
+export type PlayersCard = {
   name: "player";
   health: number;
   orderNumber: number;
 };
 
-export type PlayerList = PlayerItem[];
+export type PlayersCardList = PlayersCard[];
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { playerList?: PlayerList };
+  cardItem: { playerList?: PlayersCardList };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayerList };
+  cardItem: { playerList?: PlayersCardList };
 };
 
-export type HealthItem = {
+export type HealthCard = {
   name: "health";
   type: HealthItemType;
   apperance: "closed" | "open";
 };
 
-export type CardInteract = PlayerList | HealthItem;
+export type InteractCards = PlayersCardList | HealthCard;
 
-export type ObjHealthItem = {
-  hor: number;
-  vert: number;
-  name: "field";
-  cardItem: { healthItem: HealthItem };
+// TODO: нужен ли отдельный тип, похоже на переусложнение
+export type PlayerAndHealthCell = {
+  name: "commonCell";
+  cardItem: { playerList: PlayersCardList; healthItem: HealthCard };
 };
 
-export type PlayerAndHealthFieldItem = {
-  name: "field";
-  cardItem: { playerList: PlayerList; healthItem: HealthItem };
+export type СommonCell = {
+  name: "commonCell";
+  cardItem: { playerList?: PlayersCardList; healthItem?: HealthCard };
 };
 
-export type ObjFieldItem = {
-  name: "field";
-  cardItem: { playerList?: PlayerList; healthItem?: HealthItem };
-};
+export type CellType = СommonCell | WallItem | FinishCell | StartCell;
 
-export type ObjCellType = ObjFieldItem | WallItem | FinishCell | StartCell;
-
-export type GameList = Map<string, ObjCellType>;
+export type GameList = Map<string, CellType>;
 
 export type TypeEffect =
   | { type: "!needOpenHealthCard" }
