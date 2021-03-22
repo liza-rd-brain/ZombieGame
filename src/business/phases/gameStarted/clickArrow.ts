@@ -104,14 +104,15 @@ export const clickArrow = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-      const GameList = state.GameList;
+      const gameList = state.GameList;
+      /* const GameField = state.GameField; */
       const orderPlayerIndex = state.numberOfPlayer;
       const prevPlayerCoordIndex = state.cardInteractIndex[orderPlayerIndex];
       const isNextTrowLast = state.dice === 1;
 
       const newPlayerCoord = сhangePlayerCoord(prevPlayerCoordIndex, direction);
       const newGameList = movePlayerInArray(
-        GameList,
+        gameList,
         newPlayerCoord,
         prevPlayerCoordIndex,
         state.numberOfPlayer

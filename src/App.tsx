@@ -162,14 +162,12 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              {
-                <Status>{`здоровье: ${showPlayerListHealth(
-                  GameList,
-                  cardInteractIndex
-                ).toString()}`}</Status>
-              }
+              <Status>{`здоровье: ${showPlayerListHealth(
+                GameList,
+                cardInteractIndex
+              ).toString()}`}</Status>
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
-              <Dice />
+              <Dice /> 
               <MoveControls />
             </LeftPanel>
           </>

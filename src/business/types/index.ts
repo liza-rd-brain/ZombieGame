@@ -42,16 +42,23 @@ export type PlayerAndHealthCell = {
   cardItem: { playerList: PlayersCardList; healthItem: HealthCard };
 };
 
-export type СommonCell = {
+export type CommonCell = {
   name: "commonCell";
   cardItem: { playerList?: PlayersCardList; healthItem?: HealthCard };
 };
 
-export type CellType = СommonCell | WallItem | FinishCell | StartCell;
+export type CellType = CommonCell | WallItem | FinishCell | StartCell;
 
 export type GameList = Map<string, CellType>;
 
-export type GameField = { [key: string]: CellType };
+export type GameField = {
+  order: Array<string>;
+  values: GameValues;
+};
+
+/* export type GameValues = { [key: string]: CellType };
+ */
+export type GameValues = Record<string, CellType>;
 
 export type TypeEffect =
   | { type: "!needOpenHealthCard" }
@@ -65,6 +72,7 @@ export type State = {
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   cardInteractIndex: string[];
+  GameField: GameField;
   GameList: GameList;
   doEffect: TypeEffect;
   numberOfPlayer: number;

@@ -27,6 +27,8 @@ export const reducer = (
   state: State = initialState,
   action: ActionType
 ): State => {
+
+  
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
 
   switch (phaseOuter) {

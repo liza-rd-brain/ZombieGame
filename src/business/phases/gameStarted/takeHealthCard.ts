@@ -1,7 +1,7 @@
 import {
   CellType,
   GameList,
-  СommonCell,
+  CommonCell,
   openHealthCardType,
   PlayerAndHealthCell,
   State,
@@ -116,7 +116,7 @@ export const takeHealthCard = (
 const changeGameList = (
   gameList: GameList,
   playerCoordIndex: string,
-  playerAndHealthCell: PlayerAndHealthCell | СommonCell
+  playerAndHealthCell: PlayerAndHealthCell | CommonCell
 ) => {
   const newGameList: [string, CellType][] = Array.from(gameList).map(
     (cell) => {
@@ -150,7 +150,7 @@ const openHealthCard = (
 
 const changeHealthList = (
   playerAndHealthCell: PlayerAndHealthCell
-): СommonCell => {
+): CommonCell => {
   const { healthItem, ...otherCardItem } = playerAndHealthCell.cardItem;
   const cellWithoutHealth: CellType = {
     ...playerAndHealthCell,
