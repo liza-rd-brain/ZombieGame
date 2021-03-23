@@ -59,11 +59,13 @@ function getCell(cell: ObjCellType) {
     }
 
     case "finish": {
-      {
-        cell.cardItem.playerList ? (
-          <Player list={cell.cardItem.playerList} />
-        ) : null;
-      }
+      return (
+        <>
+          {cell.cardItem.playerList ? (
+            <Player list={cell.cardItem.playerList} />
+          ) : null}
+        </>
+      );
     }
   }
 }

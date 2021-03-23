@@ -119,6 +119,7 @@ function App() {
         }
         case "!getNextPlayer": {
           dispatch({ type: "receivedNextPlayer" });
+          break;
         }
 
         default:

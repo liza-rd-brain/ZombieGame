@@ -102,6 +102,9 @@ export const takeHealthCard = (
             doEffect: null,
           };
         }
+
+        default:
+          return { ...state };
       }
     }
 

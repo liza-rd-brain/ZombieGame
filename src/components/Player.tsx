@@ -8,7 +8,7 @@ type PlayerArray = {
   list: PlayerList;
 };
 
-const PlayerItem = styled.div`
+const PlayerCard = styled.div`
   border: 5px solid red;
   border-radius: 50%;
   width: 5px;
@@ -19,7 +19,7 @@ const PlayerItem = styled.div`
   z-index: 1;
 `;
 
-const PlayerList = styled.div`
+const PlayerCardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: absolute;
@@ -31,10 +31,10 @@ const PlayerList = styled.div`
 export const Player = (props: PlayerArray) => {
   const playerArray = props.list;
   return (
-    <PlayerList>
+    <PlayerCardList>
       {playerArray.map((item, index) => (
-        <PlayerItem key={index}>{item.orderNumber}</PlayerItem>
+        <PlayerCard key={index}>{item.orderNumber}</PlayerCard>
       ))}
-    </PlayerList>
+    </PlayerCardList>
   );
 };

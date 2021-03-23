@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { HealthItem } from "../business/types";
 
-const HealthItem = styled.div<HealthItem>`
+const HealthCard = styled.div<HealthItem>`
   border: 5px solid;
 
   background-color: ${(props) => {
@@ -47,10 +47,10 @@ const HealthItem = styled.div<HealthItem>`
 
 export const Health = (props: HealthItem) => {
   return (
-    <HealthItem
+    <HealthCard
       name="health"
       type={props.type}
       apperance={props.apperance}
-    ></HealthItem>
+    ></HealthCard>
   );
 };
