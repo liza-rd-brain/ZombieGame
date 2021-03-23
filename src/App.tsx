@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, forwardRef } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
@@ -58,7 +57,7 @@ const showPlayerListHealth = (
   return healthArray;
 };
 
-function App() {
+export function GetApp() {
   const {
     gameState,
     gameResult,
@@ -119,6 +118,7 @@ function App() {
         }
         case "!getNextPlayer": {
           dispatch({ type: "receivedNextPlayer" });
+          break;
         }
 
         default:
@@ -180,9 +180,10 @@ function App() {
   return <Game>{getGameScreen()}</Game>;
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.querySelector("#root")
-);
+export const App = () => {
+  return (
+    <Provider store={store}>
+      <GetApp />
+    </Provider>
+  );
+};

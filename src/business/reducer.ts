@@ -59,7 +59,7 @@ export const reducer = (
     }
 
     case "endGame": {
-      endGame(action, state);
+      return endGame(action, state);
     }
 
     default:
