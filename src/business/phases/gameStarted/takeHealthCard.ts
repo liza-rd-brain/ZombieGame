@@ -15,7 +15,7 @@ export const takeHealthCard = (
   state: State,
   gameState: openHealthCardType
 ): State => {
-  const gameField = state.GameField;
+  const gameField = state.gameField;
   const playerCoordIndex = gameState.context.index;
 
   const playerAndHealthCell: PlayerAndHealthCell =
@@ -32,7 +32,7 @@ export const takeHealthCard = (
 
       return {
         ...state,
-        GameField: newGameField,
+        gameField: newGameField,
         doEffect: { type: "!changePlayerHealth" },
         gameState: {
           ...gameState,
@@ -59,7 +59,7 @@ export const takeHealthCard = (
 
       return {
         ...state,
-        GameField: newGameField,
+        gameField: newGameField,
         doEffect: { type: "!changeHealthList" },
         gameState: {
           ...gameState,
@@ -89,7 +89,7 @@ export const takeHealthCard = (
         case isPlayerAlive: {
           return {
             ...state,
-            GameField: newGameField,
+            gameField: newGameField,
             gameState: {
               type: "gameStarted.getOrder",
             },
@@ -103,7 +103,7 @@ export const takeHealthCard = (
         case !isPlayerAlive: {
           return {
             ...state,
-            GameField: newGameField,
+            gameField: newGameField,
             gameState: { type: "endGame", context: {} },
             gameResult: "Вы проиграли",
             doEffect: null,

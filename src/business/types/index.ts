@@ -72,8 +72,7 @@ export type State = {
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   cardInteractIndex: string[];
-  GameField: GameField;
-  GameList: GameList;
+  gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
 };

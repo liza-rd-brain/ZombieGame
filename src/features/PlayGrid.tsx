@@ -134,13 +134,13 @@ function getFullPlayGrid(gameField: GameField) {
 }
 
 export const PlayGrid = () => {
-  const { GameField } = useSelector((state: State) => ({
+  const { gameField } = useSelector((state: State) => ({
     ...state,
   }));
   const { hor: maxHor, vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
   const playerGrid = (
-    <GridItem vert={height}>{getFullPlayGrid(GameField)}</GridItem>
+    <GridItem vert={height}>{getFullPlayGrid(gameField)}</GridItem>
   );
   return playerGrid;
 };

@@ -64,8 +64,7 @@ export function GetApp() {
     gameState,
     gameResult,
     cardInteractIndex,
-    GameList,
-    GameField,
+    gameField,
     doEffect,
   } = useSelector((state: State) => ({ ...state }));
 
@@ -166,7 +165,7 @@ export function GetApp() {
             <LeftPanel>
               <Status>{textPhase()}</Status>
               <Status>{`здоровье: ${showPlayerListHealth(
-                GameField,
+                gameField,
                 cardInteractIndex
               ).toString()}`}</Status>
               <Status>{`координаты: ${cardInteractIndex}`}</Status>

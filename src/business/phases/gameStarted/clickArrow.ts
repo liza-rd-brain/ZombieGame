@@ -104,7 +104,7 @@ const getNewState = (
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        GameField: newGameField,
+        gameField: newGameField,
         gameState: { type: "endGame", context: {} },
         gameResult: "Вы выиграли",
         cardInteractIndex: cardInteractIndex,
@@ -122,7 +122,7 @@ const getNewState = (
           const newState: State = {
             ...state,
             dice: state.dice - 1,
-            GameField: newGameField,
+            gameField: newGameField,
             gameState: {
               type: "gameStarted.takeHealthCard",
               context: {
@@ -142,7 +142,7 @@ const getNewState = (
               const newState: State = {
                 ...state,
                 dice: state.dice - 1,
-                GameField: newGameField,
+                gameField: newGameField,
                 gameState: {
                   type: "gameStarted.getOrder",
                 },
@@ -158,7 +158,7 @@ const getNewState = (
               const newState: State = {
                 ...state,
                 dice: state.dice - 1,
-                GameField: newGameField,
+                gameField: newGameField,
                 gameState: {
                   type: "gameStarted.clickArrow",
                   gameStartedContext: {},
@@ -190,9 +190,7 @@ export const clickArrow = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
-      const gameList = state.GameList;
-      const gameField = state.GameField;
-      const gameFieldValues = state.GameField.values;
+      const gameField = state.gameField;
       const isNextTrowLast = state.dice === 1;
 
       const playersNumber = state.numberOfPlayer;
