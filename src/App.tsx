@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, GameList } from "./business/types";
+import { State, GameList, PlayersCardType } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -46,9 +46,11 @@ const showPlayerListHealth = (
     const cardElem = gameList.get(orderNumber);
 
     if (cardElem && cardElem.name != "wall" && cardElem.cardItem.playerList) {
-      const playerElem = cardElem.cardItem.playerList.find((item) => {
-        return item.orderNumber === index;
-      });
+      const playerElem = cardElem.cardItem.playerList.find(
+        (item: PlayersCardType) => {
+          return item.orderNumber === index;
+        }
+      );
       return playerElem ? playerElem?.health : null;
     } else {
       return null;
@@ -167,7 +169,7 @@ export function GetApp() {
                 cardInteractIndex
               ).toString()}`}</Status>
               <Status>{`координаты: ${cardInteractIndex}`}</Status>
-              <Dice /> 
+              <Dice />
               <MoveControls />
             </LeftPanel>
           </>

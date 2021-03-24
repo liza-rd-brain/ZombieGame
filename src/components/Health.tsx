@@ -2,9 +2,9 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { HealthCard } from "../business/types";
+import { HealthCardType } from "../business/types";
 
-const StyledHealthCard= styled.div<HealthCard>`
+const StyledHealthCard = styled.div<HealthCardType>`
   border: 5px solid;
 
   background-color: ${(props) => {
@@ -45,12 +45,13 @@ const StyledHealthCard= styled.div<HealthCard>`
   left: 5px;
 `;
 
-export const Health = (props: HealthCard) => {
+export const Health = (props: HealthCardType) => {
   return (
     <StyledHealthCard
-      name="health"
+      {...props}
+      /*     name="health"  
       type={props.type}
-      apperance={props.apperance}
+      apperance={props.apperance} */
     />
   );
 };

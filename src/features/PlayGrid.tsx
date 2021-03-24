@@ -51,9 +51,13 @@ function getCell(cell: CellType) {
               apperance={cell.cardItem.healthItem.apperance}
             />
           ) : null}
+          {cell.cardItem.playerList ? (
+            <Player list={cell.cardItem.playerList} />
+          ) : null}
         </>
       );
     }
+
     case "start": {
       return (
         <>
@@ -82,7 +86,6 @@ function getFullPlayGrid(gameField: GameField) {
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
-    //явно разделить гориз и верт координату
     const [hor, vert] = orderIndex.split(".");
 
     switch (cellValues.name) {
@@ -95,6 +98,7 @@ function getFullPlayGrid(gameField: GameField) {
           </CellItem>
         );
       }
+
       case "start": {
         return (
           <CellItem key={`${hor}${vert}`}>

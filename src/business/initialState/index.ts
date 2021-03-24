@@ -10,8 +10,8 @@ import {
   HealthItemType,
   State,
   GameValues,
-  HealthCard,
-  PlayersCardList,
+  HealthCardType,
+  PlayersCardListType,
 } from "../types";
 
 export const START_COORD = { hor: 0, vert: 0 };
@@ -78,7 +78,7 @@ const organizeGameField = (emptyField: GameValues): GameValues => {
   const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
 
   // TODO: сразу добавила раскладку карточек игроков, вместо отдельного метода
-  const playerList: PlayersCardList = new Array(AMOUNT_PLAYERS)
+  const playerList: PlayersCardListType = new Array(AMOUNT_PLAYERS)
     .fill(0)
     .map((item, index) => {
       return {
@@ -176,7 +176,7 @@ const setHealthCards = (
     (cellWithCards: [string, CommonCell]) => {
       const [index, cell] = cellWithCards;
 
-      const healthItem: HealthCard = {
+      const healthItem: HealthCardType = {
         name: "health",
         type: getRandomType(),
         apperance: "closed",

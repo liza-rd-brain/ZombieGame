@@ -10,41 +10,41 @@ export type WallItem = {
   name: "wall";
 };
 
-export type PlayersCard = {
+export type PlayersCardType = {
   name: "player";
   health: number;
   orderNumber: number;
 };
 
-export type PlayersCardList = PlayersCard[];
+export type PlayersCardListType = PlayersCardType[];
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { playerList?: PlayersCardList };
+  cardItem: { playerList?: PlayersCardListType };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayersCardList };
+  cardItem: { playerList?: PlayersCardListType };
 };
 
-export type HealthCard = {
+export type HealthCardType = {
   name: "health";
   type: HealthItemType;
   apperance: "closed" | "open";
 };
 
-export type InteractCards = PlayersCardList | HealthCard;
+export type InteractCards = PlayersCardListType | HealthCardType;
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение
 export type PlayerAndHealthCell = {
   name: "commonCell";
-  cardItem: { playerList: PlayersCardList; healthItem: HealthCard };
+  cardItem: { playerList: PlayersCardListType; healthItem: HealthCardType };
 };
 
 export type CommonCell = {
   name: "commonCell";
-  cardItem: { playerList?: PlayersCardList; healthItem?: HealthCard };
+  cardItem: { playerList?: PlayersCardListType; healthItem?: HealthCardType };
 };
 
 export type CellType = CommonCell | WallItem | FinishCell | StartCell;
