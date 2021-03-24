@@ -27,8 +27,6 @@ export const reducer = (
   state: State = initialState,
   action: ActionType
 ): State => {
-
-  
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
 
   switch (phaseOuter) {
@@ -47,6 +45,7 @@ export const reducer = (
         }
 
         case "takeHealthCard": {
+          // TODO: избавиться от asserion!
           const gameState = state.gameState as openHealthCardType;
           return takeHealthCard(action, state, gameState);
         }

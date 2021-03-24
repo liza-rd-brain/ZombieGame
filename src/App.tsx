@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, GameList, PlayersCardType } from "./business/types";
+import { State, GameList, PlayersCardType, GameField } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -38,12 +38,12 @@ const Status = styled.div`
 `;
 
 const showPlayerListHealth = (
-  gameList: GameList,
+  gameField: GameField,
   cardInteractIndex: string[]
 ): (null | number)[] => {
   //TODO:не сразу понятно, что делает функция, постоянно перезапускается
   const healthArray = cardInteractIndex.map((orderNumber, index) => {
-    const cardElem = gameList.get(orderNumber);
+    const cardElem = gameField.values[orderNumber];
 
     if (cardElem && cardElem.name != "wall" && cardElem.cardItem.playerList) {
       const playerElem = cardElem.cardItem.playerList.find(
@@ -65,6 +65,7 @@ export function GetApp() {
     gameResult,
     cardInteractIndex,
     GameList,
+    GameField,
     doEffect,
   } = useSelector((state: State) => ({ ...state }));
 
@@ -165,7 +166,7 @@ export function GetApp() {
             <LeftPanel>
               <Status>{textPhase()}</Status>
               <Status>{`здоровье: ${showPlayerListHealth(
-                GameList,
+                GameField,
                 cardInteractIndex
               ).toString()}`}</Status>
               <Status>{`координаты: ${cardInteractIndex}`}</Status>

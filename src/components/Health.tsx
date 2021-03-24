@@ -46,12 +46,5 @@ const StyledHealthCard = styled.div<HealthCardType>`
 `;
 
 export const Health = (props: HealthCardType) => {
-  return (
-    <StyledHealthCard
-      {...props}
-      /*     name="health"  
-      type={props.type}
-      apperance={props.apperance} */
-    />
-  );
+  return <StyledHealthCard {...props} />;
 };
