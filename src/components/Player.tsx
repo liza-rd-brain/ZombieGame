@@ -2,10 +2,14 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { PlayersCardListType } from "../business/types";
+import { NewPlayersCardType } from "../business/types";
+
+type Player = {
+  item: NewPlayersCardType;
+};
 
 type PlayerArray = {
-  list: PlayersCardListType;
+  list: NewPlayersCardType[];
 };
 
 const PlayerCard = styled.div`
@@ -28,7 +32,16 @@ const PlayerCardList = styled.div`
   color: green;
 `;
 
-export const Player = (props: PlayerArray) => {
+export const Player = (props: Player) => {
+  const { name, health, orderNumber, coord } = props.item;
+  return (
+    <PlayerCardList>
+      <PlayerCard key={coord}>{orderNumber}</PlayerCard>
+    </PlayerCardList>
+  );
+};
+
+export const PlayerList = (props: PlayerArray) => {
   const playerArray = props.list;
   return (
     <PlayerCardList>

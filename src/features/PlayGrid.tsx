@@ -3,8 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
-import { Player, Health, Wall } from "../components";
-import { CellType, GameList, GameField } from "../business/types";
+import { Player, PlayerList, Health, Wall } from "../components";
+import {
+  CellType,
+  GameField,
+  NewPlayersList,
+  NewPlayersCardType,
+} from "../business/types";
 import { FINISH_COORD } from "../business/initialState";
 import { State } from "../business/types";
 
@@ -51,74 +56,45 @@ function getCell(cell: CellType) {
               apperance={cell.cardItem.healthItem.apperance}
             />
           ) : null}
-          {cell.cardItem.playerList ? (
-            <Player list={cell.cardItem.playerList} />
-          ) : null}
-        </>
-      );
-    }
-
-    case "start": {
-      return (
-        <>
-          {cell.cardItem.playerList ? (
-            <Player list={cell.cardItem.playerList} />
-          ) : null}
-        </>
-      );
-    }
-
-    case "finish": {
-      return (
-        <>
-          {cell.cardItem.playerList ? (
-            <Player list={cell.cardItem.playerList} />
-          ) : null}
         </>
       );
     }
   }
 }
 
+const getPlayer = (index: string, playersList: NewPlayersList) => {
+  for (let playerKey in playersList) {
+    const playerCard = playersList[playerKey];
+    const playerCoord = playerCard.coord;
+    if (playerCoord == index) {
+      return <Player item={playerCard} />;
+    }
+  }
+};
+
+const getPlayerList = (index: string, playersList: NewPlayersList) => {
+  //отдаем массив карточек здоровья
+  let healthArr: NewPlayersCardType[] = [];
+  for (let playerKey in playersList) {
+    const playerCard = playersList[playerKey];
+    const playerCoord = playerCard.coord;
+    if (playerCoord == index) {
+      healthArr.push(playersList[playerKey]);
+    }
+  }
+  return <PlayerList list={healthArr} />;
+};
+
 //TODO:как типизировать возврат jsx
-function getFullPlayGrid(gameField: GameField) {
+function getFullPlayGrid(gameField: GameField, playersList: NewPlayersList) {
   const orderGameCells = gameField.order;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
+    // TODO: getCell переименовать в getCards-?!
     switch (cellValues.name) {
-      case "commonCell": {
-        return (
-          <CellItem key={`${hor}${vert}`}>
-            {getCell(cellValues)}
-            {hor}
-            {vert}
-          </CellItem>
-        );
-      }
-
-      case "start": {
-        return (
-          <CellItem key={`${hor}${vert}`}>
-            {getCell(cellValues)}
-            {hor}
-            {vert}
-          </CellItem>
-        );
-      }
-
-      case "finish": {
-        return (
-          <CellItem key={`${hor}${vert}`}>
-            {getCell(cellValues)}
-            {hor}
-            {vert}
-          </CellItem>
-        );
-      }
-
       case "wall": {
         return (
           <CellItem key={`${hor}${vert}`}>
@@ -126,21 +102,40 @@ function getFullPlayGrid(gameField: GameField) {
           </CellItem>
         );
       }
+      case "start" || "finish": {
+        return (
+          <CellItem key={`${hor}${vert}`}>
+            {getCell(cellValues)}
+            {getPlayerList(orderIndex, playersList)}
+            {hor}
+            {vert}
+          </CellItem>
+        );
+      }
+      default: {
+        return (
+          <CellItem key={`${hor}${vert}`}>
+            {getCell(cellValues)}
+            {getPlayer(orderIndex, playersList)}
+            {hor}
+            {vert}
+          </CellItem>
+        );
+      }
     }
   });
 
-  console.log(fullPlayerGrid);
   return fullPlayerGrid;
 }
 
 export const PlayGrid = () => {
-  const { gameField } = useSelector((state: State) => ({
+  const { gameField, playersList } = useSelector((state: State) => ({
     ...state,
   }));
   const { hor: maxHor, vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
   const playerGrid = (
-    <GridItem vert={height}>{getFullPlayGrid(gameField)}</GridItem>
+    <GridItem vert={height}>{getFullPlayGrid(gameField, playersList)}</GridItem>
   );
   return playerGrid;
 };

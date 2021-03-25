@@ -5,13 +5,13 @@ import {
   CommonCell,
   FinishCell,
   WallItem,
-  GameList,
-  CellType,
   HealthItemType,
   State,
   GameValues,
   HealthCardType,
   PlayersCardListType,
+  NewPlayersCardType,
+  NewPlayersList,
 } from "../types";
 
 export const START_COORD = { hor: 0, vert: 0 };
@@ -34,11 +34,12 @@ export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
   "decrement",
 ];
 
-const newGameField = {
-  order: ["0.0", "0.1"],
-  values: {
-    "0.0": {},
-    "0.1": {},
+const players = {
+  "0": {
+    name: "player",
+    health: 3,
+    orderNumber: 0,
+    coord: "0.0",
   },
 };
 
@@ -217,16 +218,30 @@ const getNewGameField = () => {
    * 2. createEmptyGameField вернет объект поле заполненное ключами и пустыми ячейками
    * 3. organizeGameField вернет объеет поле со стартом, фишием, стенами
    * 4. spreadHealthCards вернет объеет поле с разложенными карточками здоровья
-   * 5. setPlayerCards поставить карточки людей на первую позицию
+   *
    */
   const order = getCellOrder();
   const newEmptyGameField = createEmptyGameField(order);
   const newOrganizedGameField = organizeGameField(newEmptyGameField);
   const fullPreparedGameField = spreadHealthCards(newOrganizedGameField);
-  /* const fullPreparedGameField = setPlayerCards(healthCardsField); */
+
   const gameFieldWithList = { order, values: fullPreparedGameField };
-  console.log("gameFieldWithList", gameFieldWithList);
   return gameFieldWithList;
+};
+
+const getPlayers = (): NewPlayersList => {
+  const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
+    const playerCard = {
+      name: "player",
+      health: INITIAL_PLAYER_HEALTH,
+      orderNumber: index,
+      coord: "0.0",
+    };
+    return [index, playerCard];
+  });
+
+  const playersObj: NewPlayersList = Object.fromEntries(playersList);
+  return playersObj;
 };
 
 const getInitialState = (): State => {
@@ -234,13 +249,14 @@ const getInitialState = (): State => {
     gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
+    playersList: getPlayers(),
     cardInteractIndex: new Array(AMOUNT_PLAYERS).fill(0).map(() => {
       return `${START_COORD.hor}.${START_COORD.vert}`;
     }),
     gameField: getNewGameField(),
     doEffect: null,
     numberOfPlayer: 0,
-  };
+};
 };
 
 export const initialState = getInitialState();

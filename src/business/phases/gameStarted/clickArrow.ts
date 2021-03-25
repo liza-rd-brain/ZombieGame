@@ -1,11 +1,4 @@
-import {
-  MoveDirection,
-  CellType,
-  GameList,
-  PlayerAndHealthCell,
-  State,
-  GameField,
-} from "../../types";
+import { MoveDirection, CellType, State, GameField } from "../../types";
 import { ActionType } from "../../reducer";
 
 const сhangePlayerCoord = (currentIndex: string, direction: MoveDirection) => {
@@ -58,7 +51,7 @@ const movePlayerInGameField = (
 
     const remainingPlayers =
       playerList?.filter((player) => {
-        return player.orderNumber != playersNumber;
+        return player.orderNumber !== playersNumber;
       }) || [];
 
     const prevCellWithoutPlayer = {
@@ -107,15 +100,15 @@ const getNewState = (
         gameField: newGameField,
         gameState: { type: "endGame", context: {} },
         gameResult: "Вы выиграли",
-        cardInteractIndex: cardInteractIndex,
+        /*  cardInteractIndex: cardInteractIndex, */
       };
       return newState;
     }
 
     case "commonCell": {
       const hasPlayerAndHealthCell =
-        newCellWithPlayer.cardItem.healthItem != undefined &&
-        newCellWithPlayer.cardItem.playerList != undefined;
+        newCellWithPlayer.cardItem.healthItem !== undefined &&
+        newCellWithPlayer.cardItem.playerList !== undefined;
 
       switch (hasPlayerAndHealthCell) {
         case true: {
@@ -131,7 +124,7 @@ const getNewState = (
               },
             },
             doEffect: { type: "!needOpenHealthCard" },
-            cardInteractIndex: cardInteractIndex,
+            /*  cardInteractIndex: cardInteractIndex, */
           };
           return newState;
         }
@@ -149,7 +142,7 @@ const getNewState = (
                 doEffect: {
                   type: "!getNextPlayer",
                 },
-                cardInteractIndex: cardInteractIndex,
+                /* cardInteractIndex: cardInteractIndex, */
               };
               return newState;
             }
@@ -164,7 +157,7 @@ const getNewState = (
                   gameStartedContext: {},
                   context: {},
                 },
-                cardInteractIndex: cardInteractIndex,
+                /*      cardInteractIndex: cardInteractIndex, */
               };
               return newState;
             }
@@ -204,8 +197,6 @@ export const clickArrow = (action: ActionType, state: State): State => {
         playersNumber
       );
 
-      console.log("newGameField", newGameField);
-
       const newCellWithPlayer = newGameField.values[newPlayerCoord];
 
       const cardInteractIndex = state.cardInteractIndex.map((coord, index) => {
@@ -223,6 +214,7 @@ export const clickArrow = (action: ActionType, state: State): State => {
         newPlayerCoord
       );
 
+      console.log("stateAfterClick", newState);
       return newState;
     }
 

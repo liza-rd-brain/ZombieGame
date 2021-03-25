@@ -1,6 +1,4 @@
 import {
-  CellType,
-  GameList,
   CommonCell,
   openHealthCardType,
   PlayerAndHealthCell,

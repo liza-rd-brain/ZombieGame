@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, GameList, PlayersCardType, GameField } from "./business/types";
+import { State, PlayersCardType, GameField } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -45,7 +45,7 @@ const showPlayerListHealth = (
   const healthArray = cardInteractIndex.map((orderNumber, index) => {
     const cardElem = gameField.values[orderNumber];
 
-    if (cardElem && cardElem.name != "wall" && cardElem.cardItem.playerList) {
+    if (cardElem && cardElem.name !== "wall" && cardElem.cardItem.playerList) {
       const playerElem = cardElem.cardItem.playerList.find(
         (item: PlayersCardType) => {
           return item.orderNumber === index;
@@ -63,7 +63,7 @@ export function GetApp() {
   const {
     gameState,
     gameResult,
-    cardInteractIndex,
+    /*  cardInteractIndex, */
     gameField,
     doEffect,
   } = useSelector((state: State) => ({ ...state }));
@@ -164,11 +164,11 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              <Status>{`здоровье: ${showPlayerListHealth(
+              {/*       <Status>{`здоровье: ${showPlayerListHealth(
                 gameField,
                 cardInteractIndex
               ).toString()}`}</Status>
-              <Status>{`координаты: ${cardInteractIndex}`}</Status>
+              <Status>{`координаты: ${cardInteractIndex}`}</Status> */}
               <Dice />
               <MoveControls />
             </LeftPanel>

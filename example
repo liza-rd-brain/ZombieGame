@@ -1,0 +1,16 @@
+const newGameField = {
+  order: ["0.0", "0.1"],
+  values: {
+    "0.0": {},
+    "0.1": {},
+  },
+};
+
+const players={
+    "0":{
+        name: "player",
+        health:3,
+        orderNumber:0,
+        coord: "0.0",
+    }
+}

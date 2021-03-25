@@ -16,6 +16,15 @@ export type PlayersCardType = {
   orderNumber: number;
 };
 
+export type NewPlayersCardType = {
+  name: "player";
+  health: number;
+  orderNumber: number;
+  coord: string;
+};
+
+export type NewPlayersList = Record<string, NewPlayersCardType>;
+
 export type PlayersCardListType = PlayersCardType[];
 
 export type FinishCell = {
@@ -49,8 +58,6 @@ export type CommonCell = {
 
 export type CellType = CommonCell | WallItem | FinishCell | StartCell;
 
-export type GameList = Map<string, CellType>;
-
 export type GameField = {
   order: Array<string>;
   values: GameValues;
@@ -71,6 +78,7 @@ export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
+  playersList: NewPlayersList;
   cardInteractIndex: string[];
   gameField: GameField;
   doEffect: TypeEffect;

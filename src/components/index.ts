@@ -1,3 +1,3 @@
 export { Health } from "./Health";
-export { Player } from "./Player";
+export { Player, PlayerList } from "./Player";
 export { Wall } from "./Wall";
