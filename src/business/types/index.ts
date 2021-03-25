@@ -46,17 +46,22 @@ export type HealthCardType = {
 export type InteractCards = PlayersCardListType | HealthCardType;
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение
-export type PlayerAndHealthCell = {
+export type HealthCell = {
   name: "commonCell";
-  cardItem: { playerList: PlayersCardListType; healthItem: HealthCardType };
+  cardItem: { healthItem: HealthCardType };
 };
 
 export type CommonCell = {
   name: "commonCell";
-  cardItem: { playerList?: PlayersCardListType; healthItem?: HealthCardType };
+  cardItem: { healthItem?: HealthCardType };
 };
 
-export type CellType = CommonCell | WallItem | FinishCell | StartCell;
+export type CellType =
+  | CommonCell
+  | WallItem
+  | FinishCell
+  | StartCell
+  | HealthCell;
 
 export type GameField = {
   order: Array<string>;
@@ -87,18 +92,15 @@ export type State = {
 
 export type GameState =
   | { type: "waitingStart" }
-  | { type: "gameStarted.trownDice"; context: any; gameStartedContext: any }
+  | { type: "gameStarted.trownDice" }
   | {
       type: "gameStarted.clickArrow";
-      gameStartedContext: any;
-      context: any;
     }
   | openHealthCardType
   | { type: "gameStarted.getOrder" }
-  | { type: "endGame"; context: any }
-  | { type: "getEndScreen"; context: any };
+  | { type: "endGame" }
+  | { type: "getEndScreen" };
 
 export type openHealthCardType = {
   type: "gameStarted.takeHealthCard";
-  context: any;
 };

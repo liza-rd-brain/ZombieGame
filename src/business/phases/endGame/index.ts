@@ -6,7 +6,7 @@ export const endGame = (action: ActionType, state: State): State => {
     case "getEndScreen": {
       return {
         ...state,
-        gameState: { type: "getEndScreen", context: {} },
+        gameState: { type: "getEndScreen" },
       };
     }
 

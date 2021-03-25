@@ -12,12 +12,13 @@ import {
   PlayersCardListType,
   NewPlayersCardType,
   NewPlayersList,
+  HealthCell,
 } from "../types";
 
 export const START_COORD = { hor: 0, vert: 0 };
 export const FINISH_COORD = { hor: 9, vert: 9 };
 export const INITIAL_PLAYER_HEALTH = 3;
-export const AMOUNT_HEALTH_ITEMS = 2; /* 30 */
+export const AMOUNT_HEALTH_ITEMS = 30;
 export const AMOUNT_PLAYERS = 4;
 export const WALLS_COORD: Array<CoordItem> = [
   { hor: 2, vert: 2 },
@@ -183,7 +184,7 @@ const setHealthCards = (
         apperance: "closed",
       };
 
-      const cellWithCard = {
+      const cellWithCard: HealthCell = {
         ...cell,
         cardItem: { ...cell.cardItem, healthItem },
       };

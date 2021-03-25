@@ -1,4 +1,4 @@
-import { AMOUNT_PLAYERS} from "../../initialState";
+import { AMOUNT_PLAYERS } from "../../initialState";
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
@@ -18,8 +18,6 @@ export const getOrder = (action: ActionType, state: State): State => {
         numberOfPlayer: nextPlayersNumber,
         gameState: {
           type: "gameStarted.trownDice",
-          gameStartedContext: {},
-          context: {},
         },
       };
     }

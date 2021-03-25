@@ -50,7 +50,6 @@ const getNewState = (
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameState: { type: "endGame", context: {} },
         gameResult: "Вы выиграли",
         playersList: newPlayerList,
       };
@@ -67,10 +66,6 @@ const getNewState = (
             dice: state.dice - 1,
             gameState: {
               type: "gameStarted.takeHealthCard",
-              context: {
-                index: newPlayerCoord,
-                playerAndHealthCell: newCellWithPlayer,
-              },
             },
             doEffect: { type: "!needOpenHealthCard" },
             playersList: newPlayerList,
@@ -101,8 +96,6 @@ const getNewState = (
                 dice: state.dice - 1,
                 gameState: {
                   type: "gameStarted.clickArrow",
-                  gameStartedContext: {},
-                  context: {},
                 },
                 playersList: newPlayerList,
               };
@@ -182,11 +175,11 @@ export const clickArrow = (action: ActionType, state: State): State => {
 
       console.log("stateAfterClick", newState);
 
-      if (isNextCellFree) {
-        return newState;
-      } else {
+      /*  if (isNextCellFree) { */
+      return newState;
+      /* } else {
         return state;
-      }
+      } */
     }
 
     default: {

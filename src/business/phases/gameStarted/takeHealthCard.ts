@@ -1,9 +1,11 @@
 import {
   CommonCell,
   openHealthCardType,
-  PlayerAndHealthCell,
+  HealthCell,
   State,
   GameField,
+  NewPlayersList,
+  CellType,
 } from "../../types";
 
 import { ActionType } from "../../reducer";
@@ -14,14 +16,17 @@ export const takeHealthCard = (
   gameState: openHealthCardType
 ): State => {
   const gameField = state.gameField;
-  const playerCoordIndex = gameState.context.index;
+  const numberOfPlayer = state.numberOfPlayer;
+  const playerCoordIndex = state.playersList[numberOfPlayer].coord;
+  const healthCell = gameField.values[playerCoordIndex];
 
-  const playerAndHealthCell: PlayerAndHealthCell =
-    gameState.context.playerAndHealthCell;
+  console.log(healthCell);
+
+  const playerList = state.playersList;
 
   switch (action.type) {
     case "openedHealthCard": {
-      const cellWithOpenHealth = openHealthCard(playerAndHealthCell);
+      const cellWithOpenHealth = openHealthCard(healthCell);
 
       const newGameField: GameField = {
         ...gameField,
@@ -32,48 +37,27 @@ export const takeHealthCard = (
         ...state,
         gameField: newGameField,
         doEffect: { type: "!changePlayerHealth" },
-        gameState: {
-          ...gameState,
-          context: {
-            ...gameState.context,
-            playerAndHealthCell: cellWithOpenHealth,
-          },
-        },
       };
     }
 
     case "changedPlayerHealth": {
-      const cellWithChangedPLayerHealth = changePlayerHealth(
-        playerAndHealthCell
+      const changedPlayerList = changePlayerHealth(
+        healthCell,
+        playerList,
+        numberOfPlayer
       );
-
-      const newGameField: GameField = {
-        ...gameField,
-        values: {
-          ...gameField.values,
-          [playerCoordIndex]: cellWithChangedPLayerHealth,
-        },
-      };
 
       return {
         ...state,
-        gameField: newGameField,
         doEffect: { type: "!changeHealthList" },
-        gameState: {
-          ...gameState,
-          context: {
-            ...gameState.context,
-            playerAndHealthCell: cellWithChangedPLayerHealth,
-          },
-        },
+        playersList: changedPlayerList,
       };
     }
 
     case "changedHealthList": {
-      const isPlayerAlive =
-        playerAndHealthCell.cardItem.playerList[0].health > 0;
-
-      const cellWithoutHealthCard = changeHealthList(playerAndHealthCell);
+      /*  const isPlayerAlive = healthCell.cardItem.playerList[0].health > 0; */
+      const isPlayerAlive = playerList[numberOfPlayer].health > 0;
+      const cellWithoutHealthCard = changeHealthList(healthCell);
 
       const newGameField: GameField = {
         ...gameField,
@@ -102,7 +86,7 @@ export const takeHealthCard = (
           return {
             ...state,
             gameField: newGameField,
-            gameState: { type: "endGame", context: {} },
+            gameState: { type: "endGame" },
             gameResult: "Вы проиграли",
             doEffect: null,
           };
@@ -118,56 +102,59 @@ export const takeHealthCard = (
   }
 };
 
-const openHealthCard = (
-  playerAndHealthCell: PlayerAndHealthCell
-): PlayerAndHealthCell => {
-  const openedItem: PlayerAndHealthCell = {
-    ...playerAndHealthCell,
-    cardItem: {
-      ...playerAndHealthCell.cardItem,
-      healthItem: {
-        ...playerAndHealthCell.cardItem.healthItem,
-        apperance: "open",
+const openHealthCard = (healthCell: CellType): CellType => {
+  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
+    const openedItem: HealthCell = {
+      ...healthCell,
+      cardItem: {
+        ...healthCell.cardItem,
+        healthItem: {
+          ...healthCell.cardItem.healthItem,
+          apperance: "open",
+        },
       },
-    },
-  };
-
-  return openedItem;
+    };
+    return openedItem;
+  } else {
+    return healthCell;
+  }
 };
 
-const changeHealthList = (
-  playerAndHealthCell: PlayerAndHealthCell
-): CommonCell => {
-  const { healthItem, ...otherCardItem } = playerAndHealthCell.cardItem;
+const changeHealthList = (healthCell: CellType): CellType => {
+  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
+    const { healthItem, ...otherCardItem } = healthCell.cardItem;
 
-  const cellWithoutHealth: CommonCell = {
-    ...playerAndHealthCell,
-    cardItem: { ...otherCardItem },
-  };
-  return cellWithoutHealth;
+    const cellWithoutHealth: CommonCell = {
+      ...healthCell,
+      cardItem: { ...otherCardItem },
+    };
+    return cellWithoutHealth;
+  } else return healthCell;
 };
 
 const changePlayerHealth = (
-  playerAndHealthCell: PlayerAndHealthCell
-): PlayerAndHealthCell => {
-  const sign = playerAndHealthCell.cardItem.healthItem.type;
-  // TODO:  заранее поятно, что едиственная карточка лежит в массиве
-  const currHealth = playerAndHealthCell.cardItem.playerList[0].health;
+  healthCell: CellType,
+  playerList: NewPlayersList,
+  numberOfPlayer: number
+) => {
+  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
+    const sign = healthCell.cardItem.healthItem.type;
+    // TODO:  заранее поятно, что едиственная карточка лежит в массиве
+    const currHealth = { ...playerList }[numberOfPlayer].health;
 
-  const incHealth = currHealth + 1;
-  const decHealth = currHealth - 1;
+    const incHealth = currHealth + 1;
+    const decHealth = currHealth - 1;
 
-  const chagedPlayerItem: PlayerAndHealthCell = {
-    ...playerAndHealthCell,
-    cardItem: {
-      ...playerAndHealthCell.cardItem,
-      playerList: [
-        {
-          ...playerAndHealthCell.cardItem.playerList[0],
-          health: sign === "decrement" ? decHealth : incHealth,
-        },
-      ],
-    },
-  };
-  return chagedPlayerItem;
+    const changedPlayerList: NewPlayersList = {
+      ...playerList,
+      [numberOfPlayer]: {
+        ...playerList[numberOfPlayer],
+        health: sign === "decrement" ? decHealth : incHealth,
+      },
+    };
+
+    return changedPlayerList;
+  } else {
+    return playerList;
+  }
 };

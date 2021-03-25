@@ -5,7 +5,12 @@ import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, PlayersCardType, GameField } from "./business/types";
+import {
+  State,
+  PlayersCardType,
+  GameField,
+  NewPlayersList,
+} from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -36,36 +41,37 @@ const Status = styled.div`
   width: 150px;
   min-height: 18px;
 `;
+// TODO: мемоизировать функции!!!ы
 
-const showPlayerListHealth = (
-  gameField: GameField,
-  cardInteractIndex: string[]
-): (null | number)[] => {
+const showPlayerListHealth = (playersList: NewPlayersList) => {
   //TODO:не сразу понятно, что делает функция, постоянно перезапускается
-  const healthArray = cardInteractIndex.map((orderNumber, index) => {
-    const cardElem = gameField.values[orderNumber];
-
-    if (cardElem && cardElem.name !== "wall" && cardElem.cardItem.playerList) {
-      const playerElem = cardElem.cardItem.playerList.find(
-        (item: PlayersCardType) => {
-          return item.orderNumber === index;
-        }
-      );
-      return playerElem ? playerElem?.health : null;
-    } else {
-      return null;
-    }
+  const playerArray = Object.entries(playersList);
+  const healthArray = playerArray.map((player) => {
+    const [index, playerValue] = player;
+    return playerValue.health;
   });
+
   return healthArray;
+};
+
+const showPlayerListCoord = (playersList: NewPlayersList) => {
+  //TODO:не сразу понятно, что делает функция, постоянно перезапускается
+  const playerArray = Object.entries(playersList);
+  const coordArray = playerArray.map((player) => {
+    const [index, playerValue] = player;
+    return playerValue.coord;
+  });
+
+  return coordArray;
 };
 
 export function GetApp() {
   const {
     gameState,
     gameResult,
-    /*  cardInteractIndex, */
     gameField,
     doEffect,
+    playersList,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -164,11 +170,12 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              {/*       <Status>{`здоровье: ${showPlayerListHealth(
-                gameField,
-                cardInteractIndex
+              <Status>{`здоровье: ${showPlayerListHealth(
+                playersList
               ).toString()}`}</Status>
-              <Status>{`координаты: ${cardInteractIndex}`}</Status> */}
+              <Status>{`координаты: ${showPlayerListCoord(
+                playersList
+              ).toString()}`}</Status>
               <Dice />
               <MoveControls />
             </LeftPanel>
