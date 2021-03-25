@@ -1,4 +1,10 @@
-import { MoveDirection, CellType, State, GameField } from "../../types";
+import {
+  MoveDirection,
+  CellType,
+  State,
+  GameField,
+  NewPlayersList,
+} from "../../types";
 import { ActionType } from "../../reducer";
 
 const сhangePlayerCoord = (currentIndex: string, direction: MoveDirection) => {
@@ -30,92 +36,35 @@ const сhangePlayerCoord = (currentIndex: string, direction: MoveDirection) => {
   }
 };
 
-const movePlayerInGameField = (
-  gameField: GameField,
-  nextIndex: string,
-  prevIndex: string,
-  playersNumber: number
-): GameField => {
-  const gameFieldValues = gameField.values;
-  const prevCell = gameFieldValues[prevIndex];
-  const nextCell = gameFieldValues[nextIndex];
-
-  // TODO: провалидировать заранее ячейку с карточкой человека, она точно не может  быть стеной
-  if (nextCell.name !== "wall" && prevCell.name !== "wall") {
-    const { playerList, ...otherCardItem } = { ...prevCell.cardItem };
-
-    const movedPlayer =
-      playerList?.filter((player) => {
-        return player.orderNumber === playersNumber;
-      }) || [];
-
-    const remainingPlayers =
-      playerList?.filter((player) => {
-        return player.orderNumber !== playersNumber;
-      }) || [];
-
-    const prevCellWithoutPlayer = {
-      ...prevCell,
-      cardItem: { ...otherCardItem, playerList: remainingPlayers },
-    };
-
-    const nextCellWithPlayer: CellType = {
-      ...nextCell,
-      cardItem: {
-        ...nextCell.cardItem,
-        playerList: nextCell.cardItem.playerList
-          ? nextCell.cardItem.playerList?.concat(movedPlayer)
-          : movedPlayer,
-      },
-    };
-
-    const newGameField = {
-      ...gameField,
-      values: {
-        ...gameField.values,
-        [nextIndex]: nextCellWithPlayer,
-        [prevIndex]: prevCellWithoutPlayer,
-      },
-    };
-
-    return newGameField;
-  } else {
-    return gameField;
-  }
-};
-
+// TODO: функция слишком громоздкая, разделить на нексколько более явных
 const getNewState = (
   newCellWithPlayer: CellType,
   state: State,
-  newGameField: GameField,
-  cardInteractIndex: string[],
+
   isNextTrowLast: boolean,
-  newPlayerCoord: string
+  newPlayerCoord: string,
+  newPlayerList: NewPlayersList
 ) => {
   switch (newCellWithPlayer.name) {
     case "finish": {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameField: newGameField,
         gameState: { type: "endGame", context: {} },
         gameResult: "Вы выиграли",
-        /*  cardInteractIndex: cardInteractIndex, */
+        playersList: newPlayerList,
       };
       return newState;
     }
 
     case "commonCell": {
-      const hasPlayerAndHealthCell =
-        newCellWithPlayer.cardItem.healthItem !== undefined &&
-        newCellWithPlayer.cardItem.playerList !== undefined;
+      const hasHealthCell = newCellWithPlayer.cardItem.healthItem !== undefined;
 
-      switch (hasPlayerAndHealthCell) {
+      switch (hasHealthCell) {
         case true: {
           const newState: State = {
             ...state,
             dice: state.dice - 1,
-            gameField: newGameField,
             gameState: {
               type: "gameStarted.takeHealthCard",
               context: {
@@ -124,7 +73,7 @@ const getNewState = (
               },
             },
             doEffect: { type: "!needOpenHealthCard" },
-            /*  cardInteractIndex: cardInteractIndex, */
+            playersList: newPlayerList,
           };
           return newState;
         }
@@ -135,14 +84,13 @@ const getNewState = (
               const newState: State = {
                 ...state,
                 dice: state.dice - 1,
-                gameField: newGameField,
                 gameState: {
                   type: "gameStarted.getOrder",
                 },
                 doEffect: {
                   type: "!getNextPlayer",
                 },
-                /* cardInteractIndex: cardInteractIndex, */
+                playersList: newPlayerList,
               };
               return newState;
             }
@@ -151,13 +99,12 @@ const getNewState = (
               const newState: State = {
                 ...state,
                 dice: state.dice - 1,
-                gameField: newGameField,
                 gameState: {
                   type: "gameStarted.clickArrow",
                   gameStartedContext: {},
                   context: {},
                 },
-                /*      cardInteractIndex: cardInteractIndex, */
+                playersList: newPlayerList,
               };
               return newState;
             }
@@ -179,43 +126,67 @@ const getNewState = (
   }
 };
 
+const checkNextCell = (
+  playersList: NewPlayersList,
+  newCoord: string,
+  playersNumber: number
+): boolean => {
+  const iterablePlayerList = Object.entries(playersList);
+  const isCellOccupied = iterablePlayerList.some((player) => {
+    const [, playerValue] = player;
+    return playerValue.coord === newCoord;
+  });
+  return !isCellOccupied;
+};
+
 export const clickArrow = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "arrowPressed": {
       const direction = action.payload;
       const gameField = state.gameField;
+      const playersList = state.playersList;
       const isNextTrowLast = state.dice === 1;
-
+      console.log(state);
       const playersNumber = state.numberOfPlayer;
-      const prevPlayerCoord = state.cardInteractIndex[playersNumber];
+
+      const prevPlayerCoord = playersList[playersNumber].coord;
       const newPlayerCoord = сhangePlayerCoord(prevPlayerCoord, direction);
 
-      const newGameField = movePlayerInGameField(
-        gameField,
+      console.log(gameField);
+
+      const newCellWithPlayer = gameField.values[newPlayerCoord];
+
+      const isNextCellFree = checkNextCell(
+        playersList,
         newPlayerCoord,
-        prevPlayerCoord,
         playersNumber
       );
 
-      const newCellWithPlayer = newGameField.values[newPlayerCoord];
+      const newPlayerList = {
+        ...playersList,
+        [playersNumber]: {
+          ...playersList[playersNumber],
+          coord: newPlayerCoord,
+        },
+      };
 
-      const cardInteractIndex = state.cardInteractIndex.map((coord, index) => {
-        if (index === state.numberOfPlayer) {
-          return newPlayerCoord;
-        } else return coord;
-      });
+      console.log("newPlayerList", newPlayerList);
 
       const newState = getNewState(
         newCellWithPlayer,
         state,
-        newGameField,
-        cardInteractIndex,
         isNextTrowLast,
-        newPlayerCoord
+        newPlayerCoord,
+        newPlayerList
       );
 
       console.log("stateAfterClick", newState);
-      return newState;
+
+      if (isNextCellFree) {
+        return newState;
+      } else {
+        return state;
+      }
     }
 
     default: {
