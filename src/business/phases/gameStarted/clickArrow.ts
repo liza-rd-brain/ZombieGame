@@ -3,7 +3,7 @@ import {
   CellType,
   State,
   GameField,
-  NewPlayersList,
+  PlayersList,
 } from "../../types";
 import { ActionType } from "../../reducer";
 
@@ -43,7 +43,7 @@ const getNewState = (
 
   isNextTrowLast: boolean,
   newPlayerCoord: string,
-  newPlayerList: NewPlayersList
+  newPlayerList: PlayersList
 ) => {
   switch (newCellWithPlayer.name) {
     case "finish": {
@@ -120,7 +120,7 @@ const getNewState = (
 };
 
 const checkNextCell = (
-  playersList: NewPlayersList,
+  playersList: PlayersList,
   newCoord: string,
   playersNumber: number
 ): boolean => {
@@ -139,14 +139,10 @@ export const clickArrow = (action: ActionType, state: State): State => {
       const gameField = state.gameField;
       const playersList = state.playersList;
       const isNextTrowLast = state.dice === 1;
-      console.log(state);
       const playersNumber = state.numberOfPlayer;
 
       const prevPlayerCoord = playersList[playersNumber].coord;
       const newPlayerCoord = сhangePlayerCoord(prevPlayerCoord, direction);
-
-      console.log(gameField);
-
       const newCellWithPlayer = gameField.values[newPlayerCoord];
 
       const isNextCellFree = checkNextCell(
@@ -163,23 +159,27 @@ export const clickArrow = (action: ActionType, state: State): State => {
         },
       };
 
-      console.log("newPlayerList", newPlayerList);
+      // Проверка на существование ячейки== не ушли ли мы за стену!!
 
-      const newState = getNewState(
-        newCellWithPlayer,
-        state,
-        isNextTrowLast,
-        newPlayerCoord,
-        newPlayerList
-      );
+      if (newCellWithPlayer) {
+        const newState = getNewState(
+          newCellWithPlayer,
+          state,
+          isNextTrowLast,
+          newPlayerCoord,
+          newPlayerList
+        );
 
-      console.log("stateAfterClick", newState);
-
-      /*  if (isNextCellFree) { */
-      return newState;
-      /* } else {
+        // проверка: если нельзя встать на карточку одновременно двум игрокам!
+        /*   if (isNextCellFree) {
+  return newState;
+  } else {
+    return state;
+  } */
+        return newState;
+      } else {
         return state;
-      } */
+      }
     }
 
     default: {

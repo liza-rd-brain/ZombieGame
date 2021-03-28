@@ -4,7 +4,7 @@ import {
   HealthCell,
   State,
   GameField,
-  NewPlayersList,
+  PlayersList,
   CellType,
 } from "../../types";
 
@@ -18,9 +18,9 @@ export const takeHealthCard = (
   const gameField = state.gameField;
   const numberOfPlayer = state.numberOfPlayer;
   const playerCoordIndex = state.playersList[numberOfPlayer].coord;
-  const healthCell = gameField.values[playerCoordIndex];
 
-  console.log(healthCell);
+  // TODO: завязать тип на healthCell!?
+  const healthCell = gameField.values[playerCoordIndex];
 
   const playerList = state.playersList;
 
@@ -134,18 +134,18 @@ const changeHealthList = (healthCell: CellType): CellType => {
 
 const changePlayerHealth = (
   healthCell: CellType,
-  playerList: NewPlayersList,
+  playerList: PlayersList,
   numberOfPlayer: number
 ) => {
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
     const sign = healthCell.cardItem.healthItem.type;
-    // TODO:  заранее поятно, что едиственная карточка лежит в массиве
+
     const currHealth = { ...playerList }[numberOfPlayer].health;
 
     const incHealth = currHealth + 1;
     const decHealth = currHealth - 1;
 
-    const changedPlayerList: NewPlayersList = {
+    const changedPlayerList: PlayersList = {
       ...playerList,
       [numberOfPlayer]: {
         ...playerList[numberOfPlayer],

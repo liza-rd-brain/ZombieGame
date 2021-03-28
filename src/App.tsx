@@ -1,16 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import {
-  State,
-  PlayersCardType,
-  GameField,
-  NewPlayersList,
-} from "./business/types";
+import { State, PlayersList } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -41,29 +36,6 @@ const Status = styled.div`
   width: 150px;
   min-height: 18px;
 `;
-// TODO: мемоизировать функции!!!ы
-
-const showPlayerListHealth = (playersList: NewPlayersList) => {
-  //TODO:не сразу понятно, что делает функция, постоянно перезапускается
-  const playerArray = Object.entries(playersList);
-  const healthArray = playerArray.map((player) => {
-    const [index, playerValue] = player;
-    return playerValue.health;
-  });
-
-  return healthArray;
-};
-
-const showPlayerListCoord = (playersList: NewPlayersList) => {
-  //TODO:не сразу понятно, что делает функция, постоянно перезапускается
-  const playerArray = Object.entries(playersList);
-  const coordArray = playerArray.map((player) => {
-    const [index, playerValue] = player;
-    return playerValue.coord;
-  });
-
-  return coordArray;
-};
 
 export function GetApp() {
   const {
@@ -72,6 +44,7 @@ export function GetApp() {
     gameField,
     doEffect,
     playersList,
+    numberOfPlayer,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -154,6 +127,35 @@ export function GetApp() {
     [gameState.type]
   );
 
+  const getPlayersHealthList = () => {
+    const playerArray = Object.entries(playersList);
+    const healthArray = playerArray.map((player) => {
+      const [, playerValue] = player;
+      return playerValue.health;
+    });
+
+    return healthArray.toString();
+  };
+
+  const getPlayerListCoord = () => {
+    const playerArray = Object.entries(playersList);
+    const coordArray = playerArray.map((player) => {
+      const [, playerValue] = player;
+      return playerValue.coord;
+    });
+    console.log("coord change");
+
+    return coordArray.toString();
+  };
+
+  const playersHealthList = useMemo(() => getPlayersHealthList(), [
+    playersList[numberOfPlayer].health,
+  ]);
+
+  const playersCoordList = useMemo(() => getPlayerListCoord(), [
+    playersList[numberOfPlayer].coord,
+  ]);
+
   const getGameScreen = () => {
     switch (gameState.type) {
       case "waitingStart":
@@ -170,12 +172,9 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              <Status>{`здоровье: ${showPlayerListHealth(
-                playersList
-              ).toString()}`}</Status>
-              <Status>{`координаты: ${showPlayerListCoord(
-                playersList
-              ).toString()}`}</Status>
+              <Status>{`здоровье: ${playersHealthList}`}</Status>
+              <Status>{`координаты: ${playersCoordList}`}</Status>
+
               <Dice />
               <MoveControls />
             </LeftPanel>

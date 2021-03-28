@@ -9,9 +9,8 @@ import {
   State,
   GameValues,
   HealthCardType,
-  PlayersCardListType,
-  NewPlayersCardType,
-  NewPlayersList,
+  PlayersCardType,
+  PlayersList,
   HealthCell,
 } from "../types";
 
@@ -79,20 +78,9 @@ const organizeGameField = (emptyField: GameValues): GameValues => {
   const startIndex = `${START_COORD.hor}.${START_COORD.vert}`;
   const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
 
-  // TODO: сразу добавила раскладку карточек игроков, вместо отдельного метода
-  const playerList: PlayersCardListType = new Array(AMOUNT_PLAYERS)
-    .fill(0)
-    .map((item, index) => {
-      return {
-        name: "player",
-        health: INITIAL_PLAYER_HEALTH,
-        orderNumber: index,
-      };
-    });
-
   const startCell: StartCell = {
     name: "start",
-    cardItem: { playerList },
+    cardItem: {},
   };
 
   const finishCell: FinishCell = {
@@ -230,7 +218,7 @@ const getNewGameField = () => {
   return gameFieldWithList;
 };
 
-const getPlayers = (): NewPlayersList => {
+const getPlayers = (): PlayersList => {
   const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
     const playerCard = {
       name: "player",
@@ -241,7 +229,7 @@ const getPlayers = (): NewPlayersList => {
     return [index, playerCard];
   });
 
-  const playersObj: NewPlayersList = Object.fromEntries(playersList);
+  const playersObj: PlayersList = Object.fromEntries(playersList);
   return playersObj;
 };
 

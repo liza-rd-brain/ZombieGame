@@ -2,14 +2,14 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { NewPlayersCardType } from "../business/types";
+import { PlayersCardType } from "../business/types";
 
 type Player = {
-  item: NewPlayersCardType;
+  item: PlayersCardType;
 };
 
 type PlayerArray = {
-  list: NewPlayersCardType[];
+  list: PlayersCardType[];
 };
 
 const PlayerCard = styled.div`

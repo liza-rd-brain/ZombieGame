@@ -7,8 +7,8 @@ import { Player, PlayerList, Health, Wall } from "../components";
 import {
   CellType,
   GameField,
-  NewPlayersList,
-  NewPlayersCardType,
+  PlayersList,
+  PlayersCardType,
 } from "../business/types";
 import { FINISH_COORD } from "../business/initialState";
 import { State } from "../business/types";
@@ -62,7 +62,7 @@ function getCell(cell: CellType) {
   }
 }
 
-const getPlayer = (index: string, playersList: NewPlayersList) => {
+const getPlayer = (index: string, playersList: PlayersList) => {
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
@@ -72,9 +72,9 @@ const getPlayer = (index: string, playersList: NewPlayersList) => {
   }
 };
 
-const getPlayerList = (index: string, playersList: NewPlayersList) => {
+const getPlayerList = (index: string, playersList: PlayersList) => {
   //отдаем массив карточек здоровья
-  let healthArr: NewPlayersCardType[] = [];
+  let healthArr: PlayersCardType[] = [];
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
@@ -86,7 +86,7 @@ const getPlayerList = (index: string, playersList: NewPlayersList) => {
 };
 
 //TODO:как типизировать возврат jsx
-function getFullPlayGrid(gameField: GameField, playersList: NewPlayersList) {
+function getFullPlayGrid(gameField: GameField, playersList: PlayersList) {
   const orderGameCells = gameField.order;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
@@ -116,7 +116,8 @@ function getFullPlayGrid(gameField: GameField, playersList: NewPlayersList) {
         return (
           <CellItem key={`${hor}${vert}`}>
             {getCell(cellValues)}
-            {getPlayer(orderIndex, playersList)}
+            {getPlayerList(orderIndex, playersList)}
+            {/*  {getPlayer(orderIndex, playersList)} */}
             {hor}
             {vert}
           </CellItem>
