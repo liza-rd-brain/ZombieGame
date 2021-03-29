@@ -2,15 +2,11 @@ import styled from "styled-components";
 
 import { EnemiesCardType } from "../business/types";
 
-type EnemyCardStyle = {
-  apperance: "closed" | "open";
-};
-
 type EnemiesArray = {
   list: EnemiesCardType[];
 };
 
-const EnemyCard = styled.div<EnemyCardStyle>`
+const EnemyCard = styled.div<EnemiesCardType>`
   border: 5px solid;
 
   background-color: ${(props) => {
@@ -50,7 +46,7 @@ export const EnemiesList = (props: EnemiesArray) => {
   return (
     <EnemiesCardList>
       {enemiesArray.map((item, index) => (
-        <EnemyCard key={index} apperance={item.apperance} />
+        <EnemyCard key={index} {...item} />
       ))}
     </EnemiesCardList>
   );

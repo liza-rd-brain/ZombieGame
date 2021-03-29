@@ -22,4 +22,3 @@ const enemies={
     coord: "0.0",
   },
 };
-}

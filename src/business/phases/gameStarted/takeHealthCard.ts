@@ -10,11 +10,7 @@ import {
 
 import { ActionType } from "../../reducer";
 
-export const takeHealthCard = (
-  action: ActionType,
-  state: State,
-  gameState: openHealthCardType
-): State => {
+export const takeHealthCard = (action: ActionType, state: State): State => {
   const gameField = state.gameField;
   const numberOfPlayer = state.numberOfPlayer;
   const playerCoordIndex = state.playersList[numberOfPlayer].coord;
@@ -93,12 +89,12 @@ export const takeHealthCard = (
         }
 
         default:
-          return { ...state };
+          return state;
       }
     }
 
     default:
-      return { ...state };
+      return state;
   }
 };
 

@@ -18,7 +18,7 @@ import {
 export const START_COORD = { hor: 0, vert: 0 };
 export const FINISH_COORD = { hor: 9, vert: 9 };
 export const INITIAL_PLAYER_HEALTH = 3;
-export const AMOUNT_HEALTH_ITEMS = 0; /*  30 */
+export const AMOUNT_HEALTH_ITEMS = 0; /* 30; */
 export const AMOUNT_PLAYERS = 1; /* 6 */
 export const AMOUNT_ENEMIES = 1;
 export const WALLS_COORD: Array<CoordItem> = [
@@ -244,7 +244,8 @@ const getEnemies = (): EnemiesListType => {
       coord: "1.1",
       apperance: "closed",
     };
-    return [index, enemyCard];
+    //ключ=координата
+    return [enemyCard.coord, enemyCard];
   });
 
   const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
@@ -258,9 +259,6 @@ const getInitialState = (): State => {
     gameResult: "",
     playersList: getPlayers(),
     enemiesList: getEnemies(),
-    cardInteractIndex: new Array(AMOUNT_PLAYERS).fill(0).map(() => {
-      return `${START_COORD.hor}.${START_COORD.vert}`;
-    }),
     gameField: getNewGameField(),
     doEffect: null,
     numberOfPlayer: 0,

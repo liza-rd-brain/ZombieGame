@@ -77,6 +77,16 @@ export function GetApp() {
           );
           break;
         }
+        case "!needOpenEnemyCard": {
+          const timerOpen = setTimeout(
+            () =>
+              dispatch({
+                type: "openedEnemyCard",
+              }),
+            1000
+          );
+          break;
+        }
         case "!changePlayerHealth": {
           const timerChangePlayerHealth = setTimeout(
             () =>

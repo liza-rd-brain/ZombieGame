@@ -40,7 +40,6 @@ const сhangePlayerCoord = (currentIndex: string, direction: MoveDirection) => {
 const getNewState = (
   newCellWithPlayer: CellType,
   state: State,
-
   isNextTrowLast: boolean,
   newPlayerCoord: string,
   newPlayerList: PlayersListType
@@ -58,9 +57,10 @@ const getNewState = (
 
     case "commonCell": {
       const hasHealthCell = newCellWithPlayer.cardItem.healthItem !== undefined;
+      const hasEnemyCell = state.enemiesList[newPlayerCoord] ? true : false;
 
-      switch (hasHealthCell) {
-        case true: {
+      switch (true) {
+        case hasHealthCell: {
           const newState: State = {
             ...state,
             dice: state.dice - 1,
@@ -73,7 +73,20 @@ const getNewState = (
           return newState;
         }
 
-        case false: {
+        case hasEnemyCell: {
+          const newState: State = {
+            ...state,
+            dice: state.dice - 1,
+            gameState: {
+              type: "gameStarted.interactEnemyCard",
+            },
+            doEffect: { type: "!needOpenEnemyCard" },
+            playersList: newPlayerList,
+          };
+          return newState;
+        }
+
+        default: {
           switch (isNextTrowLast) {
             case true: {
               const newState: State = {
@@ -107,9 +120,9 @@ const getNewState = (
             }
           }
         }
-        default: {
+        /* default: {
           return state;
-        }
+        } */
       }
     }
 

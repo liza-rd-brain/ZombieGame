@@ -74,6 +74,7 @@ export type TypeEffect =
   | { type: "!changePlayerHealth" }
   | { type: "!changeHealthList" }
   | { type: "!getNextPlayer" }
+  | { type: "!needOpenEnemyCard" }
   | null;
 
 export type State = {
@@ -82,7 +83,6 @@ export type State = {
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   playersList: PlayersListType;
   enemiesList: EnemiesListType;
-  cardInteractIndex: string[];
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
@@ -95,6 +95,7 @@ export type GameState =
       type: "gameStarted.clickArrow";
     }
   | openHealthCardType
+  | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

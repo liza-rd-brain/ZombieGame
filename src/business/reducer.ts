@@ -5,6 +5,7 @@ import {
   clickArrow,
   takeHealthCard,
   getOrder,
+  interactEnemyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, openHealthCardType } from "./types";
@@ -14,6 +15,7 @@ export type ActionType =
   | DiceThrownAction
   | ArrowPressAction
   | { type: "openedHealthCard" }
+  | { type: "openedEnemyCard" }
   | { type: "changedPlayerHealth" }
   | { type: "changedHealthList" }
   | { type: "receivedNextPlayer" }
@@ -45,9 +47,10 @@ export const reducer = (
         }
 
         case "takeHealthCard": {
-          // TODO: избавиться от asserion!
-          const gameState = state.gameState as openHealthCardType;
-          return takeHealthCard(action, state, gameState);
+          return takeHealthCard(action, state);
+        }
+        case "interactEnemyCard": {
+          return interactEnemyCard(action, state);
         }
 
         case "getOrder": {
