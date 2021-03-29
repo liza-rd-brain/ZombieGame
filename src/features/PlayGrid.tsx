@@ -3,12 +3,21 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
-import { Player, PlayerList, Health, Wall } from "../components";
+import {
+  Player,
+  PlayerList,
+  Health,
+  Wall,
+  /* Enemy, */
+  EnemiesList,
+} from "../components";
 import {
   CellType,
   GameField,
-  PlayersList,
+  PlayersListType,
   PlayersCardType,
+  EnemiesListType,
+  EnemiesCardType,
 } from "../business/types";
 import { FINISH_COORD } from "../business/initialState";
 import { State } from "../business/types";
@@ -62,7 +71,7 @@ function getCell(cell: CellType) {
   }
 }
 
-const getPlayer = (index: string, playersList: PlayersList) => {
+const getPlayer = (index: string, playersList: PlayersListType) => {
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
@@ -72,21 +81,40 @@ const getPlayer = (index: string, playersList: PlayersList) => {
   }
 };
 
-const getPlayerList = (index: string, playersList: PlayersList) => {
-  //отдаем массив карточек здоровья
-  let healthArr: PlayersCardType[] = [];
+const getPlayersList = (index: string, playersList: PlayersListType) => {
+  let playersArr: PlayersCardType[] = [];
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
     if (playerCoord == index) {
-      healthArr.push(playersList[playerKey]);
+      playersArr.push(playersList[playerKey]);
     }
   }
-  return <PlayerList list={healthArr} />;
+  if (playersArr.length > 0) {
+    return <PlayerList list={playersArr} />;
+  } else return null;
+};
+
+const getEnemiesList = (index: string, enemiesList: EnemiesListType) => {
+  let enemiesArr: EnemiesCardType[] = [];
+  for (let enemiesKey in enemiesList) {
+    const enemiesCard = enemiesList[enemiesKey];
+    const enemiesCoord = enemiesCard.coord;
+    if (enemiesCoord == index) {
+      enemiesArr.push(enemiesList[enemiesKey]);
+    }
+  }
+  if (enemiesArr.length > 0) {
+    return <EnemiesList list={enemiesArr} />;
+  } else return null;
 };
 
 //TODO:как типизировать возврат jsx
-function getFullPlayGrid(gameField: GameField, playersList: PlayersList) {
+function getFullPlayGrid(
+  gameField: GameField,
+  playersList: PlayersListType,
+  enemiesList: EnemiesListType
+) {
   const orderGameCells = gameField.order;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
@@ -106,7 +134,7 @@ function getFullPlayGrid(gameField: GameField, playersList: PlayersList) {
         return (
           <CellItem key={`${hor}${vert}`}>
             {getCell(cellValues)}
-            {getPlayerList(orderIndex, playersList)}
+            {getPlayersList(orderIndex, playersList)}
             {hor}
             {vert}
           </CellItem>
@@ -116,8 +144,11 @@ function getFullPlayGrid(gameField: GameField, playersList: PlayersList) {
         return (
           <CellItem key={`${hor}${vert}`}>
             {getCell(cellValues)}
-            {getPlayerList(orderIndex, playersList)}
+            {getPlayersList(orderIndex, playersList)}
             {/*  {getPlayer(orderIndex, playersList)} */}
+
+            {getEnemiesList(orderIndex, enemiesList)}
+
             {hor}
             {vert}
           </CellItem>
@@ -130,13 +161,17 @@ function getFullPlayGrid(gameField: GameField, playersList: PlayersList) {
 }
 
 export const PlayGrid = () => {
-  const { gameField, playersList } = useSelector((state: State) => ({
-    ...state,
-  }));
+  const { gameField, playersList, enemiesList } = useSelector(
+    (state: State) => ({
+      ...state,
+    })
+  );
   const { hor: maxHor, vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
   const playerGrid = (
-    <GridItem vert={height}>{getFullPlayGrid(gameField, playersList)}</GridItem>
+    <GridItem vert={height}>
+      {getFullPlayGrid(gameField, playersList, enemiesList)}
+    </GridItem>
   );
   return playerGrid;
 };

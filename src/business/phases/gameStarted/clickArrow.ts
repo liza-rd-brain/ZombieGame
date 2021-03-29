@@ -3,7 +3,7 @@ import {
   CellType,
   State,
   GameField,
-  PlayersList,
+  PlayersListType,
 } from "../../types";
 import { ActionType } from "../../reducer";
 
@@ -43,7 +43,7 @@ const getNewState = (
 
   isNextTrowLast: boolean,
   newPlayerCoord: string,
-  newPlayerList: PlayersList
+  newPlayerList: PlayersListType
 ) => {
   switch (newCellWithPlayer.name) {
     case "finish": {
@@ -120,7 +120,7 @@ const getNewState = (
 };
 
 const checkNextCell = (
-  playersList: PlayersList,
+  playersList: PlayersListType,
   newCoord: string,
   playersNumber: number
 ): boolean => {

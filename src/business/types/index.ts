@@ -17,7 +17,16 @@ export type PlayersCardType = {
   coord: string;
 };
 
-export type PlayersList = Record<string, PlayersCardType>;
+export type PlayersListType = Record<string, PlayersCardType>;
+
+export type EnemiesCardType = {
+  name: "enemy";
+  power: number;
+  coord: string;
+  apperance: "closed" | "open";
+};
+
+export type EnemiesListType = Record<string, EnemiesCardType>;
 
 export type FinishCell = {
   name: "finish";
@@ -58,7 +67,6 @@ export type GameField = {
   values: GameValues;
 };
 
-
 export type GameValues = Record<string, CellType>;
 
 export type TypeEffect =
@@ -72,7 +80,8 @@ export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  playersList: PlayersList;
+  playersList: PlayersListType;
+  enemiesList: EnemiesListType;
   cardInteractIndex: string[];
   gameField: GameField;
   doEffect: TypeEffect;

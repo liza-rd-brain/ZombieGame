@@ -4,7 +4,7 @@ import {
   HealthCell,
   State,
   GameField,
-  PlayersList,
+  PlayersListType,
   CellType,
 } from "../../types";
 
@@ -134,7 +134,7 @@ const changeHealthList = (healthCell: CellType): CellType => {
 
 const changePlayerHealth = (
   healthCell: CellType,
-  playerList: PlayersList,
+  playerList: PlayersListType,
   numberOfPlayer: number
 ) => {
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
@@ -145,7 +145,7 @@ const changePlayerHealth = (
     const incHealth = currHealth + 1;
     const decHealth = currHealth - 1;
 
-    const changedPlayerList: PlayersList = {
+    const changedPlayerList: PlayersListType = {
       ...playerList,
       [numberOfPlayer]: {
         ...playerList[numberOfPlayer],

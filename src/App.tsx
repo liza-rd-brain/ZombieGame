@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, PlayersList } from "./business/types";
+import { State, PlayersListType } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -143,7 +143,6 @@ export function GetApp() {
       const [, playerValue] = player;
       return playerValue.coord;
     });
-    console.log("coord change");
 
     return coordArray.toString();
   };

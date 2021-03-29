@@ -6,11 +6,20 @@ const newGameField = {
   },
 };
 
-const players={
-    "0":{
-        name: "player",
-        health:3,
-        orderNumber:0,
-        coord: "0.0",
-    }
+const players = {
+  "0": {
+    name: "player",
+    health: 3,
+    orderNumber: 0,
+    coord: "0.0",
+  },
+};
+
+const enemies={
+   "0": {
+    name: "enemy",
+    power: 1,
+    coord: "0.0",
+  },
+};
 }

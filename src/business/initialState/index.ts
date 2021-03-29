@@ -9,16 +9,18 @@ import {
   State,
   GameValues,
   HealthCardType,
-  PlayersCardType,
-  PlayersList,
+  PlayersListType,
   HealthCell,
+  EnemiesListType,
+  EnemiesCardType,
 } from "../types";
 
 export const START_COORD = { hor: 0, vert: 0 };
 export const FINISH_COORD = { hor: 9, vert: 9 };
 export const INITIAL_PLAYER_HEALTH = 3;
-export const AMOUNT_HEALTH_ITEMS = 30;
-export const AMOUNT_PLAYERS = 4;
+export const AMOUNT_HEALTH_ITEMS = 0; /*  30 */
+export const AMOUNT_PLAYERS = 1; /* 6 */
+export const AMOUNT_ENEMIES = 1;
 export const WALLS_COORD: Array<CoordItem> = [
   { hor: 2, vert: 2 },
   { hor: 3, vert: 2 },
@@ -34,12 +36,12 @@ export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
   "decrement",
 ];
 
-const players = {
+const enemies = {
   "0": {
-    name: "player",
-    health: 3,
+    name: "enemy",
+    power: 1,
     orderNumber: 0,
-    coord: "0.0",
+    coord: "1.1",
   },
 };
 
@@ -218,7 +220,7 @@ const getNewGameField = () => {
   return gameFieldWithList;
 };
 
-const getPlayers = (): PlayersList => {
+const getPlayers = (): PlayersListType => {
   const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
     const playerCard = {
       name: "player",
@@ -229,8 +231,24 @@ const getPlayers = (): PlayersList => {
     return [index, playerCard];
   });
 
-  const playersObj: PlayersList = Object.fromEntries(playersList);
+  const playersObj: PlayersListType = Object.fromEntries(playersList);
   return playersObj;
+};
+
+const getEnemies = (): EnemiesListType => {
+  //Добавить сначала рандомный массив с коорлинатами пустых ячеек
+  const enemiesList = new Array(AMOUNT_ENEMIES).fill(0).map((enemy, index) => {
+    const enemyCard = {
+      name: "enemy",
+      power: 1,
+      coord: "1.1",
+      apperance: "closed",
+    };
+    return [index, enemyCard];
+  });
+
+  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
+  return enemiesObj;
 };
 
 const getInitialState = (): State => {
@@ -239,6 +257,7 @@ const getInitialState = (): State => {
     dice: 0,
     gameResult: "",
     playersList: getPlayers(),
+    enemiesList: getEnemies(),
     cardInteractIndex: new Array(AMOUNT_PLAYERS).fill(0).map(() => {
       return `${START_COORD.hor}.${START_COORD.vert}`;
     }),
