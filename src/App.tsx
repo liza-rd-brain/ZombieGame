@@ -15,14 +15,14 @@ const Field = styled.div`
 `;
 
 const Game = styled.div`
-  width: 500px;
+  width: 600px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
 `;
 
 const LeftPanel = styled.div`
-  width: 120px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -33,7 +33,7 @@ const LeftPanel = styled.div`
 const Status = styled.div`
   border: 1px dotted red;
   color: red;
-  width: 150px;
+  width: 200px;
   min-height: 18px;
 `;
 
@@ -45,10 +45,12 @@ export function GetApp() {
     doEffect,
     playersList,
     numberOfPlayer,
+    dice,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
 
+  //TODO: вынести отдельный модуль режима боя-?!
   const textPhase = () => {
     switch (gameState.type) {
       case "gameStarted.trownDice":
@@ -57,6 +59,34 @@ export function GetApp() {
         return "сделать ход";
       case "gameStarted.takeHealthCard":
         return "открываем карточку";
+      case "gameStarted.interactEnemyCard":
+        switch (doEffect?.type) {
+          case "!needOpenEnemyCard": {
+            return "открываем карточку";
+          }
+          case "!needThrowBattleDice": {
+            return "pежим боя: бросить кубик";
+          }
+          case "!needGetBattleResult": {
+            switch (dice) {
+              case 1:
+              case 2: {
+                return `выпало ${dice}: игрок спасается бегством `;
+              }
+              case 3: {
+                return `выпало ${dice}: игрок теряет 1 здоровье`;
+              }
+              case 4: {
+                return `выпало ${dice}: враг побежден`;
+              }
+              default:
+                return " ";
+            }
+          }
+          default:
+            return " ";
+        }
+
       case "endGame":
         return gameResult;
       default:
@@ -109,6 +139,13 @@ export function GetApp() {
           break;
         }
 
+        case "!needCheckApperanCeEnemyCard": {
+          dispatch({
+            type: "checkApperanCeEnemyCard",
+          });
+          break;
+        }
+
         case "!needOpenEnemyCard": {
           const timerOpen = setTimeout(
             () =>
@@ -119,6 +156,17 @@ export function GetApp() {
           );
           return () => {
             clearTimeout(timerOpen);
+          };
+        }
+
+        case "!needGetBattleResult": {
+          const timerGetResult = setTimeout(
+            () => dispatch({ type: "getBattleResult" }),
+            1000
+          );
+
+          return () => {
+            clearTimeout(timerGetResult);
           };
         }
 

@@ -74,7 +74,10 @@ export type TypeEffect =
   | { type: "!changePlayerHealth" }
   | { type: "!changeHealthList" }
   | { type: "!getNextPlayer" }
+  | { type: "!needCheckApperanCeEnemyCard" }
   | { type: "!needOpenEnemyCard" }
+  | { type: "!needThrowBattleDice" }
+  | { type: "!needGetBattleResult" }
   | null;
 
 export type State = {

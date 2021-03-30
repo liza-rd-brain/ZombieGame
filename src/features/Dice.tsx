@@ -36,7 +36,7 @@ export const Dice = () => {
       <DiceButton
         onClick={() => {
           dispath({
-            type: "diceThrown",
+            type: "diceIsThrown",
             payload: getNumber(),
           });
         }}

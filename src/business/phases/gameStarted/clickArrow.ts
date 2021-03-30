@@ -80,7 +80,7 @@ const getNewState = (
             gameState: {
               type: "gameStarted.interactEnemyCard",
             },
-            doEffect: { type: "!needOpenEnemyCard" },
+            doEffect: { type: "!needCheckApperanCeEnemyCard" },
             playersList: newPlayerList,
           };
           return newState;

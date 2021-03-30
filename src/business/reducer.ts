@@ -15,15 +15,18 @@ export type ActionType =
   | DiceThrownAction
   | ArrowPressAction
   | { type: "openedHealthCard" }
-  | { type: "openedEnemyCard" }
   | { type: "changedPlayerHealth" }
   | { type: "changedHealthList" }
   | { type: "receivedNextPlayer" }
+  | { type: "checkApperanCeEnemyCard" }
+  | { type: "openedEnemyCard" }
+  | { type: "throwBattleDice" }
+  | { type: "getBattleResult" }
   | { type: "getEndScreen" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 
-export type DiceThrownAction = { type: "diceThrown"; payload: number };
+export type DiceThrownAction = { type: "diceIsThrown"; payload: number };
 
 export const reducer = (
   state: State = initialState,
