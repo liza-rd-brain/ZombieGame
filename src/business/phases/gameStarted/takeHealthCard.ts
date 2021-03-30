@@ -134,7 +134,7 @@ const changePlayerHealth = (
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
     const sign = healthCell.cardItem.healthItem.type;
 
-    const currHealth = { ...playerList }[numberOfPlayer].health;
+    const currHealth = playerList[numberOfPlayer].health;
 
     const incHealth = currHealth + 1;
     const decHealth = currHealth - 1;

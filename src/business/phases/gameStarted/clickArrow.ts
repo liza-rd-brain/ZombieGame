@@ -61,6 +61,7 @@ const getNewState = (
 
       switch (true) {
         case hasHealthCell: {
+          // TODO: такой же state  в takeHealthCard после взятия карточки
           const newState: State = {
             ...state,
             dice: state.dice - 1,
@@ -91,7 +92,7 @@ const getNewState = (
             case true: {
               const newState: State = {
                 ...state,
-                dice: state.dice - 1,
+                dice: 0,
                 gameState: {
                   type: "gameStarted.getOrder",
                 },

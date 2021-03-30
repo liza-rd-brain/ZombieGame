@@ -68,10 +68,8 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
       switch (dice) {
         case 1:
         case 2: {
-          // Полностью пердать управление в clickArrow?!
+          // Полностью передать управление в clickArrow?!
           // dice=1 - убегает на 1
-          console.log("убежать от врага, нажать стрелку");
-
           return {
             ...state,
             dice: 1,
@@ -83,11 +81,57 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
         }
         case 3: {
           console.log("игрок теряет 1 здоровье");
-          return state;
+
+          const newPlayerHealth = playerList[numberOfPlayer].health - 1;
+          const isPlayerAlive = newPlayerHealth > 0 ? true : false;
+
+          const newPlayerList = {
+            ...playerList,
+            [numberOfPlayer]: {
+              ...playerList[numberOfPlayer],
+              health: playerList[numberOfPlayer].health - 1,
+            },
+          };
+
+          if (isPlayerAlive) {
+            const newState: State = {
+              ...state,
+              dice: 0,
+              gameState: {
+                type: "gameStarted.getOrder",
+              },
+              doEffect: {
+                type: "!getNextPlayer",
+              },
+              playersList: newPlayerList,
+            };
+
+            return newState;
+          } else {
+            console.log(`игрок №${numberOfPlayer} погиб`);
+            return {
+              ...state,
+              gameState: { type: "endGame" },
+              gameResult: "Вы проиграли",
+              doEffect: null,
+            };
+          }
         }
+
         case 4: {
-          console.log("враг побежден");
-          return state;
+          const newEnemiesList = { ...enemiesCardList };
+          delete newEnemiesList[currentCoord];
+          return {
+            ...state,
+            enemiesList: newEnemiesList,
+            dice: 0,
+            gameState: {
+              type: "gameStarted.getOrder",
+            },
+            doEffect: {
+              type: "!getNextPlayer",
+            },
+          };
         }
         default:
           return state;
