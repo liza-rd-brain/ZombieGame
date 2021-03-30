@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-import { EnemiesCardType } from "../business/types";
+import { EnemyCardType } from "../business/types";
 
 type EnemiesArray = {
-  list: EnemiesCardType[];
+  list: EnemyCardType[];
 };
 
-const EnemyCard = styled.div<EnemiesCardType>`
+const EnemyCard = styled.div<EnemyCardType>`
   border: 5px solid;
 
   background-color: ${(props) => {

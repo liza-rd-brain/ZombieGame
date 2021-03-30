@@ -1,7 +1,7 @@
 import {
   CommonCell,
   State,
-  EnemiesCardType,
+  EnemyCardType,
   EnemiesListType,
 } from "../../types";
 
@@ -31,7 +31,7 @@ const openEnemyCard = (
   coord: string
 ): EnemiesListType => {
   const currEnemyCard = enemiesList[coord];
-  const openedEnemyCard: EnemiesCardType = {
+  const openedEnemyCard: EnemyCardType = {
     ...currEnemyCard,
     apperance: "open",
   };

@@ -12,7 +12,7 @@ import {
   PlayersListType,
   HealthCell,
   EnemiesListType,
-  EnemiesCardType,
+  EnemyCardType,
 } from "../types";
 
 export const START_COORD = { hor: 0, vert: 0 };
