@@ -25,4 +25,4 @@ yarn-error.log*
 *.ini
 dist
 
-.example
+example
