@@ -37,7 +37,6 @@ const EnemiesCardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: absolute;
-  z-index: 1;
   font-size: 10px;
 `;
 

@@ -75,18 +75,11 @@ export function GetApp() {
               }),
             1000
           );
-          break;
+          return () => {
+            clearTimeout(timerOpen);
+          };
         }
-        case "!needOpenEnemyCard": {
-          const timerOpen = setTimeout(
-            () =>
-              dispatch({
-                type: "openedEnemyCard",
-              }),
-            1000
-          );
-          break;
-        }
+
         case "!changePlayerHealth": {
           const timerChangePlayerHealth = setTimeout(
             () =>
@@ -95,7 +88,9 @@ export function GetApp() {
               }),
             500
           );
-          break;
+          return () => {
+            clearTimeout(timerChangePlayerHealth);
+          };
         }
         case "!changeHealthList": {
           const timerChangeHealthList = setTimeout(
@@ -105,11 +100,26 @@ export function GetApp() {
               }),
             500
           );
-          break;
+          return () => {
+            clearTimeout(timerChangeHealthList);
+          };
         }
         case "!getNextPlayer": {
           dispatch({ type: "receivedNextPlayer" });
           break;
+        }
+
+        case "!needOpenEnemyCard": {
+          const timerOpen = setTimeout(
+            () =>
+              dispatch({
+                type: "openedEnemyCard",
+              }),
+            1000
+          );
+          return () => {
+            clearTimeout(timerOpen);
+          };
         }
 
         default:
