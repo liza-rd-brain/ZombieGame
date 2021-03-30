@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, GameList } from "./business/types";
+import { State, PlayersListType } from "./business/types";
 import { store } from "./business/store";
 
 const Field = styled.div`
@@ -37,33 +37,14 @@ const Status = styled.div`
   min-height: 18px;
 `;
 
-const showPlayerListHealth = (
-  gameList: GameList,
-  cardInteractIndex: string[]
-): (null | number)[] => {
-  //TODO:не сразу понятно, что делает функция, постоянно перезапускается
-  const healthArray = cardInteractIndex.map((orderNumber, index) => {
-    const cardElem = gameList.get(orderNumber);
-
-    if (cardElem && cardElem.name != "wall" && cardElem.cardItem.playerList) {
-      const playerElem = cardElem.cardItem.playerList.find((item) => {
-        return item.orderNumber === index;
-      });
-      return playerElem ? playerElem?.health : null;
-    } else {
-      return null;
-    }
-  });
-  return healthArray;
-};
-
 export function GetApp() {
   const {
     gameState,
     gameResult,
-    cardInteractIndex,
-    GameList,
+    gameField,
     doEffect,
+    playersList,
+    numberOfPlayer,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -91,6 +72,16 @@ export function GetApp() {
             () =>
               dispatch({
                 type: "openedHealthCard",
+              }),
+            1000
+          );
+          break;
+        }
+        case "!needOpenEnemyCard": {
+          const timerOpen = setTimeout(
+            () =>
+              dispatch({
+                type: "openedEnemyCard",
               }),
             1000
           );
@@ -146,6 +137,34 @@ export function GetApp() {
     [gameState.type]
   );
 
+  const getPlayersHealthList = () => {
+    const playerArray = Object.entries(playersList);
+    const healthArray = playerArray.map((player) => {
+      const [, playerValue] = player;
+      return playerValue.health;
+    });
+
+    return healthArray.toString();
+  };
+
+  const getPlayerListCoord = () => {
+    const playerArray = Object.entries(playersList);
+    const coordArray = playerArray.map((player) => {
+      const [, playerValue] = player;
+      return playerValue.coord;
+    });
+
+    return coordArray.toString();
+  };
+
+  const playersHealthList = useMemo(() => getPlayersHealthList(), [
+    playersList[numberOfPlayer].health,
+  ]);
+
+  const playersCoordList = useMemo(() => getPlayerListCoord(), [
+    playersList[numberOfPlayer].coord,
+  ]);
+
   const getGameScreen = () => {
     switch (gameState.type) {
       case "waitingStart":
@@ -162,13 +181,9 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <Status>{textPhase()}</Status>
-              {
-                <Status>{`здоровье: ${showPlayerListHealth(
-                  GameList,
-                  cardInteractIndex
-                ).toString()}`}</Status>
-              }
-              <Status>{`координаты: ${cardInteractIndex}`}</Status>
+              <Status>{`здоровье: ${playersHealthList}`}</Status>
+              <Status>{`координаты: ${playersCoordList}`}</Status>
+
               <Dice />
               <MoveControls />
             </LeftPanel>

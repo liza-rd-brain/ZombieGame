@@ -2,21 +2,26 @@ import {
   StartCell,
   HealthItemTypeArr,
   CoordItem,
-  ObjFieldItem,
+  CommonCell,
   FinishCell,
   WallItem,
-  GameList,
-  ObjCellType,
   HealthItemType,
   State,
+  GameValues,
+  HealthCardType,
+  PlayersListType,
+  HealthCell,
+  EnemiesListType,
+  EnemiesCardType,
 } from "../types";
 
-export const Start_Coord = { hor: 0, vert: 0 };
-export const End_Coord = { hor: 9, vert: 9 };
-export const Initial_Player_Health = 3;
-export const Amount_Health_Items = 30;
-export const Amount_Players = 4;
-export const Wall_List: Array<CoordItem> = [
+export const START_COORD = { hor: 0, vert: 0 };
+export const FINISH_COORD = { hor: 9, vert: 9 };
+export const INITIAL_PLAYER_HEALTH = 3;
+export const AMOUNT_HEALTH_ITEMS = 0; /* 30; */
+export const AMOUNT_PLAYERS = 1; /* 6 */
+export const AMOUNT_ENEMIES = 1;
+export const WALLS_COORD: Array<CoordItem> = [
   { hor: 2, vert: 2 },
   { hor: 3, vert: 2 },
   { hor: 4, vert: 2 },
@@ -26,17 +31,57 @@ export const Wall_List: Array<CoordItem> = [
   { hor: 3, vert: 4 },
   { hor: 4, vert: 4 },
 ];
-export const Health_Item_Type_Arr: HealthItemTypeArr = [
+export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
   "increment",
   "decrement",
 ];
 
-const createGameField = (number: number, End_Coord: CoordItem): any => {
-  const width = End_Coord.hor;
-  const height = End_Coord.vert;
+const enemies = {
+  "0": {
+    name: "enemy",
+    power: 1,
+    orderNumber: 0,
+    coord: "1.1",
+  },
+};
 
-  const emptyFieldItem: ObjFieldItem = {
-    name: "field",
+const getCellOrder = (): Array<string> => {
+  const width = FINISH_COORD.hor;
+  const height = FINISH_COORD.vert;
+
+  let orderList: Array<string> = [];
+
+  for (let hor = 0; hor <= width; hor++) {
+    for (let vert = 0; vert <= height; vert++) {
+      const index: string = `${hor}.${vert}`;
+      orderList.push(index);
+    }
+  }
+
+  return orderList;
+};
+
+const createEmptyGameField = (cellList: Array<string>): GameValues => {
+  const emptyFieldItem: CommonCell = {
+    name: "commonCell",
+    cardItem: {},
+  };
+
+  let newEmptyGameField: GameValues = {};
+
+  cellList.map((cell: string) => {
+    newEmptyGameField[cell] = emptyFieldItem;
+  });
+
+  return newEmptyGameField;
+};
+
+const organizeGameField = (emptyField: GameValues): GameValues => {
+  const startIndex = `${START_COORD.hor}.${START_COORD.vert}`;
+  const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
+
+  const startCell: StartCell = {
+    name: "start",
     cardItem: {},
   };
 
@@ -45,165 +90,166 @@ const createGameField = (number: number, End_Coord: CoordItem): any => {
     cardItem: {},
   };
 
-  const Start_Coord: StartCell = {
-    name: "start",
-    cardItem: {},
+  const wallItem: WallItem = {
+    name: "wall",
   };
 
-  const emptyMap = new Map();
-
-  for (let hor = 0; hor <= width; hor++) {
-    for (let vert = 0; vert <= height; vert++) {
-      const hasFinish = width === hor && height === vert;
-      const hasStart = hor === 0 && vert === 0;
-      const wallCell = Wall_List.find((item) => {
-        return item.hor === hor && item.vert === vert;
-      });
-      const hasWall = wallCell ? true : false;
-      switch (true) {
-        case hasWall: {
-          const wallItem: WallItem = {
-            name: "wall",
-          };
-          emptyMap.set(`${hor}.${vert}`, wallItem);
-          break;
-        }
-
-        case hasFinish: {
-          emptyMap.set(`${hor}.${vert}`, finishCell);
-          break;
-        }
-
-        case hasStart: {
-          emptyMap.set(`${hor}.${vert}`, Start_Coord);
-          break;
-        }
-
-        default:
-          emptyMap.set(`${hor}.${vert}`, emptyFieldItem);
-      }
-    }
-  }
-
-  return emptyMap;
-};
-
-const takeItemForCard = (lenght: number, maxNumber: number): Number[] => {
-  //TODO: разобраться с комментарием ниже
-  //массив из 30 неповторяющихся индексов карточек
-  return new Array(lenght).fill(0).reduce((prev, item) => {
-    const number = getRandomNumber(prev);
-    if (prev) {
-      return [number, ...prev];
-    } else {
-      return [number];
-    }
-
-    function getRandomNumber(arr: Number[]): Number {
-      const number = Math.floor(Math.random() * maxNumber);
-      const repeat: Boolean =
-        prev && prev.find((item: Number) => item === number) >= 0;
-      if (repeat) {
-        return getRandomNumber(prev);
-      } else {
-        return number;
-      }
-    }
+  const wallList = WALLS_COORD.map((wallCoord) => {
+    return [`${wallCoord.hor}.${wallCoord.vert}`, wallItem];
   });
+
+  /*    Object.fromEntries удобно использовать для наглядности
+   чтобы ни непонятно откуда была мутация
+  а прозрачное изменение св-в объекта */
+
+  const wallCells: GameValues = Object.fromEntries(wallList);
+
+  const organizedGameField = {
+    ...emptyField,
+    ...wallCells,
+    [startIndex]: startCell,
+    [finishIndex]: finishCell,
+  };
+
+  return organizedGameField;
 };
 
-const spreadCards = (initialField: GameList) => {
-  const arrayGameField: [string, ObjCellType][] = Array.from(initialField);
-  const emptyItems: [string, ObjCellType][] = arrayGameField.filter(
-    (innerArr) => {
-      return innerArr.find((cell) => {
-        //только один объект в ячейке
-        return cell instanceof Object && cell.name === "field";
-      });
+const getRandomNumber = (
+  arrNumber: Array<number>,
+  maxNumber: number
+): number => {
+  const number = Math.floor(Math.random() * 90);
+
+  if (arrNumber) {
+    return arrNumber.includes(number)
+      ? getRandomNumber(arrNumber, maxNumber)
+      : number;
+  } else {
+    return number;
+  }
+};
+
+const getListForCards = (gameField: GameValues): [string, CommonCell][] => {
+  const listGameField = Object.entries(gameField);
+  const emptyCellsList = listGameField.filter((cellItem): cellItem is [
+    string,
+    CommonCell
+  ] => {
+    const [index, item] = cellItem;
+    return item.name === "commonCell";
+  });
+
+  const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
+
+  const keyList: Array<number> = new Array(AMOUNT_HEALTH_ITEMS)
+    .fill(0)
+    .reduce((prevkeyList) => {
+      const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);
+
+      if (prevkeyList) {
+        return [...prevkeyList, randomNumber];
+      } else {
+        return [randomNumber];
+      }
+    }, []);
+
+  const listForCards = keyList.map((keyItem: number): [string, CommonCell] => {
+    return emptyCellsList[keyItem];
+  });
+
+  return listForCards;
+};
+
+const setHealthCards = (
+  cellList: [string, CommonCell][],
+  gameField: GameValues
+): GameValues => {
+  const cellListWithCards = cellList.map(
+    (cellWithCards: [string, CommonCell]) => {
+      const [index, cell] = cellWithCards;
+
+      const healthItem: HealthCardType = {
+        name: "health",
+        type: getRandomType(),
+        apperance: "closed",
+      };
+
+      const cellWithCard: HealthCell = {
+        ...cell,
+        cardItem: { ...cell.cardItem, healthItem },
+      };
+      return [index, cellWithCard];
     }
   );
 
-  const maxRandomNumber = emptyItems.length;
+  const gameFieldWithCards = Object.fromEntries(cellListWithCards);
+  const gameFieldFull = { ...gameField, ...gameFieldWithCards };
 
-  const indexArray: Number[] = takeItemForCard(
-    Amount_Health_Items,
-    maxRandomNumber
-  );
-
-  function getRandomType(): HealthItemType {
-    return Health_Item_Type_Arr[Math.floor(Math.random() * 2)];
-  }
-
-  const itemsWithHealth = emptyItems.map((item, index) => {
-    const cardWithHealth = indexArray.find((indexItem) => indexItem === index);
-
-    if (cardWithHealth) {
-      const [index, value] = item;
-
-      if (value.name === "field") {
-        const healthCell: ObjCellType = {
-          ...value,
-          cardItem: {
-            ...value.cardItem,
-            healthItem: {
-              name: "health",
-              type: getRandomType(),
-              apperance: "closed",
-            },
-          },
-        };
-        // TODO: assertion будет исправлен с заменой структуры GameField на объект
-        return [index, healthCell] as [string, ObjCellType];
-      } else {
-        return item;
-      }
-    } else {
-      return item;
-    }
-  });
-
-  const fullGameField = [...arrayGameField, ...itemsWithHealth];
-  const fullMapGameField = new Map(fullGameField);
-  return fullMapGameField;
+  return gameFieldFull;
 };
 
-const addPlayerCards = (fieild: GameList) => {
-  const startIndex = `${Start_Coord.hor}.${Start_Coord.vert}`;
-  const startCard: ObjCellType = {
-    name: "field",
-    cardItem: {
-      playerList: new Array(Amount_Players).fill(0).map((item, index) => {
-        return {
-          name: "player",
-          health: Initial_Player_Health,
-          orderNumber: index,
-        };
-      }),
-    },
-  };
-
-  fieild.set(startIndex, startCard);
-  return fieild;
+const getRandomType = (): HealthItemType => {
+  return HEALTH_ITEM_TYPE_ARR[Math.floor(Math.random() * 2)];
 };
 
-const getGameList = (
-  Amount_Health_Items: number,
-  Wall_List: Array<CoordItem>,
-  End_Coord: CoordItem
-) => {
+const spreadHealthCards = (gameField: GameValues): GameValues => {
   /**
-   *1. @createGameField создаст пустую Map со стенами, стартом, финишем
-   *2. @spreadCards  вернет Map c разложенными карточками здоровья
-   *3. @addPlayerCards возвращает Map c карточками игроков на стартовой позиции
+   * 1. cellsForCards вернет список ячеек для карточек
+   * 2. setHealthCardsразложим на них карточки здоровья
    */
 
-  const emptyGameField: GameList = createGameField(
-    Amount_Health_Items,
-    End_Coord
-  );
-  const filledCardsField: GameList = spreadCards(emptyGameField);
-  const fullPreparedField = addPlayerCards(filledCardsField);
-  return fullPreparedField;
+  const cellsForCards = getListForCards(gameField);
+  const filledGameField = setHealthCards(cellsForCards, gameField);
+  return filledGameField;
+};
+
+const getNewGameField = () => {
+  /**
+   * 1. getCellOrder создаст массив с порядком ячеек
+   * 2. createEmptyGameField вернет объект поле заполненное ключами и пустыми ячейками
+   * 3. organizeGameField вернет объеет поле со стартом, фишием, стенами
+   * 4. spreadHealthCards вернет объеет поле с разложенными карточками здоровья
+   *
+   */
+  const order = getCellOrder();
+  const newEmptyGameField = createEmptyGameField(order);
+  const newOrganizedGameField = organizeGameField(newEmptyGameField);
+  const fullPreparedGameField = spreadHealthCards(newOrganizedGameField);
+
+  const gameFieldWithList = { order, values: fullPreparedGameField };
+  return gameFieldWithList;
+};
+
+const getPlayers = (): PlayersListType => {
+  const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
+    const playerCard = {
+      name: "player",
+      health: INITIAL_PLAYER_HEALTH,
+      orderNumber: index,
+      coord: "0.0",
+    };
+    return [index, playerCard];
+  });
+
+  const playersObj: PlayersListType = Object.fromEntries(playersList);
+  return playersObj;
+};
+
+const getEnemies = (): EnemiesListType => {
+  //Добавить сначала рандомный массив с коорлинатами пустых ячеек
+  const enemiesList = new Array(AMOUNT_ENEMIES).fill(0).map((enemy, index) => {
+    const enemyCard = {
+      name: "enemy",
+      power: 1,
+      coord: "1.1",
+      apperance: "closed",
+    };
+    //ключ=координата
+    return [enemyCard.coord, enemyCard];
+  });
+
+  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
+  return enemiesObj;
 };
 
 const getInitialState = (): State => {
@@ -211,10 +257,9 @@ const getInitialState = (): State => {
     gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
-    cardInteractIndex: new Array(Amount_Players).fill(0).map(() => {
-      return `${Start_Coord.hor}.${Start_Coord.vert}`;
-    }),
-    GameList: getGameList(Amount_Health_Items, Wall_List, End_Coord),
+    playersList: getPlayers(),
+    enemiesList: getEnemies(),
+    gameField: getNewGameField(),
     doEffect: null,
     numberOfPlayer: 0,
   };

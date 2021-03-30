@@ -1,10 +1,8 @@
-import React from "react";
-
 import styled from "styled-components";
 
-import { HealthItem } from "../business/types";
+import { HealthCardType } from "../business/types";
 
-const HealthCard = styled.div<HealthItem>`
+const StyledHealthCard = styled.div<HealthCardType>`
   border: 5px solid;
 
   background-color: ${(props) => {
@@ -45,12 +43,6 @@ const HealthCard = styled.div<HealthItem>`
   left: 5px;
 `;
 
-export const Health = (props: HealthItem) => {
-  return (
-    <HealthCard
-      name="health"
-      type={props.type}
-      apperance={props.apperance}
-    ></HealthCard>
-  );
+export const Health = (props: HealthCardType) => {
+  return <StyledHealthCard {...props} />;
 };

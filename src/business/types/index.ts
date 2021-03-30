@@ -10,84 +10,96 @@ export type WallItem = {
   name: "wall";
 };
 
-export type PlayerItem = {
+export type PlayersCardType = {
   name: "player";
   health: number;
   orderNumber: number;
+  coord: string;
 };
 
-export type PlayerList = PlayerItem[];
+export type PlayersListType = Record<string, PlayersCardType>;
+
+export type EnemiesCardType = {
+  name: "enemy";
+  power: number;
+  coord: string;
+  apperance: "closed" | "open";
+};
+
+export type EnemiesListType = Record<string, EnemiesCardType>;
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { playerList?: PlayerList };
+  cardItem: { playerList?: PlayersCardType[] };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayerList };
+  cardItem: { playerList?: PlayersCardType[] };
 };
 
-export type HealthItem = {
+export type HealthCardType = {
   name: "health";
   type: HealthItemType;
   apperance: "closed" | "open";
 };
 
-export type CardInteract = PlayerList | HealthItem;
-
-export type ObjHealthItem = {
-  hor: number;
-  vert: number;
-  name: "field";
-  cardItem: { healthItem: HealthItem };
+// TODO: нужен ли отдельный тип, похоже на переусложнение
+export type HealthCell = {
+  name: "commonCell";
+  cardItem: { healthItem: HealthCardType };
 };
 
-export type PlayerAndHealthFieldItem = {
-  name: "field";
-  cardItem: { playerList: PlayerList; healthItem: HealthItem };
+export type CommonCell = {
+  name: "commonCell";
+  cardItem: { healthItem?: HealthCardType };
 };
 
-export type ObjFieldItem = {
-  name: "field";
-  cardItem: { playerList?: PlayerList; healthItem?: HealthItem };
+export type CellType =
+  | CommonCell
+  | WallItem
+  | FinishCell
+  | StartCell
+  | HealthCell;
+
+export type GameField = {
+  order: Array<string>;
+  values: GameValues;
 };
 
-export type ObjCellType = ObjFieldItem | WallItem | FinishCell | StartCell;
-
-export type GameList = Map<string, ObjCellType>;
+export type GameValues = Record<string, CellType>;
 
 export type TypeEffect =
   | { type: "!needOpenHealthCard" }
   | { type: "!changePlayerHealth" }
   | { type: "!changeHealthList" }
   | { type: "!getNextPlayer" }
+  | { type: "!needOpenEnemyCard" }
   | null;
 
 export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  cardInteractIndex: string[];
-  GameList: GameList;
+  playersList: PlayersListType;
+  enemiesList: EnemiesListType;
+  gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
 };
 
 export type GameState =
   | { type: "waitingStart" }
-  | { type: "gameStarted.trownDice"; context: any; gameStartedContext: any }
+  | { type: "gameStarted.trownDice" }
   | {
       type: "gameStarted.clickArrow";
-      gameStartedContext: any;
-      context: any;
     }
   | openHealthCardType
+  | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }
-  | { type: "endGame"; context: any }
-  | { type: "getEndScreen"; context: any };
+  | { type: "endGame" }
+  | { type: "getEndScreen" };
 
 export type openHealthCardType = {
   type: "gameStarted.takeHealthCard";
-  context: any;
 };
