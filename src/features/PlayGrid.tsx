@@ -64,16 +64,6 @@ function getCell(cell: CellType) {
   }
 }
 
-const getPlayer = (index: string, playersList: PlayersListType) => {
-  for (let playerKey in playersList) {
-    const playerCard = playersList[playerKey];
-    const playerCoord = playerCard.coord;
-    if (playerCoord == index) {
-      return <Player item={playerCard} />;
-    }
-  }
-};
-
 const getPlayersList = (index: string, playersList: PlayersListType) => {
   let playersArr: PlayerCardType[] = [];
   for (let playerKey in playersList) {
@@ -138,8 +128,6 @@ function getFullPlayGrid(
           <CellItem key={`${hor}${vert}`}>
             {getCell(cellValues)}
             {getPlayersList(orderIndex, playersList)}
-            {/*  {getPlayer(orderIndex, playersList)} */}
-
             {getEnemiesList(orderIndex, enemiesList)}
 
             {hor}

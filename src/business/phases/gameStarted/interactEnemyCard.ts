@@ -46,12 +46,6 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
       };
     }
 
-    /**
-     * 1,2 -убежал
-     * 3 - потерял 1 ед здоровья
-     * 4 - убил врага
-     */
-
     case "diceIsThrown": {
       const dice = action.payload;
       console.log(dice);

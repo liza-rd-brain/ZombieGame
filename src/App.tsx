@@ -52,6 +52,7 @@ export function GetApp() {
 
   //TODO: вынести отдельный модуль режима боя-?!
   const textPhase = () => {
+    
     switch (gameState.type) {
       case "gameStarted.trownDice":
         return "бросить кубик";
@@ -216,6 +217,7 @@ export function GetApp() {
   };
 
   const playersHealthList = useMemo(() => getPlayersHealthList(), [
+    // TODO: вынести в константу зависимости
     playersList[numberOfPlayer].health,
   ]);
 
