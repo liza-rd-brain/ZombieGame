@@ -1,9 +1,4 @@
-import {
-  CommonCell,
-  State,
-  EnemiesCardType,
-  EnemiesListType,
-} from "../../types";
+import { CommonCell, State, EnemyCardType, EnemiesListType } from "../../types";
 
 import { ActionType } from "../../reducer";
 
@@ -12,12 +7,129 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
   const playerList = state.playersList;
   const numberOfPlayer = state.numberOfPlayer;
   const currentCoord = playerList[numberOfPlayer].coord;
-  /*   const currEnemy = enemiesCardList[currentCoord]; */
 
   switch (action.type) {
+    case "checkApperanCeEnemyCard": {
+      const isNeedOpenEnemyCard =
+        enemiesCardList[currentCoord].apperance === "open" ? false : true;
+
+      switch (true) {
+        case isNeedOpenEnemyCard: {
+          return {
+            ...state,
+            doEffect: { type: "!needOpenEnemyCard" },
+          };
+        }
+
+        case !isNeedOpenEnemyCard: {
+          return {
+            ...state,
+            doEffect: { type: "!needThrowBattleDice" },
+            dice: 0,
+          };
+        }
+
+        default: {
+          return state;
+        }
+      }
+    }
     case "openedEnemyCard": {
       const newEnemiesList = openEnemyCard(enemiesCardList, currentCoord);
-      return { ...state, enemiesList: newEnemiesList };
+
+      return {
+        ...state,
+        enemiesList: newEnemiesList,
+        //для отрисовки статуса!
+        doEffect: { type: "!needThrowBattleDice" },
+        dice: 0,
+      };
+    }
+
+    case "diceIsThrown": {
+      const dice = action.payload;
+      console.log(dice);
+      return {
+        ...state,
+        dice: action.payload,
+        doEffect: { type: "!needGetBattleResult" },
+      };
+    }
+
+    case "getBattleResult": {
+      const dice = state.dice;
+
+      switch (dice) {
+        case 1:
+        case 2: {
+          // Полностью передать управление в clickArrow?!
+          // dice=1 - убегает на 1
+          return {
+            ...state,
+            dice: 1,
+            gameState: {
+              ...state,
+              type: "gameStarted.clickArrow",
+            },
+          };
+        }
+        case 3: {
+          console.log("игрок теряет 1 здоровье");
+
+          const newPlayerHealth = playerList[numberOfPlayer].health - 1;
+          const isPlayerAlive = newPlayerHealth > 0 ? true : false;
+
+          const newPlayerList = {
+            ...playerList,
+            [numberOfPlayer]: {
+              ...playerList[numberOfPlayer],
+              health: playerList[numberOfPlayer].health - 1,
+            },
+          };
+
+          if (isPlayerAlive) {
+            const newState: State = {
+              ...state,
+              dice: 0,
+              gameState: {
+                type: "gameStarted.getOrder",
+              },
+              doEffect: {
+                type: "!getNextPlayer",
+              },
+              playersList: newPlayerList,
+            };
+
+            return newState;
+          } else {
+            console.log(`игрок №${numberOfPlayer} погиб`);
+            return {
+              ...state,
+              gameState: { type: "endGame" },
+              gameResult: "Вы проиграли",
+              doEffect: null,
+            };
+          }
+        }
+
+        case 4: {
+          const newEnemiesList = { ...enemiesCardList };
+          delete newEnemiesList[currentCoord];
+          return {
+            ...state,
+            enemiesList: newEnemiesList,
+            dice: 0,
+            gameState: {
+              type: "gameStarted.getOrder",
+            },
+            doEffect: {
+              type: "!getNextPlayer",
+            },
+          };
+        }
+        default:
+          return state;
+      }
     }
 
     default: {
@@ -31,50 +143,10 @@ const openEnemyCard = (
   coord: string
 ): EnemiesListType => {
   const currEnemyCard = enemiesList[coord];
-  const openedEnemyCard: EnemiesCardType = {
+  const openedEnemyCard: EnemyCardType = {
     ...currEnemyCard,
     apperance: "open",
   };
 
   return { ...enemiesList, [coord]: openedEnemyCard };
 };
-
-/* const changeHealthList = (healthCell: CellType): CellType => {
-  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
-    const { healthItem, ...otherCardItem } = healthCell.cardItem;
-
-    const cellWithoutHealth: CommonCell = {
-      ...healthCell,
-      cardItem: { ...otherCardItem },
-    };
-    return cellWithoutHealth;
-  } else return healthCell;
-}; */
-
-/* const changePlayerHealth = (
-  healthCell: CellType,
-  playerList: PlayersListType,
-  numberOfPlayer: number
-) => {
-  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
-    const sign = healthCell.cardItem.healthItem.type;
-
-    const currHealth = { ...playerList }[numberOfPlayer].health;
-
-    const incHealth = currHealth + 1;
-    const decHealth = currHealth - 1;
-
-    const changedPlayerList: PlayersListType = {
-      ...playerList,
-      [numberOfPlayer]: {
-        ...playerList[numberOfPlayer],
-        health: sign === "decrement" ? decHealth : incHealth,
-      },
-    };
-
-    return changedPlayerList;
-  } else {
-    return playerList;
-  }
-};
- */

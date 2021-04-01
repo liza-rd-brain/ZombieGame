@@ -1,6 +1,5 @@
 import {
   CommonCell,
-  openHealthCardType,
   HealthCell,
   State,
   GameField,
@@ -51,7 +50,6 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
     }
 
     case "changedHealthList": {
-      /*  const isPlayerAlive = healthCell.cardItem.playerList[0].health > 0; */
       const isPlayerAlive = playerList[numberOfPlayer].health > 0;
       const cellWithoutHealthCard = changeHealthList(healthCell);
 
@@ -136,7 +134,7 @@ const changePlayerHealth = (
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
     const sign = healthCell.cardItem.healthItem.type;
 
-    const currHealth = { ...playerList }[numberOfPlayer].health;
+    const currHealth = playerList[numberOfPlayer].health;
 
     const incHealth = currHealth + 1;
     const decHealth = currHealth - 1;

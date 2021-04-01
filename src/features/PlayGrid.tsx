@@ -3,21 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
-import {
-  Player,
-  PlayerList,
-  Health,
-  Wall,
-  /* Enemy, */
-  EnemiesList,
-} from "../components";
+import { Player, PlayerList, Health, Wall, EnemiesList } from "../components";
 import {
   CellType,
   GameField,
   PlayersListType,
-  PlayersCardType,
+  PlayerCardType,
   EnemiesListType,
-  EnemiesCardType,
+  EnemyCardType,
 } from "../business/types";
 import { FINISH_COORD } from "../business/initialState";
 import { State } from "../business/types";
@@ -71,18 +64,8 @@ function getCell(cell: CellType) {
   }
 }
 
-const getPlayer = (index: string, playersList: PlayersListType) => {
-  for (let playerKey in playersList) {
-    const playerCard = playersList[playerKey];
-    const playerCoord = playerCard.coord;
-    if (playerCoord == index) {
-      return <Player item={playerCard} />;
-    }
-  }
-};
-
 const getPlayersList = (index: string, playersList: PlayersListType) => {
-  let playersArr: PlayersCardType[] = [];
+  let playersArr: PlayerCardType[] = [];
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
@@ -96,7 +79,7 @@ const getPlayersList = (index: string, playersList: PlayersListType) => {
 };
 
 const getEnemiesList = (index: string, enemiesList: EnemiesListType) => {
-  let enemiesArr: EnemiesCardType[] = [];
+  let enemiesArr: EnemyCardType[] = [];
   for (let enemiesKey in enemiesList) {
     const enemiesCard = enemiesList[enemiesKey];
     const enemiesCoord = enemiesCard.coord;
@@ -145,8 +128,6 @@ function getFullPlayGrid(
           <CellItem key={`${hor}${vert}`}>
             {getCell(cellValues)}
             {getPlayersList(orderIndex, playersList)}
-            {/*  {getPlayer(orderIndex, playersList)} */}
-
             {getEnemiesList(orderIndex, enemiesList)}
 
             {hor}

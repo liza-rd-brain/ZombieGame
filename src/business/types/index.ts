@@ -10,32 +10,32 @@ export type WallItem = {
   name: "wall";
 };
 
-export type PlayersCardType = {
+export type PlayerCardType = {
   name: "player";
   health: number;
   orderNumber: number;
   coord: string;
 };
 
-export type PlayersListType = Record<string, PlayersCardType>;
+export type PlayersListType = Record<string, PlayerCardType>;
 
-export type EnemiesCardType = {
+export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
   apperance: "closed" | "open";
 };
 
-export type EnemiesListType = Record<string, EnemiesCardType>;
+export type EnemiesListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { playerList?: PlayersCardType[] };
+  cardItem: { playerList?: PlayerCardType[] };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayersCardType[] };
+  cardItem: { playerList?: PlayerCardType[] };
 };
 
 export type HealthCardType = {
@@ -74,7 +74,10 @@ export type TypeEffect =
   | { type: "!changePlayerHealth" }
   | { type: "!changeHealthList" }
   | { type: "!getNextPlayer" }
+  | { type: "!needCheckApperanCeEnemyCard" }
   | { type: "!needOpenEnemyCard" }
+  | { type: "!needThrowBattleDice" }
+  | { type: "!needGetBattleResult" }
   | null;
 
 export type State = {
