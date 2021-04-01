@@ -2,7 +2,6 @@ import {
   MoveDirection,
   CellType,
   State,
-  GameField,
   PlayersListType,
 } from "../../types";
 import { ActionType } from "../../reducer";

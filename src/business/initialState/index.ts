@@ -59,7 +59,7 @@ const createEmptyGameField = (cellList: Array<string>): GameValues => {
 
   let newEmptyGameField: GameValues = {};
 
-  cellList.map((cell: string) => {
+  cellList.forEach((cell: string) => {
     newEmptyGameField[cell] = emptyFieldItem;
   });
 
@@ -125,7 +125,7 @@ const getListForCards = (gameField: GameValues): [string, CommonCell][] => {
     string,
     CommonCell
   ] => {
-    const [index, item] = cellItem;
+    const [, item] = cellItem;
     return item.name === "commonCell";
   });
 

@@ -1,9 +1,9 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { Player, PlayerList, Health, Wall, EnemiesList } from "../components";
+import { PlayerList, Health, Wall, EnemiesList } from "../components";
 import {
   CellType,
   GameField,
@@ -69,7 +69,7 @@ const getPlayersList = (index: string, playersList: PlayersListType) => {
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
-    if (playerCoord == index) {
+    if (playerCoord === index) {
       playersArr.push(playersList[playerKey]);
     }
   }
@@ -83,7 +83,7 @@ const getEnemiesList = (index: string, enemiesList: EnemiesListType) => {
   for (let enemiesKey in enemiesList) {
     const enemiesCard = enemiesList[enemiesKey];
     const enemiesCoord = enemiesCard.coord;
-    if (enemiesCoord == index) {
+    if (enemiesCoord === index) {
       enemiesArr.push(enemiesList[enemiesKey]);
     }
   }
@@ -147,7 +147,7 @@ export const PlayGrid = () => {
       ...state,
     })
   );
-  const { hor: maxHor, vert: maxVert } = FINISH_COORD;
+  const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
   const playerGrid = (
     <GridItem vert={height}>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { PlayerCardType } from "../business/types";
 
-type Player = {
+type PlayerItem = {
   item: PlayerCardType;
 };
 
@@ -32,8 +32,8 @@ const PlayerCardList = styled.div`
   color: green;
 `;
 
-export const Player = (props: Player) => {
-  const { name, health, orderNumber, coord } = props.item;
+export const Player = (props: PlayerItem) => {
+  const {orderNumber, coord } = props.item;
   return (
     <PlayerCardList>
       <PlayerCard key={coord}>{orderNumber}</PlayerCard>

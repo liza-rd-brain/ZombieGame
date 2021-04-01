@@ -8,7 +8,7 @@ import {
   interactEnemyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State, openHealthCardType } from "./types";
+import { MoveDirection, State } from "./types";
 
 export type ActionType =
   | { type: "clickStartButton" }

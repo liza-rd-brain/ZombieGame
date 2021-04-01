@@ -1,4 +1,4 @@
-import { CommonCell, State, EnemyCardType, EnemiesListType } from "../../types";
+import { State, EnemyCardType, EnemiesListType } from "../../types";
 
 import { ActionType } from "../../reducer";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 
 import { State } from "../business/types";
 

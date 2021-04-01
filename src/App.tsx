@@ -5,8 +5,9 @@ import styled from "styled-components";
 
 import { PlayGrid, MoveControls, Dice } from "./features";
 import { StartScreen, EndScreen } from "./pages";
-import { State, PlayersListType } from "./business/types";
+import { State } from "./business/types";
 import { store } from "./business/store";
+import { useOpenCard } from "./business/effects";
 
 const Field = styled.div`
   position: relative;
@@ -41,18 +42,16 @@ export function GetApp() {
   const {
     gameState,
     gameResult,
-    gameField,
-    doEffect,
     playersList,
     numberOfPlayer,
     dice,
+    doEffect,
   } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
 
   //TODO: вынести отдельный модуль режима боя-?!
   const textPhase = () => {
-    
     switch (gameState.type) {
       case "gameStarted.trownDice":
         return "бросить кубик";
@@ -95,88 +94,7 @@ export function GetApp() {
     }
   };
 
-  useEffect(
-    function openCard() {
-      switch (doEffect?.type) {
-        case "!needOpenHealthCard": {
-          const timerOpen = setTimeout(
-            () =>
-              dispatch({
-                type: "openedHealthCard",
-              }),
-            1000
-          );
-          return () => {
-            clearTimeout(timerOpen);
-          };
-        }
-
-        case "!changePlayerHealth": {
-          const timerChangePlayerHealth = setTimeout(
-            () =>
-              dispatch({
-                type: "changedPlayerHealth",
-              }),
-            500
-          );
-          return () => {
-            clearTimeout(timerChangePlayerHealth);
-          };
-        }
-        case "!changeHealthList": {
-          const timerChangeHealthList = setTimeout(
-            () =>
-              dispatch({
-                type: "changedHealthList",
-              }),
-            500
-          );
-          return () => {
-            clearTimeout(timerChangeHealthList);
-          };
-        }
-        case "!getNextPlayer": {
-          dispatch({ type: "receivedNextPlayer" });
-          break;
-        }
-
-        case "!needCheckApperanCeEnemyCard": {
-          dispatch({
-            type: "checkApperanCeEnemyCard",
-          });
-          break;
-        }
-
-        case "!needOpenEnemyCard": {
-          const timerOpen = setTimeout(
-            () =>
-              dispatch({
-                type: "openedEnemyCard",
-              }),
-            1000
-          );
-          return () => {
-            clearTimeout(timerOpen);
-          };
-        }
-
-        case "!needGetBattleResult": {
-          const timerGetResult = setTimeout(
-            () => dispatch({ type: "getBattleResult" }),
-            1000
-          );
-
-          return () => {
-            clearTimeout(timerGetResult);
-          };
-        }
-
-        default:
-          break;
-      }
-    },
-    [doEffect]
-  );
+  useOpenCard();
 
   useEffect(
     function getEndScreen() {
@@ -193,7 +111,7 @@ export function GetApp() {
           break;
       }
     },
-    [gameState.type]
+    [gameState.type, dispatch]
   );
 
   const getPlayersHealthList = () => {
@@ -216,13 +134,17 @@ export function GetApp() {
     return coordArray.toString();
   };
 
+  const playersHealth = playersList[numberOfPlayer].health;
+  const playersCoord = playersList[numberOfPlayer].coord;
+
   const playersHealthList = useMemo(() => getPlayersHealthList(), [
-    // TODO: вынести в константу зависимости
-    playersList[numberOfPlayer].health,
+    playersHealth,
+    getPlayersHealthList,
   ]);
 
   const playersCoordList = useMemo(() => getPlayerListCoord(), [
-    playersList[numberOfPlayer].coord,
+    playersCoord,
+    getPlayerListCoord,
   ]);
 
   const getGameScreen = () => {
