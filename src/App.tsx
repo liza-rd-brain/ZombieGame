@@ -7,7 +7,7 @@ import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
-import { useOpenCard } from "./business/effects";
+import { useOpenCard, useEndScreen } from "./business/effects";
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -30,43 +30,12 @@ const LeftPanel = styled.div`
   flex-grow: 0;
 `;
 
-
 export function GetApp() {
-  const {
-    gameState,
-    gameResult,
-    playersList,
-    numberOfPlayer,
-    dice,
-    doEffect,
-  } = useSelector((state: State) => ({ ...state }));
+  const { gameState } = useSelector((state: State) => ({ ...state }));
 
   const dispatch = useDispatch();
-
-  //TODO: вынести отдельный модуль режима боя-?!
-
-
   useOpenCard();
-
-  useEffect(
-    function getEndScreen() {
-      switch (gameState.type) {
-        case "endGame":
-          const timer = setTimeout(
-            () => dispatch({ type: "getEndScreen" }),
-            1000
-          );
-
-          return () => clearTimeout(timer);
-
-        default:
-          break;
-      }
-    },
-    [gameState.type, dispatch]
-  );
-
- 
+  useEndScreen();
 
   const getGameScreen = () => {
     switch (gameState.type) {
@@ -84,7 +53,6 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <StatusList />
-       
 
               <Dice />
               <MoveControls />
