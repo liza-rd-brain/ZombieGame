@@ -8,6 +8,7 @@ import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
 import { useOpenCard, useEndScreen } from "./business/effects";
+
 const Field = styled.div`
   position: relative;
   width: 300px;
@@ -33,7 +34,6 @@ const LeftPanel = styled.div`
 export function GetApp() {
   const { gameState } = useSelector((state: State) => ({ ...state }));
 
-  const dispatch = useDispatch();
   useOpenCard();
   useEndScreen();
 
@@ -53,7 +53,6 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <StatusList />
-
               <Dice />
               <MoveControls />
             </LeftPanel>
