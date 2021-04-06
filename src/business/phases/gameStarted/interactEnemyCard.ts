@@ -87,6 +87,7 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
             },
           };
 
+          // TODO: заменить на switchToNextPlayer
           if (isPlayerAlive) {
             const newState: State = {
               ...state,
@@ -103,6 +104,7 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
             return newState;
           } else {
             console.log(`игрок №${numberOfPlayer} погиб`);
+            //TODO :общая часть state?
             return {
               ...state,
               gameState: { type: "endGame" },
@@ -115,6 +117,8 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
         case 4: {
           const newEnemiesList = { ...enemiesCardList };
           delete newEnemiesList[currentCoord];
+
+          // TODO: заменить на switchToNextPlayer
           return {
             ...state,
             enemiesList: newEnemiesList,

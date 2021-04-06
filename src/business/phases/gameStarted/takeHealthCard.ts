@@ -62,6 +62,7 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
       };
 
       switch (true) {
+        // TODO: заменить на switchToNextPlayer
         case isPlayerAlive: {
           return {
             ...state,
@@ -75,7 +76,7 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
             dice: 0,
           };
         }
-
+        //TODO :общая часть state?
         case !isPlayerAlive: {
           return {
             ...state,
