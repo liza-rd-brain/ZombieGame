@@ -24,7 +24,7 @@ const DiceNumber = styled.div`
 const maxNumber = 4;
 
 export const Dice = () => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const [diceNumber] = useSelector((state: State) => [state.dice]);
   const getNumber = () => {
     return Math.floor(Math.random() * maxNumber + 1);
@@ -35,7 +35,7 @@ export const Dice = () => {
       <DiceNumber>{diceNumber}</DiceNumber>
       <DiceButton
         onClick={() => {
-          dispath({
+          dispatch({
             type: "diceIsThrown",
             payload: getNumber(),
           });
