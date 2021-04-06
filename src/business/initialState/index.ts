@@ -7,6 +7,8 @@ import {
 } from "../types";
 
 import { getGameField } from "./getGameField";
+import { getPlayers } from "./getPlayers";
+import {getEnemies} from "./getEnemies"
 
 // TODO: создать конфиг-?!
 export const START_COORD = { hor: 0, vert: 0 };
@@ -30,37 +32,6 @@ export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
   "decrement",
 ];
 
-const getPlayers = (): PlayersListType => {
-  const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
-    const playerCard = {
-      name: "player",
-      health: INITIAL_PLAYER_HEALTH,
-      orderNumber: index,
-      coord: "0.0",
-    };
-    return [index, playerCard];
-  });
-
-  const playersObj: PlayersListType = Object.fromEntries(playersList);
-  return playersObj;
-};
-
-const getEnemies = (): EnemiesListType => {
-  //Добавить сначала рандомный массив с координатами пустых ячеек
-  const enemiesList = new Array(AMOUNT_ENEMIES).fill(0).map((enemy, index) => {
-    const enemyCard = {
-      name: "enemy",
-      power: 1,
-      coord: "1.1",
-      apperance: "closed",
-    };
-    //ключ=координата
-    return [enemyCard.coord, enemyCard];
-  });
-
-  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
-  return enemiesObj;
-};
 
 const getInitialState = (): State => {
   return {
