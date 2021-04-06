@@ -6,7 +6,7 @@ import {
   EnemiesListType,
 } from "../types";
 
-import { gameField } from "./gameField";
+import { getGameField } from "./getGameField";
 
 // TODO: создать конфиг-?!
 export const START_COORD = { hor: 0, vert: 0 };
@@ -46,7 +46,7 @@ const getPlayers = (): PlayersListType => {
 };
 
 const getEnemies = (): EnemiesListType => {
-  //Добавить сначала рандомный массив с коорлинатами пустых ячеек
+  //Добавить сначала рандомный массив с координатами пустых ячеек
   const enemiesList = new Array(AMOUNT_ENEMIES).fill(0).map((enemy, index) => {
     const enemyCard = {
       name: "enemy",
@@ -69,7 +69,7 @@ const getInitialState = (): State => {
     gameResult: "",
     playersList: getPlayers(),
     enemiesList: getEnemies(),
-    gameField: gameField(),
+    gameField: getGameField(),
     doEffect: null,
     numberOfPlayer: 0,
   };
