@@ -6,7 +6,7 @@ import {
   HealthCell,
 } from "../../types";
 
-import { HEALTH_ITEM_TYPE_ARR, AMOUNT_HEALTH_ITEMS } from "../index";
+import { HEALTH_ITEM_TYPE_ARR, AMOUNT_HEALTH_ITEMS } from "../../../shared/config";
 
 /**
  * Returns an object in structure of GameValues with spreaded healthCards in random picked cells.

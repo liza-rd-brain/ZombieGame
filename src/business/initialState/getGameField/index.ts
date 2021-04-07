@@ -1,4 +1,4 @@
-import { FINISH_COORD } from "../index";
+import { FINISH_COORD } from "../../../shared/config";
 
 import { getGameValues } from "./getGameValues";
 import { spreadHealthCards } from "./spreadHealthCards";

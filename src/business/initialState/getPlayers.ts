@@ -1,6 +1,6 @@
 import { PlayersListType } from "../types";
 
-import { AMOUNT_PLAYERS, INITIAL_PLAYER_HEALTH } from "./index";
+import { AMOUNT_PLAYERS, INITIAL_PLAYER_HEALTH } from "./../../shared/config";
 
 export const getPlayers = (): PlayersListType => {
   const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {

@@ -1,6 +1,6 @@
 import { EnemiesListType } from "../types";
 
-import { AMOUNT_ENEMIES } from "./index";
+import { AMOUNT_ENEMIES } from "../../shared/config";
 
 export const getEnemies = (): EnemiesListType => {
   //Добавить сначала рандомный массив с координатами пустых ячеек

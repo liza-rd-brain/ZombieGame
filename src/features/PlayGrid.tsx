@@ -12,7 +12,7 @@ import {
   EnemiesListType,
   EnemyCardType,
 } from "../business/types";
-import { FINISH_COORD } from "../business/initialState";
+import { FINISH_COORD } from "../shared/config";
 import { State } from "../business/types";
 
 type GridProps = {

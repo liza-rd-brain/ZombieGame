@@ -6,7 +6,7 @@ import {
   GameValues,
 } from "../../types";
 
-import { FINISH_COORD, START_COORD, WALLS_COORD } from "../index";
+import { FINISH_COORD, START_COORD, WALLS_COORD } from "../../../shared/config";
 
 /**
  *  Returns an object with start, finish and walls in structure of GameValues.
