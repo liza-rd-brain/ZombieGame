@@ -97,6 +97,8 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
   }
 };
 
+
+
 const openHealthCard = (healthCell: CellType): CellType => {
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
     const openedItem: HealthCell = {
