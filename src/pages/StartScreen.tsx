@@ -1,7 +1,6 @@
-import React from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 
 const StartButton = styled.button`
   margin: 100px;
@@ -13,7 +12,7 @@ export const StartScreen = () => {
     <>
       <StartButton
         onClick={() => {
-          dispatch({ type: "clickStartButton" });
+          dispatch({ type: "clickedStartButton" });
         }}
       >
         {" "}

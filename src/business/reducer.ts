@@ -8,25 +8,24 @@ import {
   interactEnemyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State, openHealthCardType } from "./types";
+import { MoveDirection, State } from "./types";
 
 export type ActionType =
-  | { type: "clickStartButton" }
+  | { type: "clickedStartButton" }
   | DiceThrownAction
   | ArrowPressAction
-  | { type: "openedHealthCard" }
-  | { type: "changedPlayerHealth" }
-  | { type: "changedHealthList" }
-  | { type: "receivedNextPlayer" }
-  | { type: "checkApperanCeEnemyCard" }
-  | { type: "openedEnemyCard" }
-  | { type: "throwBattleDice" }
-  | { type: "getBattleResult" }
-  | { type: "getEndScreen" };
+  | { type: "req-openHealthCard" }
+  | { type: "req-changePlayerHealth" }
+  | { type: "req-deleteHealthCard" }
+  | { type: "req-getNextPlayer" }
+  | { type: "req-checkEnemyCard" }
+  | { type: "req-openEnemyCard" }
+  | { type: "req-getBattleResult" }
+  | { type: "req-getEndScreen" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 
-export type DiceThrownAction = { type: "diceIsThrown"; payload: number };
+export type DiceThrownAction = { type: "diceThrown"; payload: number };
 
 export const reducer = (
   state: State = initialState,

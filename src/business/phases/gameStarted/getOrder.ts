@@ -1,4 +1,4 @@
-import { AMOUNT_PLAYERS } from "../../initialState";
+import { AMOUNT_PLAYERS } from "../../../shared/config";
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
@@ -12,7 +12,7 @@ export const getOrder = (action: ActionType, state: State): State => {
       : numberCurrPlayer + 1;
 
   switch (action.type) {
-    case "receivedNextPlayer": {
+    case "req-getNextPlayer": {
       return {
         ...state,
         numberOfPlayer: nextPlayersNumber,
