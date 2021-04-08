@@ -49,6 +49,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
   };
 
   // TODO: заменить на switchToNextPlayer
+  // TODO :  режим боя должен вестись до победы\побега\проигрыша
   if (isPlayerAlive) {
     const newState: State = {
       ...state,

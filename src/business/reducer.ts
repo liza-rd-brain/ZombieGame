@@ -16,7 +16,7 @@ export type ActionType =
   | ArrowPressAction
   | { type: "openedHealthCard" }
   | { type: "changedPlayerHealth" }
-  | { type: "changedHealthList" }
+  | { type: "deletedHealthCard" }
   | { type: "receivedNextPlayer" }
   | { type: "checkApperanCeEnemyCard" }
   | { type: "openedEnemyCard" }
