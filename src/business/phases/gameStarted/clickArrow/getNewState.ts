@@ -63,7 +63,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
         gameState: {
           type: "gameStarted.takeHealthCard",
         },
-        doEffect: { type: "!needOpenHealthCard" },
+        doEffect: { type: "!openHealthCard" },
         playersList: newPlayerList,
       };
       return newState;
@@ -76,7 +76,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
         gameState: {
           type: "gameStarted.interactEnemyCard",
         },
-        doEffect: { type: "!needCheckApperanCeEnemyCard" },
+        doEffect: { type: "!checkApperanceEnemyCard" },
         playersList: newPlayerList,
       };
       return newState;

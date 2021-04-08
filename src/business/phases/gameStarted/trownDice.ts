@@ -3,7 +3,7 @@ import { ActionType } from "../../reducer";
 
 export const trownDice = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "diceIsThrown": {
+    case "diceThrown": {
       return {
         ...state,
         dice: action.payload,

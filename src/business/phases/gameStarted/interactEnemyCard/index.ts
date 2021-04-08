@@ -6,20 +6,20 @@ import { getBattleResult } from "./getBattleResult";
 
 export const interactEnemyCard = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "checkApperanCeEnemyCard": {
+    case "req-checkEnemyCard": {
       return getStateCheckApperance(state);
     }
 
-    case "openedEnemyCard": {
+    case "req-openEnemyCard": {
       return getStateOpenCard(state);
     }
 
-    case "diceIsThrown": {
+    case "diceThrown": {
       const dice = action.payload;
       return getStateDIceIsThrown(state, dice);
     }
 
-    case "getBattleResult": {
+    case "req-getBattleResult": {
       return getBattleResult(state);
     }
 
@@ -40,14 +40,14 @@ const getStateCheckApperance = (state: State): State => {
     case isNeedOpenEnemyCard: {
       return {
         ...state,
-        doEffect: { type: "!needOpenEnemyCard" },
+        doEffect: { type: "!openEnemyCard" },
       };
     }
 
     case !isNeedOpenEnemyCard: {
       return {
         ...state,
-        doEffect: { type: "!needThrowBattleDice" },
+        doEffect: { type: "!throwBattleDice" },
         dice: 0,
       };
     }
@@ -67,7 +67,7 @@ const getStateOpenCard = (state: State): State => {
     ...state,
     enemiesList: newEnemiesList,
     //для отрисовки статуса!
-    doEffect: { type: "!needThrowBattleDice" },
+    doEffect: { type: "!throwBattleDice" },
     dice: 0,
   };
 };
@@ -76,6 +76,6 @@ const getStateDIceIsThrown = (state: State, dice: number): State => {
   return {
     ...state,
     dice: dice,
-    doEffect: { type: "!needGetBattleResult" },
+    doEffect: { type: "!getBattleResult" },
   };
 };

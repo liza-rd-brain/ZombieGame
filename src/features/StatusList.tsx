@@ -46,13 +46,13 @@ const getTextStatus = (
       return "открываем карточку";
     case "gameStarted.interactEnemyCard":
       switch (doEffect?.type) {
-        case "!needOpenEnemyCard": {
+        case "!openEnemyCard": {
           return "открываем карточку";
         }
-        case "!needThrowBattleDice": {
+        case "!throwBattleDice": {
           return "pежим боя: бросить кубик";
         }
-        case "!needGetBattleResult": {
+        case "!getBattleResult": {
           switch (dice) {
             case 1:
             case 2: {

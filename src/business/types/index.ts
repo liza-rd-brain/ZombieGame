@@ -70,14 +70,14 @@ export type GameField = {
 export type GameValues = Record<string, CellType>;
 
 export type TypeEffect =
-  | { type: "!needOpenHealthCard" }
+  | { type: "!openHealthCard" }
   | { type: "!changePlayerHealth" }
-  | { type: "!changeHealthList" }
+  | { type: "!deleteHealthCard" }
   | { type: "!getNextPlayer" }
-  | { type: "!needCheckApperanCeEnemyCard" }
-  | { type: "!needOpenEnemyCard" }
-  | { type: "!needThrowBattleDice" }
-  | { type: "!needGetBattleResult" }
+  | { type: "!checkApperanceEnemyCard" }
+  | { type: "!openEnemyCard" }
+  | { type: "!throwBattleDice" }
+  | { type: "!getBattleResult" }
   | null;
 
 export type State = {

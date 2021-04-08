@@ -10,11 +10,11 @@ export function useOpenCard() {
   useEffect(
     function openCard() {
       switch (doEffect?.type) {
-        case "!needOpenHealthCard": {
+        case "!openHealthCard": {
           const timerOpen = setTimeout(
             () =>
               dispatch({
-                type: "openedHealthCard",
+                type: "req-openHealthCard",
               }),
             1000
           );
@@ -27,7 +27,7 @@ export function useOpenCard() {
           const timerChangePlayerHealth = setTimeout(
             () =>
               dispatch({
-                type: "changedPlayerHealth",
+                type: "req-changePlayerHealth",
               }),
             500
           );
@@ -35,35 +35,35 @@ export function useOpenCard() {
             clearTimeout(timerChangePlayerHealth);
           };
         }
-        case "!changeHealthList": {
-          const timerChangeHealthList = setTimeout(
+        case "!deleteHealthCard": {
+          const timerDeleteHealthCard = setTimeout(
             () =>
               dispatch({
-                type: "deletedHealthCard",
+                type: "req-deleteHealthCard",
               }),
             500
           );
           return () => {
-            clearTimeout(timerChangeHealthList);
+            clearTimeout(timerDeleteHealthCard);
           };
         }
         case "!getNextPlayer": {
-          dispatch({ type: "receivedNextPlayer" });
+          dispatch({ type: "req-getNextPlayer" });
           break;
         }
 
-        case "!needCheckApperanCeEnemyCard": {
+        case "!checkApperanceEnemyCard": {
           dispatch({
-            type: "checkApperanCeEnemyCard",
+            type: "req-checkEnemyCard",
           });
           break;
         }
 
-        case "!needOpenEnemyCard": {
+        case "!openEnemyCard": {
           const timerOpen = setTimeout(
             () =>
               dispatch({
-                type: "openedEnemyCard",
+                type: "req-openEnemyCard",
               }),
             1000
           );
@@ -72,9 +72,9 @@ export function useOpenCard() {
           };
         }
 
-        case "!needGetBattleResult": {
+        case "!getBattleResult": {
           const timerGetResult = setTimeout(
-            () => dispatch({ type: "getBattleResult" }),
+            () => dispatch({ type: "req-getBattleResult" }),
             1000
           );
 

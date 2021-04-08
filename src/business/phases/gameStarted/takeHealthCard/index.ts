@@ -7,15 +7,15 @@ import { changePlayerHealth } from "./changePlayerHealth";
 
 export const takeHealthCard = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "openedHealthCard": {
+    case "req-openHealthCard": {
       return getStateOpenCard(state);
     }
 
-    case "changedPlayerHealth": {
+    case "req-changePlayerHealth": {
       return getStateChangedHealth(state);
     }
 
-    case "deletedHealthCard": {
+    case "req-deleteHealthCard" : {
       return getStateDeletedCard(state);
     }
 
@@ -56,7 +56,7 @@ const getStateChangedHealth = (state: State): State => {
 
   return {
     ...state,
-    doEffect: { type: "!changeHealthList" },
+    doEffect: { type: "!deleteHealthCard"},
     playersList: changedplayersList,
   };
 };

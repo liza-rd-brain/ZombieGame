@@ -3,7 +3,7 @@ import { ActionType } from "../../reducer";
 
 export const endGame = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "getEndScreen": {
+    case "req-getEndScreen": {
       return {
         ...state,
         gameState: { type: "getEndScreen" },

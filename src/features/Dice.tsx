@@ -36,7 +36,7 @@ export const Dice = () => {
       <DiceButton
         onClick={() => {
           dispatch({
-            type: "diceIsThrown",
+            type: "diceThrown",
             payload: getNumber(),
           });
         }}

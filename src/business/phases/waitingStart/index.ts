@@ -3,7 +3,7 @@ import { ActionType } from "../../reducer";
 
 export const waitingStart = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "clickStartButton": {
+    case "clickedStartButton": {
       return {
         ...state,
         gameState: {

@@ -12,7 +12,7 @@ export const StartScreen = () => {
     <>
       <StartButton
         onClick={() => {
-          dispatch({ type: "clickStartButton" });
+          dispatch({ type: "clickedStartButton" });
         }}
       >
         {" "}

@@ -12,7 +12,7 @@ export const getOrder = (action: ActionType, state: State): State => {
       : numberCurrPlayer + 1;
 
   switch (action.type) {
-    case "receivedNextPlayer": {
+    case "req-getNextPlayer": {
       return {
         ...state,
         numberOfPlayer: nextPlayersNumber,

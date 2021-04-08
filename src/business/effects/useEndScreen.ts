@@ -12,7 +12,7 @@ export function useEndScreen() {
       switch (gameState.type) {
         case "endGame":
           const timer = setTimeout(
-            () => dispatch({ type: "getEndScreen" }),
+            () => dispatch({ type: "req-getEndScreen" }),
             1000
           );
 
