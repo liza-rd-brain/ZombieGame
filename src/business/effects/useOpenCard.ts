@@ -39,7 +39,7 @@ export function useOpenCard() {
           const timerChangeHealthList = setTimeout(
             () =>
               dispatch({
-                type: "changedHealthList",
+                type: "deletedHealthCard",
               }),
             500
           );
