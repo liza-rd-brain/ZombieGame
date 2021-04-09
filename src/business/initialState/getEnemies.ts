@@ -1,39 +1,49 @@
-import { EnemiesListType, GameField, CommonCell, CellType } from "../types";
+import { EnemiesListType, GameField, CommonCell } from "../types";
 
 import { AMOUNT_ENEMIES } from "../../shared/config";
 
 export const getEnemies = (gameField: GameField): EnemiesListType => {
-  const emptyCellsList = getEmptyList(gameField);
-  const enemiesCoords = getListOfIndexes(emptyCellsList);
-  const enemiesObj = getListOfEnemy(enemiesCoords);
+  //Добавить сначала рандомный массив с координатами пустых ячеек
+
+  const enemiesCoords = getEnemiesCoord(gameField);
+  console.log("enemiesCoords", enemiesCoords);
+
+  const enemiesList = enemiesCoords.map((coord) => {
+    const enemyCard = {
+      name: "enemy",
+      power: 1,
+      coord: coord,
+      apperance: "open",
+    };
+    return [enemyCard.coord, enemyCard];
+  });
+  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
   return enemiesObj;
 };
 
+
+
 /**
- * For every element checks that cell has no cards on it.
- * Returns the list of cells without any cards.
+ * 1. Get list of indexes all of  empty cells
  */
-const getEmptyList = (gameField: GameField): [string, CommonCell][] => {
-  const listCells = Object.entries(gameField.values);
-  const emptyCellsList = listCells.filter((cellItem): cellItem is [
+const getEnemiesCoord = (gameField: GameField) => {
+  const listFieldCells = Object.entries(gameField.values);
+
+  const emptyCellsList = listFieldCells.filter((cellItem): cellItem is [
     string,
     CommonCell
   ] => {
     const [, item] = cellItem;
+    //check that cardItem is empty
     return (
       item.name === "commonCell" && Object.entries(item.cardItem).length === 0
     );
   });
-  return emptyCellsList;
-};
 
-/**
- * Returns the list of random picked indexes of emptyCellsList
- */
-const getListOfIndexes = (emptyCellsList: [string, CommonCell][]) => {
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
+  console.log("emptyCellsList", emptyCellsList);
 
-  // TODO: it may be taking out as separate module with getRandomNumber?
+  // TODO: it's also can be common module
   const keyList: Array<number> = new Array(AMOUNT_ENEMIES)
     .fill(0)
     .reduce((prevkeyList) => {
@@ -46,36 +56,18 @@ const getListOfIndexes = (emptyCellsList: [string, CommonCell][]) => {
       }
     }, []);
 
+  console.log("keyList", keyList);
+
   const idexesListForCards = keyList.map((keyItem: number): string => {
     const [index] = emptyCellsList[keyItem];
     return index;
   });
 
+  console.log("listForCards", idexesListForCards);
   return idexesListForCards;
 };
 
-/**
- * Returns the object of all enemies
- */
-const getListOfEnemy = (enemiesCoords: string[]) => {
-  const enemiesList = enemiesCoords.map((coord) => {
-    const enemyCard = {
-      name: "enemy",
-      power: 1,
-      coord: coord,
-      apperance: "closed",
-    };
-    return [enemyCard.coord, enemyCard];
-  });
-
-  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
-  return enemiesObj;
-};
-
-/**
- * Gets an array with the previously selected random numbers and the maximum number to select.
- * Returns a random number satisfying the conditions.
- */
+// TODO: take out as separete module
 const getRandomNumber = (
   arrNumber: Array<number>,
   maxNumber: number
