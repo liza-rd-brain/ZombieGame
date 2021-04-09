@@ -34,6 +34,7 @@ export const reducer = (
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
 
   switch (phaseOuter) {
+    
     case "waitingStart": {
       return waitingStart(action, state);
     }

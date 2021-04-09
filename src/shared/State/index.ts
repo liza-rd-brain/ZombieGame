@@ -1,1 +1,1 @@
-export { switchToNextPlayer } from "./switchToNextPlayer";
+export { switchToNextPlayer } from "./SwitchToNextPlayer";
