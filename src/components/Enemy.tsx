@@ -11,7 +11,7 @@ const EnemyCard = styled.div<EnemyCardType>`
 
   background-color: ${(props) => {
     if (props.apperance === "closed") {
-      return "gray";
+      return "lightgray";
     } else {
       return "navy";
     }
@@ -19,7 +19,7 @@ const EnemyCard = styled.div<EnemyCardType>`
 
   border-color: ${(props) => {
     if (props.apperance === "closed") {
-      return "gray";
+      return "lightgray";
     } else {
       return "navy";
     }
