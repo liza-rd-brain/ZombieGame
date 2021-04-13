@@ -5,13 +5,16 @@ import { getPlayers } from "./getPlayers";
 import { getEnemies } from "./getEnemies";
 
 const getInitialState = (): State => {
+  //отдаем gameFieldWithoutEnemy для рандомного выбора координат врагов из пустых ячеек
+  const gameFieldWithoutEnemy = getGameField();
+
   return {
     gameState: { type: "waitingStart" },
     dice: 0,
     gameResult: "",
     playersList: getPlayers(),
-    enemiesList: getEnemies(),
-    gameField: getGameField(),
+    enemiesList: getEnemies(gameFieldWithoutEnemy),
+    gameField: gameFieldWithoutEnemy,
     doEffect: null,
     numberOfPlayer: 0,
   };

@@ -58,6 +58,7 @@ const getRandomType = (): HealthItemType => {
  */
 const getListForCards = (gameField: GameValues): [string, CommonCell][] => {
   const listGameField = Object.entries(gameField);
+
   const emptyCellsList = listGameField.filter((cellItem): cellItem is [
     string,
     CommonCell
@@ -68,6 +69,9 @@ const getListForCards = (gameField: GameValues): [string, CommonCell][] => {
 
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
 
+  /**
+   * Is a list with number of indexes of empty cells.
+   */
   const keyList: Array<number> = new Array(AMOUNT_HEALTH_ITEMS)
     .fill(0)
     .reduce((prevkeyList) => {
