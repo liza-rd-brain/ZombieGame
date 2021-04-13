@@ -1,7 +1,7 @@
 import {
   CommonCell,
   HealthItemType,
-  GameValues,
+  GameFieldCells,
   HealthCardType,
   HealthCell,
 } from "../../types";
@@ -9,12 +9,12 @@ import {
 import { HEALTH_ITEM_TYPE_ARR, AMOUNT_HEALTH_ITEMS } from "../../../shared/config";
 
 /**
- * Returns an object in structure of GameValues with spreaded healthCards in random picked cells.
+ * Returns an object in structure of FieldCells with spreaded healthCards in random picked cells.
  */
-export const spreadHealthCards = (gameValues: GameValues): GameValues => {
-  const cellsForCards = getListForCards(gameValues);
-  const filledWithCardsGameValues = setHealthCards(cellsForCards, gameValues);
-  return filledWithCardsGameValues;
+export const spreadHealthCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
+  const cellsForCards = getListForCards(gameFieldCells);
+  const filledWithCardsFieldCells = setHealthCards(cellsForCards, gameFieldCells);
+  return filledWithCardsFieldCells;
 };
 
 /**
@@ -22,8 +22,8 @@ export const spreadHealthCards = (gameValues: GameValues): GameValues => {
  */
 const setHealthCards = (
   cellList: [string, CommonCell][],
-  gameValues: GameValues
-): GameValues => {
+  gameFieldCells: GameFieldCells
+): GameFieldCells => {
   const cellListWithCards = cellList.map(
     (cellWithCards: [string, CommonCell]) => {
       const [index, cell] = cellWithCards;
@@ -42,8 +42,8 @@ const setHealthCards = (
     }
   );
 
-  const gameValuesWithCards = Object.fromEntries(cellListWithCards);
-  const gameFieldFull = { ...gameValues, ...gameValuesWithCards };
+  const fieldCellsWithCards = Object.fromEntries(cellListWithCards);
+  const gameFieldFull = { ...gameFieldCells, ...fieldCellsWithCards };
 
   return gameFieldFull;
 };
@@ -56,7 +56,7 @@ const getRandomType = (): HealthItemType => {
  * Returns an array with random empty cell witch suitable for healthCard.
  * Array lenght is equal AMOUNT_HEALTH_ITEMS.
  */
-const getListForCards = (gameField: GameValues): [string, CommonCell][] => {
+const getListForCards = (gameField: GameFieldCells): [string, CommonCell][] => {
   const listGameField = Object.entries(gameField);
 
   const emptyCellsList = listGameField.filter((cellItem): cellItem is [

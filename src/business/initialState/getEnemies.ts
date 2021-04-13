@@ -1,8 +1,8 @@
-import { EnemiesListType, GameField, CommonCell, CellType } from "../types";
+import { EnemyListType, GameField, CommonCell, CellType } from "../types";
 
 import { AMOUNT_ENEMIES } from "../../shared/config";
 
-export const getEnemies = (gameField: GameField): EnemiesListType => {
+export const getEnemies = (gameField: GameField): EnemyListType => {
   const emptyCellsList = getEmptyList(gameField);
   const enemiesCoords = getListOfIndexes(emptyCellsList);
   const enemiesObj = getListOfEnemy(enemiesCoords);
@@ -58,7 +58,7 @@ const getListOfIndexes = (emptyCellsList: [string, CommonCell][]) => {
  * Returns the object of all enemies
  */
 const getListOfEnemy = (enemiesCoords: string[]) => {
-  const enemiesList = enemiesCoords.map((coord) => {
+  const enemyList = enemiesCoords.map((coord) => {
     const enemyCard = {
       name: "enemy",
       power: 1,
@@ -68,7 +68,7 @@ const getListOfEnemy = (enemiesCoords: string[]) => {
     return [enemyCard.coord, enemyCard];
   });
 
-  const enemiesObj: EnemiesListType = Object.fromEntries(enemiesList);
+  const enemiesObj: EnemyListType = Object.fromEntries(enemyList);
   return enemiesObj;
 };
 

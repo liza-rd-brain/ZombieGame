@@ -1,8 +1,8 @@
 import { PlayerList } from "../../components";
 
-import { PlayersListType, PlayerCardType } from "../../business/types";
+import { PlayerListType, PlayerCardType } from "../../business/types";
 
-export const getPlayersList = (index: string, playersList: PlayersListType) => {
+export const getPlayersList = (index: string, playersList: PlayerListType) => {
   let playersArr: PlayerCardType[] = [];
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];

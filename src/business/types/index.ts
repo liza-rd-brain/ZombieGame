@@ -17,7 +17,7 @@ export type PlayerCardType = {
   coord: string;
 };
 
-export type PlayersListType = Record<string, PlayerCardType>;
+export type PlayerListType = Record<string, PlayerCardType>;
 
 export type EnemyCardType = {
   name: "enemy";
@@ -26,7 +26,7 @@ export type EnemyCardType = {
   apperance: "closed" | "open";
 };
 
-export type EnemiesListType = Record<string, EnemyCardType>;
+export type EnemyListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
@@ -64,10 +64,10 @@ export type CellType =
 
 export type GameField = {
   order: Array<string>;
-  values: GameValues;
+  values: GameFieldCells;
 };
 
-export type GameValues = Record<string, CellType>;
+export type GameFieldCells = Record<string, CellType>;
 
 export type TypeEffect =
   | { type: "!openHealthCard" }
@@ -84,8 +84,8 @@ export type State = {
   gameState: GameState;
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  playersList: PlayersListType;
-  enemiesList: EnemiesListType;
+  playerList: PlayerListType;
+  enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
@@ -95,7 +95,7 @@ export type GameState =
   | { type: "waitingStart" }
   | { type: "gameStarted.trownDice" }
   | {
-      type: "gameStarted.clickArrow";
+      type: "gameStarted.playerMove";
     }
   | openHealthCardType
   | { type: "gameStarted.interactEnemyCard" }

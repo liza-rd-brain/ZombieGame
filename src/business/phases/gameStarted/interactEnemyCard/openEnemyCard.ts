@@ -1,14 +1,14 @@
-import { EnemyCardType, EnemiesListType } from "../../../types";
+import { EnemyCardType, EnemyListType } from "../../../types";
 
 export const openEnemyCard = (
-  enemiesList: EnemiesListType,
+  enemyList: EnemyListType,
   coord: string
-): EnemiesListType => {
-  const currEnemyCard = enemiesList[coord];
+): EnemyListType => {
+  const currEnemyCard = enemyList[coord];
   const openedEnemyCard: EnemyCardType = {
     ...currEnemyCard,
     apperance: "open",
   };
 
-  return { ...enemiesList, [coord]: openedEnemyCard };
+  return { ...enemyList, [coord]: openedEnemyCard };
 };

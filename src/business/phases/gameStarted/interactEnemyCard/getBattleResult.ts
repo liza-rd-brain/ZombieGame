@@ -1,4 +1,4 @@
-import { State, EnemiesListType, PlayersListType } from "../../../types";
+import { State } from "../../../types";
 
 export const getBattleResult = (state: State): State => {
   const { dice } = state;
@@ -21,30 +21,29 @@ export const getBattleResult = (state: State): State => {
   }
 };
 
-
 const getStatePlayerRunsAway = (state: State): State => {
-  // Полностью передать управление в clickArrow?!
+  // Полностью передать управление в playerMove?!
   // dice=1 - убегает на 1
   return {
     ...state,
     dice: 1,
     gameState: {
       ...state,
-      type: "gameStarted.clickArrow",
+      type: "gameStarted.playerMove",
     },
   };
 };
 
 const getStatePlayetLoseHealth = (state: State): State => {
-  const { playersList, numberOfPlayer } = state;
-  const newPlayerHealth = playersList[numberOfPlayer].health - 1;
+  const { playerList, numberOfPlayer } = state;
+  const newPlayerHealth = playerList[numberOfPlayer].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
-  const newplayersList = {
-    ...playersList,
+  const newPlayerList = {
+    ...playerList,
     [numberOfPlayer]: {
-      ...playersList[numberOfPlayer],
-      health: playersList[numberOfPlayer].health - 1,
+      ...playerList[numberOfPlayer],
+      health: playerList[numberOfPlayer].health - 1,
     },
   };
 
@@ -60,7 +59,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
       doEffect: {
         type: "!getNextPlayer",
       },
-      playersList: newplayersList,
+      playerList: newPlayerList,
     };
 
     return newState;
@@ -77,15 +76,15 @@ const getStatePlayetLoseHealth = (state: State): State => {
 };
 
 const getStatePLayerWon = (state: State): State => {
-  const { enemiesList, numberOfPlayer, playersList } = state;
-  const currentCoord = playersList[numberOfPlayer].coord;
-  const newEnemiesList = { ...enemiesList };
-  delete newEnemiesList[currentCoord];
+  const { enemyList, numberOfPlayer, playerList } = state;
+  const currentCoord = playerList[numberOfPlayer].coord;
+  const newEnemyList = { ...enemyList };
+  delete newEnemyList[currentCoord];
 
   // TODO: заменить на switchToNextPlayer
   return {
     ...state,
-    enemiesList: newEnemiesList,
+    enemyList: newEnemyList,
     dice: 0,
     gameState: {
       type: "gameStarted.getOrder",

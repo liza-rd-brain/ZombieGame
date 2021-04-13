@@ -6,7 +6,7 @@ import {
   State,
   GameState,
   TypeEffect,
-  PlayersListType,
+  PlayerListType,
 } from "../business/types";
 
 const Status = styled.div`
@@ -17,7 +17,7 @@ const Status = styled.div`
 `;
 
 export const StatusList = () => {
-  const { dice, playersList, gameState, doEffect, gameResult } = useSelector(
+  const { dice, playerList, gameState, doEffect, gameResult } = useSelector(
     (state: State) => ({
       ...state,
     })
@@ -25,8 +25,8 @@ export const StatusList = () => {
   return (
     <>
       <Status>{getTextStatus(gameState, doEffect, dice, gameResult)}</Status>
-      <Status>{`здоровье: ${getPlayersHealthList(playersList)}`}</Status>
-      <Status>{`координаты: ${getPlayersCoordList(playersList)}`}</Status>
+      <Status>{`здоровье: ${getPlayersHealthList(playerList)}`}</Status>
+      <Status>{`координаты: ${getPlayersCoordList(playerList)}`}</Status>
     </>
   );
 };
@@ -40,7 +40,7 @@ const getTextStatus = (
   switch (gameState.type) {
     case "gameStarted.trownDice":
       return "бросить кубик";
-    case "gameStarted.clickArrow":
+    case "gameStarted.playerMove":
       return "сделать ход";
     case "gameStarted.takeHealthCard":
       return "открываем карточку";
@@ -79,7 +79,7 @@ const getTextStatus = (
   }
 };
 
-const getPlayersHealthList = (playersList: PlayersListType) => {
+const getPlayersHealthList = (playersList: PlayerListType) => {
   const playerArray = Object.entries(playersList);
   const healthArray = playerArray.map((player) => {
     const [, playerValue] = player;
@@ -89,7 +89,7 @@ const getPlayersHealthList = (playersList: PlayersListType) => {
   return healthArray.toString();
 };
 
-const getPlayersCoordList = (playersList: PlayersListType) => {
+const getPlayersCoordList = (playersList: PlayerListType) => {
   const playerArray = Object.entries(playersList);
   const coordArray = playerArray.map((player) => {
     const [, playerValue] = player;

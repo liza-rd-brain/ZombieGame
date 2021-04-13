@@ -30,11 +30,11 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
 };
 
 const getStateCheckApperance = (state: State): State => {
-  const { enemiesList, playersList, numberOfPlayer } = state;
-  const currentCoord = playersList[numberOfPlayer].coord;
+  const { enemyList, playerList, numberOfPlayer } = state;
+  const currentCoord = playerList[numberOfPlayer].coord;
 
   const isNeedOpenEnemyCard =
-    enemiesList[currentCoord].apperance === "open" ? false : true;
+  enemyList[currentCoord].apperance === "open" ? false : true;
 
   switch (true) {
     case isNeedOpenEnemyCard: {
@@ -59,13 +59,13 @@ const getStateCheckApperance = (state: State): State => {
 };
 
 const getStateOpenCard = (state: State): State => {
-  const { enemiesList, playersList, numberOfPlayer } = state;
-  const currentCoord = playersList[numberOfPlayer].coord;
-  const newEnemiesList = openEnemyCard(enemiesList, currentCoord);
+  const { enemyList, playerList, numberOfPlayer } = state;
+  const currentCoord = playerList[numberOfPlayer].coord;
+  const newEnemyList = openEnemyCard(enemyList, currentCoord);
 
   return {
     ...state,
-    enemiesList: newEnemiesList,
+    enemyList: newEnemyList,
     //для отрисовки статуса!
     doEffect: { type: "!throwBattleDice" },
     dice: 0,

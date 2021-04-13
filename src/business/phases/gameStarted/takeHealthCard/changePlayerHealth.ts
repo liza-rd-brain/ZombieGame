@@ -1,8 +1,8 @@
-import { PlayersListType, CellType } from "../../../types";
+import { PlayerListType, CellType } from "../../../types";
 
 export const changePlayerHealth = (
   healthCell: CellType,
-  playersList: PlayersListType,
+  playersList: PlayerListType,
   numberOfPlayer: number
 ) => {
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
@@ -13,7 +13,7 @@ export const changePlayerHealth = (
     const incHealth = currHealth + 1;
     const decHealth = currHealth - 1;
 
-    const changedplayersList: PlayersListType = {
+    const changedplayersList: PlayerListType = {
       ...playersList,
       [numberOfPlayer]: {
         ...playersList[numberOfPlayer],

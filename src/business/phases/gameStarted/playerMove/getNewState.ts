@@ -1,18 +1,18 @@
-import { State, PlayersListType } from "../../../types";
+import { State, PlayerListType } from "../../../types";
 
 import { switchToNextPlayer } from "../../../../shared/State";
 /**
  * @returns A new state depending on the result of the player's movement.
  */
 export const getNewState = (state: State, newPlayerCoord: string) => {
-  const { gameField, playersList, numberOfPlayer, dice } = { ...state };
+  const { gameField, playerList, numberOfPlayer, dice } = { ...state };
 
   const newCellWithPlayer = gameField.values[newPlayerCoord];
 
   const newPlayerList = {
-    ...playersList,
+    ...playerList,
     [numberOfPlayer]: {
-      ...playersList[numberOfPlayer],
+      ...playerList[numberOfPlayer],
       coord: newPlayerCoord,
     },
   };
@@ -26,14 +26,14 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
 
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" &&
-    state.enemiesList[newPlayerCoord]
+    state.enemyList[newPlayerCoord]
       ? true
       : false;
 
   const isLastStepOfMove = dice === 1;
 
   const isNextCellOcupied = checkNextCellOccupied(
-    playersList,
+    playerList,
     newPlayerCoord,
     numberOfPlayer
   );
@@ -51,7 +51,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
         ...state,
         dice: state.dice - 1,
         gameResult: "Вы выиграли",
-        playersList: newPlayerList,
+        playerList: newPlayerList,
       };
       return newState;
     }
@@ -64,7 +64,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
           type: "gameStarted.takeHealthCard",
         },
         doEffect: { type: "!openHealthCard" },
-        playersList: newPlayerList,
+        playerList: newPlayerList,
       };
       return newState;
     }
@@ -77,7 +77,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
           type: "gameStarted.interactEnemyCard",
         },
         doEffect: { type: "!checkApperanceEnemyCard" },
-        playersList: newPlayerList,
+        playerList: newPlayerList,
       };
       return newState;
     }
@@ -93,7 +93,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
       const newState: State = {
         ...state,
         ...changedPartState,
-        playersList: newPlayerList,
+        playerList: newPlayerList,
       };
       return newState;
     }
@@ -103,9 +103,9 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
         ...state,
         dice: state.dice - 1,
         gameState: {
-          type: "gameStarted.clickArrow",
+          type: "gameStarted.playerMove",
         },
-        playersList: newPlayerList,
+        playerList: newPlayerList,
       };
       return newState;
     }
@@ -113,7 +113,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
 };
 
 const checkNextCellOccupied = (
-  playersList: PlayersListType,
+  playersList: PlayerListType,
   newCoord: string,
   playersNumber: number
 ): boolean => {

@@ -3,7 +3,7 @@ import {
   CommonCell,
   FinishCell,
   WallItem,
-  GameValues,
+  GameFieldCells,
 } from "../../types";
 
 import { FINISH_COORD, START_COORD, WALLS_COORD } from "../../../shared/config";
@@ -11,22 +11,22 @@ import { FINISH_COORD, START_COORD, WALLS_COORD } from "../../../shared/config";
 /**
  *  Returns an object with start, finish and walls in structure of GameValues.
  */
-export const getGameValues = (cellList: string[]): GameValues => {
-  const emptyGameValues = createEmptyGameValues(cellList);
-  const organizedGameValues = organizeGameValues(emptyGameValues);
-  return organizedGameValues;
+export const getFieldCells = (cellList: string[]): GameFieldCells => {
+  const emptyFieldCells = createEmptyFieldCells(cellList);
+  const organizedFieldCells= organizeFieldCells(emptyFieldCells);
+  return organizedFieldCells;
 };
 
 /**
  * Creates an object with keys and empty cells in structure of GameValues.
  */
-const createEmptyGameValues = (cellList: Array<string>): GameValues => {
+const createEmptyFieldCells = (cellList: Array<string>): GameFieldCells => {
   const emptyFieldItem: CommonCell = {
     name: "commonCell",
     cardItem: {},
   };
 
-  let newEmptyGameField: GameValues = {};
+  let newEmptyGameField: GameFieldCells = {};
 
   cellList.forEach((cell: string) => {
     newEmptyGameField[cell] = emptyFieldItem;
@@ -38,7 +38,7 @@ const createEmptyGameValues = (cellList: Array<string>): GameValues => {
 /**
  *  Creates an object with start, finish and walls in structure of GameValues.
  */
-const organizeGameValues = (emptyField: GameValues): GameValues => {
+const organizeFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
   const startIndex = `${START_COORD.hor}.${START_COORD.vert}`;
   const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
 
@@ -64,14 +64,14 @@ const organizeGameValues = (emptyField: GameValues): GameValues => {
        чтобы ни непонятно откуда была мутация
       а прозрачное изменение св-в объекта */
 
-  const wallCells: GameValues = Object.fromEntries(wallList);
+  const wallCells: GameFieldCells = Object.fromEntries(wallList);
 
-  const organizedGameValues = {
+  const organizedGameFieldCells = {
     ...emptyField,
     ...wallCells,
     [startIndex]: startCell,
     [finishIndex]: finishCell,
   };
 
-  return organizedGameValues;
+  return organizedGameFieldCells;
 };

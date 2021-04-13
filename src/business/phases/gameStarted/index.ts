@@ -1,4 +1,4 @@
-export { clickArrow } from "./clickArrow";
+export { playerMove } from "./playerMove";
 export { getOrder } from "./getOrder";
 export { takeHealthCard } from "./takeHealthCard";
 export { trownDice } from "./trownDice";

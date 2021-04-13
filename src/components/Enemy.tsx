@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { EnemyCardType } from "../business/types";
 
-type EnemiesArray = {
+type EnemyArray = {
   list: EnemyCardType[];
 };
 
@@ -40,11 +40,11 @@ const EnemiesCardList = styled.div`
   font-size: 10px;
 `;
 
-export const EnemiesList = (props: EnemiesArray) => {
-  const enemiesArray = props.list;
+export const EnemyList = (props: EnemyArray) => {
+  const enemyArray = props.list;
   return (
     <EnemiesCardList>
-      {enemiesArray.map((item, index) => (
+      {enemyArray.map((item, index) => (
         <EnemyCard key={index} {...item} />
       ))}
     </EnemiesCardList>
