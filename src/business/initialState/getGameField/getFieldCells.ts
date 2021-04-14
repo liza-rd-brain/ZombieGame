@@ -18,7 +18,7 @@ import {
 export const getFieldCells = (cellList: string[]): GameFieldCells => {
   const emptyFieldCells = createEmptyFieldCells(cellList);
   const fieldCellsWithWalls = getCellsWalls(emptyFieldCells);
-  const organizedFieldCells = getOrganizedFieldCells(emptyFieldCells);
+  const organizedFieldCells = getOrganizedFieldCells(fieldCellsWithWalls);
   return organizedFieldCells;
 };
 
@@ -76,7 +76,11 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
   return organizedGameFieldCells;
 };
 
-const getCellsWalls = (emptyField: GameFieldCells) /* : GameFieldCells */ => {
+/**
+ *
+ * @returns The object in structure GameFieldCells. With walls(surfaces) in cells.
+ */
+const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
   // TODO: Need add checking for CommonCell?
   /**
    * Returns list of Cells with walls(surfaces)
@@ -107,5 +111,5 @@ const getCellsWalls = (emptyField: GameFieldCells) /* : GameFieldCells */ => {
   );
 
   const fieldCellsWithWalls = { ...emptyField, ...cellsWithSurfaces };
-  console.log(fieldCellsWithWalls);
+  return fieldCellsWithWalls;
 };

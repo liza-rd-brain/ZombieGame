@@ -6,7 +6,7 @@ export type HealthItemTypeArr = ["increment", "decrement"];
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 
-// BarrierType
+// BarrierType. Later add "boards"
 export type SurfaceKind = "wall" | "window" | "door" | null;
 
 export type SurfaceDirection = MoveDirection;
