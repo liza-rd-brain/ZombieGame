@@ -1,12 +1,7 @@
 import styled from "styled-components";
 
-import {
-  GameField,
-  PlayerListType,
-  EnemyListType,
-} from "../../business/types";
+import { GameField, PlayerListType, EnemyListType } from "../../business/types";
 
-import { Wall } from "../../components";
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
@@ -33,13 +28,6 @@ export const getFilledPlayGrid = (
     const [hor, vert] = orderIndex.split(".");
 
     switch (cellValues.name) {
-      case "wall": {
-        return (
-          <CellItem key={`${hor}${vert}`}>
-            <Wall></Wall>
-          </CellItem>
-        );
-      }
       case "start" || "finish": {
         return (
           <CellItem key={`${hor}${vert}`}>

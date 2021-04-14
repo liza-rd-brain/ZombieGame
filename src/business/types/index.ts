@@ -6,17 +6,13 @@ export type HealthItemTypeArr = ["increment", "decrement"];
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 
-export type WallItem = {
-  name: "wall";
-};
-
 // BarrierType
 export type SurfaceKind = "wall" | "window" | "door" | null;
 
 export type SurfaceDirection = MoveDirection;
 
 // Kind of surfaces of cell
-export type SurfacesType = Record<SurfaceDirection , SurfaceKind>;
+export type SurfacesType = Record<SurfaceDirection, SurfaceKind>;
 
 export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
 
@@ -67,12 +63,7 @@ export type CommonCell = {
   cardItem: { healthItem?: HealthCardType };
 };
 
-export type CellType =
-  | CommonCell
-  | WallItem
-  | FinishCell
-  | StartCell
-  | HealthCell;
+export type CellType = CommonCell | FinishCell | StartCell | HealthCell;
 
 export type GameField = {
   order: Array<string>;

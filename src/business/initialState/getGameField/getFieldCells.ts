@@ -1,19 +1,13 @@
-import {
-  StartCell,
-  CommonCell,
-  FinishCell,
-  WallItem,
-  GameFieldCells,
-} from "../../types";
+import { StartCell, CommonCell, FinishCell, GameFieldCells } from "../../types";
 
-import { FINISH_COORD, START_COORD, WALLS_COORD } from "../../../shared/config";
+import { FINISH_COORD, START_COORD } from "../../../shared/config";
 
 /**
  *  Returns an object with start, finish and walls in structure of GameValues.
  */
 export const getFieldCells = (cellList: string[]): GameFieldCells => {
   const emptyFieldCells = createEmptyFieldCells(cellList);
-  const organizedFieldCells= organizeFieldCells(emptyFieldCells);
+  const organizedFieldCells = organizeFieldCells(emptyFieldCells);
   return organizedFieldCells;
 };
 
@@ -52,23 +46,18 @@ const organizeFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
     cardItem: {},
   };
 
-  const wallItem: WallItem = {
-    name: "wall",
-  };
-
-  const wallList = WALLS_COORD.map((wallCoord) => {
+  /*   const wallList = WALLS_COORD.map((wallCoord) => {
     return [`${wallCoord.hor}.${wallCoord.vert}`, wallItem];
-  });
+  }); */
 
   /*    Object.fromEntries удобно использовать для наглядности
        чтобы ни непонятно откуда была мутация
       а прозрачное изменение св-в объекта */
 
-  const wallCells: GameFieldCells = Object.fromEntries(wallList);
+  /*   const wallCells: GameFieldCells = Object.fromEntries(wallList); */
 
   const organizedGameFieldCells = {
     ...emptyField,
-    ...wallCells,
     [startIndex]: startCell,
     [finishIndex]: finishCell,
   };
