@@ -10,6 +10,18 @@ export type WallItem = {
   name: "wall";
 };
 
+// BarrierType
+export type SurfaceKind = "wall" | "window" | "door" | null;
+
+export type SurfaceDirection = MoveDirection;
+
+// Kind of surfaces of cell
+export type SurfacesType = Record<SurfaceDirection , SurfaceKind>;
+
+export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
+
+export type CellsSurfaceListType = Array<CellsSurfaceType>;
+
 export type PlayerCardType = {
   name: "player";
   health: number;
