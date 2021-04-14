@@ -56,6 +56,7 @@ export type HealthCardType = {
 export type HealthCell = {
   name: "commonCell";
   cardItem: { healthItem: HealthCardType };
+  surfaceItem?: SurfacesType;
 };
 
 export type CommonCell = {

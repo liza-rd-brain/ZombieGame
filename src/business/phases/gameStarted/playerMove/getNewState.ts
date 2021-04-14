@@ -1,10 +1,14 @@
-import { State, PlayerListType } from "../../../types";
+import { State, PlayerListType, MoveDirection, CellType } from "../../../types";
 
 import { switchToNextPlayer } from "../../../../shared/State";
 /**
  * @returns A new state depending on the result of the player's movement.
  */
-export const getNewState = (state: State, newPlayerCoord: string) => {
+export const getNewState = (
+  state: State,
+  newPlayerCoord: string,
+  direction: MoveDirection
+) => {
   const { gameField, playerList, numberOfPlayer, dice } = { ...state };
 
   const newCellWithPlayer = gameField.values[newPlayerCoord];
@@ -39,9 +43,16 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
 
   const canNotTakeCell = isLastStepOfMove && isNextCellOcupied;
 
+  const metSurface = cellHasWall(state, newPlayerCoord, direction);
+
   // TODO: Is flat switch okey? Or i need in nested?!
   switch (true) {
     case playerLeftTheField: {
+      return state;
+    }
+
+    case metSurface: {
+      console.log("не можем пройти сквозь стену");
       return state;
     }
 
@@ -123,4 +134,55 @@ const checkNextCellOccupied = (
     return playerValue.coord === newCoord;
   });
   return isCellOccupied;
+};
+
+/**
+ * Returns true if current or next cell has wall
+ */
+
+const cellHasWall = (
+  state: State,
+  newPlayerCoord: string,
+  direction: MoveDirection
+) => {
+  const { playerList, numberOfPlayer, gameField } = state;
+  const currCellCoord = playerList[numberOfPlayer].coord;
+  const currCell = gameField.values[currCellCoord];
+  const nextCell = gameField.values[newPlayerCoord];
+  const oppositeDirection = getOppositeDirection(direction);
+  const currCellHasBarrier = checkCellOnSurface(currCell, direction);
+
+  const nextCellHasBarrier = checkCellOnSurface(nextCell, oppositeDirection);
+
+  if (currCellHasBarrier || nextCellHasBarrier) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const checkCellOnSurface = (cell: CellType, direction: MoveDirection) => {
+  if (cell.name === "commonCell") {
+    const cellHasBarrier =
+      cell.surfaceItem?.[direction] === "wall" ? true : false;
+    return cellHasBarrier;
+  }
+  return false;
+};
+
+const getOppositeDirection = (direction: MoveDirection): MoveDirection => {
+  switch (direction) {
+    case "top": {
+      return "bottom";
+    }
+    case "bottom": {
+      return "top";
+    }
+    case "left": {
+      return "right";
+    }
+    case "right": {
+      return "left";
+    }
+  }
 };
