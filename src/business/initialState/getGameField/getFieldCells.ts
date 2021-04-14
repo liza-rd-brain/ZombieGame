@@ -1,13 +1,24 @@
-import { StartCell, CommonCell, FinishCell, GameFieldCells } from "../../types";
+import {
+  StartCell,
+  CommonCell,
+  FinishCell,
+  GameFieldCells,
+  CellType,
+} from "../../types";
 
-import { FINISH_COORD, START_COORD } from "../../../shared/config";
+import {
+  FINISH_COORD,
+  START_COORD,
+  CELLS_SURFACES_LIST,
+} from "../../../shared/config";
 
 /**
- *  Returns an object with start, finish and walls in structure of GameValues.
+ *  Returns an object with start and finish  in structure of GameValues.
  */
 export const getFieldCells = (cellList: string[]): GameFieldCells => {
   const emptyFieldCells = createEmptyFieldCells(cellList);
-  const organizedFieldCells = organizeFieldCells(emptyFieldCells);
+  const fieldCellsWithWalls = getCellsWalls(emptyFieldCells);
+  const organizedFieldCells = getOrganizedFieldCells(emptyFieldCells);
   return organizedFieldCells;
 };
 
@@ -32,7 +43,7 @@ const createEmptyFieldCells = (cellList: Array<string>): GameFieldCells => {
 /**
  *  Creates an object with start, finish and walls in structure of GameValues.
  */
-const organizeFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
+const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
   const startIndex = `${START_COORD.hor}.${START_COORD.vert}`;
   const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
 
@@ -63,4 +74,38 @@ const organizeFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
   };
 
   return organizedGameFieldCells;
+};
+
+const getCellsWalls = (emptyField: GameFieldCells) /* : GameFieldCells */ => {
+  // TODO: Need add checking for CommonCell?
+  /**
+   * Returns list of Cells with walls(surfaces)
+   */
+  const cellsWithSurfacesList = CELLS_SURFACES_LIST.map((cellSurfaces): [
+    string,
+    CellType
+  ] => {
+    const { coord, surfaces } = cellSurfaces;
+    const cellIndex = `${coord.hor}.${coord.vert}`;
+
+    const cellWithoutSurface = emptyField[cellIndex];
+
+    if (cellWithoutSurface.name === "commonCell") {
+      const cellWithSurface = {
+        ...cellWithoutSurface,
+        surfaceItem: surfaces,
+      };
+      /* return { [cellIndex]: cellWithSurface }; */
+      return [cellIndex, cellWithSurface];
+    } else {
+      return [cellIndex, cellWithoutSurface];
+    }
+  });
+
+  const cellsWithSurfaces: GameFieldCells = Object.fromEntries(
+    cellsWithSurfacesList
+  );
+
+  const fieldCellsWithWalls = { ...emptyField, ...cellsWithSurfaces };
+  console.log(fieldCellsWithWalls);
 };

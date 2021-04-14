@@ -17,7 +17,7 @@ export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
 ];
 
 // The array is convenient for iterating
-export const SURFACES_LIST: CellsSurfaceListType = [
+export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   {
     coord: { hor: 2, vert: 2 },
     surfaces: {
@@ -91,5 +91,3 @@ export const SURFACES_LIST: CellsSurfaceListType = [
     },
   },
 ];
-
-console.log(SURFACES_LIST);

@@ -25,8 +25,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
     newCellWithPlayer?.cardItem.healthItem !== undefined;
 
   const metEnemyCard =
-    newCellWithPlayer?.name === "commonCell" &&
-    state.enemyList[newPlayerCoord]
+    newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]
       ? true
       : false;
 
@@ -40,6 +39,7 @@ export const getNewState = (state: State, newPlayerCoord: string) => {
 
   const canNotTakeCell = isLastStepOfMove && isNextCellOcupied;
 
+  // TODO: Is flat switch okey? Or i need in nested?!
   switch (true) {
     case playerLeftTheField: {
       return state;
