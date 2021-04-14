@@ -24,7 +24,7 @@ export type SurfaceKind = "wall" | "window" | "door" | null;
 export type SurfaceDirection = MoveDirection;
 
 // Kind of surfaces of cell
-export type SurfacesType = Record<SurfaceDirection , SurfaceKind>;
+export type SurfacesType = Record<SurfaceDirection, SurfaceKind>;
 
 export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
 
