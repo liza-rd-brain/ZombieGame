@@ -82,6 +82,13 @@ export function useOpenCard() {
             clearTimeout(timerGetResult);
           };
         }
+        // TODO: Take out in separdte custom hook
+        case "!checkAvailableNeighboringCell": {
+          dispatch({
+            type: "req-checkAvailableNeighboringCell",
+          });
+          break;
+        }
 
         default:
           break;

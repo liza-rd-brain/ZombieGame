@@ -11,6 +11,7 @@ export const trownDice = (action: ActionType, state: State): State => {
           ...state,
           type: "gameStarted.playerMove",
         },
+        doEffect: { type: "!checkAvailableNeighboringCell" },
       };
     }
     default:

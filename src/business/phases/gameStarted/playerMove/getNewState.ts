@@ -21,9 +21,9 @@ export const getNewState = (
       coord: newPlayerCoord,
     },
   };
-  
+
   const isLastStepOfMove = dice === 1;
-  
+
   const takeFinish = newCellWithPlayer?.name === "finish";
 
   const takeHealthCard =
@@ -91,6 +91,7 @@ export const getNewState = (
         gameState: {
           type: "gameStarted.playerMove",
         },
+        doEffect: { type: "!checkAvailableNeighboringCell" },
         playerList: newPlayerList,
       };
       return newState;

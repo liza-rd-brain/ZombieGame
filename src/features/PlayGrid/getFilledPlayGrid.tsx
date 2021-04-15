@@ -5,24 +5,34 @@ import {
   PlayerListType,
   EnemyListType,
   CommonCell,
+  CellType,
 } from "../../business/types";
 
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
 
-const CellItem = styled.div`
+const CellItem = styled.div<CellType>`
   position: relative;
   border: 1px solid #bfb1b1;
   box-sizing: content-box;
   width: 30px;
   height: 30px;
   color: lightgrey;
+  background-color: ${(props) => {
+    if (props.availableForTake) {
+      return "pink";
+    }
+  }};
 `;
 
 // TODO: Take out style variable-?!
 const CellItemWall = styled.div<CommonCell>`
   position: absolute;
+  box-sizing: content-box;
+  width: 30px;
+  height: 30px;
+  color: lightgrey;
   border-top: ${(props) => {
     if (props.surfaceItem) {
       switch (props.surfaceItem.top) {
@@ -101,11 +111,6 @@ const CellItemWall = styled.div<CommonCell>`
       return "none";
     }
   }};
-
-  box-sizing: content-box;
-  width: 30px;
-  height: 30px;
-  color: lightgrey;
 `;
 
 //TODO:как типизировать возврат jsx
@@ -124,7 +129,7 @@ export const getFilledPlayGrid = (
       case "start":
       case "finish": {
         return (
-          <CellItem key={`${hor}${vert}`}>
+          <CellItem key={`${hor}${vert}`} {...cellValues}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList)}
             {hor}
@@ -135,7 +140,7 @@ export const getFilledPlayGrid = (
       case "commonCell": {
         // TODO:  Pass props for walls
         return (
-          <CellItem key={`${hor}${vert}`}>
+          <CellItem key={`${hor}${vert}`} {...cellValues}>
             <CellItemWall key={`${hor}${vert}`} {...cellValues}>
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList)}
