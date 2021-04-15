@@ -7,7 +7,7 @@ import { MoveDirection } from "../../../types";
  * @returns A string with new coordinate.
  */
 
-export const changePlayerCoord = (
+export const getNextPlayerCoord = (
   currentCoord: string,
   direction: MoveDirection
 ) => {
