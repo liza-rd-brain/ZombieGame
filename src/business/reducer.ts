@@ -22,7 +22,8 @@ export type ActionType =
   | { type: "req-openEnemyCard" }
   | { type: "req-getBattleResult" }
   | { type: "req-getEndScreen" }
-  | { type: "req-checkAvailableNeighboringCell" };
+  | { type: "req-checkAvailableNeighboringCell" }
+  | { type: "req-cleanMarkedCell" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 

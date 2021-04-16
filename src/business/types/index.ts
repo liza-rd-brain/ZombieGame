@@ -88,6 +88,7 @@ export type TypeEffect =
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
+  | { type: "!cleanMarkedCell" }
   | null;
 
 export type State = {

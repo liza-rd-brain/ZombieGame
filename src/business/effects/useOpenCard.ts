@@ -90,6 +90,13 @@ export function useOpenCard() {
           break;
         }
 
+        case "!cleanMarkedCell": {
+          dispatch({
+            type: "req-cleanMarkedCell",
+          });
+          break;
+        }
+
         default:
           break;
       }

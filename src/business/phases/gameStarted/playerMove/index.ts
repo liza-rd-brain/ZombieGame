@@ -10,31 +10,35 @@ import { ActionType } from "../../../reducer";
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
 import { getNewState } from "./getNewState";
 import { checkCanTakeCell } from "./checkCanTakeCell";
+import { changePlayerCoord } from "./changePlayerCoord";
 
 export const playerMove = (action: ActionType, state: State): State => {
   // TODO: First, before the switch, checking all direction on opportunities of making move
 
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      const newState = getStateWithMarkedCell(state);
-      return newState;
+      const gameFieldWithMarkedCell = getGameFieldWithMarkedCell(state);
+      return { ...state, gameField: gameFieldWithMarkedCell };
     }
     case "arrowPressed": {
       const direction = action.payload;
 
-      const { playerList, numberOfPlayer } = state;
+      const { playerList, numberOfPlayer, gameField } = state;
       const prevPlayerCoord = playerList[numberOfPlayer].coord;
       const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
 
-      const canTakeNextCell = checkCanTakeCell(
-        state,
-        nextPlayerCoord,
-        direction
-      );
+      const canTakeNextCell =
+        gameField.values[nextPlayerCoord].availableForTake;
 
       switch (canTakeNextCell) {
         case true: {
-          const newState = getNewState(state, nextPlayerCoord, direction);
+          const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
+          const newState: State = {
+            ...state,
+            playerList: newPlayerList,
+            doEffect: { type: "!cleanMarkedCell" },
+          };
+          console.log(newState);
           return newState;
         }
         case false: {
@@ -44,6 +48,11 @@ export const playerMove = (action: ActionType, state: State): State => {
           return state;
         }
       }
+    }
+    case "req-cleanMarkedCell": {
+      const cleanedGameField = cleanGameField(state);
+      return { ...state, gameField: cleanedGameField };
+      /*  return state; */
     }
 
     default: {
@@ -55,42 +64,35 @@ export const playerMove = (action: ActionType, state: State): State => {
 /**
  * We need chekout all neighboring cell
  */
-const getStateWithMarkedCell = (state: State): State => {
+const getGameFieldWithMarkedCell = (state: State): GameField => {
   const { playerList, numberOfPlayer, gameField } = state;
+
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
-  const topCellCoor = getNextPlayerCoord(prevPlayerCoord, "top");
-  const bottomCellCoor = getNextPlayerCoord(prevPlayerCoord, "bottom");
-  const rightCellCoor = getNextPlayerCoord(prevPlayerCoord, "right");
-  const leftCellCoor = getNextPlayerCoord(prevPlayerCoord, "left");
 
-  const availableCellCoord: Record<MoveDirection, string> = {
-    top: topCellCoor,
-    bottom: bottomCellCoor,
-    right: rightCellCoor,
-    left: leftCellCoor,
-  };
+  const topCellCoord = getNextPlayerCoord(prevPlayerCoord, "top");
+  const bottomCellCoord = getNextPlayerCoord(prevPlayerCoord, "bottom");
+  const rightCellCoord = getNextPlayerCoord(prevPlayerCoord, "right");
+  const leftCellCoord = getNextPlayerCoord(prevPlayerCoord, "left");
 
-  const availableCellCoordList = Object.entries(availableCellCoord);
+  const availableCellCoord: { direction: MoveDirection; coord: string }[] = [
+    { direction: "top", coord: topCellCoord },
+    { direction: "bottom", coord: bottomCellCoord },
+    { direction: "right", coord: rightCellCoord },
+    { direction: "left", coord: leftCellCoord },
+  ];
 
-  const existanceAvailableCellCoord = availableCellCoordList.filter(
-    (coordItem) => {
-      const [direction, coord] = coordItem;
-      return gameField.values[coord];
-    }
-  );
+  const existanceAvailableCellCoord = availableCellCoord.filter((coordItem) => {
+    const { direction, coord } = coordItem;
+    return gameField.values[coord];
+  });
 
-  console.log("existanceAvailableCellCoord", existanceAvailableCellCoord);
-  /*   console.log("availableCellList", availableCellCoord); */
   const availableCellList = existanceAvailableCellCoord.map((coordItem): [
     string,
     CellType
   ] => {
-    const [direction, coord] = coordItem;
-    const availableForTake = checkCanTakeCell(
-      state,
-      coord,
-      direction as MoveDirection
-    );
+    const { direction, coord } = coordItem;
+
+    const availableForTake = checkCanTakeCell(state, coord, direction);
     return [
       coord,
       { ...gameField.values[coord], availableForTake: availableForTake },
@@ -99,8 +101,18 @@ const getStateWithMarkedCell = (state: State): State => {
 
   const availableGameCells = Object.fromEntries(availableCellList);
 
-  console.log("availableGameCells", availableGameCells);
+  const gameFieldWithhAvailableCells = {
+    ...gameField,
+    values: { ...gameField.values, ...availableGameCells },
+  };
 
+  console.log("gameFieldWithhAvailableCells", gameFieldWithhAvailableCells);
+
+  return gameFieldWithhAvailableCells;
+};
+
+const cleanGameField = (state: State): GameField => {
+  const { gameField } = state;
   const cleanedMarkedCellList = Object.entries({ ...gameField }.values).map(
     (gameFieldCells): [string, CellType] => {
       const [index, cell] = gameFieldCells;
@@ -118,16 +130,5 @@ const getStateWithMarkedCell = (state: State): State => {
       ...cleanedMarkedGameCells,
     },
   };
-
-  const gameFieldWicthavailableCells = {
-    ...cleanedMarkedGameField,
-    values: {
-      ...cleanedMarkedGameField.values,
-      ...availableGameCells,
-    },
-  };
-
-  console.log("gameFieldWicthavailableCells", gameFieldWicthavailableCells);
-  const newState = { ...state, gameField: gameFieldWicthavailableCells };
-  return newState;
+  return cleanedMarkedGameField;
 };
