@@ -96,6 +96,12 @@ export function useOpenCard() {
           });
           break;
         }
+        case "!getPlayerMoveResult": {
+          dispatch({
+            type: "req-getPlayerMoveResult",
+          });
+          break;
+        }
 
         default:
           break;

@@ -38,7 +38,6 @@ export const playerMove = (action: ActionType, state: State): State => {
             playerList: newPlayerList,
             doEffect: { type: "!cleanMarkedCell" },
           };
-          console.log(newState);
           return newState;
         }
         case false: {
@@ -51,8 +50,15 @@ export const playerMove = (action: ActionType, state: State): State => {
     }
     case "req-cleanMarkedCell": {
       const cleanedGameField = cleanGameField(state);
-      return { ...state, gameField: cleanedGameField };
-      /*  return state; */
+      return {
+        ...state,
+        gameField: cleanedGameField,
+        doEffect: { type: "!getPlayerMoveResult" },
+      };
+    }
+    case "req-getPlayerMoveResult": {
+      const newState = getNewState(state);
+      return newState;
     }
 
     default: {
@@ -106,8 +112,6 @@ const getGameFieldWithMarkedCell = (state: State): GameField => {
     values: { ...gameField.values, ...availableGameCells },
   };
 
-  console.log("gameFieldWithhAvailableCells", gameFieldWithhAvailableCells);
-
   return gameFieldWithhAvailableCells;
 };
 
@@ -120,7 +124,6 @@ const cleanGameField = (state: State): GameField => {
       return [index, cell];
     }
   );
-  console.log("cleanedMarkedGameCells", cleanedMarkedCellList);
 
   const cleanedMarkedGameCells = Object.fromEntries(cleanedMarkedCellList);
 

@@ -5,23 +5,11 @@ import { switchToNextPlayer } from "../../../../shared/State";
  * @returns A new state depending on the result of the player's movement.
  */
 
-export const getNewState = (
-  state: State,
-  newPlayerCoord: string,
-  direction: MoveDirection
-) => {
+export const getNewState = (state: State) => {
   const { gameField, playerList, numberOfPlayer, dice } = { ...state };
 
+  const newPlayerCoord = playerList[numberOfPlayer].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];
-
-  const newPlayerList = {
-    ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
-      coord: newPlayerCoord,
-    },
-  };
-
   const isLastStepOfMove = dice === 1;
 
   const takeFinish = newCellWithPlayer?.name === "finish";
@@ -43,7 +31,6 @@ export const getNewState = (
         ...state,
         dice: state.dice - 1,
         gameResult: "Вы выиграли",
-        playerList: newPlayerList,
       };
       return newState;
     }
@@ -56,7 +43,6 @@ export const getNewState = (
           type: "gameStarted.takeHealthCard",
         },
         doEffect: { type: "!openHealthCard" },
-        playerList: newPlayerList,
       };
       return newState;
     }
@@ -69,17 +55,21 @@ export const getNewState = (
           type: "gameStarted.interactEnemyCard",
         },
         doEffect: { type: "!checkApperanceEnemyCard" },
-        playerList: newPlayerList,
       };
       return newState;
     }
 
     case isLastStepOfMove: {
-      const changedPartState = switchToNextPlayer();
+      /*  const changedPartState = switchToNextPlayer(); */
       const newState: State = {
         ...state,
-        ...changedPartState,
-        playerList: newPlayerList,
+        dice: 0,
+        gameState: {
+          type: "gameStarted.getOrder",
+        },
+        doEffect: {
+          type: "!getNextPlayer",
+        },
       };
       return newState;
     }
@@ -92,7 +82,6 @@ export const getNewState = (
           type: "gameStarted.playerMove",
         },
         doEffect: { type: "!checkAvailableNeighboringCell" },
-        playerList: newPlayerList,
       };
       return newState;
     }

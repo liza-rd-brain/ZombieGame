@@ -31,6 +31,7 @@ const getStatePlayerRunsAway = (state: State): State => {
       ...state,
       type: "gameStarted.playerMove",
     },
+    doEffect: { type: "!checkAvailableNeighboringCell" },
   };
 };
 

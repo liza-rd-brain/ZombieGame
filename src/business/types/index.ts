@@ -89,6 +89,7 @@ export type TypeEffect =
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
+  | { type: "!getPlayerMoveResult" }
   | null;
 
 export type State = {
