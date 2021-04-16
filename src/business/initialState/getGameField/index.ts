@@ -1,13 +1,13 @@
 import { FINISH_COORD } from "../../../shared/config";
 
-import { getGameValues } from "./getGameValues";
+import { getFieldCells} from "./getFieldCells";
 import { spreadHealthCards } from "./spreadHealthCards";
 
 export const getGameField = () => {
   const order = getCellOrder();
-  const gameValues = getGameValues(order);
-  const filledWithCardsGameValues = spreadHealthCards(gameValues);
-  const gameField = { order, values: filledWithCardsGameValues };
+  const gameFieldCells = getFieldCells(order);
+  const filledWithCardsCells = spreadHealthCards(gameFieldCells);
+  const gameField = { order, values: filledWithCardsCells };
   return gameField;
 };
 

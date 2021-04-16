@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 import {
   GameField,
-  PlayersListType,
-  EnemiesListType,
+  PlayerListType,
+  EnemyListType,
 } from "../../business/types";
 
 import { Wall } from "../../components";
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
-import { getEnemiesList } from "./getEnemiesList";
+import { getEnemyList } from "./getEnemyList";
 
 const CellItem = styled.div`
   position: relative;
@@ -23,8 +23,8 @@ const CellItem = styled.div`
 //TODO:как типизировать возврат jsx
 export const getFilledPlayGrid = (
   gameField: GameField,
-  playersList: PlayersListType,
-  enemiesList: EnemiesListType
+  playersList: PlayerListType,
+  enemyList: EnemyListType
 ) => {
   const orderGameCells = gameField.order;
 
@@ -55,7 +55,7 @@ export const getFilledPlayGrid = (
           <CellItem key={`${hor}${vert}`}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList)}
-            {getEnemiesList(orderIndex, enemiesList)}
+            {getEnemyList(orderIndex, enemyList)}
 
             {hor}
             {vert}

@@ -2,7 +2,7 @@ import { initialState } from "./initialState";
 import { waitingStart } from "./phases/waitingStart";
 import {
   trownDice,
-  clickArrow,
+  playerMove,
   takeHealthCard,
   getOrder,
   interactEnemyCard,
@@ -45,8 +45,8 @@ export const reducer = (
           return trownDice(action, state);
         }
 
-        case "clickArrow": {
-          return clickArrow(action, state);
+        case "playerMove": {
+          return playerMove(action, state);
         }
 
         case "takeHealthCard": {

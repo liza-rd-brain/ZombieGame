@@ -9,7 +9,7 @@ export const trownDice = (action: ActionType, state: State): State => {
         dice: action.payload,
         gameState: {
           ...state,
-          type: "gameStarted.clickArrow",
+          type: "gameStarted.playerMove",
         },
       };
     }

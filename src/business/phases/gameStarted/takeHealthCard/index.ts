@@ -25,8 +25,8 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
 };
 
 const getStateOpenCard = (state: State): State => {
-  const { gameField, numberOfPlayer, playersList } = state;
-  const playerCoordIndex = playersList[numberOfPlayer].coord;
+  const { gameField, numberOfPlayer, playerList } = state;
+  const playerCoordIndex = playerList[numberOfPlayer].coord;
   const healthCell = gameField.values[playerCoordIndex];
 
   const cellWithOpenHealth = openHealthCard(healthCell);
@@ -44,29 +44,29 @@ const getStateOpenCard = (state: State): State => {
 };
 
 const getStateChangedHealth = (state: State): State => {
-  const { gameField, numberOfPlayer, playersList } = state;
-  const playerCoordIndex = playersList[numberOfPlayer].coord;
+  const { gameField, numberOfPlayer, playerList } = state;
+  const playerCoordIndex = playerList[numberOfPlayer].coord;
   const healthCell = gameField.values[playerCoordIndex];
 
-  const changedplayersList = changePlayerHealth(
+  const changedPlayerList = changePlayerHealth(
     healthCell,
-    playersList,
+    playerList,
     numberOfPlayer
   );
 
   return {
     ...state,
     doEffect: { type: "!deleteHealthCard"},
-    playersList: changedplayersList,
+    playerList: changedPlayerList,
   };
 };
 
 const getStateDeletedCard = (state: State): State => {
-  const { gameField, numberOfPlayer, playersList } = state;
-  const playerCoordIndex = playersList[numberOfPlayer].coord;
+  const { gameField, numberOfPlayer, playerList } = state;
+  const playerCoordIndex = playerList[numberOfPlayer].coord;
   const healthCell = gameField.values[playerCoordIndex];
 
-  const isPlayerAlive = playersList[numberOfPlayer].health > 0;
+  const isPlayerAlive = playerList[numberOfPlayer].health > 0;
   const cellWithoutHealthCard = deleteHealthCard(healthCell);
 
   const newGameField: GameField = {

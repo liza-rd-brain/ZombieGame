@@ -1,8 +1,8 @@
-import { EnemiesList } from "../../components";
+import { EnemyList } from "../../components";
 
-import { EnemiesListType, EnemyCardType } from "../../business/types";
+import { EnemyListType, EnemyCardType } from "../../business/types";
 
-export const getEnemiesList = (index: string, enemiesList: EnemiesListType) => {
+export const getEnemyList = (index: string, enemiesList: EnemyListType) => {
   let enemiesArr: EnemyCardType[] = [];
   for (let enemiesKey in enemiesList) {
     const enemiesCard = enemiesList[enemiesKey];
@@ -12,6 +12,6 @@ export const getEnemiesList = (index: string, enemiesList: EnemiesListType) => {
     }
   }
   if (enemiesArr.length > 0) {
-    return <EnemiesList list={enemiesArr} />;
+    return <EnemyList list={enemiesArr} />;
   } else return null;
 };
