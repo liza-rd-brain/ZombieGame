@@ -11,7 +11,8 @@ export const playerMove = (action: ActionType, state: State): State => {
       const { playerList, numberOfPlayer } = state;
       const prevPlayerCoord = playerList[numberOfPlayer].coord;
       const newPlayerCoord = changePlayerCoord(prevPlayerCoord, direction);
-      const newState = getNewState(state, newPlayerCoord);
+      // TODO: Need separate chek out: can the player take nextCell?
+      const newState = getNewState(state, newPlayerCoord, direction);
       return newState;
     }
 
