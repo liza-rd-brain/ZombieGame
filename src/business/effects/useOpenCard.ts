@@ -82,26 +82,6 @@ export function useOpenCard() {
             clearTimeout(timerGetResult);
           };
         }
-        // TODO: Take out in separdte custom hook
-        case "!checkAvailableNeighboringCell": {
-          dispatch({
-            type: "req-checkAvailableNeighboringCell",
-          });
-          break;
-        }
-
-        case "!cleanMarkedCell": {
-          dispatch({
-            type: "req-cleanMarkedCell",
-          });
-          break;
-        }
-        case "!getPlayerMoveResult": {
-          dispatch({
-            type: "req-getPlayerMoveResult",
-          });
-          break;
-        }
 
         default:
           break;
