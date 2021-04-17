@@ -23,7 +23,7 @@ export type ActionType =
   | { type: "req-getBattleResult" }
   | { type: "req-getEndScreen" }
   | { type: "req-checkAvailableNeighboringCell" }
-  | { type: "req-cleanMarkedCell" }
+  | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };

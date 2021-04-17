@@ -5,7 +5,7 @@ import { switchToNextPlayer } from "../../../../shared/State";
  * @returns A new state depending on the result of the player's movement.
  */
 
-export const getNewState = (state: State) => {
+export const getPlayerMoveResult = (state: State) => {
   const { gameField, playerList, numberOfPlayer, dice } = { ...state };
 
   const newPlayerCoord = playerList[numberOfPlayer].coord;

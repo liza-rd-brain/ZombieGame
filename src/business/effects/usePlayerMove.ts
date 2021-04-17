@@ -19,7 +19,7 @@ export function usePlayerMove() {
 
         case "!cleanMarkedCell": {
           dispatch({
-            type: "req-cleanMarkedCell",
+            type: "req-cleanAvailableCells",
           });
           break;
         }

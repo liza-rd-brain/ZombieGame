@@ -5,60 +5,29 @@ import {
   CellType,
   MoveDirection,
 } from "../../../types";
+
 import { ActionType } from "../../../reducer";
+import { MOVE_DIRECTION_LIST } from "./../../../../shared/config";
 
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
-import { getNewState } from "./getNewState";
+import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
 
 export const playerMove = (action: ActionType, state: State): State => {
-  // TODO: First, before the switch, checking all direction on opportunities of making move
-
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      const gameFieldWithMarkedCell = getGameFieldWithMarkedCell(state);
-      return { ...state, gameField: gameFieldWithMarkedCell };
+      return getGameFieldWithAvailableCell(state);
     }
     case "arrowPressed": {
       const direction = action.payload;
-
-      const { playerList, numberOfPlayer, gameField } = state;
-      const prevPlayerCoord = playerList[numberOfPlayer].coord;
-      const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
-
-      const canTakeNextCell =
-        gameField.values[nextPlayerCoord].availableForTake;
-
-      switch (canTakeNextCell) {
-        case true: {
-          const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
-          const newState: State = {
-            ...state,
-            playerList: newPlayerList,
-            doEffect: { type: "!cleanMarkedCell" },
-          };
-          return newState;
-        }
-        case false: {
-          return state;
-        }
-        default: {
-          return state;
-        }
-      }
+      return getStateArrowPressed(state, direction);
     }
-    case "req-cleanMarkedCell": {
-      const cleanedGameField = cleanGameField(state);
-      return {
-        ...state,
-        gameField: cleanedGameField,
-        doEffect: { type: "!getPlayerMoveResult" },
-      };
+    case "req-cleanAvailableCells": {
+      return getStateClearedAvailableCells(state);
     }
     case "req-getPlayerMoveResult": {
-      const newState = getNewState(state);
-      return newState;
+      return getPlayerMoveResult(state);
     }
 
     default: {
@@ -68,31 +37,74 @@ export const playerMove = (action: ActionType, state: State): State => {
 };
 
 /**
- * We need chekout all neighboring cell
+ * Changing coordinates of player if he can take the cell in  certain direction.
  */
-const getGameFieldWithMarkedCell = (state: State): GameField => {
+const getStateArrowPressed = (
+  state: State,
+  direction: MoveDirection
+): State => {
+  const { playerList, numberOfPlayer, gameField } = state;
+
+  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
+
+  const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
+
+  switch (canTakeNextCell) {
+    case true: {
+      const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
+      const newState: State = {
+        ...state,
+        playerList: newPlayerList,
+        doEffect: { type: "!cleanMarkedCell" },
+      };
+      return newState;
+    }
+    case false: {
+      return state;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+/**
+ * Cells that can be taken get special field "availableForTake".
+ * With this field we add color for these cells.
+ */
+const getGameFieldWithAvailableCell = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
 
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
 
-  const topCellCoord = getNextPlayerCoord(prevPlayerCoord, "top");
-  const bottomCellCoord = getNextPlayerCoord(prevPlayerCoord, "bottom");
-  const rightCellCoord = getNextPlayerCoord(prevPlayerCoord, "right");
-  const leftCellCoord = getNextPlayerCoord(prevPlayerCoord, "left");
-
-  const availableCellCoord: { direction: MoveDirection; coord: string }[] = [
-    { direction: "top", coord: topCellCoord },
-    { direction: "bottom", coord: bottomCellCoord },
-    { direction: "right", coord: rightCellCoord },
-    { direction: "left", coord: leftCellCoord },
-  ];
-
-  const existanceAvailableCellCoord = availableCellCoord.filter((coordItem) => {
-    const { direction, coord } = coordItem;
-    return gameField.values[coord];
+  /**
+   * Returns coordinate of neighboring cells in all direction.
+   */
+  const coordNeighboringCells: {
+    direction: MoveDirection;
+    coord: string;
+  }[] = MOVE_DIRECTION_LIST.map((directionItem) => {
+    return {
+      direction: directionItem,
+      coord: getNextPlayerCoord(prevPlayerCoord, directionItem),
+    };
   });
 
-  const availableCellList = existanceAvailableCellCoord.map((coordItem): [
+  /**
+   * Returns the coordinates that lying in the GameField.
+   */
+  const existanceInGameFieldCells = coordNeighboringCells.filter(
+    (coordItem) => {
+      const { direction, coord } = coordItem;
+      return gameField.values[coord];
+    }
+  );
+
+  /**
+   * Returns the coordinates of Cell that can be taken by player.
+   */
+  const availableCellList = existanceInGameFieldCells.map((coordItem): [
     string,
     CellType
   ] => {
@@ -111,14 +123,20 @@ const getGameFieldWithMarkedCell = (state: State): GameField => {
     ...gameField,
     values: { ...gameField.values, ...availableGameCells },
   };
-
-  return gameFieldWithhAvailableCells;
+  return { ...state, gameField: gameFieldWithhAvailableCells };
 };
 
-const cleanGameField = (state: State): GameField => {
+/**
+ * Re field "availableForTake".
+ * With this field we add color for these cells.
+ */
+const getStateClearedAvailableCells = (state: State): State => {
   const { gameField } = state;
+
   const cleanedMarkedCellList = Object.entries({ ...gameField }.values).map(
     (gameFieldCells): [string, CellType] => {
+
+
       const [index, cell] = gameFieldCells;
       delete cell.availableForTake;
       return [index, cell];
@@ -133,5 +151,10 @@ const cleanGameField = (state: State): GameField => {
       ...cleanedMarkedGameCells,
     },
   };
-  return cleanedMarkedGameField;
+
+  return {
+    ...state,
+    gameField: cleanedMarkedGameField,
+    doEffect: { type: "!getPlayerMoveResult" },
+  };
 };
