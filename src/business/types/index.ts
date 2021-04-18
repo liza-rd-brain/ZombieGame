@@ -18,11 +18,18 @@ export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
 
 export type CellsSurfaceListType = Array<CellsSurfaceType>;
 
+export type AvailableCellType = {
+  direction: MoveDirection;
+  coord: string;
+};
+export type AvailableCellListType = AvailableCellType[];
+
 export type PlayerCardType = {
   name: "player";
   health: number;
   orderNumber: number;
   coord: string;
+  availableCellList?: [];
 };
 
 export type PlayerListType = Record<string, PlayerCardType>;
