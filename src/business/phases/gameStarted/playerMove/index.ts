@@ -24,9 +24,11 @@ export const playerMove = (action: ActionType, state: State): State => {
       const direction = action.payload;
       return getStateArrowPressed(state, direction);
     }
-    /*  case "req-cleanAvailableCells": {
-      return getStateClearedAvailableCells(state);
-    } */
+    case "req-cleanAvailableCells": {
+      const newState = getStateClearedAvailableCells(state);
+      console.log(newState);
+      return newState;
+    }
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
     }
@@ -138,9 +140,15 @@ const getPlayerWithAvailableCell = (state: State): State => {
 
  */
 const getStateClearedAvailableCells = (state: State): State => {
-  const { gameField } = state;
-
-  const cleanedMarkedCellList = Object.entries({ ...gameField }.values).map(
+  const { playerList, numberOfPlayer, gameField } = state;
+  const currPlayer = playerList[numberOfPlayer];
+  delete currPlayer.availableCellList;
+  return {
+    ...state,
+    playerList: { ...state.playerList, [numberOfPlayer]: currPlayer },
+    doEffect: { type: "!getPlayerMoveResult" },
+  };
+  /*   const cleanedMarkedCellList = Object.entries({ ...gameField }.values).map(
     (gameFieldCells): [string, CellType] => {
       const [index, cell] = gameFieldCells;
       delete cell.availableForTake;
@@ -161,5 +169,5 @@ const getStateClearedAvailableCells = (state: State): State => {
     ...state,
     gameField: cleanedMarkedGameField,
     doEffect: { type: "!getPlayerMoveResult" },
-  };
+  }; */
 };
