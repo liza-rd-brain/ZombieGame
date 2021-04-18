@@ -137,7 +137,7 @@ const getPlayerWithAvailableCell = (state: State): State => {
 };
 
 /**
-
+ *Remove from current player availableCellList
  */
 const getStateClearedAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
@@ -148,26 +148,4 @@ const getStateClearedAvailableCells = (state: State): State => {
     playerList: { ...state.playerList, [numberOfPlayer]: currPlayer },
     doEffect: { type: "!getPlayerMoveResult" },
   };
-  /*   const cleanedMarkedCellList = Object.entries({ ...gameField }.values).map(
-    (gameFieldCells): [string, CellType] => {
-      const [index, cell] = gameFieldCells;
-      delete cell.availableForTake;
-      return [index, cell];
-    }
-  );
-
-  const cleanedMarkedGameCells = Object.fromEntries(cleanedMarkedCellList);
-
-  const cleanedMarkedGameField: GameField = {
-    ...gameField,
-    values: {
-      ...cleanedMarkedGameCells,
-    },
-  };
-
-  return {
-    ...state,
-    gameField: cleanedMarkedGameField,
-    doEffect: { type: "!getPlayerMoveResult" },
-  }; */
 };

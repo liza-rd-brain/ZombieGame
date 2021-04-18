@@ -46,13 +46,11 @@ export type EnemyListType = Record<string, EnemyCardType>;
 export type FinishCell = {
   name: "finish";
   cardItem: { playerList?: PlayerCardType[] };
-  availableForTake?: boolean;
 };
 
 export type StartCell = {
   name: "start";
   cardItem: { playerList?: PlayerCardType[] };
-  availableForTake?: boolean;
 };
 
 export type HealthCardType = {
@@ -66,14 +64,12 @@ export type HealthCell = {
   name: "commonCell";
   cardItem: { healthItem: HealthCardType };
   surfaceItem?: SurfacesType;
-  availableForTake?: boolean;
 };
 
 export type CommonCell = {
   name: "commonCell";
   cardItem: { healthItem?: HealthCardType };
   surfaceItem?: SurfacesType;
-  availableForTake?: boolean;
 };
 
 export type CellType = CommonCell | FinishCell | StartCell | HealthCell;
