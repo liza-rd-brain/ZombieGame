@@ -49,7 +49,18 @@ const getStateArrowPressed = (
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
   const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
 
-  const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
+  /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
+   */
+
+  const canTakeNextCell = playerList[numberOfPlayer].availableCellList?.find(
+    (cell) => {
+      {
+        return cell.coord == nextPlayerCoord;
+      }
+    }
+  )
+    ? true
+    : false;
 
   switch (canTakeNextCell) {
     case true: {
@@ -71,8 +82,7 @@ const getStateArrowPressed = (
 };
 
 /**
- * Cells that can be taken get special field "availableForTake".
- * With this field we add color for these cells.
+ * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
 const getPlayerWithAvailableCell = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;

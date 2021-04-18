@@ -66,7 +66,7 @@ const cellHasWall = (
 
   if (currCellHasBarrier || nextCellHasBarrier) {
     return true;
-  } else {
+  } else { 
     return false;
   }
 };
