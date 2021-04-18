@@ -18,10 +18,16 @@ export function usePlayerMove() {
         }
 
         case "!cleanMarkedCell": {
-          dispatch({
-            type: "req-cleanAvailableCells",
-          });
-          break;
+          const timerMarkCell = setTimeout(
+            () =>
+              dispatch({
+                type: "req-cleanAvailableCells",
+              }),
+            300
+          );
+          return () => {
+            clearTimeout(timerMarkCell);
+          };
         }
         case "!getPlayerMoveResult": {
           dispatch({

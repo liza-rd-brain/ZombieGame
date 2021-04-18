@@ -118,7 +118,6 @@ const CellItemWall = styled.div<CommonCell>`
   }};
 `;
 
-//TODO:как типизировать возврат jsx
 export const getFilledPlayGrid = (
   gameField: GameField,
   playersList: PlayerListType,
@@ -150,7 +149,6 @@ export const getFilledPlayGrid = (
         );
       }
       case "commonCell": {
-        // TODO:  Pass props for walls
         return (
           <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             <CellItemWall key={`${hor}${vert}`} {...cellValues}>

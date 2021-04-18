@@ -5,22 +5,29 @@ import styled from "styled-components";
 import { PlayerCardType } from "../business/types";
 
 type PlayerItem = {
-  item: PlayerCardType;
+  isCurrent: boolean;
 };
 
-type PlayerArray = {
+type PlayerListItem = {
   list: PlayerCardType[];
+  numberOfPlayer: number;
 };
 
-const PlayerCard = styled.div`
+const PlayerCard = styled.div<PlayerItem>`
   border: 5px solid red;
+  background-color: red;
   border-radius: 50%;
   width: 5px;
   height: 5px;
-  background-color: red;
   top: 2px;
   left: 1px;
   z-index: 1;
+  opacity: 0.5;
+  opacity: ${(props) => {
+    if (props.isCurrent) {
+      return "1";
+    }
+  }};
 `;
 
 const PlayerCardList = styled.div`
@@ -32,21 +39,15 @@ const PlayerCardList = styled.div`
   color: green;
 `;
 
-export const Player = (props: PlayerItem) => {
-  const {orderNumber, coord } = props.item;
+export const PlayerList = (props: PlayerListItem) => {
+  const { list, numberOfPlayer } = props;
   return (
     <PlayerCardList>
-      <PlayerCard key={coord}>{orderNumber}</PlayerCard>
-    </PlayerCardList>
-  );
-};
-
-export const PlayerList = (props: PlayerArray) => {
-  const playerArray = props.list;
-  return (
-    <PlayerCardList>
-      {playerArray.map((item, index) => (
-        <PlayerCard key={index}>{item.orderNumber}</PlayerCard>
+      {list.map((item, index) => (
+        <PlayerCard key={index} isCurrent={numberOfPlayer == item.orderNumber}>
+          {" "}
+          {item.orderNumber}
+        </PlayerCard>
       ))}
     </PlayerCardList>
   );
