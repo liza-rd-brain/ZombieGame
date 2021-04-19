@@ -132,12 +132,10 @@ const Wall = styled.div<CommonCell>`
 `;
 const CellItem = styled.div<CellApperance>`
   position: relative;
-  box-sizing: border-box;
-  border: 1px solid lightgray;
-  font-size: 14px;
-  text-align: right;
-  width: 50px;
-  height: 50px;
+  border: 1px solid #ddd1d1;
+  box-sizing: content-box;
+  width: 30px;
+  height: 30px;
   color: lightgrey;
   background-color: ${(props) => {
     if (props.hasMarker) {
