@@ -20,12 +20,7 @@ type ContextMenuType = {
 type WrapType = {};
 
 const GridItem = styled.div<GridProps>`
- /*  pointer-events: ${(props) => {
-    if (props.type === "visible") {
-      return "none";
-    } else return "auto";
-  }}; */
-  outline: 2px solid lightgray;
+  outline: 2px solid red;
   margin: 0 auto;
   width: 100%;
   transform: rotate(270deg);

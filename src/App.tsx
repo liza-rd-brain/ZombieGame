@@ -17,13 +17,13 @@ import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
 
 const Field = styled.div`
   position: relative;
-  /*   width: 450px; */
+/*   width: 450px; */
   margin: 0 auto;
 `;
 
 const Game = styled.div`
-  width: 900px;
-  margin: 40px auto;
+  width: 650px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
 `;
