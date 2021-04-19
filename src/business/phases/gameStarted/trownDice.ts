@@ -8,9 +8,9 @@ export const trownDice = (action: ActionType, state: State): State => {
         ...state,
         dice: action.payload,
         gameState: {
-          ...state,
           type: "gameStarted.playerMove",
         },
+        doEffect: { type: "!checkAvailableNeighboringCell" },
       };
     }
     default:

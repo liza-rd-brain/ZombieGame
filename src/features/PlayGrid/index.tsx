@@ -29,7 +29,7 @@ const GridItem = styled.div<GridProps>`
 `;
 
 export const PlayGrid = () => {
-  const { gameField, playerList, enemyList } = useSelector(
+  const { gameField, playerList, enemyList, numberOfPlayer } = useSelector(
     (state: State) => ({
       ...state,
     })
@@ -38,7 +38,7 @@ export const PlayGrid = () => {
   const height = maxVert + 1;
   const playerGrid = (
     <GridItem vert={height}>
-      {getFilledPlayGrid(gameField, playerList, enemyList)}
+      {getFilledPlayGrid(gameField, playerList, enemyList, numberOfPlayer)}
     </GridItem>
   );
   return playerGrid;

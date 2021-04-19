@@ -5,24 +5,39 @@ import {
   PlayerListType,
   EnemyListType,
   CommonCell,
+  CellType,
+  AvailableCellType,
 } from "../../business/types";
 
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
 
-const CellItem = styled.div`
+type CellApperance = {
+  hasMarker?: AvailableCellType;
+};
+
+const CellItem = styled.div<CellApperance>`
   position: relative;
   border: 1px solid #bfb1b1;
   box-sizing: content-box;
   width: 30px;
   height: 30px;
   color: lightgrey;
+  background-color: ${(props) => {
+    if (props.hasMarker) {
+      return "pink";
+    }
+  }};
 `;
 
 // TODO: Take out style variable-?!
 const CellItemWall = styled.div<CommonCell>`
   position: absolute;
+  box-sizing: content-box;
+  width: 30px;
+  height: 30px;
+  color: lightgrey;
   border-top: ${(props) => {
     if (props.surfaceItem) {
       switch (props.surfaceItem.top) {
@@ -101,18 +116,13 @@ const CellItemWall = styled.div<CommonCell>`
       return "none";
     }
   }};
-
-  box-sizing: content-box;
-  width: 30px;
-  height: 30px;
-  color: lightgrey;
 `;
 
-//TODO:как типизировать возврат jsx
 export const getFilledPlayGrid = (
   gameField: GameField,
   playersList: PlayerListType,
-  enemyList: EnemyListType
+  enemyList: EnemyListType,
+  numberOfPlayer: number
 ) => {
   const orderGameCells = gameField.order;
 
@@ -120,25 +130,30 @@ export const getFilledPlayGrid = (
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
+    const hasMarker = playersList[numberOfPlayer].availableCellList?.find(
+      (cell) => {
+        return cell.coord == orderIndex;
+      }
+    );
+
     switch (cellValues.name) {
       case "start":
       case "finish": {
         return (
-          <CellItem key={`${hor}${vert}`}>
+          <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
-            {getPlayersList(orderIndex, playersList)}
+            {getPlayersList(orderIndex, playersList, numberOfPlayer)}
             {hor}
             {vert}
           </CellItem>
         );
       }
       case "commonCell": {
-        // TODO:  Pass props for walls
         return (
-          <CellItem key={`${hor}${vert}`}>
+          <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             <CellItemWall key={`${hor}${vert}`} {...cellValues}>
               {getCards(cellValues)}
-              {getPlayersList(orderIndex, playersList)}
+              {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}
 
               {hor}

@@ -2,6 +2,7 @@ import {
   HealthItemTypeArr,
   CoordItem,
   CellsSurfaceListType,
+  MoveDirectionList,
 } from "../business/types";
 
 export const START_COORD = { hor: 0, vert: 0 };
@@ -14,6 +15,13 @@ export const AMOUNT_ENEMIES = 10;
 export const HEALTH_ITEM_TYPE_ARR: HealthItemTypeArr = [
   "increment",
   "decrement",
+];
+
+export const MOVE_DIRECTION_LIST: MoveDirectionList = [
+  "top",
+  "right",
+  "bottom",
+  "left",
 ];
 
 // The array is convenient for iterating

@@ -21,7 +21,10 @@ export type ActionType =
   | { type: "req-checkEnemyCard" }
   | { type: "req-openEnemyCard" }
   | { type: "req-getBattleResult" }
-  | { type: "req-getEndScreen" };
+  | { type: "req-getEndScreen" }
+  | { type: "req-checkAvailableNeighboringCell" }
+  | { type: "req-cleanAvailableCells" }
+  | { type: "req-getPlayerMoveResult" };
 
 export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
 
@@ -34,7 +37,6 @@ export const reducer = (
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
 
   switch (phaseOuter) {
-    
     case "waitingStart": {
       return waitingStart(action, state);
     }

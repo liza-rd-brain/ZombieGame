@@ -16,7 +16,7 @@ export const interactEnemyCard = (action: ActionType, state: State): State => {
 
     case "diceThrown": {
       const dice = action.payload;
-      return getStateDIceIsThrown(state, dice);
+      return getStateDiceIsThrown(state, dice);
     }
 
     case "req-getBattleResult": {
@@ -72,7 +72,7 @@ const getStateOpenCard = (state: State): State => {
   };
 };
 
-const getStateDIceIsThrown = (state: State, dice: number): State => {
+const getStateDiceIsThrown = (state: State, dice: number): State => {
   return {
     ...state,
     dice: dice,

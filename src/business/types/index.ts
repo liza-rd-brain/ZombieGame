@@ -5,7 +5,7 @@ export type HealthItemType = "increment" | "decrement";
 export type HealthItemTypeArr = ["increment", "decrement"];
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
-
+export type MoveDirectionList = MoveDirection[];
 // BarrierType. Later add "boards"
 export type SurfaceKind = "wall" | "window" | "door" | null;
 
@@ -18,11 +18,18 @@ export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
 
 export type CellsSurfaceListType = Array<CellsSurfaceType>;
 
+export type AvailableCellType = {
+  direction: MoveDirection;
+  coord: string;
+};
+export type AvailableCellListType = AvailableCellType[];
+
 export type PlayerCardType = {
   name: "player";
   health: number;
   orderNumber: number;
   coord: string;
+  availableCellList?: AvailableCellListType;
 };
 
 export type PlayerListType = Record<string, PlayerCardType>;
@@ -83,6 +90,9 @@ export type TypeEffect =
   | { type: "!openEnemyCard" }
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }
+  | { type: "!checkAvailableNeighboringCell" }
+  | { type: "!cleanMarkedCell" }
+  | { type: "!getPlayerMoveResult" }
   | null;
 
 export type State = {

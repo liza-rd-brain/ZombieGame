@@ -7,7 +7,7 @@ import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
-import { useOpenCard, useEndScreen } from "./business/effects";
+import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
 
 const Field = styled.div`
   position: relative;
@@ -35,6 +35,7 @@ export function GetApp() {
   const { gameState } = useSelector((state: State) => ({ ...state }));
 
   useOpenCard();
+  usePlayerMove();
   useEndScreen();
 
   const getGameScreen = () => {
