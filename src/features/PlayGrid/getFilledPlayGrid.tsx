@@ -14,7 +14,7 @@ import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
 
 type CellApperance = {
-  hasMarker?: AvailableCellType;
+  hasMarker?: boolean;
 };
 
 const CellItem = styled.div<CellApperance>`
@@ -130,11 +130,9 @@ export const getFilledPlayGrid = (
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
-    const hasMarker = playersList[numberOfPlayer].availableCellList?.find(
-      (cell) => {
-        return cell.coord == orderIndex;
-      }
-    );
+    const hasMarker = playersList[
+      numberOfPlayer
+    ].availableCellsCoords?.includes(orderIndex);
 
     switch (cellValues.name) {
       case "start":

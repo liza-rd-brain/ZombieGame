@@ -18,17 +18,18 @@ import { changePlayerCoord } from "./changePlayerCoord";
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      return getPlayerWithAvailableCell(state);
+      return getPlayerWithAvailableCells(state);
     }
+
     case "arrowPressed": {
       const direction = action.payload;
       return getStateArrowPressed(state, direction);
     }
+
     case "req-cleanAvailableCells": {
-      const newState = getStateClearedAvailableCells(state);
-      console.log(newState);
-      return newState;
+      return getStateClearedAvailableCells(state);
     }
+
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
     }
@@ -54,15 +55,9 @@ const getStateArrowPressed = (
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
    */
 
-  const canTakeNextCell = playerList[numberOfPlayer].availableCellList?.find(
-    (cell) => {
-      {
-        return cell.coord == nextPlayerCoord;
-      }
-    }
-  )
-    ? true
-    : false;
+  const canTakeNextCell = playerList[
+    numberOfPlayer
+  ].availableCellsCoords?.includes(nextPlayerCoord);
 
   switch (canTakeNextCell) {
     case true: {
@@ -86,7 +81,7 @@ const getStateArrowPressed = (
 /**
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
-const getPlayerWithAvailableCell = (state: State): State => {
+const getPlayerWithAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
 
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
@@ -107,8 +102,8 @@ const getPlayerWithAvailableCell = (state: State): State => {
    * Returns the coordinates that lying in the GameField.
    */
   const existanceInGameFieldCells: AvailableCellListType = coordNeighboringCells.filter(
-    (coordItem) => {
-      const { direction, coord } = coordItem;
+    (cellItem) => {
+      const { direction, coord } = cellItem;
       return gameField.values[coord];
     }
   );
@@ -117,12 +112,17 @@ const getPlayerWithAvailableCell = (state: State): State => {
    * Returns the coordinates of Cell that can be taken by player.
    */
   const availableCellList: AvailableCellListType = existanceInGameFieldCells.filter(
-    (coordItem) => {
-      const { direction, coord } = coordItem;
+    (cellItem) => {
+      const { direction, coord } = cellItem;
 
       return checkCanTakeCell(state, coord, direction);
     }
   );
+
+  const availableCellsCoords = availableCellList.map((cellItem) => {
+    const { direction, coord } = cellItem;
+    return coord;
+  });
 
   return {
     ...state,
@@ -130,7 +130,7 @@ const getPlayerWithAvailableCell = (state: State): State => {
       ...state.playerList,
       [numberOfPlayer]: {
         ...state.playerList[numberOfPlayer],
-        availableCellList: availableCellList,
+        availableCellsCoords: availableCellsCoords,
       },
     },
   };
@@ -142,7 +142,7 @@ const getPlayerWithAvailableCell = (state: State): State => {
 const getStateClearedAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
   const currPlayer = playerList[numberOfPlayer];
-  delete currPlayer.availableCellList;
+  delete currPlayer.availableCellsCoords;
   return {
     ...state,
     playerList: { ...state.playerList, [numberOfPlayer]: currPlayer },
