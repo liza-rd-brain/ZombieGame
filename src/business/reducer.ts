@@ -26,7 +26,7 @@ export type ActionType =
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" };
 
-export type ArrowPressAction = { type: "arrowPressed"; payload: MoveDirection };
+export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
 
 export type DiceThrownAction = { type: "diceThrown"; payload: number };
 

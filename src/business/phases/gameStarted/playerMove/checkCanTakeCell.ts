@@ -6,7 +6,7 @@ export const checkCanTakeCell = (
   nextPlayerCoord: string,
   direction: MoveDirection
 ) => {
-  const { gameField, playerList, dice } = { ...state };
+  const { gameField, playerList, dice } = state;
   const nextCellWForPlayer = gameField.values[nextPlayerCoord];
   const nextCellOutOfGameField = nextCellWForPlayer ? false : true;
 
@@ -66,7 +66,7 @@ const cellHasWall = (
 
   if (currCellHasBarrier || nextCellHasBarrier) {
     return true;
-  } else { 
+  } else {
     return false;
   }
 };

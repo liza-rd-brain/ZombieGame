@@ -21,9 +21,9 @@ export const playerMove = (action: ActionType, state: State): State => {
       return getPlayerWithAvailableCells(state);
     }
 
-    case "arrowPressed": {
+    case "playerMoved": {
       const direction = action.payload;
-      return getStateArrowPressed(state, direction);
+      return getStatePlayerMoved(state, direction);
     }
 
     case "req-cleanAvailableCells": {
@@ -41,9 +41,9 @@ export const playerMove = (action: ActionType, state: State): State => {
 };
 
 /**
- * Changing coordinates of player if he can take the cell in  certain direction.
+ * Changing coordinates of player if he can take the cell in certain direction.
  */
-const getStateArrowPressed = (
+const getStatePlayerMoved = (
   state: State,
   direction: MoveDirection
 ): State => {

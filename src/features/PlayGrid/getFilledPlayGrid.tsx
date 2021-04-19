@@ -5,8 +5,6 @@ import {
   PlayerListType,
   EnemyListType,
   CommonCell,
-  CellType,
-  AvailableCellType,
 } from "../../business/types";
 
 import { getCards } from "./getCards";
