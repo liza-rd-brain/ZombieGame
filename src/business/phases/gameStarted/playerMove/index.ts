@@ -8,7 +8,7 @@ import {
 } from "../../../types";
 
 import { ActionType } from "../../../reducer";
-import { MOVE_DIRECTION_LIST } from "./../../../../shared/config";
+import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
 
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";

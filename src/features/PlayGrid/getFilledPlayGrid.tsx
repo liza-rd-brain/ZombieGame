@@ -17,7 +17,7 @@ type CellApperance = {
 
 const CellItem = styled.div<CellApperance>`
   position: relative;
-  border: 1px solid #bfb1b1;
+  border: 1px solid #ddd1d1;
   box-sizing: content-box;
   width: 30px;
   height: 30px;
