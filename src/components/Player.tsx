@@ -29,15 +29,16 @@ type ContextMenuType = {
 const PlayerCard = styled.div<PlayerItem>`
   background-color: #9f3f3f;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  margin: 2px;
-  z-index: 3;
-  text-align: center;
-  padding: 4px;
-  box-sizing: border-box;
-  cursor: default;
-
+  width: 4px;
+  height: 4px;
+  top: 2px;
+  left: 1px;
+  z-index: 1;
+  border: ${(props) => {
+    if (props.isCurrent) {
+      return "5px solid red";
+    }
+  }};
   background-color: ${(props) => {
     if (props.isCurrent) {
       return "red";
