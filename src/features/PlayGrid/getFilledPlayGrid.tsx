@@ -23,8 +23,8 @@ const Wall = styled.div<CommonCell>`
   &:before {
     content: "";
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     bottom: 0px;
     z-index: 10;
     height: ${(props) => {
@@ -57,7 +57,7 @@ const Wall = styled.div<CommonCell>`
             return " #584324;";
           }
           case "window": {
-            return " #a3cdd8;";
+            return " #669aa7;";
           }
           default:
             return "none";
@@ -71,7 +71,7 @@ const Wall = styled.div<CommonCell>`
     content: "";
     position: absolute;
     /*   width: 30px; */
-    height: 50px;
+    height: 30px;
     z-index: 10;
     bottom: 0px;
 
@@ -97,7 +97,7 @@ const Wall = styled.div<CommonCell>`
 
     height: ${(props) => {
       if (props.surfaceItem && props.surfaceItem.left) {
-        return "50px";
+        return "30px";
       } else if (
         props.surfaceItem &&
         !props.surfaceItem.left &&
@@ -119,7 +119,7 @@ const Wall = styled.div<CommonCell>`
             return " #584324";
           }
           case "window": {
-            return " #a3cdd8";
+            return " #669aa7";
           }
           default:
             return "#f09308";
@@ -267,10 +267,14 @@ export const getFilledPlayGrid = (
         return (
           <Wrap>
             <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+              {/*  <CellItemWall key={`${hor}${vert}`} {...cellValues}> */}
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}
-              {`${hor}.${vert}`}
+
+              {hor}
+              {vert}
+              {/*  </CellItemWall> */}
             </CellItem>
             <Wall {...cellValues}> </Wall>
           </Wrap>
