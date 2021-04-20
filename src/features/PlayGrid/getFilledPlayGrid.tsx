@@ -15,6 +15,121 @@ type CellApperance = {
   hasMarker?: boolean;
 };
 
+const Wrap = styled.div`
+  position: relative;
+`;
+
+const Wall = styled.div<CommonCell>`
+  &:before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 0px;
+    z-index: 10;
+    height: ${(props) => {
+      if (props.surfaceItem) {
+        switch (props.surfaceItem.bottom) {
+          case "wall": {
+            return "5px ";
+          }
+          case "door": {
+            return "3px";
+          }
+          case "window": {
+            return "3px";
+          }
+          default:
+            return "0px";
+        }
+      } else {
+        return "none";
+      }
+    }};
+
+    background-color: ${(props) => {
+      if (props.surfaceItem) {
+        switch (props.surfaceItem.bottom) {
+          case "wall": {
+            return "#f09308;";
+          }
+          case "door": {
+            return " #584324;";
+          }
+          case "window": {
+            return " #669aa7;";
+          }
+          default:
+            return "none";
+        }
+      } else {
+        return "none";
+      }
+    }};
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    /*   width: 30px; */
+    height: 30px;
+    z-index: 10;
+    bottom: 0px;
+
+    width: ${(props) => {
+      if (props.surfaceItem) {
+        switch (props.surfaceItem.left) {
+          case "wall": {
+            return "5px ";
+          }
+          case "door": {
+            return "3px";
+          }
+          case "window": {
+            return "3px";
+          }
+          default:
+            return "5px";
+        }
+      } else {
+        return "none";
+      }
+    }};
+
+    height: ${(props) => {
+      if (props.surfaceItem && props.surfaceItem.left) {
+        return "30px";
+      } else if (
+        props.surfaceItem &&
+        !props.surfaceItem.left &&
+        !props.surfaceItem.bottom
+      ) {
+        return "5px";
+      } else {
+        return "0px";
+      }
+    }};
+
+    background-color: ${(props) => {
+      if (props.surfaceItem) {
+        switch (props.surfaceItem.left) {
+          case "wall": {
+            return "#f09308";
+          }
+          case "door": {
+            return " #584324";
+          }
+          case "window": {
+            return " #669aa7";
+          }
+          default:
+            return "#f09308";
+        }
+      } else {
+        return "none";
+      }
+    }};
+  }
+`;
 const CellItem = styled.div<CellApperance>`
   position: relative;
   box-sizing: border-box;
@@ -38,6 +153,7 @@ const CellItemWall = styled.div<CommonCell>`
   width: 30px;
   height: 30px;
   color: lightgrey;
+
   border-top: ${(props) => {
     if (props.surfaceItem) {
       switch (props.surfaceItem.top) {
@@ -149,16 +265,19 @@ export const getFilledPlayGrid = (
       }
       case "commonCell": {
         return (
-          <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
-            <CellItemWall key={`${hor}${vert}`} {...cellValues}>
+          <Wrap>
+            <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+              {/*  <CellItemWall key={`${hor}${vert}`} {...cellValues}> */}
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}
 
               {hor}
               {vert}
-            </CellItemWall>
-          </CellItem>
+              {/*  </CellItemWall> */}
+            </CellItem>
+            <Wall {...cellValues}> </Wall>
+          </Wrap>
         );
       }
       default: {
