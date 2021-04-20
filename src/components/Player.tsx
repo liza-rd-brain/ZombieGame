@@ -17,9 +17,10 @@ const PlayerCard = styled.div<PlayerItem>`
   border: 5px solid #9f3f3f;
   background-color: #9f3f3f;
   border-radius: 50%;
-  width: 10px;
-  height: 10px;
-  margin: 2px;
+  width: 4px;
+  height: 4px;
+  top: 2px;
+  left: 1px;
   z-index: 1;
   border: ${(props) => {
     if (props.isCurrent) {

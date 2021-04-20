@@ -132,8 +132,9 @@ const Wall = styled.div<CommonCell>`
 `;
 const CellItem = styled.div<CellApperance>`
   position: relative;
-  border: 1px solid #ddd1d1;
-  box-sizing: content-box;
+  box-sizing: border-box;
+  border: 1px solid lightgray;
+
   width: 30px;
   height: 30px;
   color: lightgrey;
@@ -256,7 +257,9 @@ export const getFilledPlayGrid = (
           <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList, numberOfPlayer)}
-            {`${hor}.${vert}`}
+
+            {hor}
+            {vert}
           </CellItem>
         );
       }
