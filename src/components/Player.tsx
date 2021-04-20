@@ -17,8 +17,8 @@ const PlayerCard = styled.div<PlayerItem>`
   border: 5px solid red;
   background-color: red;
   border-radius: 50%;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   top: 2px;
   left: 1px;
   z-index: 1;

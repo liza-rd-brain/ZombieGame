@@ -17,8 +17,9 @@ type CellApperance = {
 
 const CellItem = styled.div<CellApperance>`
   position: relative;
-  border: 1px solid #ddd1d1;
-  box-sizing: content-box;
+  box-sizing: border-box;
+  border: 1px solid lightgray;
+
   width: 30px;
   height: 30px;
   color: lightgrey;
@@ -32,7 +33,8 @@ const CellItem = styled.div<CellApperance>`
 // TODO: Take out style variable-?!
 const CellItemWall = styled.div<CommonCell>`
   position: absolute;
-  box-sizing: content-box;
+  z-index: 2;
+  box-sizing: border-box;
   width: 30px;
   height: 30px;
   color: lightgrey;
@@ -139,6 +141,7 @@ export const getFilledPlayGrid = (
           <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+
             {hor}
             {vert}
           </CellItem>

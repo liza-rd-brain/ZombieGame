@@ -106,7 +106,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
     coord: { hor: 6, vert: 9 },
     surfaces: {
       top: "wall",
-      right: "wall",
+      right: null,
       bottom: null,
       left: null,
     },
@@ -117,7 +117,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
       top: "wall",
       right: null,
       bottom: null,
-      left: null,
+      left: "wall",
     },
   },
   {
@@ -318,27 +318,28 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
     coord: { hor: 6, vert: 7 },
     surfaces: {
       top: null,
-      right: "wall",
+      right:null,
       bottom: "wall",
       left: null,
     },
   },
-  {
-    coord: { hor: 6, vert: 8 },
-    surfaces: {
-      top: null,
-      right: "door",
-      bottom: null,
-      left: null,
-    },
-  },
+
   {
     coord: { hor: 7, vert: 7 },
     surfaces: {
       top: null,
       right: null,
       bottom: "wall",
-      left: null,
+      left: "wall",
+    },
+  },
+  {
+    coord: { hor: 7, vert: 8 },
+    surfaces: {
+      top: null,
+      right: null,
+      bottom: null,
+      left: "door",
     },
   },
   {
