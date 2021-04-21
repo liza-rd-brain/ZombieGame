@@ -2,10 +2,14 @@ import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, PlayerListType } from "../business/types";
+import {
+  State,
+  GameState,
+  TypeEffect,
+  PlayerListType,
+} from "../business/types";
 
 import { AMOUNT_PLAYERS, MAX_HEALTH_AMOUNT } from "../shared/config";
-import { HealthSlots } from "./HealthSlots";
 
 type HealthSlotType = {
   isFilled: boolean;
@@ -16,53 +20,96 @@ type AmountOfPlayers = {
 };
 
 const PlayersListWrap = styled.div<AmountOfPlayers>`
-  width: 130px;
+  width: 250px;
   height: 100px;
-  /*   border: 1px solid lightgray; */
+  border: 1px solid lightgray;
   display: grid;
 
-  grid-template-rows: 20% auto auto;
-  grid-template-columns: ${(props) => {
-    return `repeat(${props.amount} ,25px)`;
-  }};
-  /* grid-template-columns: 20% auto auto;
+  grid-template-columns: 20% auto auto;
   grid-template-rows: ${(props) => {
     return `repeat(${props.amount} ,25px)`;
-  }}; */
+  }};
+`;
+
+const PlayerCommonStatus = styled.div`
+  grid-column-start: 1;
+  grid-column-end: 4;
+  border: 1px solid #d5c0c0;
 `;
 
 const CharacterAvatar = styled.div`
-  font-size: 12px;
-  text-align: center;
-  grid-row-start: 1;
-  grid-row-end: 2;
+  font-size: 11px;
+  grid-column-start: 1;
+  grid-column-end: 2;
 `;
 
-const HealthSlotsWrap = styled.div`
-  grid-row-start: 2;
-  grid-row-end: 3;
-  & > * {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-direction: column;
-    width:100%
-  }
+const HealthSlotList = styled.div`
+  display: flex;
+  height: 15px;
+  align-items: center;
+  grid-column-start: 2;
+  grid-column-end: 3;
+`;
+const HealthSlot = styled.div<HealthSlotType>`
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid #f09292;
+  margin: 1px;
+  background-color: ${(props) => {
+    if (props.isFilled) {
+      return "#f09292";
+    } else return "none";
+  }};
 `;
 
 export const PlayersStatusList = () => {
+  const { playerList, numberOfPlayer } = useSelector((state: State) => ({
+    ...state,
+  }));
+
   return (
     <PlayersListWrap amount={AMOUNT_PLAYERS}>
       {new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
         return (
+          /*  <PlayerCommonStatus> */
           <>
             <CharacterAvatar>{`${index + 1}`}</CharacterAvatar>
-            <HealthSlotsWrap>
-              <HealthSlots index={index}></HealthSlots>
-            </HealthSlotsWrap>
+            <HealthSlotList>
+              {getHealthSlot(playerList, index).map(
+                (healthSlotFilled: boolean) => {
+                  return <HealthSlot isFilled={healthSlotFilled}></HealthSlot>;
+                }
+              )}
+            </HealthSlotList>
           </>
+          /*  </PlayerCommonStatus> */
         );
       })}
     </PlayersListWrap>
   );
+};
+
+const getHealthSlot = (playersList: PlayerListType, index: number) => {
+  const playerHealth = getPlayerHealth(playersList, index);
+  const maxHealthSlotList = new Array(MAX_HEALTH_AMOUNT).fill(0);
+
+  const filledHealthSlotList = maxHealthSlotList.reduce(
+    (prev, currSlot, index) => {
+      if (index < playerHealth) {
+        return [...prev, true];
+      } else {
+        return [...prev, false];
+      }
+    },
+    []
+  );
+  return filledHealthSlotList;
+};
+
+const getPlayerHealth = (
+  playersList: PlayerListType,
+  numberOfPlayer: number
+) => {
+  return playersList[numberOfPlayer].health;
 };
