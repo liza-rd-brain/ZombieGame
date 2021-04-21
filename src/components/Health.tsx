@@ -2,16 +2,12 @@ import styled from "styled-components";
 
 import { HealthCardType } from "../business/types";
 
-type HealthApperanceType = {
-  apperance?: "closed" | "open";
-};
-
-export const StyledHealthCard = styled.div<HealthApperanceType>`
+const StyledHealthCard = styled.div<HealthCardType>`
+  width: 10px;
+  height: 10px;
   position: absolute;
   border: 5px solid;
-  width: 15px;
-  height: 15px;
-  margin: 12px;
+  margin: 4px;
 
   background-color: ${(props) => {
     if (props.apperance === "closed") {

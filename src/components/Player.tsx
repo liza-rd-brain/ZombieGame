@@ -34,6 +34,7 @@ const PlayerCard = styled.div<PlayerItem>`
   top: 2px;
   left: 1px;
   z-index: 1;
+  /* opacity: 0.5; */
   border: ${(props) => {
     if (props.isCurrent) {
       return "5px solid red";
@@ -69,10 +70,10 @@ const PlayerCardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: absolute;
-  z-index: 3;
-  font-size: 12px;
+  z-index: 1;
+  font-size: 8px;
   font-weight: bold;
-  color: white;
+  color: black;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
