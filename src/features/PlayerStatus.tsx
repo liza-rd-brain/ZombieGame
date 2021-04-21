@@ -91,7 +91,6 @@ export const PlayerStatus = () => {
     []
   );
 
-  console.log(filledHealthSlotList);
   return (
     <PlayerStatusCard>
       <Column>
