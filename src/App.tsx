@@ -11,7 +11,7 @@ import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
 
 const Field = styled.div`
   position: relative;
-/*   width: 450px; */
+  /*   width: 450px; */
   margin: 0 auto;
 `;
 
@@ -23,12 +23,17 @@ const Game = styled.div`
 `;
 
 const LeftPanel = styled.div`
-  width: 200px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   flex-grow: 0;
+`;
+
+const GameControls = styled.div`
+  display: flex;
+  width: 70%;
 `;
 
 export function GetApp() {
@@ -54,8 +59,10 @@ export function GetApp() {
             </Field>
             <LeftPanel>
               <StatusList />
-              <Dice />
-              <MoveControls />
+              <GameControls>
+                <Dice />
+                <MoveControls />
+              </GameControls>
             </LeftPanel>
           </>
         );

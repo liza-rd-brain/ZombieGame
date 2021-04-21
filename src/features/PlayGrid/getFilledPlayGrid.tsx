@@ -134,13 +134,13 @@ const CellItem = styled.div<CellApperance>`
   position: relative;
   box-sizing: border-box;
   border: 1px solid lightgray;
-
+  font-size: 12px;
   width: 30px;
   height: 30px;
   color: lightgrey;
   background-color: ${(props) => {
     if (props.hasMarker) {
-      return "pink";
+      return " rgb(233, 207, 207)";
     }
   }};
 `;
@@ -257,9 +257,7 @@ export const getFilledPlayGrid = (
           <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList, numberOfPlayer)}
-
-            {hor}
-            {vert}
+            {`${hor}.${vert}`}
           </CellItem>
         );
       }
@@ -271,9 +269,7 @@ export const getFilledPlayGrid = (
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}
-
-              {hor}
-              {vert}
+              {`${hor}.${vert}`}
               {/*  </CellItemWall> */}
             </CellItem>
             <Wall {...cellValues}> </Wall>

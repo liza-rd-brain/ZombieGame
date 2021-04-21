@@ -9,6 +9,8 @@ import {
   PlayerListType,
 } from "../business/types";
 
+import { PlayerStatus } from "./PlayerStatus";
+
 const Status = styled.div`
   border: 1px dotted red;
   color: red;
@@ -25,8 +27,9 @@ export const StatusList = () => {
   return (
     <>
       <Status>{getTextStatus(gameState, doEffect, dice, gameResult)}</Status>
-      <Status>{`здоровье: ${getPlayersHealthList(playerList)}`}</Status>
-      <Status>{`координаты: ${getPlayersCoordList(playerList)}`}</Status>
+      <PlayerStatus />
+      {/*  <Status>{`здоровье: ${getPlayersHealthList(playerList)}`}</Status>
+      <Status>{`координаты: ${getPlayersCoordList(playerList)}`}</Status> */}
     </>
   );
 };
