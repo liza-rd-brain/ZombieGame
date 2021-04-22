@@ -11,7 +11,7 @@ type GridProps = {
 };
 
 const GridItem = styled.div<GridProps>`
-  outline: 2px solid red;
+  outline: 2px solid lightgray;
   margin: 0 auto;
   width: 100%;
   transform: rotate(270deg);

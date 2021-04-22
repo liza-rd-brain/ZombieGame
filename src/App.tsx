@@ -22,7 +22,7 @@ const Field = styled.div`
 `;
 
 const Game = styled.div`
-  width: 650px;
+  width: 800px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
