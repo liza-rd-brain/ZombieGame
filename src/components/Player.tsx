@@ -17,12 +17,10 @@ const PlayerCard = styled.div<PlayerItem>`
   border: 5px solid #9f3f3f;
   background-color: #9f3f3f;
   border-radius: 50%;
-  width: 4px;
-  height: 4px;
-  top: 2px;
-  left: 1px;
+  width: 10px;
+  height: 10px;
+  margin: 2px;
   z-index: 1;
-  /* opacity: 0.5; */
   border: ${(props) => {
     if (props.isCurrent) {
       return "5px solid red";
@@ -40,9 +38,9 @@ const PlayerCardList = styled.div`
   flex-wrap: wrap;
   position: absolute;
   z-index: 1;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: bold;
-  color: black;
+  color: white;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {

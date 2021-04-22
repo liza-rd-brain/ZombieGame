@@ -7,8 +7,11 @@ type EnemyArray = {
 };
 
 const EnemyCard = styled.div<EnemyCardType>`
+  position: absolute;
   border: 5px solid;
-
+  width: 15px;
+  height: 15px;
+  margin: 12px;
   background-color: ${(props) => {
     if (props.apperance === "closed") {
       return "lightgray";
@@ -24,13 +27,6 @@ const EnemyCard = styled.div<EnemyCardType>`
       return "navy";
     }
   }};
-
-  width: 10px;
-  height: 10px;
-
-  position: absolute;
-  top: 5px;
-  left: 5px;
 `;
 
 const EnemiesCardList = styled.div`

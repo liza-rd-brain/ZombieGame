@@ -23,8 +23,8 @@ const Wall = styled.div<CommonCell>`
   &:before {
     content: "";
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     bottom: 0px;
     z-index: 10;
     height: ${(props) => {
@@ -57,7 +57,7 @@ const Wall = styled.div<CommonCell>`
             return " #584324;";
           }
           case "window": {
-            return " #669aa7;";
+            return " #a3cdd8;";
           }
           default:
             return "none";
@@ -71,7 +71,7 @@ const Wall = styled.div<CommonCell>`
     content: "";
     position: absolute;
     /*   width: 30px; */
-    height: 30px;
+    height: 50px;
     z-index: 10;
     bottom: 0px;
 
@@ -97,7 +97,7 @@ const Wall = styled.div<CommonCell>`
 
     height: ${(props) => {
       if (props.surfaceItem && props.surfaceItem.left) {
-        return "30px";
+        return "50px";
       } else if (
         props.surfaceItem &&
         !props.surfaceItem.left &&
@@ -119,7 +119,7 @@ const Wall = styled.div<CommonCell>`
             return " #584324";
           }
           case "window": {
-            return " #669aa7";
+            return " #a3cdd8";
           }
           default:
             return "#f09308";
@@ -134,9 +134,10 @@ const CellItem = styled.div<CellApperance>`
   position: relative;
   box-sizing: border-box;
   border: 1px solid lightgray;
-  font-size: 12px;
-  width: 30px;
-  height: 30px;
+  font-size: 14px;
+  text-align: right;
+  width: 50px;
+  height: 50px;
   color: lightgrey;
   background-color: ${(props) => {
     if (props.hasMarker) {
@@ -265,12 +266,10 @@ export const getFilledPlayGrid = (
         return (
           <Wrap>
             <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
-              {/*  <CellItemWall key={`${hor}${vert}`} {...cellValues}> */}
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}
               {`${hor}.${vert}`}
-              {/*  </CellItemWall> */}
             </CellItem>
             <Wall {...cellValues}> </Wall>
           </Wrap>
