@@ -6,7 +6,7 @@ import { switchToNextPlayer } from "../../../../shared/State";
  */
 
 export const getPlayerMoveResult = (state: State) => {
-  const { gameField, playerList, numberOfPlayer, dice } = { ...state };
+  const { gameField, playerList, numberOfPlayer, dice } = state;
 
   const newPlayerCoord = playerList[numberOfPlayer].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];

@@ -29,7 +29,7 @@ export type PlayerCardType = {
   health: number;
   orderNumber: number;
   coord: string;
-  availableCellList?: AvailableCellListType;
+  availableCellsCoords?: string[];
 };
 
 export type PlayerListType = Record<string, PlayerCardType>;

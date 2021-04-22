@@ -1,7 +1,7 @@
 import { State } from "../../../types";
 
 export const changePlayerCoord = (state: State, newPlayerCoord: string) => {
-  const { playerList, numberOfPlayer } = { ...state };
+  const { playerList, numberOfPlayer } = state;
 
   const newPlayerList = {
     ...playerList,

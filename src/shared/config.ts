@@ -1,6 +1,5 @@
 import {
   HealthItemTypeArr,
-  CoordItem,
   CellsSurfaceListType,
   MoveDirectionList,
 } from "../business/types";
