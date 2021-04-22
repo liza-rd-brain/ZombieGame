@@ -29,17 +29,18 @@ const CharacterAvatar = styled.div`
   width: 50px;
   height: 70px;
   border: 1px solid lightgray;
-
-  font-size: 11px;
+  font-size: 14px;
+  text-align: center;
 `;
 
 const Status = styled.div`
   display: flex;
   border: 1px solid lightgray;
-  font-size: 11px;
   height: 20px;
   padding: 3px;
   margin-bottom: 15px;
+  font-size: 14px;
+  width: 150px;
 `;
 
 const HealthSlotList = styled.div`
@@ -94,9 +95,7 @@ export const PlayerStatus = () => {
   return (
     <PlayerStatusCard>
       <Column>
-        <CharacterAvatar>
-          Персонаж, игрок {`${numberOfPlayer + 1}`}
-        </CharacterAvatar>
+        <CharacterAvatar>игрок {`${numberOfPlayer + 1}`}</CharacterAvatar>
       </Column>
       <Column>
         <HealthStatus>
