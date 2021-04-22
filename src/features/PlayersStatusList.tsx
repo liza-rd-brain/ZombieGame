@@ -20,35 +20,35 @@ type AmountOfPlayers = {
 };
 
 const PlayersListWrap = styled.div<AmountOfPlayers>`
-  width: 250px;
+  width: 130px;
   height: 100px;
-  border: 1px solid lightgray;
+/*   border: 1px solid lightgray; */
   display: grid;
 
-  grid-template-columns: 20% auto auto;
-  grid-template-rows: ${(props) => {
+  grid-template-rows: 20% auto auto;
+  grid-template-columns: ${(props) => {
     return `repeat(${props.amount} ,25px)`;
   }};
-`;
-
-const PlayerCommonStatus = styled.div`
-  grid-column-start: 1;
-  grid-column-end: 4;
-  border: 1px solid #d5c0c0;
+  /* grid-template-columns: 20% auto auto;
+  grid-template-rows: ${(props) => {
+    return `repeat(${props.amount} ,25px)`;
+  }}; */
 `;
 
 const CharacterAvatar = styled.div`
-  font-size: 11px;
-  grid-column-start: 1;
-  grid-column-end: 2;
+  font-size: 12px;
+  text-align: center;
+  grid-row-start: 1;
+  grid-row-end: 2;
 `;
 
 const HealthSlotList = styled.div`
   display: flex;
-  height: 15px;
+  flex-direction: column;
+  /*   height: 15px; */
   align-items: center;
-  grid-column-start: 2;
-  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
 `;
 const HealthSlot = styled.div<HealthSlotType>`
   width: 5px;
@@ -72,7 +72,6 @@ export const PlayersStatusList = () => {
     <PlayersListWrap amount={AMOUNT_PLAYERS}>
       {new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
         return (
-          /*  <PlayerCommonStatus> */
           <>
             <CharacterAvatar>{`${index + 1}`}</CharacterAvatar>
             <HealthSlotList>
@@ -83,7 +82,6 @@ export const PlayersStatusList = () => {
               )}
             </HealthSlotList>
           </>
-          /*  </PlayerCommonStatus> */
         );
       })}
     </PlayersListWrap>

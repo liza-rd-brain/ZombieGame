@@ -22,14 +22,15 @@ const Field = styled.div`
 `;
 
 const Game = styled.div`
-  width: 800px;
-  margin: 0 auto;
+  width: 900px;
+  margin: 40px auto;
   display: flex;
   justify-content: center;
 `;
 
 const LeftPanel = styled.div`
   width: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -47,11 +48,6 @@ const GameControls = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`;
-
-const GameControls = styled.div`
-  display: flex;
-  width: 70%;
 `;
 
 export function GetApp() {

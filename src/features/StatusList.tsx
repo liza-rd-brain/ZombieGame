@@ -36,9 +36,7 @@ export const StatusList = () => {
     <>
       <Status>{getTextStatus(gameState, doEffect, dice, gameResult)}</Status>
       <PlayerStatus />
-      <PlayersStatusList />
-      {/*  <Status>{`здоровье: ${getPlayersHealthList(playerList)}`}</Status>
-      <Status>{`координаты: ${getPlayersCoordList(playerList)}`}</Status> */}
+      {/*    <PlayersStatusList /> */}
     </>
   );
 };
