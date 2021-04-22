@@ -3,7 +3,13 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
+import {
+  PlayGrid,
+  MoveControls,
+  Dice,
+  StatusList,
+  PlayersStatusList,
+} from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
@@ -16,24 +22,32 @@ const Field = styled.div`
 `;
 
 const Game = styled.div`
-  width: 800px;
-  margin: 0 auto;
+  width: 900px;
+  margin: 40px auto;
   display: flex;
   justify-content: center;
 `;
 
 const LeftPanel = styled.div`
   width: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   flex-grow: 0;
+  align-items: start;
+  margin: 0 30px;
+`;
+
+const RightPanel = styled.div`
+  display: flex;
 `;
 
 const GameControls = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
+  justify-content: space-between;
 `;
 
 export function GetApp() {
@@ -54,6 +68,9 @@ export function GetApp() {
       default:
         return (
           <>
+            <RightPanel>
+              <PlayersStatusList />
+            </RightPanel>
             <Field>
               <PlayGrid />
             </Field>

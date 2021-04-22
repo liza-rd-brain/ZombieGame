@@ -53,8 +53,13 @@ const ArrowContainer = styled.div`
     ". arrow_top ."
     "arrow_left . arrow_right "
     ". arrow_bottom . ";
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
+  & > * {
+    padding: 6px;
+    box-sizing: border-box;
+
+  }
 `;
 
 export const MoveControls = () => {

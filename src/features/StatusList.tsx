@@ -13,10 +13,17 @@ import { PlayerStatus } from "./PlayerStatus";
 import { PlayersStatusList } from "./PlayersStatusList";
 
 const Status = styled.div`
-  border: 1px dotted red;
-  color: red;
   width: 200px;
   min-height: 18px;
+  width: 250px;
+  height: 60px;
+  border: 1px solid lightgray;
+  background-color: #fff2d9;
+  text-align: center;
+  font-size: 20px;
+  color: #5f5757;
+  padding-top: 15px;
+  box-sizing: border-box;
 `;
 
 export const StatusList = () => {
@@ -29,9 +36,7 @@ export const StatusList = () => {
     <>
       <Status>{getTextStatus(gameState, doEffect, dice, gameResult)}</Status>
       <PlayerStatus />
-      <PlayersStatusList />
-      {/*  <Status>{`здоровье: ${getPlayersHealthList(playerList)}`}</Status>
-      <Status>{`координаты: ${getPlayersCoordList(playerList)}`}</Status> */}
+      {/*    <PlayersStatusList /> */}
     </>
   );
 };
