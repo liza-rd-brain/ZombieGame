@@ -1,9 +1,5 @@
 export type CoordItem = { hor: number; vert: number };
 
-export type HealthItemType = "increment" | "decrement";
-
-export type HealthItemTypeArr = ["increment", "decrement"];
-
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 // BarrierType. Later add "boards"
@@ -55,7 +51,6 @@ export type StartCell = {
 
 export type HealthCardType = {
   name: "health";
-  type: HealthItemType;
   apperance: "closed" | "open";
 };
 

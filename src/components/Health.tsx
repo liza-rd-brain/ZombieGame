@@ -13,14 +13,7 @@ const StyledHealthCard = styled.div<HealthCardType>`
     if (props.apperance === "closed") {
       return "gray";
     } else {
-      switch (props.type) {
-        case "increment":
-          return "green";
-        case "decrement":
-          return "orange";
-        default:
-          return "black";
-      }
+      return "green";
     }
   }};
 
@@ -28,18 +21,11 @@ const StyledHealthCard = styled.div<HealthCardType>`
     if (props.apperance === "closed") {
       return "gray";
     } else {
-      switch (props.type) {
-        case "increment":
-          return "green";
-        case "decrement":
-          return "orange";
-        default:
-          break;
-      }
+      return "green";
     }
   }};
 `;
 
 export const Health = (props: HealthCardType) => {
-  return <StyledHealthCard {...props} />;
+  return <StyledHealthCard {...props}></StyledHealthCard>;
 };

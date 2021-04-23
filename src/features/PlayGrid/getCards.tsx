@@ -9,7 +9,6 @@ export const getCards = (cell: CellType) => {
           {cell.cardItem.healthItem ? (
             <Health
               name={cell.cardItem.healthItem.name}
-              type={cell.cardItem.healthItem.type}
               apperance={cell.cardItem.healthItem.apperance}
             />
           ) : null}

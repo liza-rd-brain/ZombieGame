@@ -1,19 +1,23 @@
 import {
   CommonCell,
-  HealthItemType,
   GameFieldCells,
   HealthCardType,
   HealthCell,
 } from "../../types";
 
-import { HEALTH_ITEM_TYPE_ARR, AMOUNT_HEALTH_ITEMS } from "../../../shared/config";
+import { AMOUNT_HEALTH_ITEMS } from "../../../shared/config";
 
 /**
  * Returns an object in structure of FieldCells with spreaded healthCards in random picked cells.
  */
-export const spreadHealthCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
+export const spreadHealthCards = (
+  gameFieldCells: GameFieldCells
+): GameFieldCells => {
   const cellsForCards = getListForCards(gameFieldCells);
-  const filledWithCardsFieldCells = setHealthCards(cellsForCards, gameFieldCells);
+  const filledWithCardsFieldCells = setHealthCards(
+    cellsForCards,
+    gameFieldCells
+  );
   return filledWithCardsFieldCells;
 };
 
@@ -30,7 +34,6 @@ const setHealthCards = (
 
       const healthItem: HealthCardType = {
         name: "health",
-        type: getRandomType(),
         apperance: "closed",
       };
 
@@ -46,10 +49,6 @@ const setHealthCards = (
   const gameFieldFull = { ...gameFieldCells, ...fieldCellsWithCards };
 
   return gameFieldFull;
-};
-
-const getRandomType = (): HealthItemType => {
-  return HEALTH_ITEM_TYPE_ARR[Math.floor(Math.random() * 2)];
 };
 
 /**
