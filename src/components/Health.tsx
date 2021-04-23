@@ -26,6 +26,6 @@ const StyledHealthCard = styled.div<HealthCardType>`
   }};
 `;
 
-export const Health = (props: HealthApperanceType) => {
+export const Health = (props: HealthCardType) => {
   return <StyledHealthCard {...props}></StyledHealthCard>;
 };

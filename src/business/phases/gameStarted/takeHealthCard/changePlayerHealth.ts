@@ -8,7 +8,7 @@ export const changePlayerHealth = (
   if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
     const currHealth = playersList[numberOfPlayer].health;
 
-    const changedPlayersList: PlayerListType = {
+    const changedplayersList: PlayerListType = {
       ...playersList,
       [numberOfPlayer]: {
         ...playersList[numberOfPlayer],

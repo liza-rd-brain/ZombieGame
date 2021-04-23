@@ -34,7 +34,7 @@ const setHealthCards = (
 
       const healthItem: HealthCardType = {
         name: "health",
-        apperance: "open",
+        apperance: "closed",
       };
 
       const cellWithCard: HealthCell = {
