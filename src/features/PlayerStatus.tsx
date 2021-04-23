@@ -2,15 +2,10 @@ import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import {
-  State,
-  GameState,
-  TypeEffect,
-  PlayerListType,
-} from "../business/types";
+import { State, PlayerListType } from "../business/types";
 
 import { MAX_HEALTH_AMOUNT } from "../shared/config";
-
+import { HealthSlots } from "./HealthSlots";
 type HealthSlotType = {
   isFilled: boolean;
 };
@@ -43,54 +38,14 @@ const Status = styled.div`
   width: 150px;
 `;
 
-const HealthSlotList = styled.div`
-  display: flex;
-  height: 15px;
-  align-items: center;
-`;
-const HealthSlot = styled.div<HealthSlotType>`
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  border: 1px solid #f09292;
-  margin: 1px;
-  background-color: ${(props) => {
-    if (props.isFilled) {
-      return "#f09292";
-    } else return "none";
-  }};
-`;
-
-const HealthStatus = styled(Status)`
-  height: 20px;
-`;
-
-const InventoryStatus = styled(Status)`
-  height: 100px;
-`;
-
 const Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
 export const PlayerStatus = () => {
-  const { playerList, numberOfPlayer } = useSelector((state: State) => ({
+  const { numberOfPlayer } = useSelector((state: State) => ({
     ...state,
   }));
-
-  const playerHealth = getPlayerHealth(playerList, numberOfPlayer);
-  const maxHealthSlotList = new Array(MAX_HEALTH_AMOUNT).fill(0);
-
-  const filledHealthSlotList = maxHealthSlotList.reduce(
-    (prev, currSlot, index) => {
-      if (index < playerHealth) {
-        return [...prev, true];
-      } else {
-        return [...prev, false];
-      }
-    },
-    []
-  );
 
   return (
     <PlayerStatusCard>
@@ -100,21 +55,10 @@ export const PlayerStatus = () => {
       <Column>
         <HealthStatus>
           {`здоровье:  `}
-          <HealthSlotList>
-            {filledHealthSlotList.map((healthSlotFilled: boolean) => {
-              return <HealthSlot isFilled={healthSlotFilled}></HealthSlot>;
-            })}
-          </HealthSlotList>
+          <HealthSlots index={numberOfPlayer}></HealthSlots>
         </Status>
         <Status>{`предметы:  `}</Status>
       </Column>
     </PlayerStatusCard>
   );
-};
-
-const getPlayerHealth = (
-  playersList: PlayerListType,
-  numberOfPlayer: number
-) => {
-  return playersList[numberOfPlayer].health;
 };
