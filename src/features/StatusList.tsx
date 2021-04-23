@@ -88,23 +88,3 @@ const getTextStatus = (
       return " ";
   }
 };
-
-const getPlayersHealthList = (playersList: PlayerListType) => {
-  const playerArray = Object.entries(playersList);
-  const healthArray = playerArray.map((player) => {
-    const [, playerValue] = player;
-    return playerValue.health;
-  });
-
-  return healthArray.toString();
-};
-
-const getPlayersCoordList = (playersList: PlayerListType) => {
-  const playerArray = Object.entries(playersList);
-  const coordArray = playerArray.map((player) => {
-    const [, playerValue] = player;
-    return playerValue.coord;
-  });
-
-  return coordArray.toString();
-};
