@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { State, PlayerListType } from "../business/types";
 
 import { MAX_HEALTH_AMOUNT } from "../shared/config";
-import { HealthSlots } from "./HealthSlots";
+import { HealthSlots } from "../components/HealthSlots";
+import { Inventory } from "./Inventory";
+
 type HealthSlotType = {
   isFilled: boolean;
 };
@@ -31,11 +33,19 @@ const CharacterAvatar = styled.div`
 const Status = styled.div`
   display: flex;
   border: 1px solid lightgray;
-  height: 20px;
+
   padding: 3px;
   margin-bottom: 15px;
   font-size: 14px;
   width: 150px;
+`;
+
+const HealthStatus = styled(Status)`
+  height: 20px;
+`;
+
+const InventoryStatus = styled(Status)`
+  height: 100px;
 `;
 
 const Column = styled.div`
@@ -47,6 +57,7 @@ export const PlayerStatus = () => {
     ...state,
   }));
 
+  // TODO: why pass the index?
   return (
     <PlayerStatusCard>
       <Column>
@@ -56,8 +67,11 @@ export const PlayerStatus = () => {
         <HealthStatus>
           {`здоровье:  `}
           <HealthSlots index={numberOfPlayer}></HealthSlots>
-        </Status>
-        <Status>{`предметы:  `}</Status>
+        </HealthStatus>
+        <InventoryStatus>
+          {`предметы:  `}
+          <Inventory />
+        </InventoryStatus>
       </Column>
     </PlayerStatusCard>
   );
