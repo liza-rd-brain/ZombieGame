@@ -26,10 +26,10 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
-  inventory: InventoryCardType[];
+  inventory: CardType[];
 };
 
-export type InventoryCardType = HealthCardType;
+export type CardType = HealthCardType;
 
 export type PlayerListType = Record<string, PlayerCardType>;
 
@@ -44,13 +44,12 @@ export type EnemyListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
-  // TODO: need to determine cardItem here?
-  cardItem: { playerList?: PlayerCardType[] };
+  cardItem: { healthItem?: HealthCardType };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayerCardType[] };
+  cardItem: { healthItem?: HealthCardType };
 };
 
 export type HealthCardType = {

@@ -2,7 +2,10 @@ import styled from "styled-components";
 
 import { HealthCardType } from "../business/types";
 
-const StyledHealthCard = styled.div<HealthCardType>`
+type HealthApperanceType = {
+  apperance?: "closed" | "open";
+};
+export const StyledHealthCard = styled.div<HealthApperanceType>`
   position: absolute;
   border: 5px solid;
   width: 15px;
@@ -26,6 +29,6 @@ const StyledHealthCard = styled.div<HealthCardType>`
   }};
 `;
 
-export const Health = (props: HealthCardType) => {
+export const Health = (props: HealthApperanceType) => {
   return <StyledHealthCard {...props}></StyledHealthCard>;
 };

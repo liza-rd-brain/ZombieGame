@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { State, PlayerListType } from "../business/types";
 
 import { AMOUNT_PLAYERS, MAX_HEALTH_AMOUNT } from "../shared/config";
-import { HealthSlots } from "./HealthSlots";
+import { HealthSlots } from "../components/HealthSlots";
 
 type HealthSlotType = {
   isFilled: boolean;
