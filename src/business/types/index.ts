@@ -26,6 +26,7 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
+  inventory: { healthCard?: HealthCardType };
 };
 
 export type PlayerListType = Record<string, PlayerCardType>;
@@ -88,6 +89,7 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
+  | { type: "!takeHealthCard" }
   | null;
 
 export type State = {

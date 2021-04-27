@@ -23,6 +23,18 @@ export function useOpenCard() {
           };
         }
 
+        case "!takeHealthCard": {
+          const timerTakeHealthCard = setTimeout(
+            () =>
+              dispatch({
+                type: "req-takeHealthCard",
+              }),
+            500
+          );
+          return () => {
+            clearTimeout(timerTakeHealthCard);
+          };
+        }
         case "!changePlayerHealth": {
           const timerChangePlayerHealth = setTimeout(
             () =>
@@ -35,6 +47,7 @@ export function useOpenCard() {
             clearTimeout(timerChangePlayerHealth);
           };
         }
+
         case "!deleteHealthCard": {
           const timerDeleteHealthCard = setTimeout(
             () =>

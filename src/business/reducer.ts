@@ -24,7 +24,8 @@ export type ActionType =
   | { type: "req-getEndScreen" }
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
-  | { type: "req-getPlayerMoveResult" };
+  | { type: "req-getPlayerMoveResult" }
+  | { type: "req-takeHealthCard" };
 
 export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
 
