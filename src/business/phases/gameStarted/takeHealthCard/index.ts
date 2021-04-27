@@ -1,4 +1,4 @@
-import { State, GameField, PlayerListType, CommonCell } from "../../../types";
+import { State, GameField, PlayerListType } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { openHealthCard } from "./openHealthCard";
@@ -52,26 +52,14 @@ const getStateCardTaken = (state: State): State => {
 
   // We know for sure,that on cell lying only healthCard.
   // TODO: potential problem. Need validate of healthCard.
-  const cardItems = gameField.values[player.coord].cardItem;
-
-  /**
-   * Extract cardItem with type healthItem. And from it extract HealthCardType
-   */
-  const healthCard = Object.entries(cardItems)
-    .map((cardItem) => {
-      const [type, item] = cardItem;
-      if (type === "healthItem") {
-        return item;
-      } else return null;
-    })
-    .filter((item) => {
-      return !null;
-    });
+  const healthCard = gameField.values[player.coord].cardItem;
 
   const newPlayer = {
     ...player,
-    inventory: [...player.inventory, ...healthCard],
+    inventory: { ...player.inventory /* ...healthCard */ },
   };
+
+  console.log(newPlayer);
 
   const newPlayerList: PlayerListType = {
     ...playerList,

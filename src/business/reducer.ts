@@ -27,12 +27,11 @@ export type ActionType =
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
-  | { type: "req-takeHealthCard" }
-  | { type: "cardChoosed"; payload: number }
-  | { type: "req-choosePlayer" }
-  | { type: "req-healPlayer"; payload: number }
-  | { type: "req-contextMenu"; payload: number }
-  | { type: "req-shareHealthCard"; payload: number };
+  | { type: "req-takeHealthCard" };
+
+export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
+
+export type DiceThrownAction = { type: "diceThrown"; payload: number };
 
 export const reducer = (
   state: State = initialState,

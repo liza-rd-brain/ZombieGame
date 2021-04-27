@@ -94,7 +94,10 @@ export type TypeEffect =
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!takeHealthCard" }
+<<<<<<< HEAD
   | { type: "!healPlayer" }
+=======
+>>>>>>> cacb53f (Added phase takeHealthCard)
   | null;
 
 export type State = {
