@@ -26,7 +26,6 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
-
   inventory: CardType[];
 };
 
@@ -94,10 +93,6 @@ export type TypeEffect =
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!takeHealthCard" }
-<<<<<<< HEAD
-  | { type: "!healPlayer" }
-=======
->>>>>>> cacb53f (Added phase takeHealthCard)
   | null;
 
 export type State = {
