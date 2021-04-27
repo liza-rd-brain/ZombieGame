@@ -56,12 +56,12 @@ export const PlayersStatusList = () => {
     <PlayersListWrap amount={AMOUNT_PLAYERS}>
       {new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
         return (
-          <>
+          <React.Fragment key={index}>
             <CharacterAvatar>{`${index + 1}`}</CharacterAvatar>
             <HealthSlotsWrap>
               <HealthSlots index={index}></HealthSlots>
             </HealthSlotsWrap>
-          </>
+          </React.Fragment>
         );
       })}
     </PlayersListWrap>
