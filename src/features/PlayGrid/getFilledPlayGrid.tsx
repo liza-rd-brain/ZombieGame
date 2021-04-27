@@ -255,7 +255,7 @@ export const getFilledPlayGrid = (
       case "start":
       case "finish": {
         return (
-          <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+          <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
             {getPlayersList(orderIndex, playersList, numberOfPlayer)}
             {`${hor}.${vert}`}
@@ -264,8 +264,8 @@ export const getFilledPlayGrid = (
       }
       case "commonCell": {
         return (
-          <Wrap>
-            <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+          <Wrap key={`${hor}.${vert}`}>
+            <CellItem hasMarker={hasMarker}>
               {getCards(cellValues)}
               {getPlayersList(orderIndex, playersList, numberOfPlayer)}
               {getEnemyList(orderIndex, enemyList)}

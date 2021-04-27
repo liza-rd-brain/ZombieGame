@@ -35,8 +35,10 @@ export const HealthSlots = (props: { index: number }) => {
   return (
     <HealthSlotList>
       {getHealthSlot(playerList, props.index).map(
-        (healthSlotFilled: boolean) => {
-          return <HealthSlot isFilled={healthSlotFilled}></HealthSlot>;
+        (healthSlotFilled: boolean, index: number) => {
+          return (
+            <HealthSlot key={index} isFilled={healthSlotFilled}></HealthSlot>
+          );
         }
       )}
     </HealthSlotList>
