@@ -9,6 +9,7 @@ export const getPlayers = (): PlayerListType => {
       health: INITIAL_PLAYER_HEALTH,
       orderNumber: index,
       coord: "0.0",
+      inventory: [],
     };
     return [index, playerCard];
   });
