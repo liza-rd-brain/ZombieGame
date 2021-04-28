@@ -26,7 +26,7 @@ const HealthSlot = styled.div<HealthSlotType>`
   }
 
   outline: ${(props) => {
-    if (props.highlighting) {
+    if (props.highlighting === true) {
       return "1px solid red ";
     }
   }};
@@ -52,7 +52,7 @@ export const Inventory = () => {
             <HealthSlot
               key={inventoryCardindex}
               highlighting={inventoryCard.highlighting}
-              onClick={(e) => {
+              onClick={() => {
                 dispatch({
                   type: "cardChoosed",
                   payload: inventoryCardindex,
