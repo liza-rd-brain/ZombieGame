@@ -57,16 +57,6 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
     cardItem: {},
   };
 
-  /*   const wallList = WALLS_COORD.map((wallCoord) => {
-    return [`${wallCoord.hor}.${wallCoord.vert}`, wallItem];
-  }); */
-
-  /*    Object.fromEntries удобно использовать для наглядности
-       чтобы ни непонятно откуда была мутация
-      а прозрачное изменение св-в объекта */
-
-  /*   const wallCells: GameFieldCells = Object.fromEntries(wallList); */
-
   const organizedGameFieldCells = {
     ...emptyField,
     [startIndex]: startCell,
@@ -77,7 +67,7 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
 };
 
 /**
- *
+ 
  * @returns The object in structure GameFieldCells. With walls(surfaces) in cells.
  */
 const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
@@ -99,7 +89,7 @@ const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
         ...cellWithoutSurface,
         surfaceItem: surfaces,
       };
-      /* return { [cellIndex]: cellWithSurface }; */
+
       return [cellIndex, cellWithSurface];
     } else {
       return [cellIndex, cellWithoutSurface];

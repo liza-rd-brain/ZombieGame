@@ -8,12 +8,13 @@ import {
   interactEnemyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State } from "./types";
+import { MoveDirection, State, HealthCardType } from "./types";
+import { DOMElement } from "react";
 
 export type ActionType =
   | { type: "clickedStartButton" }
-  | DiceThrownAction
-  | ArrowPressAction
+  | { type: "diceThrown"; payload: number }
+  | { type: "playerMoved"; payload: MoveDirection }
   | { type: "req-openHealthCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteHealthCard" }
@@ -25,11 +26,8 @@ export type ActionType =
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
-  | { type: "req-takeHealthCard" };
-
-export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
-
-export type DiceThrownAction = { type: "diceThrown"; payload: number };
+  | { type: "req-takeHealthCard" }
+  | { type: "cardChoosed"; payload: number };
 
 export const reducer = (
   state: State = initialState,
@@ -55,6 +53,7 @@ export const reducer = (
         case "takeHealthCard": {
           return takeHealthCard(action, state);
         }
+
         case "interactEnemyCard": {
           return interactEnemyCard(action, state);
         }
