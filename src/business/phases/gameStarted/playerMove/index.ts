@@ -15,7 +15,6 @@ import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
 import { getStateCardChosed } from "../getStateCardChosed";
-import { getNeighboringCellList } from "../getNeighboringCellList";
 
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {
@@ -34,6 +33,10 @@ export const playerMove = (action: ActionType, state: State): State => {
 
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
+    }
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardChosed(state, target);
     }
 
     case "cardChoosed": {

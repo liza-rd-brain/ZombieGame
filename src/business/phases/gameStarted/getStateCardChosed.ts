@@ -1,25 +1,34 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { State, HealthCardType, PlayerListType } from "../../types";
+import { ActionType } from "../../reducer";
 
 /**
  * We need to give highlighting to healthCard
  */
-
-/**
- * 
-Need switch for click false/true
- */
 export const getStateCardChosed = (state: State, currentCardIndex: number) => {
-  const stateWithHighlightning: State = {
-    ...state,
+  const { playerList, numberOfPlayer } = state;
 
-    gameState: {
-      type:
-        state.gameState.type === "gameStarted.applyCard"
-          ? "gameStarted.playerMove"
-          : "gameStarted.applyCard",
+  const inventory = playerList[numberOfPlayer].inventory;
+
+  // We take first from the healthCards
+  const choosenHealthCard = inventory[currentCardIndex];
+  const highlightHealthCard = { ...choosenHealthCard, highlighting: true };
+
+  const newInventory = inventory.map((card, index) => {
+    if (index === currentCardIndex) {
+      return highlightHealthCard;
+    } else return card;
+  });
+
+  const newPlayerList: PlayerListType = {
+    ...playerList,
+    [numberOfPlayer]: {
+      ...playerList[numberOfPlayer],
+      inventory: newInventory,
     },
   };
-  return stateWithHighlightning;
+
+  console.log(newPlayerList);
+  return { ...state, playerList: newPlayerList };
 };

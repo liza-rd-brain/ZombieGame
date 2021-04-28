@@ -27,11 +27,8 @@ export type ActionType =
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
-  | { type: "req-takeHealthCard" };
-
-export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
-
-export type DiceThrownAction = { type: "diceThrown"; payload: number };
+  | { type: "req-takeHealthCard" }
+  | { type: "cardChoosed"; payload: number };
 
 export const reducer = (
   state: State = initialState,
@@ -56,9 +53,6 @@ export const reducer = (
 
         case "takeHealthCard": {
           return takeHealthCard(action, state);
-        }
-        case "applyCard": {
-          return applyCard(action, state);
         }
 
         case "interactEnemyCard": {
