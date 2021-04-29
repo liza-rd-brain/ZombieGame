@@ -2,29 +2,51 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { State, HealthCardType, PlayerListType } from "../../types";
 
-
 /**
  * We need to give highlighting to healthCard
  */
 export const getStateCardChosed = (state: State, currentCardIndex: number) => {
+  const hasAnyCardHighlightning = findAnyHighlightning(state);
+  const hasCurrentCardHighlightning = findCurrentCardHighlightning(
+    state,
+    currentCardIndex
+  );
+
+  const newPlayerList = changeHighlightningInventory(
+    state,
+    currentCardIndex,
+    hasCurrentCardHighlightning
+  );
+
+  switch (hasCurrentCardHighlightning) {
+    case true: {
+      return { ...state, playerList: newPlayerList };
+    }
+    case false: {
+      switch (hasAnyCardHighlightning) {
+        case false: {
+          return { ...state, playerList: newPlayerList };
+        }
+        case true: {
+          return state;
+        }
+      }
+    }
+  }
+};
+
+/**
+ * Just returns the opposite of current highlightning.
+ */
+const changeHighlightningInventory = (
+  state: State,
+  currentCardIndex: number,
+  hasCurrentCardHighlightning: boolean
+) => {
   const { playerList, numberOfPlayer } = state;
-
   const inventory = playerList[numberOfPlayer].inventory;
-
-  const hasAnyCardHighlightning = inventory.find((card) => {
-    return card.highlighting === true;
-  })
-    ? true
-    : false;
-
-  // We take first from the healthCards
   const choosenHealthCard = inventory[currentCardIndex];
 
-  const hasCurrentCardHighlightning = choosenHealthCard.highlighting ? true : false;
-
-  /**
-   * Just returns the opposite.
-   */
   const highlightHealthCard = {
     ...choosenHealthCard,
     highlighting: !hasCurrentCardHighlightning,
@@ -43,20 +65,33 @@ export const getStateCardChosed = (state: State, currentCardIndex: number) => {
       inventory: newInventory,
     },
   };
+  return newPlayerList;
+};
 
-  switch (hasCurrentCardHighlightning) {
-    case true: {
-      return { ...state, playerList: newPlayerList };
-    }
-    case false: {
-      switch (hasAnyCardHighlightning) {
-        case false: {
-          return { ...state, playerList: newPlayerList };
-        }
-        case true: {
-          return state;
-        }
-      }
-    }
-  }
+const findAnyHighlightning = (state: State): boolean => {
+  const { playerList, numberOfPlayer } = state;
+  const inventory = playerList[numberOfPlayer].inventory;
+
+  const hasAnyCardHighlightning = inventory.find((card) => {
+    return card.highlighting === true;
+  })
+    ? true
+    : false;
+  return hasAnyCardHighlightning;
+};
+
+const findCurrentCardHighlightning = (
+  state: State,
+  currentCardIndex: number
+): boolean => {
+  const { playerList, numberOfPlayer } = state;
+  const inventory = playerList[numberOfPlayer].inventory;
+
+  const choosenHealthCard = inventory[currentCardIndex];
+
+  const hasCurrentCardHighlightning = choosenHealthCard.highlighting
+    ? true
+    : false;
+
+  return hasCurrentCardHighlightning;
 };

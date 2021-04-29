@@ -34,6 +34,7 @@ export const playerMove = (action: ActionType, state: State): State => {
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
     }
+    
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardChosed(state, target);
