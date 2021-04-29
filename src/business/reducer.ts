@@ -6,6 +6,7 @@ import {
   takeHealthCard,
   getOrder,
   interactEnemyCard,
+  applyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, HealthCardType } from "./types";
@@ -27,7 +28,8 @@ export type ActionType =
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
   | { type: "req-takeHealthCard" }
-  | { type: "cardChoosed"; payload: number };
+  | { type: "cardChoosed"; payload: number }
+  | { type: "playerChoosed"; payload: number };
 
 export const reducer = (
   state: State = initialState,
@@ -52,6 +54,9 @@ export const reducer = (
 
         case "takeHealthCard": {
           return takeHealthCard(action, state);
+        }
+        case "applyCard": {
+          return applyCard(action, state);
         }
 
         case "interactEnemyCard": {

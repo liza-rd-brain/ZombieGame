@@ -112,12 +112,13 @@ export type GameState =
   | {
       type: "gameStarted.playerMove";
     }
-  | openHealthCardType
+  | {
+      type: "gameStarted.takeHealthCard";
+    }
+  | {
+      type: "gameStarted.applyCard";
+    }
   | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
-
-export type openHealthCardType = {
-  type: "gameStarted.takeHealthCard";
-};

@@ -18,15 +18,25 @@ export const getStateCardChosed = (state: State, currentCardIndex: number) => {
     hasCurrentCardHighlightning
   );
 
+  const stateWithChangingHighlightning: State = {
+    ...state,
+    playerList: newPlayerList,
+    gameState: {
+      type: "gameStarted.applyCard",
+    },
+  };
+
   switch (hasCurrentCardHighlightning) {
     case true: {
-      return { ...state, playerList: newPlayerList };
+      return stateWithChangingHighlightning;
     }
+
     case false: {
       switch (hasAnyCardHighlightning) {
         case false: {
-          return { ...state, playerList: newPlayerList };
+          return stateWithChangingHighlightning;
         }
+
         case true: {
           return state;
         }

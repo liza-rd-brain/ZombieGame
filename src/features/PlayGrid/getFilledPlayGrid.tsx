@@ -26,7 +26,7 @@ const Wall = styled.div<CommonCell>`
     width: 50px;
     height: 50px;
     bottom: 0px;
-    z-index: 10;
+    z-index: 2;
     height: ${(props) => {
       if (props.surfaceItem) {
         switch (props.surfaceItem.bottom) {
@@ -72,7 +72,7 @@ const Wall = styled.div<CommonCell>`
     position: absolute;
     /*   width: 30px; */
     height: 50px;
-    z-index: 10;
+    z-index:2;
     bottom: 0px;
 
     width: ${(props) => {
