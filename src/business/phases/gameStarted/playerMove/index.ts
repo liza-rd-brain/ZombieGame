@@ -92,6 +92,11 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  */
 
 const getPlayerWithAvailableCells = (state: State): State => {
+  const { playerList, numberOfPlayer, gameField } = state;
+
+  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+
+const getPlayerWithAvailableCells = (state: State): State => {
   const { numberOfPlayer } = state;
 
   const neighboringCellList = getNeighboringCellList(state);
