@@ -1,4 +1,4 @@
-import { MoveDirection } from "../../../types";
+import { MoveDirection } from "../../types";
 
 /**
  * Returns new coordinate of player.
