@@ -55,7 +55,7 @@ export const PlayerList = (props: PlayerListItem) => {
           onClick={() => {
             dispatch({
               type: "playerChoosed",
-              payload: index,
+              payload: item.orderNumber,
             });
           }}
         >
