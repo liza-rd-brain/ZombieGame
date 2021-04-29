@@ -1,6 +1,7 @@
 import { State, PlayerListType } from "../../types";
-
 import { ActionType } from "../../reducer";
+
+import { getStateCardChosed } from "./getStateCardChosed";
 
 /**
  * 1. We need to check type of highlitningCard
@@ -35,7 +36,6 @@ export const applyCard = (action: ActionType, state: State): State => {
         },
       };
 
-
       return {
         ...state,
         playerList: newPlayerList,
@@ -43,8 +43,11 @@ export const applyCard = (action: ActionType, state: State): State => {
           type: "gameStarted.playerMove",
         },
       };
-      
 
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardChosed(state, target);
+    }
     default:
       return state;
   }
