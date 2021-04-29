@@ -1,8 +1,9 @@
-import { State, PlayerListType } from "../../types";
+import { State, PlayerListType, AvailableCellListType } from "../../types";
 import { ActionType } from "../../reducer";
 
 import { getStateCardChosed } from "./getStateCardChosed";
-
+import { getNeighboringCellList } from "./getNeighboringCellList";
+import { canInteractWithCell } from "./canInteractWithCell";
 /**
  * 1. We need to check type of highlitningCard
  * 2. In depends of type call the function!
@@ -84,7 +85,14 @@ const getStateHealAnotherPlayer = (
   const coordCurrPlayer = playerList[indexCurrPlayer].coord;
   const coordChosenPlayer = playerList[indexChosenPlayer].coord;
 
-  const canHeal = coordCurrPlayer === coordChosenPlayer;
+  const playersMeetOnCell = coordCurrPlayer === coordChosenPlayer;
+  const neighboringCellList = getAvailableCellList(state);
+
+  const canInteractWithNeigboringCell = neighboringCellList.includes(
+    coordChosenPlayer
+  );
+  const canHeal = playersMeetOnCell || canInteractWithNeigboringCell;
+
   const newInventory = changeInventory(playerList, indexCurrPlayer);
   const newHealth = changeHealth(playerList, indexChosenPlayer);
 
@@ -130,4 +138,22 @@ const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
  */
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
   return playerList[indexTarget].health + 1;
+};
+
+const getAvailableCellList = (state: State) /* : State */ => {
+  const neighboringCellList = getNeighboringCellList(state);
+  const availableCellList: AvailableCellListType = neighboringCellList.filter(
+    (cellItem) => {
+      const { direction, coord } = cellItem;
+
+      return canInteractWithCell(state, coord, direction);
+    }
+  );
+
+  const availableCellsCoords = availableCellList.map((cellItem) => {
+    const { direction, coord } = cellItem;
+    return coord;
+  });
+
+  return availableCellsCoords;
 };
