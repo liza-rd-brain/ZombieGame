@@ -1,4 +1,3 @@
-import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -32,7 +31,7 @@ const PlayerCard = styled.div<PlayerItem>`
   width: 10px;
   height: 10px;
   margin: 2px;
-  z-index: 1;
+  z-index: 3;
   border: ${(props) => {
     if (props.isCurrent) {
       return "5px solid red";
@@ -43,32 +42,14 @@ const PlayerCard = styled.div<PlayerItem>`
       return "red";
     }
   }};
-
-  &:before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid #34b834;";
-      }
-    }};
-
-    opacity: 0.5;
-    padding: 4px;
-
-    left: -1px;
-    top: -1px;
-  }
+  cursor: default;
 `;
 
 const PlayerCardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   font-size: 12px;
   font-weight: bold;
   color: white;
@@ -76,85 +57,24 @@ const PlayerCardList = styled.div`
 
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-
-  const { playerList, numberOfPlayer, getContextMenu } = props;
-  const listForInteract = getAvailableCellList(state);
-
+  const { list, numberOfPlayer } = props;
   return (
     <PlayerCardList>
-      {playerList.map((playerCardItem, index) => {
-        const needHighlightning = listForInteract.includes(
-          playerCardItem.coord
-        );
-
-        const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
-
-        switch (true) {
-          case needHighlightning: {
-            switch (true) {
-              case isCurrentPlayer: {
-                return (
-                  <PlayerCard
-                    key={index}
-                    isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                    needHighlightning={true}
-                    onClick={() =>
-                      dispatch({
-                        type: "req-healPlayer",
-                        payload: playerCardItem.orderNumber,
-                      })
-                    }
-                  >
-                    {playerCardItem.orderNumber + 1}
-                  </PlayerCard>
-                );
-              }
-
-              case !isCurrentPlayer: {
-                return (
-                  <React.Fragment key={index}>
-                    <PlayerCard
-                      key={index}
-                      isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                      needHighlightning={true}
-                      onClick={() => {
-                        getContextMenu(playerCardItem.orderNumber);
-
-                        dispatch({
-                          type: "req-contextMenu",
-                          payload: playerCardItem.orderNumber,
-                        });
-                      }}
-                    >
-                      {playerCardItem.orderNumber + 1}
-                    </PlayerCard>
-                  </React.Fragment>
-                );
-              }
-              default:
-                return null;
-            }
-          }
-          case !needHighlightning: {
-            return (
-              <PlayerCard
-                key={index}
-                isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                onClick={() => {
-                  console.log("не можем вылечить!");
-                }}
-              >
-                {playerCardItem.orderNumber + 1}
-              </PlayerCard>
-            );
-          }
-          default:
-            return null;
-        }
-      })}
+      {list.map((item, index) => (
+        <PlayerCard
+          key={index}
+          isCurrent={numberOfPlayer == item.orderNumber}
+          onClick={() => {
+            dispatch({
+              type: "playerChoosed",
+              payload: index,
+            });
+          }}
+        >
+          {" "}
+          {item.orderNumber + 1}
+        </PlayerCard>
+      ))}
     </PlayerCardList>
   );
 };

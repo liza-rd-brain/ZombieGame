@@ -117,8 +117,6 @@ export type GameState =
     }
   | {
       type: "gameStarted.applyCard";
-    } | {
-      type: "gameStarted.applyCard.contextMenu";
     }
   | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }

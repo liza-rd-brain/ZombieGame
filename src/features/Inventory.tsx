@@ -40,9 +40,6 @@ export const Inventory = () => {
 
   const inventory = playerList[numberOfPlayer].inventory;
 
-  /* const healthCardList = inventory.filter((card) => {
-    return (card.name = "health");
-  }); */
 
   return (
     <InventoryWrap>
