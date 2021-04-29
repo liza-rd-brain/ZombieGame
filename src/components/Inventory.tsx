@@ -1,14 +1,8 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import {
-  State,
-  PlayerListType,
-  HealthCardType,
-  GameState,
-} from "../business/types";
+import { State, PlayerListType, HealthCardType } from "../business/types";
 import { Health } from "./Health";
 
 type HealthSlotType = {
@@ -41,21 +35,11 @@ const HealthSlot = styled.div<HealthSlotType>`
 
 export const Inventory = (props: { index: number }) => {
   const dispatch = useDispatch();
-  const { playerList, gameState } = useSelector((state: State) => ({
+  const { playerList } = useSelector((state: State) => ({
     ...state,
   }));
 
-  type AppranceType = { highlightning?: boolean }[];
-
   const inventory = playerList[props.index].inventory;
-
-  /*   const initialApperance: AppranceType = [{ highlightning: false }]; */
-  const initialApperance: AppranceType = inventory.map((inventoryItem) => {
-    return {
-      highlightning: false,
-    };
-  });
-  const [apperance, setApperance] = useState(initialApperance);
 
   return (
     <InventoryWrap>
@@ -64,24 +48,8 @@ export const Inventory = (props: { index: number }) => {
           return (
             <HealthSlot
               key={inventoryCardindex}
-              highlighting={
-                apperance[inventoryCardindex]
-                  ? apperance[inventoryCardindex].highlightning
-                  : false
-              }
+              highlighting={inventoryCard.highlighting}
               onClick={() => {
-                setApperance((prevApperance) => {
-                  return inventory.map((inventoryItem, index) => {
-                    if (index === inventoryCardindex) {
-                      return {
-                        highlightning: prevApperance[inventoryCardindex]
-                          ? !prevApperance[inventoryCardindex].highlightning
-                          : true,
-                      };
-                    } else return { highlightning: false };
-                  });
-                });
-
                 dispatch({
                   type: "cardChoosed",
                   payload: inventoryCardindex,

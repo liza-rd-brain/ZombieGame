@@ -6,7 +6,7 @@ import { State, PlayerListType } from "../business/types";
 
 import { MAX_HEALTH_AMOUNT } from "../shared/config";
 import { HealthSlots } from "../components/HealthSlots";
-import { Inventory } from "./Inventory";
+import { Inventory } from "../components/Inventory";
 
 type HealthSlotType = {
   isFilled: boolean;
@@ -70,7 +70,7 @@ export const PlayerStatus = () => {
         </HealthStatus>
         <InventoryStatus>
           {`предметы:  `}
-          <Inventory />
+          <Inventory index={numberOfPlayer} />
         </InventoryStatus>
       </Column>
     </PlayerStatusCard>
