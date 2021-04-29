@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { State, PlayerListType, HealthCardType } from "../business/types";
-import { Health } from "../components/Health";
+import { Health } from "./Health";
 
 type HealthSlotType = {
   onClick: Function;
@@ -23,6 +23,7 @@ const HealthSlot = styled.div<HealthSlotType>`
   & > * {
     margin: 2px;
     position: relative;
+    /*  box-sizing: border-box; */
   }
 
   outline: ${(props) => {
@@ -32,14 +33,13 @@ const HealthSlot = styled.div<HealthSlotType>`
   }};
 `;
 
-export const Inventory = () => {
+export const Inventory = (props: { index: number }) => {
   const dispatch = useDispatch();
-  const { playerList, numberOfPlayer } = useSelector((state: State) => ({
+  const { playerList } = useSelector((state: State) => ({
     ...state,
   }));
 
-  const inventory = playerList[numberOfPlayer].inventory;
-
+  const inventory = playerList[props.index].inventory;
 
   return (
     <InventoryWrap>
