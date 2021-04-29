@@ -28,45 +28,13 @@ export const applyCard = (action: ActionType, state: State): State => {
 
       switch (true) {
         case needToHealCurrPlayer: {
-          const newInventory = changeInventory(playerList, indexCurrPlayer);
-          const newHealth = changeHealth(playerList, indexCurrPlayer);
-          const newPlayerList: PlayerListType = {
-            ...playerList,
-            [indexCurrPlayer]: {
-              ...playerList[indexCurrPlayer],
-              inventory: newInventory,
-              health: newHealth,
-            },
-          };
-
-          return {
-            ...state,
-            playerList: newPlayerList,
-            gameState: { type: "gameStarted.playerMove" },
-          };
+          return getStateHealCurrPlayer(state);
         }
 
         case needToHealAnotherPlayer: {
-          const newInventory = changeInventory(playerList, indexCurrPlayer);
-          const newHealth = changeHealth(playerList, indexChosenPlayer);
-
-          const newPlayerList: PlayerListType = {
-            ...playerList,
-            [indexChosenPlayer]: {
-              ...playerList[indexChosenPlayer],
-              health: newHealth,
-            },
-            [indexCurrPlayer]: {
-              ...playerList[indexCurrPlayer],
-              inventory: newInventory,
-            },
-          };
-
-          return {
-            ...state,
-            playerList: newPlayerList,
-            gameState: { type: "gameStarted.playerMove" },
-          };
+          const indexChosenPlayer = action.payload;
+          //Added check out of enable to heal
+          return getStateHealAnotherPlayer(state, indexChosenPlayer);
         }
 
         default:
@@ -77,6 +45,71 @@ export const applyCard = (action: ActionType, state: State): State => {
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardChosed(state, target);
+    }
+
+    default:
+      return state;
+  }
+};
+
+const getStateHealCurrPlayer = (state: State): State => {
+  const { playerList, numberOfPlayer } = state;
+  const indexCurrPlayer = numberOfPlayer;
+  const newInventory = changeInventory(playerList, indexCurrPlayer);
+  const newHealth = changeHealth(playerList, indexCurrPlayer);
+
+  const newPlayerList: PlayerListType = {
+    ...playerList,
+    [indexCurrPlayer]: {
+      ...playerList[indexCurrPlayer],
+      inventory: newInventory,
+      health: newHealth,
+    },
+  };
+
+  return {
+    ...state,
+    playerList: newPlayerList,
+    gameState: { type: "gameStarted.playerMove" },
+  };
+};
+
+const getStateHealAnotherPlayer = (
+  state: State,
+  indexChosenPlayer: number
+): State => {
+  const { playerList, numberOfPlayer } = state;
+
+  const indexCurrPlayer = numberOfPlayer;
+  const coordCurrPlayer = playerList[indexCurrPlayer].coord;
+  const coordChosenPlayer = playerList[indexChosenPlayer].coord;
+
+  const canHeal = coordCurrPlayer === coordChosenPlayer;
+  const newInventory = changeInventory(playerList, indexCurrPlayer);
+  const newHealth = changeHealth(playerList, indexChosenPlayer);
+
+  const newPlayerList: PlayerListType = {
+    ...playerList,
+    [indexChosenPlayer]: {
+      ...playerList[indexChosenPlayer],
+      health: newHealth,
+    },
+    [indexCurrPlayer]: {
+      ...playerList[indexCurrPlayer],
+      inventory: newInventory,
+    },
+  };
+
+  switch (canHeal) {
+    case true: {
+      return {
+        ...state,
+        playerList: newPlayerList,
+        gameState: { type: "gameStarted.playerMove" },
+      };
+    }
+    case false: {
+      return state;
     }
 
     default:

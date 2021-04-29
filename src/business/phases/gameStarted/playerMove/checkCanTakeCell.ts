@@ -23,6 +23,7 @@ export const checkCanTakeCell = (
         playerList,
         nextPlayerCoord
       );
+
       const canNotTakeCell = isLastStepOfMove && isNextCellOcupied;
 
       switch (true) {
@@ -36,6 +37,7 @@ export const checkCanTakeCell = (
           console.log("ячейка занята");
           return false;
         }
+        
         default: {
           return true;
         }
@@ -46,6 +48,8 @@ export const checkCanTakeCell = (
     }
   }
 };
+
+
 
 /**
  * Returns true if current or next cell has wall
@@ -96,6 +100,7 @@ const getOppositeDirection = (direction: MoveDirection): MoveDirection => {
     }
   }
 };
+
 
 const checkNextCellOccupied = (
   playersList: PlayerListType,

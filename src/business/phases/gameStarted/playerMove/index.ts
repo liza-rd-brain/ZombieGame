@@ -84,6 +84,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
 /**
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
+
 const getPlayerWithAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
 
