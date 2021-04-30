@@ -8,7 +8,6 @@ import {
 } from "../business/types";
 import { getNeighboringCellList } from "../business/phases/gameStarted/getNeighboringCellList";
 import { canInteractWithCell } from "../business/phases/gameStarted/canInteractWithCell";
-import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -28,21 +27,39 @@ type ContextMenuType = {
 const PlayerCard = styled.div<PlayerItem>`
   background-color: #9f3f3f;
   border-radius: 50%;
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   margin: 2px;
   z-index: 3;
-  border: ${(props) => {
-    if (props.isCurrent) {
-      return "5px solid red";
-    }
-  }};
+  text-align: center;
+  padding: 4px;
+  box-sizing: border-box;
+  cursor: default;
+
   background-color: ${(props) => {
     if (props.isCurrent) {
       return "red";
     }
   }};
-  cursor: default;
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: ${(props) => {
+      if (props.needHighlightning) {
+        return "3px solid #34b834;";
+      }
+    }};
+
+    opacity: 0.5;
+    padding: 4px;
+
+    left: -1px;
+    top: -1px;
+  }
 `;
 
 const PlayerCardList = styled.div`
@@ -57,24 +74,52 @@ const PlayerCardList = styled.div`
 
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
-  const { list, numberOfPlayer } = props;
+  const state = useSelector((state: State) => ({
+    ...state,
+  }));
+
+  const { playerList, numberOfPlayer } = props;
+  const listForInteract = getAvailableCellList(state);
+
   return (
     <PlayerCardList>
-      {list.map((item, index) => (
-        <PlayerCard
-          key={index}
-          isCurrent={numberOfPlayer == item.orderNumber}
-          onClick={() => {
-            dispatch({
-              type: "playerChoosed",
-              payload: item.orderNumber,
-            });
-          }}
-        >
-          {" "}
-          {item.orderNumber + 1}
-        </PlayerCard>
-      ))}
+      {playerList.map((playerCardItem, index) => {
+        const needHighlightning = listForInteract.includes(
+          playerCardItem.coord
+        );
+
+        if (needHighlightning) {
+          return (
+            <PlayerCard
+              key={index}
+              isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+              needHighlightning={true}
+              onClick={() => {
+                dispatch({
+                  type: "playerChoosed",
+                  payload: playerCardItem.orderNumber,
+                });
+              }}
+            >
+              {" "}
+              {playerCardItem.orderNumber + 1}
+            </PlayerCard>
+          );
+        } else {
+          return (
+            <PlayerCard
+              key={index}
+              isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+              onClick={() => {
+                console.log("не можем вылечить!");
+              }}
+            >
+              {" "}
+              {playerCardItem.orderNumber + 1}
+            </PlayerCard>
+          );
+        }
+      })}
     </PlayerCardList>
   );
 };
@@ -101,10 +146,10 @@ const getAvailableCellList = (state: State) => {
     .concat(currPlayerCoord);
 
   switch (gameState.type) {
-    case "gameStarted.applyCard.contextMenu":
-    case "gameStarted.applyCard":
+    case "gameStarted.applyCard": {
+      console.log("listForInteract", availableCellsCoords);
       return availableCellsCoords;
-
+    }
     default:
       return [];
   }

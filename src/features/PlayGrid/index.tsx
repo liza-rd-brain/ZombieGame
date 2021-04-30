@@ -90,17 +90,11 @@ type contextMenuType = {
   numberOfPlayer?: number;
 };
 export const PlayGrid = () => {
-  const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
     ...state,
   }));
 
-  const initialContextMenuState: contextMenuType = { type: "hidden" };
-  const [contextMenuState, updatecontextMenuState] = useState(
-    initialContextMenuState
-  );
-
-  const { gameField, playerList, enemyList, numberOfPlayer } = state;
+  const { gameField, playerList, enemyList, numberOfPlayer, gameState } = state;
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
@@ -166,3 +160,8 @@ export const PlayGrid = () => {
     </>
   );
 };
+
+/**
+ * List of cell that can be hightlighted for healing.
+ *state=cardChoosed
+ */
