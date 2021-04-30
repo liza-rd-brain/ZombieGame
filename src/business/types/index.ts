@@ -26,6 +26,7 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
+  
   inventory: CardType[];
 };
 

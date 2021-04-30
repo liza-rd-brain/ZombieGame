@@ -2,7 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, PlayerListType, HealthCardType } from "../business/types";
+import {
+  State,
+  PlayerListType,
+  HealthCardType,
+  GameState,
+} from "../business/types";
 import { Health } from "./Health";
 
 type HealthSlotType = {

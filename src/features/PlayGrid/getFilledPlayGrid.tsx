@@ -72,7 +72,7 @@ const Wall = styled.div<CommonCell>`
     position: absolute;
     /*   width: 30px; */
     height: 50px;
-    z-index:2;
+    z-index: 2;
     bottom: 0px;
 
     width: ${(props) => {

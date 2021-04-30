@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { FINISH_COORD } from "../../shared/config";
 import { State } from "../../business/types";
+
 import { getFilledPlayGrid } from "./getFilledPlayGrid";
 
 type GridProps = {
@@ -29,11 +30,12 @@ const GridItem = styled.div<GridProps>`
 `;
 
 export const PlayGrid = () => {
-  const { gameField, playerList, enemyList, numberOfPlayer } = useSelector(
-    (state: State) => ({
-      ...state,
-    })
-  );
+  const state = useSelector((state: State) => ({
+    ...state,
+  }));
+
+  const { gameField, playerList, enemyList, numberOfPlayer, gameState } = state;
+
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
   const playerGrid = (
@@ -43,3 +45,8 @@ export const PlayGrid = () => {
   );
   return playerGrid;
 };
+
+/**
+ * List of cell that can be hightlighted for healing.
+ *state=cardChoosed
+ */

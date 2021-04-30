@@ -91,6 +91,7 @@ const getStateHealAnotherPlayer = (
   const canInteractWithNeigboringCell = neighboringCellList.includes(
     coordChosenPlayer
   );
+
   const canHeal = playersMeetOnCell || canInteractWithNeigboringCell;
 
   const newInventory = changeInventory(playerList, indexCurrPlayer);
@@ -109,6 +110,8 @@ const getStateHealAnotherPlayer = (
   };
 
   switch (canHeal) {
+  
+
     case true: {
       return {
         ...state,

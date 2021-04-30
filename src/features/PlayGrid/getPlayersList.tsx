@@ -1,6 +1,10 @@
 import { PlayerList } from "../../components";
 
-import { PlayerListType, PlayerCardType } from "../../business/types";
+import {
+  PlayerListType,
+  PlayerCardType,
+
+} from "../../business/types";
 
 export const getPlayersList = (
   index: string,
@@ -8,6 +12,7 @@ export const getPlayersList = (
   numberOfPlayer: number
 ) => {
   let playersArr: PlayerCardType[] = [];
+
   for (let playerKey in playersList) {
     const playerCard = playersList[playerKey];
     const playerCoord = playerCard.coord;
@@ -16,6 +21,6 @@ export const getPlayersList = (
     }
   }
   if (playersArr.length > 0) {
-    return <PlayerList list={playersArr} numberOfPlayer={numberOfPlayer} />;
+    return <PlayerList playerList={playersArr} numberOfPlayer={numberOfPlayer} />;
   } else return null;
 };
