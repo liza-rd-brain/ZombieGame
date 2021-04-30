@@ -25,6 +25,7 @@ export const getStateCardChosed = (state: State, currentCardIndex: number) => {
       type: "gameStarted.applyCard",
     },
   };
+  
   const stateWithoutHighlightning: State = {
     ...state,
     playerList: newPlayerList,

@@ -19,7 +19,7 @@ export const applyCard = (action: ActionType, state: State): State => {
        * Then remove card from inventory
        * Can we do this simultaneously?
        */
-      const { playerList, numberOfPlayer } = state;
+      const { numberOfPlayer } = state;
 
       const indexChosenPlayer = action.payload;
       const indexCurrPlayer = numberOfPlayer;
@@ -82,17 +82,6 @@ const getStateHealAnotherPlayer = (
   const { playerList, numberOfPlayer } = state;
 
   const indexCurrPlayer = numberOfPlayer;
-  const coordCurrPlayer = playerList[indexCurrPlayer].coord;
-  const coordChosenPlayer = playerList[indexChosenPlayer].coord;
-
-  const playersMeetOnCell = coordCurrPlayer === coordChosenPlayer;
-  const neighboringCellList = getAvailableCellList(state);
-
-  const canInteractWithNeigboringCell = neighboringCellList.includes(
-    coordChosenPlayer
-  );
-
-  const canHeal = playersMeetOnCell || canInteractWithNeigboringCell;
 
   const newInventory = changeInventory(playerList, indexCurrPlayer);
   const newHealth = changeHealth(playerList, indexChosenPlayer);
@@ -109,23 +98,11 @@ const getStateHealAnotherPlayer = (
     },
   };
 
-  switch (canHeal) {
-  
-
-    case true: {
-      return {
-        ...state,
-        playerList: newPlayerList,
-        gameState: { type: "gameStarted.playerMove" },
-      };
-    }
-    case false: {
-      return state;
-    }
-
-    default:
-      return state;
-  }
+  return {
+    ...state,
+    playerList: newPlayerList,
+    gameState: { type: "gameStarted.playerMove" },
+  };
 };
 
 const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
@@ -141,22 +118,4 @@ const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
  */
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
   return playerList[indexTarget].health + 1;
-};
-
-const getAvailableCellList = (state: State) /* : State */ => {
-  const neighboringCellList = getNeighboringCellList(state);
-  const availableCellList: AvailableCellListType = neighboringCellList.filter(
-    (cellItem) => {
-      const { direction, coord } = cellItem;
-
-      return canInteractWithCell(state, coord, direction);
-    }
-  );
-
-  const availableCellsCoords = availableCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
-    return coord;
-  });
-
-  return availableCellsCoords;
 };
