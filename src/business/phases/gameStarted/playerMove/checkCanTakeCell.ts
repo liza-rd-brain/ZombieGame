@@ -15,13 +15,11 @@ export const checkCanTakeCell = (
 
   switch (true) {
     case metBarrier: {
-      console.log("встретили стену");
       return false;
     }
 
     case canNotTakeCell: {
       // TODO: можно сделать промежуточное состояние для статуса с предупреждением о занятой чейке
-      console.log("ячейка занята");
       return false;
     }
     default: {

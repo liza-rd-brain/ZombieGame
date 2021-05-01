@@ -26,7 +26,7 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
-  
+
   inventory: CardType[];
 };
 
@@ -105,6 +105,7 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
+  cursor?: { x: number; y: number };
 };
 
 export type GameState =
@@ -118,6 +119,9 @@ export type GameState =
     }
   | {
       type: "gameStarted.applyCard";
+    }
+  | {
+      type: "gameStarted.getContextMenu";
     }
   | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }

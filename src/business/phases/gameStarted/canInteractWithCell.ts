@@ -12,7 +12,6 @@ export const canInteractWithCell = (
 
   switch (nextCellOutOfGameField) {
     case true: {
-      console.log("не можем выйти за границу поля");
       return false;
     }
 
@@ -21,7 +20,6 @@ export const canInteractWithCell = (
 
       switch (true) {
         case metBarrier: {
-          console.log("встретили стену");
           return false;
         }
 

@@ -4,13 +4,12 @@ import { ActionType } from "../../reducer";
 import { getStateCardChosed } from "./getStateCardChosed";
 import { getNeighboringCellList } from "./getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
+
 /**
- * 1. We need to check type of highlitningCard
- * 2. In depends of type call the function!
- * 3. On player we need to handle callback
-
+ *  In payload get order number of chosen for interact player.
+ * If this number = indexCurrPlayer we heal player.
+ * If not - we give context menu: need heal or apply.
  */
-
 export const applyCard = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "playerChoosed": {
@@ -25,14 +24,14 @@ export const applyCard = (action: ActionType, state: State): State => {
       const indexCurrPlayer = numberOfPlayer;
 
       const needToHealCurrPlayer = indexChosenPlayer === indexCurrPlayer;
-      const needToHealAnotherPlayer = !needToHealCurrPlayer;
+      const needInteractWithAnotherPlayer = !needToHealCurrPlayer;
 
       switch (true) {
         case needToHealCurrPlayer: {
           return getStateHealCurrPlayer(state);
         }
 
-        case needToHealAnotherPlayer: {
+        case needInteractWithAnotherPlayer: {
           const indexChosenPlayer = action.payload;
           //Added check out of enable to heal
           return getStateHealAnotherPlayer(state, indexChosenPlayer);
@@ -46,6 +45,16 @@ export const applyCard = (action: ActionType, state: State): State => {
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardChosed(state, target);
+    }
+
+    case "req-getContextPlayerMenu": {
+      return {
+        ...state,
+        gameState: {
+          type: "gameStarted.getContextMenu",
+        },
+        cursor: { x: action.payload.x, y: action.payload.y },
+      };
     }
 
     default:

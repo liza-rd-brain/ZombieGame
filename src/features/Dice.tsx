@@ -15,6 +15,7 @@ const DiceWrap = styled.div`
 const DiceButton = styled.button`
   margin: 0 auto;
 `;
+
 const DiceNumber = styled.div`
   height: 30px;
   margin-top: 20px;

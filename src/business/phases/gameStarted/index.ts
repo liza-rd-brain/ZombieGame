@@ -4,3 +4,4 @@ export { takeHealthCard } from "./takeHealthCard";
 export { trownDice } from "./trownDice";
 export { interactEnemyCard } from "./interactEnemyCard";
 export { applyCard } from "./applyCard";
+export { getContextMenu } from "./getContextMenu";

@@ -68,16 +68,10 @@ const getStateCardTaken = (state: State): State => {
       return !null;
     });
 
-  /*  const healthCard = Object.fromEntries(cardItemList); */
-
-  console.log(healthCard);
-
   const newPlayer = {
     ...player,
     inventory: [...player.inventory, ...healthCard],
   };
-
-  console.log(newPlayer);
 
   const newPlayerList: PlayerListType = {
     ...playerList,

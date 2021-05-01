@@ -10,6 +10,10 @@ import { getFilledPlayGrid } from "./getFilledPlayGrid";
 type GridProps = {
   vert: number;
 };
+type ContextMenuType = {
+  coordX: number;
+  coordY: number;
+};
 
 const GridItem = styled.div<GridProps>`
   outline: 2px solid lightgray;
@@ -29,6 +33,25 @@ const GridItem = styled.div<GridProps>`
   }
 `;
 
+const ContextMenu = styled.div<ContextMenuType>`
+  display: flex;
+  position: absolute;
+  width: 150px;
+  height: 40px;
+  background-color: #ffffff;
+  /*  border: 1px solid gray; */
+  top: ${(props) => `${props.coordY - 50}px`};
+  left: ${(props) => `${props.coordX - 150}px`};
+`;
+
+const Button = styled.button`
+  margin: auto;
+  height: 30px;
+  width: 70px;
+  opacity: 1;
+  /*   box-shadow: inset 0 -3px 0 #736357; */
+`;
+
 export const PlayGrid = () => {
   const state = useSelector((state: State) => ({
     ...state,
@@ -38,15 +61,49 @@ export const PlayGrid = () => {
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
-  const playerGrid = (
-    <GridItem vert={height}>
-      {getFilledPlayGrid(gameField, playerList, enemyList, numberOfPlayer)}
-    </GridItem>
-  );
-  return playerGrid;
-};
+  const needContextMenu = state.gameState.type === "gameStarted.getContextMenu";
 
-/**
- * List of cell that can be hightlighted for healing.
- *state=cardChoosed
- */
+  const coordX = state.cursor?.x ? state.cursor?.x : 0;
+  const coordY = state.cursor?.y ? state.cursor?.y : 0;
+  switch (needContextMenu) {
+    case false: {
+      const playerGrid = (
+        <GridItem vert={height}>
+          {getFilledPlayGrid(gameField, playerList, enemyList, numberOfPlayer)}
+        </GridItem>
+      );
+      return playerGrid;
+    }
+    case true: {
+      const playerGrid = (
+        <>
+          <GridItem vert={height}>
+            {getFilledPlayGrid(
+              gameField,
+              playerList,
+              enemyList,
+              numberOfPlayer
+            )}
+          </GridItem>
+          <ContextMenu coordX={coordX} coordY={coordY}>
+            <Button
+              onClick={() => {
+                console.log("передать");
+              }}
+            >
+              передать
+            </Button>
+            <Button
+              onClick={() => {
+                console.log("лечить");
+              }}
+            >
+              лечить
+            </Button>
+          </ContextMenu>
+        </>
+      );
+      return playerGrid;
+    }
+  }
+};
