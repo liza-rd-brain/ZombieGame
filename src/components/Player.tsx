@@ -8,6 +8,7 @@ import {
 } from "../business/types";
 import { getNeighboringCellList } from "../business/phases/gameStarted/getNeighboringCellList";
 import { canInteractWithCell } from "../business/phases/gameStarted/canInteractWithCell";
+import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -72,6 +73,13 @@ const PlayerCardList = styled.div`
   color: white;
 `;
 
+const ContextMenu = styled.iframe`
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: black;
+`;
+
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
@@ -88,36 +96,92 @@ export const PlayerList = (props: PlayerListItem) => {
           playerCardItem.coord
         );
 
-        if (needHighlightning) {
-          return (
-            <PlayerCard
-              key={index}
-              isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-              needHighlightning={true}
-              onClick={() => {
-                dispatch({
-                  type: "playerChoosed",
-                  payload: playerCardItem.orderNumber,
-                });
-              }}
-            >
-              {" "}
-              {playerCardItem.orderNumber + 1}
-            </PlayerCard>
-          );
-        } else {
-          return (
-            <PlayerCard
-              key={index}
-              isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-              onClick={() => {
-                console.log("не можем вылечить!");
-              }}
-            >
-              {" "}
-              {playerCardItem.orderNumber + 1}
-            </PlayerCard>
-          );
+        const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
+
+        /**
+         * Context menu to show to clicked player?
+         */
+        const needContextMenu =
+          state.gameState.type === "gameStarted.getContextMenu" &&
+          !isCurrentPlayer;
+
+        switch (true) {
+          /*           case needContextMenu: {
+            return (
+              <React.Fragment key={index}>
+                <PlayerCard
+                  isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+                  needHighlightning={true}
+                  onClick={() =>
+                    dispatch({
+                      type: "playerChoosed",
+                      payload: playerCardItem.orderNumber,
+                    })
+                  }
+                >
+                  {playerCardItem.orderNumber + 1}
+                </PlayerCard>
+
+                <ContextMenu />
+              </React.Fragment>
+            );
+          } */
+          case needHighlightning: {
+            switch (true) {
+              case isCurrentPlayer: {
+                return (
+                  <PlayerCard
+                    key={index}
+                    isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+                    needHighlightning={true}
+                    onClick={() =>
+                      dispatch({
+                        type: "playerChoosed",
+                        payload: playerCardItem.orderNumber,
+                      })
+                    }
+                  >
+                    {playerCardItem.orderNumber + 1}
+                  </PlayerCard>
+                );
+              }
+
+              case !isCurrentPlayer: {
+                return (
+                  <PlayerCard
+                    key={index}
+                    isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+                    needHighlightning={true}
+                    onClick={(e) => {
+                      dispatch({
+                        type: "req-getContextPlayerMenu",
+                        payload: { x: e.clientX, y: e.clientY },
+                      });
+                    }}
+                  >
+                    {playerCardItem.orderNumber + 1}
+                  </PlayerCard>
+                );
+              }
+              default:
+                return null;
+            }
+          }
+          case !needHighlightning: {
+            return (
+              <PlayerCard
+                key={index}
+                isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+                onClick={() => {
+                  console.log("не можем вылечить!");
+                }}
+              >
+                {playerCardItem.orderNumber + 1}
+              </PlayerCard>
+            );
+          }
+          default:
+            return null;
         }
       })}
     </PlayerCardList>
@@ -147,7 +211,6 @@ const getAvailableCellList = (state: State) => {
 
   switch (gameState.type) {
     case "gameStarted.applyCard": {
-      console.log("listForInteract", availableCellsCoords);
       return availableCellsCoords;
     }
     default:

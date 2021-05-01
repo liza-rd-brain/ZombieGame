@@ -7,6 +7,7 @@ import {
   getOrder,
   interactEnemyCard,
   applyCard,
+  getContextMenu,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, HealthCardType } from "./types";
@@ -29,7 +30,8 @@ export type ActionType =
   | { type: "req-getPlayerMoveResult" }
   | { type: "req-takeHealthCard" }
   | { type: "cardChoosed"; payload: number }
-  | { type: "playerChoosed"; payload: number };
+  | { type: "playerChoosed"; payload: number }
+  | { type: "req-getContextPlayerMenu"; payload: { x: number; y: number } };
 
 export const reducer = (
   state: State = initialState,
@@ -61,6 +63,12 @@ export const reducer = (
 
         case "interactEnemyCard": {
           return interactEnemyCard(action, state);
+        }
+
+        case "getContextMenu": {
+          console.log("обработка контекстного меню", action);
+          /*           return getContextMenu(action, state); */
+          return state;
         }
 
         case "getOrder": {
