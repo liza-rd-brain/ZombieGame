@@ -27,10 +27,7 @@ const PlayersListWrap = styled.div<AmountOfPlayers>`
   grid-template-columns: ${(props) => {
     return `repeat(${props.amount} ,25px)`;
   }};
-  /* grid-template-columns: 20% auto auto;
-  grid-template-rows: ${(props) => {
-    return `repeat(${props.amount} ,25px)`;
-  }}; */
+  pointer-events: none;
 `;
 
 const CharacterAvatar = styled.div`
@@ -61,7 +58,8 @@ const InventorysWrap = styled.div`
     align-items: center;
     flex-direction: column;
     box-sizing: border-box;
-   /*  & > * {
+    outline: none;
+    /*  & > * {
       box-sizing: border-box;
     } */
   }

@@ -11,30 +11,19 @@ import { canInteractWithCell } from "./canInteractWithCell";
  * If not - we give context menu: need heal or apply.
  */
 export const applyCard = (action: ActionType, state: State): State => {
-  switch (action.type) {
-    case "req-healPlayer": {
-      /**
-       * Need to increase playerHealth
-       * Then remove card from inventory
-       * Can we do this simultaneously?
-       */
-      const { numberOfPlayer } = state;
-
-      const indexChosenPlayer = action.payload;
-      const indexCurrPlayer = numberOfPlayer;
-
-      const needToHealCurrPlayer = indexChosenPlayer === indexCurrPlayer;
-      const needInteractWithAnotherPlayer = !needToHealCurrPlayer;
-
-      switch (true) {
-        case needToHealCurrPlayer: {
-          return getStateHealCurrPlayer(state);
-        }
-
-        case needInteractWithAnotherPlayer: {
+  const [, , phaseInner] = state.gameState.type.split(".");
+  switch (phaseInner) {
+    case "contextMenu": {
+      switch (action.type) {
+        case "req-healPlayer": {
           const indexChosenPlayer = action.payload;
           //Added check out of enable to heal
           return getStateHealAnotherPlayer(state, indexChosenPlayer);
+        }
+
+        case "req-shareHealthCard": {
+          const recipientPlayerNumber = action.payload;
+          return getStateGiveHealthCard(state, recipientPlayerNumber);
         }
 
         default:
@@ -42,19 +31,32 @@ export const applyCard = (action: ActionType, state: State): State => {
       }
     }
 
-    case "req-shareHealthCard": {
-      const recipientPlayerNumber = action.payload;
-      return getStateGiveHealthCard(state, recipientPlayerNumber);
-      return state;
-    }
+    default: {
+      switch (action.type) {
+        case "req-healPlayer": {
+          /**
+           * Need to increase playerHealth
+           * Then remove card from inventory
+           * Can we do this simultaneously?
+           */
+          return getStateHealCurrPlayer(state);
+        }
 
-    case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardChosed(state, target);
-    }
+        case "cardChoosed": {
+          const target = action.payload;
+          return getStateCardChosed(state, target);
+        }
 
-    default:
-      return state;
+        case "req-contextMenu": {
+          return {
+            ...state,
+            gameState: { type: "gameStarted.applyCard.contextMenu" },
+          };
+        }
+        default:
+          return state;
+      }
+    }
   }
 };
 

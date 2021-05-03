@@ -122,6 +122,11 @@ export const PlayerList = (props: PlayerListItem) => {
                       needHighlightning={true}
                       onClick={() => {
                         getContextMenu(playerCardItem.orderNumber);
+
+                        dispatch({
+                          type: "req-contextMenu",
+                          payload: playerCardItem.orderNumber,
+                        });
                       }}
                     >
                       {playerCardItem.orderNumber + 1}
@@ -176,6 +181,7 @@ const getAvailableCellList = (state: State) => {
     .concat(currPlayerCoord);
 
   switch (gameState.type) {
+    case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
       return availableCellsCoords;
 
