@@ -239,7 +239,8 @@ export const getFilledPlayGrid = (
   gameField: GameField,
   playersList: PlayerListType,
   enemyList: EnemyListType,
-  numberOfPlayer: number
+  numberOfPlayer: number,
+  getContextMenu: Function
 ) => {
   const orderGameCells = gameField.order;
 
@@ -257,7 +258,7 @@ export const getFilledPlayGrid = (
         return (
           <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
-            {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+            {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
             {`${hor}.${vert}`}
           </CellItem>
         );
@@ -267,7 +268,7 @@ export const getFilledPlayGrid = (
           <Wrap key={`${hor}.${vert}`}>
             <CellItem hasMarker={hasMarker}>
               {getCards(cellValues)}
-              {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+              {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
               {getEnemyList(orderIndex, enemyList)}
               {`${hor}.${vert}`}
             </CellItem>

@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -18,6 +19,11 @@ type PlayerItem = {
 type PlayerListItem = {
   playerList: PlayerCardType[];
   numberOfPlayer: number;
+  getContextMenu: Function;
+};
+
+type ContextMenuType = {
+  visible: boolean;
 };
 
 const PlayerCard = styled.div<PlayerItem>`
@@ -68,20 +74,13 @@ const PlayerCardList = styled.div`
   color: white;
 `;
 
-const ContextMenu = styled.iframe`
-  position: relative;
-  width: 100px;
-  height: 100px;
-  background-color: black;
-`;
-
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
     ...state,
   }));
 
-  const { playerList, numberOfPlayer } = props;
+  const { playerList, numberOfPlayer, getContextMenu } = props;
   const listForInteract = getAvailableCellList(state);
 
   return (
@@ -93,34 +92,7 @@ export const PlayerList = (props: PlayerListItem) => {
 
         const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
 
-        /**
-         * Context menu to show to clicked player?
-         */
-        const needContextMenu =
-          state.gameState.type === "gameStarted.getContextMenu" &&
-          !isCurrentPlayer;
-
         switch (true) {
-          /*           case needContextMenu: {
-            return (
-              <React.Fragment key={index}>
-                <PlayerCard
-                  isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                  needHighlightning={true}
-                  onClick={() =>
-                    dispatch({
-                      type: "playerChoosed",
-                      payload: playerCardItem.orderNumber,
-                    })
-                  }
-                >
-                  {playerCardItem.orderNumber + 1}
-                </PlayerCard>
-
-                <ContextMenu />
-              </React.Fragment>
-            );
-          } */
           case needHighlightning: {
             switch (true) {
               case isCurrentPlayer: {
@@ -131,7 +103,7 @@ export const PlayerList = (props: PlayerListItem) => {
                     needHighlightning={true}
                     onClick={() =>
                       dispatch({
-                        type: "playerChoosed",
+                        type: "req-healPlayer",
                         payload: playerCardItem.orderNumber,
                       })
                     }
@@ -143,19 +115,18 @@ export const PlayerList = (props: PlayerListItem) => {
 
               case !isCurrentPlayer: {
                 return (
-                  <PlayerCard
-                    key={index}
-                    isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                    needHighlightning={true}
-                    onClick={(e) => {
-                      dispatch({
-                        type: "req-getContextPlayerMenu",
-                        payload: { x: e.clientX, y: e.clientY },
-                      });
-                    }}
-                  >
-                    {playerCardItem.orderNumber + 1}
-                  </PlayerCard>
+                  <React.Fragment key={index}>
+                    <PlayerCard
+                      key={index}
+                      isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+                      needHighlightning={true}
+                      onClick={() => {
+                        getContextMenu(playerCardItem.orderNumber);
+                      }}
+                    >
+                      {playerCardItem.orderNumber + 1}
+                    </PlayerCard>
+                  </React.Fragment>
                 );
               }
               default:
@@ -205,9 +176,9 @@ const getAvailableCellList = (state: State) => {
     .concat(currPlayerCoord);
 
   switch (gameState.type) {
-    case "gameStarted.applyCard": {
+    case "gameStarted.applyCard":
       return availableCellsCoords;
-    }
+
     default:
       return [];
   }

@@ -1,15 +1,12 @@
 import { PlayerList } from "../../components";
 
-import {
-  PlayerListType,
-  PlayerCardType,
-
-} from "../../business/types";
+import { PlayerListType, PlayerCardType } from "../../business/types";
 
 export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
-  numberOfPlayer: number
+  numberOfPlayer: number,
+  getContextMenu: Function
 ) => {
   let playersArr: PlayerCardType[] = [];
 
@@ -21,6 +18,12 @@ export const getPlayersList = (
     }
   }
   if (playersArr.length > 0) {
-    return <PlayerList playerList={playersArr} numberOfPlayer={numberOfPlayer} />;
+    return (
+      <PlayerList
+        playerList={playersArr}
+        numberOfPlayer={numberOfPlayer}
+        getContextMenu={getContextMenu}
+      />
+    );
   } else return null;
 };

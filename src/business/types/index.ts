@@ -94,6 +94,7 @@ export type TypeEffect =
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!takeHealthCard" }
+  | { type: "!healPlayer" }
   | null;
 
 export type State = {
@@ -105,7 +106,6 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
-  cursor?: { x: number; y: number };
 };
 
 export type GameState =
@@ -119,9 +119,6 @@ export type GameState =
     }
   | {
       type: "gameStarted.applyCard";
-    }
-  | {
-      type: "gameStarted.getContextMenu";
     }
   | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }
