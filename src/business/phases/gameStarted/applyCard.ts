@@ -12,7 +12,7 @@ import { canInteractWithCell } from "./canInteractWithCell";
  */
 export const applyCard = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "playerChoosed": {
+    case "req-healPlayer": {
       /**
        * Need to increase playerHealth
        * Then remove card from inventory
@@ -42,24 +42,64 @@ export const applyCard = (action: ActionType, state: State): State => {
       }
     }
 
+    case "req-shareHealthCard": {
+      const recipientPlayerNumber = action.payload;
+      return getStateGiveHealthCard(state, recipientPlayerNumber);
+      return state;
+    }
+
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardChosed(state, target);
     }
 
-    case "req-getContextPlayerMenu": {
-      return {
-        ...state,
-        gameState: {
-          type: "gameStarted.getContextMenu",
-        },
-        cursor: { x: action.payload.x, y: action.payload.y },
-      };
-    }
-
     default:
       return state;
   }
+};
+
+const getStateGiveHealthCard = (
+  state: State,
+  recipientPlayerNumber: number
+): State => {
+  const { playerList, numberOfPlayer } = state;
+  const indexCurrPlayer = numberOfPlayer;
+
+  const currentPlayerInventory = playerList[indexCurrPlayer].inventory;
+  const recepientPlayerInventory = playerList[recipientPlayerNumber].inventory;
+
+  const sharedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
+    (card) => {
+      return card.name === "health";
+    }
+  );
+  const sharedCard = [...currentPlayerInventory][sharedCardIndex];
+
+  const newCurrentPlayerInventory = currentPlayerInventory.filter(
+    (card, indexOfCard) => {
+      return indexOfCard !== sharedCardIndex;
+    }
+  );
+
+  const newRecepientPlayerInventory = [...recepientPlayerInventory, sharedCard];
+
+  const newPlayerList = {
+    ...playerList,
+    [indexCurrPlayer]: {
+      ...playerList[indexCurrPlayer],
+      inventory: newCurrentPlayerInventory,
+    },
+    [recipientPlayerNumber]: {
+      ...playerList[recipientPlayerNumber],
+      inventory: newRecepientPlayerInventory,
+    },
+  };
+
+  return {
+    ...state,
+    playerList: newPlayerList,
+    gameState: { type: "gameStarted.playerMove" },
+  };
 };
 
 const getStateHealCurrPlayer = (state: State): State => {
@@ -114,6 +154,7 @@ const getStateHealAnotherPlayer = (
   };
 };
 
+// TODO: Not a obviously, what  exactly do this method!
 const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
   const currInventory = playerList[indexTarget].inventory;
   const inventoryWithoutAppyingCard = currInventory.filter((inventoryCard) => {

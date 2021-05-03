@@ -258,7 +258,7 @@ export const getFilledPlayGrid = (
         return (
           <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
-            {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+            {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
             {`${hor}.${vert}`}
           </CellItem>
         );

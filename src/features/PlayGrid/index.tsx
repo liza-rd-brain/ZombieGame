@@ -12,10 +12,6 @@ type GridProps = {
   vert: number;
   type: "visible" | "hidden";
 };
-type ContextMenuType = {
-  coordX: number;
-  coordY: number;
-};
 
 type ContextMenuType = {
   type: "visible" | "hidden";
@@ -42,76 +38,131 @@ const GridItem = styled.div<GridProps>`
 `;
 
 const ContextMenu = styled.div<ContextMenuType>`
-  display: flex;
+  display: ${(props) => {
+    if (props.type === "visible") {
+      return "block";
+    } else {
+      return "none";
+    }
+  }};
+  flex-direction: column;
   position: absolute;
-  width: 150px;
-  height: 40px;
+  width: 100px;
+  height: 100px;
   background-color: #ffffff;
-  /*  border: 1px solid gray; */
-  top: ${(props) => `${props.coordY - 50}px`};
-  left: ${(props) => `${props.coordX - 150}px`};
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+  justify-content: start;
+  padding: 21px 0 0 12px;
+  box-sizing: border-box;
+`;
+
+const Wrap = styled.div<WrapType>`
+  display: block;
+  position: absolute;
+  width: 70px;
+  height: 60px;
+  background-color: white;
 `;
 
 const Button = styled.button`
-  margin: auto;
   height: 30px;
   width: 70px;
-  opacity: 1;
-  /*   box-shadow: inset 0 -3px 0 #736357; */
 `;
 
+const CloseButton = styled.button`
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  outline: 1px solid black;
+  border: none;
+  top: 0;
+  position: absolute;
+  right: 0;
+  line-height: 12px;
+
+  &:hover {
+    color: red;
+  }
+`;
+
+type contextMenuType = {
+  type: "visible" | "hidden";
+  numberOfPlayer?: number;
+};
 export const PlayGrid = () => {
+  const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
     ...state,
   }));
 
-  const { gameField, playerList, enemyList, numberOfPlayer, gameState } = state;
+  const initialContextMenuState: contextMenuType = { type: "hidden" };
+  const [contextMenuState, updatecontextMenuState] = useState(
+    initialContextMenuState
+  );
+
+  const { gameField, playerList, enemyList, numberOfPlayer } = state;
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
-  const needContextMenu = state.gameState.type === "gameStarted.getContextMenu";
 
-  const coordX = state.cursor?.x ? state.cursor?.x : 0;
-  const coordY = state.cursor?.y ? state.cursor?.y : 0;
-  switch (needContextMenu) {
-    case false: {
-      const playerGrid = (
-        <GridItem vert={height}>
-          {getFilledPlayGrid(gameField, playerList, enemyList, numberOfPlayer)}
-        </GridItem>
-      );
-      return playerGrid;
-    }
-    case true: {
-      const playerGrid = (
-        <>
-          <GridItem vert={height}>
-            {getFilledPlayGrid(
-              gameField,
-              playerList,
-              enemyList,
-              numberOfPlayer
-            )}
-          </GridItem>
-          <ContextMenu coordX={coordX} coordY={coordY}>
-            <Button
-              onClick={() => {
-                console.log("передать");
-              }}
-            >
-              передать
-            </Button>
-            <Button
-              onClick={() => {
-                console.log("лечить");
-              }}
-            >
-              лечить
-            </Button>
-          </ContextMenu>
-        </>
-      );
-      return playerGrid;
-    }
-  }
+  const getContextMenu = (numberOfPlayer: number) => {
+    console.log("показать контекстное меню", numberOfPlayer);
+    updatecontextMenuState({
+      type: "visible",
+      numberOfPlayer,
+    });
+  };
+
+  return (
+    <>
+      <GridItem vert={height}>
+        {getFilledPlayGrid(
+          gameField,
+          playerList,
+          enemyList,
+          numberOfPlayer,
+          getContextMenu
+        )}
+      </GridItem>
+      <div id="modalMenu" />
+
+      <ContextMenu type={contextMenuState.type}>
+        <Button
+          onClick={() => {
+            updatecontextMenuState({
+              type: "hidden",
+            });
+            dispatch({
+              type: "req-shareHealthCard",
+              payload: contextMenuState.numberOfPlayer,
+            });
+          }}
+        >
+          передать
+        </Button>
+        <Button
+          onClick={() => {
+            updatecontextMenuState({
+              type: "hidden",
+            });
+            dispatch({
+              type: "req-healPlayer",
+              payload: contextMenuState.numberOfPlayer,
+            });
+          }}
+        >
+          лечить
+        </Button>
+        <CloseButton
+          onClick={() => {
+            updatecontextMenuState({
+              type: "hidden",
+            });
+          }}
+        >
+          &#10006;
+        </CloseButton>
+      </ContextMenu>
+    </>
+  );
 };
