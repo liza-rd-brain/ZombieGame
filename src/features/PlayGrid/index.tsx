@@ -10,6 +10,7 @@ import { getFilledPlayGrid } from "./getFilledPlayGrid";
 
 type GridProps = {
   vert: number;
+  type: "visible" | "hidden";
 };
 
 type ContextMenuType = {
@@ -19,6 +20,11 @@ type ContextMenuType = {
 type WrapType = {};
 
 const GridItem = styled.div<GridProps>`
+ /*  pointer-events: ${(props) => {
+    if (props.type === "visible") {
+      return "none";
+    } else return "auto";
+  }}; */
   outline: 2px solid lightgray;
   margin: 0 auto;
   width: 100%;
@@ -114,7 +120,7 @@ export const PlayGrid = () => {
 
   return (
     <>
-      <GridItem vert={height}>
+      <GridItem vert={height} type={contextMenuState.type}>
         {getFilledPlayGrid(
           gameField,
           playerList,
