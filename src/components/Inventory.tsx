@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -40,11 +41,21 @@ const HealthSlot = styled.div<HealthSlotType>`
 
 export const Inventory = (props: { index: number }) => {
   const dispatch = useDispatch();
-  const { playerList } = useSelector((state: State) => ({
+  const { playerList, gameState } = useSelector((state: State) => ({
     ...state,
   }));
 
+  type AppranceType = { highlightning?: boolean }[];
+
   const inventory = playerList[props.index].inventory;
+
+  /*   const initialApperance: AppranceType = [{ highlightning: false }]; */
+  const initialApperance: AppranceType = inventory.map((inventoryItem) => {
+    return {
+      highlightning: false,
+    };
+  });
+  const [apperance, setApperance] = useState(initialApperance);
 
   return (
     <InventoryWrap>
@@ -53,8 +64,24 @@ export const Inventory = (props: { index: number }) => {
           return (
             <HealthSlot
               key={inventoryCardindex}
-              highlighting={inventoryCard.highlighting}
+              highlighting={
+                apperance[inventoryCardindex]
+                  ? apperance[inventoryCardindex].highlightning
+                  : false
+              }
               onClick={() => {
+                setApperance((prevApperance) => {
+                  return inventory.map((inventoryItem, index) => {
+                    if (index === inventoryCardindex) {
+                      return {
+                        highlightning: prevApperance[inventoryCardindex]
+                          ? !prevApperance[inventoryCardindex].highlightning
+                          : true,
+                      };
+                    } else return { highlightning: false };
+                  });
+                });
+
                 dispatch({
                   type: "cardChoosed",
                   payload: inventoryCardindex,
