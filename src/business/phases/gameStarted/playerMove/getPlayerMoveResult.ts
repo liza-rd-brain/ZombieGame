@@ -16,7 +16,7 @@ export const getPlayerMoveResult = (state: State) => {
 
   const takeHealthCard =
     newCellWithPlayer?.name === "commonCell" &&
-    newCellWithPlayer?.cardItem.healthItem !== undefined;
+    newCellWithPlayer?.cardItem.some((cardItem) => cardItem?.name === "health");
 
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]

@@ -28,7 +28,7 @@ export const getFieldCells = (cellList: string[]): GameFieldCells => {
 const createEmptyFieldCells = (cellList: Array<string>): GameFieldCells => {
   const emptyFieldItem: CommonCell = {
     name: "commonCell",
-    cardItem: {},
+    cardItem: [],
   };
 
   let newEmptyGameField: GameFieldCells = {};
@@ -49,12 +49,12 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
 
   const startCell: StartCell = {
     name: "start",
-    cardItem: {},
+    cardItem: [],
   };
 
   const finishCell: FinishCell = {
     name: "finish",
-    cardItem: {},
+    cardItem: [],
   };
 
   const organizedGameFieldCells = {
@@ -67,11 +67,11 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
 };
 
 /**
- 
  * @returns The object in structure GameFieldCells. With walls(surfaces) in cells.
  */
 const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
   // TODO: Need add checking for CommonCell?
+  
   /**
    * Returns list of Cells with walls(surfaces)
    */

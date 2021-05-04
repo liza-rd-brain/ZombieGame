@@ -26,11 +26,11 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
-
-  inventory: CardType[];
+  inventory: CardItemList;
 };
 
-export type CardType = HealthCardType;
+export type CardItem = HealthCardType | null;
+export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
 
@@ -45,30 +45,29 @@ export type EnemyListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { healthItem?: HealthCardType };
+  cardItem: CardItemList;
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { healthItem?: HealthCardType };
+  cardItem: CardItemList;
 };
 
 export type HealthCardType = {
   name: "health";
   apperance: "closed" | "open";
-  highlighting?: boolean;
 };
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение
 export type HealthCell = {
   name: "commonCell";
-  cardItem: { healthItem: HealthCardType };
+  cardItem: CardItemList;
   surfaceItem?: SurfacesType;
 };
 
 export type CommonCell = {
   name: "commonCell";
-  cardItem: { healthItem?: HealthCardType };
+  cardItem: CardItemList;
   surfaceItem?: SurfacesType;
 };
 
@@ -119,7 +118,8 @@ export type GameState =
     }
   | {
       type: "gameStarted.applyCard";
-    } | {
+    }
+  | {
       type: "gameStarted.applyCard.contextMenu";
     }
   | { type: "gameStarted.interactEnemyCard" }

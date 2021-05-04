@@ -1,5 +1,4 @@
 import { FINISH_COORD } from "../../../shared/config";
-
 import { getFieldCells} from "./getFieldCells";
 import { spreadHealthCards } from "./spreadHealthCards";
 

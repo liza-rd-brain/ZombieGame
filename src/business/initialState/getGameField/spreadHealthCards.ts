@@ -39,7 +39,7 @@ const setHealthCards = (
 
       const cellWithCard: HealthCell = {
         ...cell,
-        cardItem: { ...cell.cardItem, healthItem },
+        cardItem: [...cell.cardItem, healthItem ],
       };
       return [index, cellWithCard];
     }
