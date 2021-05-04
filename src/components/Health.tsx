@@ -3,7 +3,11 @@ import styled from "styled-components";
 import { HealthCardType } from "../business/types";
 
 const StyledHealthCard = styled.div<HealthCardType>`
+  position: absolute;
   border: 5px solid;
+  width: 15px;
+  height: 15px;
+  margin: 12px;
 
   background-color: ${(props) => {
     if (props.apperance === "closed") {
@@ -34,13 +38,6 @@ const StyledHealthCard = styled.div<HealthCardType>`
       }
     }
   }};
-
-  width: 10px;
-  height: 10px;
-
-  position: absolute;
-  top: 5px;
-  left: 5px;
 `;
 
 export const Health = (props: HealthCardType) => {

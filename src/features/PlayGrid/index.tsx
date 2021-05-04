@@ -11,7 +11,7 @@ type GridProps = {
 };
 
 const GridItem = styled.div<GridProps>`
-  border: 2px solid red;
+  outline: 2px solid lightgray;
   margin: 0 auto;
   width: 100%;
   transform: rotate(270deg);
@@ -19,7 +19,7 @@ const GridItem = styled.div<GridProps>`
   grid-column-start: -1;
   //параметризирую по ширине поля
   grid-template-columns: ${(props) => {
-    return `repeat(${props.vert} ,30px)`;
+    return `repeat(${props.vert} ,50px)`;
   }};
 
   grid-gap: 0px;

@@ -14,18 +14,21 @@ type PlayerListItem = {
 };
 
 const PlayerCard = styled.div<PlayerItem>`
-  border: 5px solid red;
-  background-color: red;
+  border: 5px solid #9f3f3f;
+  background-color: #9f3f3f;
   border-radius: 50%;
-  width: 5px;
-  height: 5px;
-  top: 2px;
-  left: 1px;
+  width: 10px;
+  height: 10px;
+  margin: 2px;
   z-index: 1;
-  opacity: 0.5;
-  opacity: ${(props) => {
+  border: ${(props) => {
     if (props.isCurrent) {
-      return "1";
+      return "5px solid red";
+    }
+  }};
+  background-color: ${(props) => {
+    if (props.isCurrent) {
+      return "red";
     }
   }};
 `;
@@ -35,8 +38,9 @@ const PlayerCardList = styled.div`
   flex-wrap: wrap;
   position: absolute;
   z-index: 1;
-  font-size: 10px;
-  color: green;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -46,7 +50,7 @@ export const PlayerList = (props: PlayerListItem) => {
       {list.map((item, index) => (
         <PlayerCard key={index} isCurrent={numberOfPlayer == item.orderNumber}>
           {" "}
-          {item.orderNumber}
+          {item.orderNumber + 1}
         </PlayerCard>
       ))}
     </PlayerCardList>
