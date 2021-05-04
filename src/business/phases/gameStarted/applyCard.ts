@@ -107,7 +107,17 @@ const getStateGiveHealthCard = (
 const getStateHealCurrPlayer = (state: State): State => {
   const { playerList, numberOfPlayer } = state;
   const indexCurrPlayer = numberOfPlayer;
-  const newInventory = changeInventory(playerList, indexCurrPlayer);
+  /*  const newInventory = changeInventory(playerList, indexCurrPlayer); */
+  const currInventory = playerList[indexCurrPlayer].inventory;
+
+  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
+    (card) => {
+      return card.name === "health";
+    }
+  );
+  const newInventory = currInventory.filter((card, indexOfCard) => {
+    return indexOfCard !== removedCardIndex;
+  });
   const newHealth = changeHealth(playerList, indexCurrPlayer);
 
   const newPlayerList: PlayerListType = {
@@ -133,8 +143,17 @@ const getStateHealAnotherPlayer = (
   const { playerList, numberOfPlayer } = state;
 
   const indexCurrPlayer = numberOfPlayer;
+  const currInventory = playerList[indexCurrPlayer].inventory;
 
-  const newInventory = changeInventory(playerList, indexCurrPlayer);
+  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
+    (card) => {
+      return card.name === "health";
+    }
+  );
+  const newInventory = currInventory.filter((card, indexOfCard) => {
+    return indexOfCard !== removedCardIndex;
+  });
+
   const newHealth = changeHealth(playerList, indexChosenPlayer);
 
   const newPlayerList: PlayerListType = {
@@ -157,13 +176,13 @@ const getStateHealAnotherPlayer = (
 };
 
 // TODO: Not a obviously, what  exactly do this method!
-const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
+/* const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
   const currInventory = playerList[indexTarget].inventory;
   const inventoryWithoutAppyingCard = currInventory.filter((inventoryCard) => {
     return inventoryCard.highlighting !== true;
   });
   return inventoryWithoutAppyingCard;
-};
+}; */
 
 /**
  * This could be useful for special players

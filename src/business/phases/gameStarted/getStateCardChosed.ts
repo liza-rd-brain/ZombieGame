@@ -5,7 +5,24 @@ import { State, HealthCardType, PlayerListType } from "../../types";
 /**
  * We need to give highlighting to healthCard
  */
+
+/**
+ * 
+Need switch for click false/true
+ */
 export const getStateCardChosed = (state: State, currentCardIndex: number) => {
+  const stateWithHighlightning: State = {
+    ...state,
+    /*  playerList: newPlayerList, */
+    gameState: {
+      type:
+        state.gameState.type === "gameStarted.applyCard"
+          ? "gameStarted.playerMove"
+          : "gameStarted.applyCard",
+    },
+  };
+  return stateWithHighlightning;
+  /* 
   const hasAnyCardHighlightning = findAnyHighlightning(state);
   const hasCurrentCardHighlightning = findCurrentCardHighlightning(
     state,
@@ -25,7 +42,7 @@ export const getStateCardChosed = (state: State, currentCardIndex: number) => {
       type: "gameStarted.applyCard",
     },
   };
-  
+
   const stateWithoutHighlightning: State = {
     ...state,
     playerList: newPlayerList,
@@ -50,13 +67,13 @@ export const getStateCardChosed = (state: State, currentCardIndex: number) => {
         }
       }
     }
-  }
+  } */
 };
 
 /**
  * Just returns the opposite of current highlightning.
  */
-const changeHighlightningInventory = (
+/* const changeHighlightningInventory = (
   state: State,
   currentCardIndex: number,
   hasCurrentCardHighlightning: boolean
@@ -84,9 +101,9 @@ const changeHighlightningInventory = (
     },
   };
   return newPlayerList;
-};
+}; */
 
-const findAnyHighlightning = (state: State): boolean => {
+/* const findAnyHighlightning = (state: State): boolean => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
 
@@ -96,9 +113,9 @@ const findAnyHighlightning = (state: State): boolean => {
     ? true
     : false;
   return hasAnyCardHighlightning;
-};
+}; */
 
-const findCurrentCardHighlightning = (
+/* const findCurrentCardHighlightning = (
   state: State,
   currentCardIndex: number
 ): boolean => {
@@ -112,4 +129,4 @@ const findCurrentCardHighlightning = (
     : false;
 
   return hasCurrentCardHighlightning;
-};
+}; */
