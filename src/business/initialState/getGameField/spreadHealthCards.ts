@@ -34,12 +34,12 @@ const setHealthCards = (
 
       const healthItem: HealthCardType = {
         name: "health",
-        apperance: "open",
+        apperance: "closed",
       };
 
       const cellWithCard: HealthCell = {
         ...cell,
-        cardItem: [...cell.cardItem, healthItem ],
+        cardItem: [healthItem],
       };
       return [index, cellWithCard];
     }
