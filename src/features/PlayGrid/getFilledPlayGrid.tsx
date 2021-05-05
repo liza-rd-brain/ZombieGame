@@ -28,8 +28,8 @@ const Wall = styled.div<CommonCell>`
     bottom: 0px;
     z-index: 2;
     height: ${(props) => {
-      if (props.surfaceItem) {
-        switch (props.surfaceItem.bottom) {
+      if (props.barrierItem) {
+        switch (props.barrierItem.bottom) {
           case "wall": {
             return "5px ";
           }
@@ -48,8 +48,8 @@ const Wall = styled.div<CommonCell>`
     }};
 
     background-color: ${(props) => {
-      if (props.surfaceItem) {
-        switch (props.surfaceItem.bottom) {
+      if (props.barrierItem) {
+        switch (props.barrierItem.bottom) {
           case "wall": {
             return "#f09308;";
           }
@@ -76,8 +76,8 @@ const Wall = styled.div<CommonCell>`
     bottom: 0px;
 
     width: ${(props) => {
-      if (props.surfaceItem) {
-        switch (props.surfaceItem.left) {
+      if (props.barrierItem) {
+        switch (props.barrierItem.left) {
           case "wall": {
             return "5px ";
           }
@@ -96,12 +96,12 @@ const Wall = styled.div<CommonCell>`
     }};
 
     height: ${(props) => {
-      if (props.surfaceItem && props.surfaceItem.left) {
+      if (props.barrierItem && props.barrierItem.left) {
         return "50px";
       } else if (
-        props.surfaceItem &&
-        !props.surfaceItem.left &&
-        !props.surfaceItem.bottom
+        props.barrierItem &&
+        !props.barrierItem.left &&
+        !props.barrierItem.bottom
       ) {
         return "5px";
       } else {
@@ -110,8 +110,8 @@ const Wall = styled.div<CommonCell>`
     }};
 
     background-color: ${(props) => {
-      if (props.surfaceItem) {
-        switch (props.surfaceItem.left) {
+      if (props.barrierItem) {
+        switch (props.barrierItem.left) {
           case "wall": {
             return "#f09308";
           }
@@ -156,8 +156,8 @@ const CellItemWall = styled.div<CommonCell>`
   color: lightgrey;
 
   border-top: ${(props) => {
-    if (props.surfaceItem) {
-      switch (props.surfaceItem.top) {
+    if (props.barrierItem) {
+      switch (props.barrierItem.top) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -176,8 +176,8 @@ const CellItemWall = styled.div<CommonCell>`
   }};
 
   border-bottom: ${(props) => {
-    if (props.surfaceItem) {
-      switch (props.surfaceItem.bottom) {
+    if (props.barrierItem) {
+      switch (props.barrierItem.bottom) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -196,8 +196,8 @@ const CellItemWall = styled.div<CommonCell>`
   }};
 
   border-left: ${(props) => {
-    if (props.surfaceItem) {
-      switch (props.surfaceItem.left) {
+    if (props.barrierItem) {
+      switch (props.barrierItem.left) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -215,8 +215,8 @@ const CellItemWall = styled.div<CommonCell>`
     }
   }};
   border-right: ${(props) => {
-    if (props.surfaceItem) {
-      switch (props.surfaceItem.right) {
+    if (props.barrierItem) {
+      switch (props.barrierItem.right) {
         case "wall": {
           return "5px solid #f09308";
         }

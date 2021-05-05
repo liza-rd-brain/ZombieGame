@@ -3,16 +3,16 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 // BarrierType. Later add "boards"
-export type SurfaceKind = "wall" | "window" | "door" | null;
+export type BarrierKind = "wall" | "window" | "door" | null;
 
-export type SurfaceDirection = MoveDirection;
+export type BarrierDirection = MoveDirection;
 
-// Kind of surfaces of cell
-export type SurfacesType = Record<SurfaceDirection, SurfaceKind>;
+// Kind of barriers of cell
+export type BarrierType = Record<BarrierDirection, BarrierKind>;
 
-export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
+export type CellsBarrierType = { coord: CoordItem; barrier: BarrierType };
 
-export type CellsSurfaceListType = Array<CellsSurfaceType>;
+export type CellsBarrierListType = Array<CellsBarrierType>;
 
 export type AvailableCellType = {
   direction: MoveDirection;
@@ -62,13 +62,13 @@ export type HealthCardType = {
 export type HealthCell = {
   name: "commonCell";
   cardItem: CardItemList;
-  surfaceItem?: SurfacesType;
+  barrierItem?: BarrierType;
 };
 
 export type CommonCell = {
   name: "commonCell";
   cardItem: CardItemList;
-  surfaceItem?: SurfacesType;
+  barrierItem?: BarrierType;
 };
 
 export type CellType = CommonCell | FinishCell | StartCell | HealthCell;

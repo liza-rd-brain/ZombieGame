@@ -13,9 +13,9 @@ export const checkCellHasWall = (
   const currCell = gameField.values[currCellCoord];
   const nextCell = gameField.values[newPlayerCoord];
   const oppositeDirection = getOppositeDirection(direction);
-  const currCellHasBarrier = checkCellOnSurface(currCell, direction);
+  const currCellHasBarrier = checkCellOnBarrier(currCell, direction);
 
-  const nextCellHasBarrier = checkCellOnSurface(nextCell, oppositeDirection);
+  const nextCellHasBarrier = checkCellOnBarrier(nextCell, oppositeDirection);
 
   if (currCellHasBarrier || nextCellHasBarrier) {
     return true;
@@ -24,10 +24,10 @@ export const checkCellHasWall = (
   }
 };
 
-const checkCellOnSurface = (cell: CellType, direction: MoveDirection) => {
+const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     const cellHasBarrier =
-      cell.surfaceItem?.[direction] === "wall" ? true : false;
+      cell.barrierItem?.[direction] === "wall" ? true : false;
     return cellHasBarrier;
   }
   return false;

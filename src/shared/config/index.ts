@@ -16,4 +16,4 @@ export const MOVE_DIRECTION_LIST: MoveDirectionList = [
   "left",
 ];
 
-export { CELLS_SURFACES_LIST } from "./walls";
+export { CELLS_BARRIERS_LIST } from "./walls";

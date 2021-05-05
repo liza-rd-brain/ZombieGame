@@ -9,7 +9,7 @@ import {
 import {
   FINISH_COORD,
   START_COORD,
-  CELLS_SURFACES_LIST,
+  CELLS_BARRIERS_LIST,
 } from "../../../shared/config";
 
 /**
@@ -67,39 +67,39 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
 };
 
 /**
- * @returns The object in structure GameFieldCells. With walls(surfaces) in cells.
+ * @returns The object in structure GameFieldCells. With walls(barriers) in cells.
  */
 const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
   // TODO: Need add checking for CommonCell?
-  
+
   /**
-   * Returns list of Cells with walls(surfaces)
+   * Returns list of Cells with walls(barriers)
    */
-  const cellsWithSurfacesList = CELLS_SURFACES_LIST.map((cellSurfaces): [
+  const cellsWithBarrierList = CELLS_BARRIERS_LIST.map((cellBarrier): [
     string,
     CellType
   ] => {
-    const { coord, surfaces } = cellSurfaces;
+    const { coord, barrier } = cellBarrier;
     const cellIndex = `${coord.hor}.${coord.vert}`;
 
-    const cellWithoutSurface = emptyField[cellIndex];
+    const cellWithoutBarrier = emptyField[cellIndex];
 
-    if (cellWithoutSurface.name === "commonCell") {
-      const cellWithSurface = {
-        ...cellWithoutSurface,
-        surfaceItem: surfaces,
+    if (cellWithoutBarrier.name === "commonCell") {
+      const cellWithBarrier = {
+        ...cellWithoutBarrier,
+        barrierItem: barrier,
       };
 
-      return [cellIndex, cellWithSurface];
+      return [cellIndex, cellWithBarrier];
     } else {
-      return [cellIndex, cellWithoutSurface];
+      return [cellIndex, cellWithoutBarrier];
     }
   });
 
-  const cellsWithSurfaces: GameFieldCells = Object.fromEntries(
-    cellsWithSurfacesList
+  const cellsWithBarriers: GameFieldCells = Object.fromEntries(
+    cellsWithBarrierList
   );
 
-  const fieldCellsWithWalls = { ...emptyField, ...cellsWithSurfaces };
+  const fieldCellsWithWalls = { ...emptyField, ...cellsWithBarriers };
   return fieldCellsWithWalls;
 };
