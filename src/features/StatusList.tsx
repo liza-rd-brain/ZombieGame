@@ -54,6 +54,8 @@ const getTextStatus = (
       return "сделать ход";
     case "gameStarted.takeHealthCard":
       return "открываем карточку";
+    case "gameStarted.applyCard":
+      return "применить карточку";
     case "gameStarted.interactEnemyCard":
       switch (doEffect?.type) {
         case "!openEnemyCard": {

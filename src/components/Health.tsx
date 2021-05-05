@@ -2,7 +2,11 @@ import styled from "styled-components";
 
 import { HealthCardType } from "../business/types";
 
-const StyledHealthCard = styled.div<HealthCardType>`
+type HealthApperanceType = {
+  apperance?: "closed" | "open";
+};
+
+export const StyledHealthCard = styled.div<HealthApperanceType>`
   position: absolute;
   border: 5px solid;
   width: 15px;
@@ -13,14 +17,7 @@ const StyledHealthCard = styled.div<HealthCardType>`
     if (props.apperance === "closed") {
       return "gray";
     } else {
-      switch (props.type) {
-        case "increment":
-          return "green";
-        case "decrement":
-          return "orange";
-        default:
-          return "black";
-      }
+      return "green";
     }
   }};
 
@@ -28,18 +25,11 @@ const StyledHealthCard = styled.div<HealthCardType>`
     if (props.apperance === "closed") {
       return "gray";
     } else {
-      switch (props.type) {
-        case "increment":
-          return "green";
-        case "decrement":
-          return "orange";
-        default:
-          break;
-      }
+      return "green";
     }
   }};
 `;
 
-export const Health = (props: HealthCardType) => {
-  return <StyledHealthCard {...props} />;
+export const Health = (props: HealthApperanceType) => {
+  return <StyledHealthCard {...props}></StyledHealthCard>;
 };

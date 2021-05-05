@@ -10,10 +10,12 @@ import {
 import { ActionType } from "../../../reducer";
 import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
 
-import { getNextPlayerCoord } from "./getNextPlayerCoord";
+import { getNextPlayerCoord } from "../getNextPlayerCoord";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
+import { getStateCardChosed } from "../getStateCardChosed";
+import { getNeighboringCellList } from "../getNeighboringCellList";
 
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {
@@ -34,6 +36,12 @@ export const playerMove = (action: ActionType, state: State): State => {
       return getPlayerMoveResult(state);
     }
 
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardChosed(state, target);
+        // TODO: Need get highlightning to playerCard with index indexChosenPlayer
+    }
+
     default: {
       return state;
     }
@@ -43,10 +51,7 @@ export const playerMove = (action: ActionType, state: State): State => {
 /**
  * Changing coordinates of player if he can take the cell in certain direction.
  */
-const getStatePlayerMoved = (
-  state: State,
-  direction: MoveDirection
-): State => {
+const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
   const { playerList, numberOfPlayer, gameField } = state;
 
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
@@ -81,37 +86,16 @@ const getStatePlayerMoved = (
 /**
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
+
 const getPlayerWithAvailableCells = (state: State): State => {
-  const { playerList, numberOfPlayer, gameField } = state;
+  const { numberOfPlayer } = state;
 
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
-
-  /**
-   * Returns coordinate of neighboring cells in all direction.
-   */
-  const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.map(
-    (directionItem) => {
-      return {
-        direction: directionItem,
-        coord: getNextPlayerCoord(prevPlayerCoord, directionItem),
-      };
-    }
-  );
-
-  /**
-   * Returns the coordinates that lying in the GameField.
-   */
-  const existanceInGameFieldCells: AvailableCellListType = coordNeighboringCells.filter(
-    (cellItem) => {
-      const { direction, coord } = cellItem;
-      return gameField.values[coord];
-    }
-  );
+  const neighboringCellList = getNeighboringCellList(state);
 
   /**
    * Returns the coordinates of Cell that can be taken by player.
    */
-  const availableCellList: AvailableCellListType = existanceInGameFieldCells.filter(
+  const availableCellList: AvailableCellListType = neighboringCellList.filter(
     (cellItem) => {
       const { direction, coord } = cellItem;
 

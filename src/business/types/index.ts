@@ -1,9 +1,5 @@
 export type CoordItem = { hor: number; vert: number };
 
-export type HealthItemType = "increment" | "decrement";
-
-export type HealthItemTypeArr = ["increment", "decrement"];
-
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 // BarrierType. Later add "boards"
@@ -30,7 +26,11 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
+
+  inventory: CardType[];
 };
+
+export type CardType = HealthCardType;
 
 export type PlayerListType = Record<string, PlayerCardType>;
 
@@ -45,18 +45,18 @@ export type EnemyListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { playerList?: PlayerCardType[] };
+  cardItem: { healthItem?: HealthCardType };
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { playerList?: PlayerCardType[] };
+  cardItem: { healthItem?: HealthCardType };
 };
 
 export type HealthCardType = {
   name: "health";
-  type: HealthItemType;
   apperance: "closed" | "open";
+  highlighting?: boolean;
 };
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение
@@ -93,6 +93,8 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
+  | { type: "!takeHealthCard" }
+  | { type: "!healPlayer" }
   | null;
 
 export type State = {
@@ -112,12 +114,15 @@ export type GameState =
   | {
       type: "gameStarted.playerMove";
     }
-  | openHealthCardType
+  | {
+      type: "gameStarted.takeHealthCard";
+    }
+  | {
+      type: "gameStarted.applyCard";
+    } | {
+      type: "gameStarted.applyCard.contextMenu";
+    }
   | { type: "gameStarted.interactEnemyCard" }
   | { type: "gameStarted.getOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
-
-export type openHealthCardType = {
-  type: "gameStarted.takeHealthCard";
-};

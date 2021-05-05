@@ -8,8 +8,7 @@ export const getCards = (cell: CellType) => {
         <>
           {cell.cardItem.healthItem ? (
             <Health
-              name={cell.cardItem.healthItem.name}
-              type={cell.cardItem.healthItem.type}
+             /*  name={cell.cardItem.healthItem.name} */
               apperance={cell.cardItem.healthItem.apperance}
             />
           ) : null}

@@ -26,7 +26,7 @@ const Wall = styled.div<CommonCell>`
     width: 50px;
     height: 50px;
     bottom: 0px;
-    z-index: 10;
+    z-index: 2;
     height: ${(props) => {
       if (props.surfaceItem) {
         switch (props.surfaceItem.bottom) {
@@ -72,7 +72,7 @@ const Wall = styled.div<CommonCell>`
     position: absolute;
     /*   width: 30px; */
     height: 50px;
-    z-index: 10;
+    z-index: 2;
     bottom: 0px;
 
     width: ${(props) => {
@@ -239,7 +239,8 @@ export const getFilledPlayGrid = (
   gameField: GameField,
   playersList: PlayerListType,
   enemyList: EnemyListType,
-  numberOfPlayer: number
+  numberOfPlayer: number,
+  getContextMenu: Function
 ) => {
   const orderGameCells = gameField.order;
 
@@ -255,19 +256,19 @@ export const getFilledPlayGrid = (
       case "start":
       case "finish": {
         return (
-          <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+          <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
-            {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+            {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
             {`${hor}.${vert}`}
           </CellItem>
         );
       }
       case "commonCell": {
         return (
-          <Wrap>
-            <CellItem key={`${hor}${vert}`} hasMarker={hasMarker}>
+          <Wrap key={`${hor}.${vert}`}>
+            <CellItem hasMarker={hasMarker}>
               {getCards(cellValues)}
-              {getPlayersList(orderIndex, playersList, numberOfPlayer)}
+              {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
               {getEnemyList(orderIndex, enemyList)}
               {`${hor}.${vert}`}
             </CellItem>

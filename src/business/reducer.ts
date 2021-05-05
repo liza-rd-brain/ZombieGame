@@ -6,14 +6,16 @@ import {
   takeHealthCard,
   getOrder,
   interactEnemyCard,
+  applyCard,
 } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State } from "./types";
+import { MoveDirection, State, HealthCardType } from "./types";
+import { DOMElement } from "react";
 
 export type ActionType =
   | { type: "clickedStartButton" }
-  | DiceThrownAction
-  | ArrowPressAction
+  | { type: "diceThrown"; payload: number }
+  | { type: "playerMoved"; payload: MoveDirection }
   | { type: "req-openHealthCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteHealthCard" }
@@ -24,11 +26,13 @@ export type ActionType =
   | { type: "req-getEndScreen" }
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
-  | { type: "req-getPlayerMoveResult" };
-
-export type ArrowPressAction = { type: "playerMoved"; payload: MoveDirection };
-
-export type DiceThrownAction = { type: "diceThrown"; payload: number };
+  | { type: "req-getPlayerMoveResult" }
+  | { type: "req-takeHealthCard" }
+  | { type: "cardChoosed"; payload: number }
+  | { type: "req-choosePlayer" }
+  | { type: "req-healPlayer"; payload: number }
+  | { type: "req-contextMenu"; payload: number }
+  | { type: "req-shareHealthCard"; payload: number };
 
 export const reducer = (
   state: State = initialState,
@@ -54,6 +58,10 @@ export const reducer = (
         case "takeHealthCard": {
           return takeHealthCard(action, state);
         }
+        case "applyCard": {
+          return applyCard(action, state);
+        }
+
         case "interactEnemyCard": {
           return interactEnemyCard(action, state);
         }
