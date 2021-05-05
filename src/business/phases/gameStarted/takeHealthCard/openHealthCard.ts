@@ -1,17 +1,22 @@
-import { HealthCell, CellType } from "../../../types";
+import { HealthCell, CellType, HealthCardType } from "../../../types";
 
 export const openHealthCard = (healthCell: CellType): CellType => {
-  if (healthCell.name === "commonCell" && healthCell.cardItem.healthItem) {
+  if (healthCell.name === "commonCell") {
+    const cardItemWithOpenHealth = healthCell.cardItem.map((cardItem) => {
+      if (cardItem?.name === "health") {
+        const healthCard: HealthCardType = {
+          ...cardItem,
+          apperance: "open",
+        };
+        return healthCard;
+      } else return cardItem;
+    });
+
     const openedItem: HealthCell = {
       ...healthCell,
-      cardItem: {
-        ...healthCell.cardItem,
-        healthItem: {
-          ...healthCell.cardItem.healthItem,
-          apperance: "open",
-        },
-      },
+      cardItem: cardItemWithOpenHealth,
     };
+
     return openedItem;
   } else {
     return healthCell;

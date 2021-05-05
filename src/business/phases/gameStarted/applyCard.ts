@@ -72,7 +72,7 @@ const getStateGiveHealthCard = (
 
   const sharedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
-      return card.name === "health";
+      return card?.name === "health";
     }
   );
   const sharedCard = [...currentPlayerInventory][sharedCardIndex];
@@ -112,7 +112,7 @@ const getStateHealCurrPlayer = (state: State): State => {
 
   const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
-      return card.name === "health";
+      return card?.name === "health";
     }
   );
   const newInventory = currInventory.filter((card, indexOfCard) => {
@@ -147,7 +147,7 @@ const getStateHealAnotherPlayer = (
 
   const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
-      return card.name === "health";
+      return card?.name === "health";
     }
   );
   const newInventory = currInventory.filter((card, indexOfCard) => {

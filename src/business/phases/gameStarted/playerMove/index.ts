@@ -42,6 +42,12 @@ export const playerMove = (action: ActionType, state: State): State => {
         // TODO: Need get highlightning to playerCard with index indexChosenPlayer
     }
 
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardChosed(state, target);
+        // TODO: Need get highlightning to playerCard with index indexChosenPlayer
+    }
+
     default: {
       return state;
     }

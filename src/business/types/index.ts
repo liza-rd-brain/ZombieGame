@@ -3,16 +3,16 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 // BarrierType. Later add "boards"
-export type SurfaceKind = "wall" | "window" | "door" | null;
+export type BarrierKind = "wall" | "window" | "door" | null;
 
-export type SurfaceDirection = MoveDirection;
+export type BarrierDirection = MoveDirection;
 
-// Kind of surfaces of cell
-export type SurfacesType = Record<SurfaceDirection, SurfaceKind>;
+// Kind of barriers of cell
+export type BarrierType = Record<BarrierDirection, BarrierKind>;
 
-export type CellsSurfaceType = { coord: CoordItem; surfaces: SurfacesType };
+export type CellsBarrierType = { coord: CoordItem; barrier: BarrierType };
 
-export type CellsSurfaceListType = Array<CellsSurfaceType>;
+export type CellsBarrierListType = Array<CellsBarrierType>;
 
 export type AvailableCellType = {
   direction: MoveDirection;
@@ -26,11 +26,11 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   availableCellsCoords?: string[];
-
-  inventory: CardType[];
+  inventory: CardItemList;
 };
 
-export type CardType = HealthCardType;
+export type CardItem = HealthCardType | null;
+export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
 
@@ -45,31 +45,30 @@ export type EnemyListType = Record<string, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
-  cardItem: { healthItem?: HealthCardType };
+  cardItem: CardItemList;
 };
 
 export type StartCell = {
   name: "start";
-  cardItem: { healthItem?: HealthCardType };
+  cardItem: CardItemList;
 };
 
 export type HealthCardType = {
   name: "health";
   apperance: "closed" | "open";
-  highlighting?: boolean;
 };
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение
 export type HealthCell = {
   name: "commonCell";
-  cardItem: { healthItem: HealthCardType };
-  surfaceItem?: SurfacesType;
+  cardItem: CardItemList;
+  barrierItem?: BarrierType;
 };
 
 export type CommonCell = {
   name: "commonCell";
-  cardItem: { healthItem?: HealthCardType };
-  surfaceItem?: SurfacesType;
+  cardItem: CardItemList;
+  barrierItem?: BarrierType;
 };
 
 export type CellType = CommonCell | FinishCell | StartCell | HealthCell;
@@ -119,7 +118,8 @@ export type GameState =
     }
   | {
       type: "gameStarted.applyCard";
-    } | {
+    }
+  | {
       type: "gameStarted.applyCard.contextMenu";
     }
   | { type: "gameStarted.interactEnemyCard" }

@@ -1,10 +1,10 @@
-import { CellsSurfaceListType } from "../../business/types";
+import { CellsBarrierListType } from "../../business/types";
 
 // The array is convenient for iterating
-export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
+export const  CELLS_BARRIERS_LIST: CellsBarrierListType = [
   {
     coord: { hor: 2, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -13,7 +13,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 3 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -22,7 +22,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 4 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -31,7 +31,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 5 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -40,7 +40,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 6 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -49,7 +49,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -58,7 +58,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 8 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -67,7 +67,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 9 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -76,7 +76,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 2, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -85,7 +85,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 3, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -94,7 +94,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 4, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -103,7 +103,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 5, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -112,7 +112,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 6, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "door",
@@ -121,7 +121,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -130,7 +130,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 8, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -139,7 +139,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 9, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -148,7 +148,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 10, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -158,7 +158,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 7, vert: 9 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -168,7 +168,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 3, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -177,7 +177,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 4, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "door",
@@ -186,7 +186,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 5, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "window",
@@ -195,7 +195,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 6, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -204,7 +204,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -213,7 +213,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 8, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "window",
@@ -222,7 +222,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 9, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -231,7 +231,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 10, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -241,7 +241,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 10, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -251,7 +251,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 3, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: "door",
       bottom: "wall",
@@ -260,7 +260,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 4, vert: 9 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -270,7 +270,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 4, vert: 8 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -280,7 +280,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 4, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "door",
@@ -289,7 +289,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 5, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -298,7 +298,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 6, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -308,7 +308,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 7, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -317,7 +317,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 8 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -326,7 +326,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 8, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "wall",
@@ -335,7 +335,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 9, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: "door",
@@ -344,7 +344,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 6 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -353,7 +353,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 5 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -362,7 +362,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 4 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -371,7 +371,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 7, vert: 3 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -380,7 +380,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 10 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -390,7 +390,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 11, vert: 9 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -400,7 +400,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
 
   {
     coord: { hor: 11, vert: 8 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -409,7 +409,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 7 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -418,7 +418,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 6 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -427,7 +427,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 5 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -436,7 +436,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 4 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -445,7 +445,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 3 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,
@@ -454,7 +454,7 @@ export const CELLS_SURFACES_LIST: CellsSurfaceListType = [
   },
   {
     coord: { hor: 11, vert: 2 },
-    surfaces: {
+    barrier: {
       top: null,
       right: null,
       bottom: null,

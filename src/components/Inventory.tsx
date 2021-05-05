@@ -60,7 +60,7 @@ export const Inventory = (props: { index: number }) => {
   return (
     <InventoryWrap>
       {inventory.map((inventoryCard, inventoryCardindex) => {
-        if (inventoryCard.name === "health") {
+        if (inventoryCard?.name === "health") {
           return (
             <HealthSlot
               key={inventoryCardindex}

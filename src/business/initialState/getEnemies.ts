@@ -20,9 +20,7 @@ const getEmptyList = (gameField: GameField): [string, CommonCell][] => {
     CommonCell
   ] => {
     const [, item] = cellItem;
-    return (
-      item.name === "commonCell" && Object.entries(item.cardItem).length === 0
-    );
+    return item.name === "commonCell" && item.cardItem.length === 0;
   });
   return emptyCellsList;
 };

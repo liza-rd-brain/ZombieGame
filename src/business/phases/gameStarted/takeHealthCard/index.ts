@@ -57,16 +57,9 @@ const getStateCardTaken = (state: State): State => {
   /**
    * Extract cardItem with type healthItem. And from it extract HealthCardType
    */
-  const healthCard = Object.entries(cardItems)
-    .map((cardItem) => {
-      const [type, item] = cardItem;
-      if (type === "healthItem") {
-        return item;
-      } else return null;
-    })
-    .filter((item) => {
-      return !null;
-    });
+  const healthCard = cardItems.filter((cardItem) => {
+    return cardItem?.name === "health";
+  });
 
   const newPlayer = {
     ...player,
