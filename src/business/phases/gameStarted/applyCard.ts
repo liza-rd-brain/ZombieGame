@@ -1,7 +1,7 @@
 import { State, PlayerListType, AvailableCellListType } from "../../types";
 import { ActionType } from "../../reducer";
 
-import { getStateCardChosed } from "./getStateCardChosed";
+import { getStateCardSelected } from "./getStateCardSelected";
 import { getNeighboringCellList } from "./getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
 
@@ -44,7 +44,7 @@ export const applyCard = (action: ActionType, state: State): State => {
 
         case "cardChoosed": {
           const target = action.payload;
-          return getStateCardChosed(state, target);
+          return getStateCardSelected(state, target);
         }
 
         case "req-contextMenu": {
