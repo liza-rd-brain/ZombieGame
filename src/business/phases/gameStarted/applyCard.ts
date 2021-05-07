@@ -36,31 +36,13 @@ export const applyCard = (action: ActionType, state: State): State => {
       }
     }
 
-    default: {
-      switch (action.type) {
-        case "req-healPlayer": {
-          /**
-           * Need to increase playerHealth
-           * Then remove card from inventory
-           * Can we do this simultaneously?
-           */
-          return getStateHealCurrPlayer(state);
-        }
-
-        case "cardChoosed": {
-          const target = action.payload;
-          return getStateCardSelected(state, target);
-        }
-
-        case "req-contextMenu": {
-          return {
-            ...state,
-            gameState: { type: "gameStarted.applyCard.contextMenu" },
-          };
-        }
-        default:
-          return state;
-      }
+    case "req-shareHealthCard": {
+      const recipientPlayerNumber = action.payload;
+      return getStateGiveHealthCard(state, recipientPlayerNumber);
+    }
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardSelected(state, target);
     }
 
     default:
