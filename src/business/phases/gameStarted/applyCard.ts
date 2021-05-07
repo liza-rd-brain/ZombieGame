@@ -77,6 +77,9 @@ export const applyCard = (action: ActionType, state: State): State => {
           return state;
       }
     }
+
+    default:
+      return state;
   }
 };
 
