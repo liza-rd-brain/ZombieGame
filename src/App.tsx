@@ -26,6 +26,7 @@ const Game = styled.div`
   margin: 40px auto;
   display: flex;
   justify-content: center;
+  height: 100vh;
 `;
 
 const LeftPanel = styled.div`

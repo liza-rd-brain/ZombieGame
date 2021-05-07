@@ -11,52 +11,42 @@ import { canInteractWithCell } from "./canInteractWithCell";
  * If not - we give context menu: need heal or apply.
  */
 export const applyCard = (action: ActionType, state: State): State => {
+  const { numberOfPlayer } = state;
   const [, , phaseInner] = state.gameState.type.split(".");
-  switch (phaseInner) {
-    case "contextMenu": {
-      switch (action.type) {
-        case "req-healPlayer": {
-          const indexChosenPlayer = action.payload;
-          //Added check out of enable to heal
+  switch (action.type) {
+    case "req-healPlayer": {
+      /**
+       * Need to increase playerHealth
+       * Then remove card from inventory
+       * Can we do this simultaneously?
+       */
+
+      const indexChosenPlayer = action.payload;
+      const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+
+      switch (isCurrPlayer) {
+        case true:
+          return getStateHealCurrPlayer(state);
+
+        case false: {
           return getStateHealAnotherPlayer(state, indexChosenPlayer);
         }
-
-        case "req-shareHealthCard": {
-          const recipientPlayerNumber = action.payload;
-          return getStateGiveHealthCard(state, recipientPlayerNumber);
-        }
-
         default:
           return state;
       }
     }
 
-    default: {
-      switch (action.type) {
-        case "req-healPlayer": {
-          /**
-           * Need to increase playerHealth
-           * Then remove card from inventory
-           * Can we do this simultaneously?
-           */
-          return getStateHealCurrPlayer(state);
-        }
-
-        case "cardChoosed": {
-          const target = action.payload;
-          return getStateCardSelected(state, target);
-        }
-
-        case "req-contextMenu": {
-          return {
-            ...state,
-            gameState: { type: "gameStarted.applyCard.contextMenu" },
-          };
-        }
-        default:
-          return state;
-      }
+    case "req-shareHealthCard": {
+      const recipientPlayerNumber = action.payload;
+      return getStateGiveHealthCard(state, recipientPlayerNumber);
     }
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardSelected(state, target);
+    }
+
+    default:
+      return state;
   }
 };
 
@@ -76,6 +66,7 @@ const getStateGiveHealthCard = (
     }
   );
   const sharedCard = [...currentPlayerInventory][sharedCardIndex];
+  const sharedCardWithoutHighlightning = { ...sharedCard, isSelected: false };
 
   const newCurrentPlayerInventory = currentPlayerInventory.filter(
     (card, indexOfCard) => {
@@ -83,7 +74,10 @@ const getStateGiveHealthCard = (
     }
   );
 
-  const newRecepientPlayerInventory = [...recepientPlayerInventory, sharedCard];
+  const newRecepientPlayerInventory = [
+    ...recepientPlayerInventory,
+    sharedCardWithoutHighlightning,
+  ];
 
   const newPlayerList = {
     ...playerList,
@@ -107,7 +101,6 @@ const getStateGiveHealthCard = (
 const getStateHealCurrPlayer = (state: State): State => {
   const { playerList, numberOfPlayer } = state;
   const indexCurrPlayer = numberOfPlayer;
-  /*  const newInventory = changeInventory(playerList, indexCurrPlayer); */
   const currInventory = playerList[indexCurrPlayer].inventory;
 
   const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
@@ -175,18 +168,6 @@ const getStateHealAnotherPlayer = (
   };
 };
 
-// TODO: Not a obviously, what  exactly do this method!
-/* const changeInventory = (playerList: PlayerListType, indexTarget: number) => {
-  const currInventory = playerList[indexTarget].inventory;
-  const inventoryWithoutAppyingCard = currInventory.filter((inventoryCard) => {
-    return inventoryCard.highlighting !== true;
-  });
-  return inventoryWithoutAppyingCard;
-}; */
-
-/**
- * This could be useful for special players
- */
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
   return playerList[indexTarget].health + 1;
 };

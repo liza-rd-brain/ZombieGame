@@ -98,6 +98,7 @@ export const PlayerList = (props: PlayerListItem) => {
               case isCurrentPlayer: {
                 return (
                   <PlayerCard
+                    id={`player${playerCardItem.orderNumber}`}
                     key={index}
                     isCurrent={numberOfPlayer == playerCardItem.orderNumber}
                     needHighlightning={true}
@@ -117,16 +118,13 @@ export const PlayerList = (props: PlayerListItem) => {
                 return (
                   <React.Fragment key={index}>
                     <PlayerCard
+                      id={`player${playerCardItem.orderNumber}`}
                       key={index}
                       isCurrent={numberOfPlayer == playerCardItem.orderNumber}
                       needHighlightning={true}
-                      onClick={() => {
+                      onClick={(e) => {
+                        console.log("playerClicked");
                         getContextMenu(playerCardItem.orderNumber);
-
-                        dispatch({
-                          type: "req-contextMenu",
-                          payload: playerCardItem.orderNumber,
-                        });
                       }}
                     >
                       {playerCardItem.orderNumber + 1}
@@ -141,6 +139,7 @@ export const PlayerList = (props: PlayerListItem) => {
           case !needHighlightning: {
             return (
               <PlayerCard
+                id={`player${playerCardItem.orderNumber}`}
                 key={index}
                 isCurrent={numberOfPlayer == playerCardItem.orderNumber}
                 onClick={() => {
