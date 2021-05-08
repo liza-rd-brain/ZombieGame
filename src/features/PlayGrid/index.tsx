@@ -15,6 +15,7 @@ type GridProps = {
 
 type ContextMenuType = {
   type: "visible" | "hidden";
+  coord?: { x?: number; y?: number };
 };
 
 type WrapType = {};
@@ -54,7 +55,16 @@ const ContextMenu = styled.div<ContextMenuType>`
   justify-content: start;
   padding: 21px 0 0 12px;
   box-sizing: border-box;
-  /*   pointer-events: none; */
+  left: ${(props) => {
+    if (props.coord?.x) {
+      return `${props.coord?.x + 50}px`;
+    } else {
+      return "0px";
+    }
+  }};
+  top: ${(props) => {
+    return `${props.coord?.y}px`;
+  }};
 `;
 
 const Button = styled.button`
@@ -71,6 +81,7 @@ export const PlayGrid = () => {
   type contextMenuType = {
     type: "visible" | "hidden";
     playerNumber?: Number;
+    coord?: { x?: number; y?: number };
   };
 
   const initialContextMenuState: contextMenuType = { type: "hidden" };
@@ -83,14 +94,20 @@ export const PlayGrid = () => {
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
+  const playerEl = document.getElementById(`player${numberOfPlayer}`);
+  const playerCoord = {
+    x: playerEl?.getBoundingClientRect().x,
+    y: playerEl?.getBoundingClientRect().y,
+  };
 
   const getContextMenu = (numberOfPlayer: number) => {
-    console.log("показать контекстное меню", numberOfPlayer);
-
     updatecontextMenuState({
       type: "visible",
       playerNumber: numberOfPlayer,
+      coord: playerCoord,
     });
+
+    console.log("координаты", playerEl?.getBoundingClientRect());
   };
 
   useEffect(() => {
@@ -99,6 +116,9 @@ export const PlayGrid = () => {
         const bodyElement = document.querySelector("body");
 
         const callback = (e: MouseEvent) => {
+          /**
+           * Its for avoiding event on currentPlayer
+           */
           if (
             e.target ===
             document.getElementById(`player${state.numberOfPlayer}`)
@@ -148,6 +168,7 @@ export const PlayGrid = () => {
         type={contextMenuState.type}
         id={"contextMenu"}
         className={"contextMenu"}
+        coord={contextMenuState.coord}
       >
         <Button
           className={"contextMenu"}
