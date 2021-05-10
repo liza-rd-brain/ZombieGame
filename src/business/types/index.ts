@@ -2,6 +2,7 @@ export type CoordItem = { hor: number; vert: number };
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
+
 // BarrierType. Later add "boards"
 export type BarrierKind = "wall" | "window" | "door" | null;
 
@@ -18,6 +19,7 @@ export type AvailableCellType = {
   direction: MoveDirection;
   coord: string;
 };
+
 export type AvailableCellListType = AvailableCellType[];
 
 export type PlayerCardType = {
@@ -29,7 +31,8 @@ export type PlayerCardType = {
   inventory: CardItemList;
 };
 
-export type CardItem = HealthCardType | null;
+export type CardItem = HealthCardType | BoardsCardType | null;
+
 export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
@@ -55,6 +58,12 @@ export type StartCell = {
 
 export type HealthCardType = {
   name: "health";
+  apperance: "closed" | "open";
+  isSelected?: boolean;
+};
+
+export type BoardsCardType = {
+  name: "boards";
   apperance: "closed" | "open";
   isSelected?: boolean;
 };

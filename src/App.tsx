@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
@@ -16,7 +15,6 @@ import { store } from "./business/store";
 import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
 
 const Field = styled.div`
-
   margin: 0 auto;
 `;
 
