@@ -1,9 +1,14 @@
-import { CommonCell, GameFieldCells, CardItem } from "../../types";
+import {
+  CommonCell,
+  GameFieldCells,
+  HealthCardType,
+  HealthCell,
+  CardItem,
+} from "../../types";
 
 import {
   AMOUNT_HEALTH_ITEMS,
   AMOUNT_BOARDS_ITEMS,
-  APPERANCE_CARD,
 } from "../../../shared/config";
 
 type CardSet = {
@@ -15,21 +20,21 @@ const cardsList: CardSet[] = [
   {
     card: {
       name: "health",
-      apperance: APPERANCE_CARD,
+      apperance: "open",
     },
     amount: AMOUNT_HEALTH_ITEMS,
   },
   {
     card: {
       name: "boards",
-      apperance: APPERANCE_CARD,
+      apperance: "open",
     },
     amount: AMOUNT_BOARDS_ITEMS,
   },
 ];
 
 /**
- * Returns an object in structure of FieldCells with spreaded cards in random picked cells.
+ * Returns an object in structure of FieldCells with spreaded healthCards in random picked cells.
  */
 export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
   /**
@@ -58,11 +63,13 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
   }, {});
 
   const gameFieldFull = { ...gameFieldCells, ...cellsWithAllCards };
+  console.log("cellsWithAllCards", cellsWithAllCards);
+  console.log("gameFieldFull", gameFieldFull);
   return gameFieldFull;
 };
 
 /**
- *  Creates an object with spreaded cards into cells from cellsForCards.
+ *  Creates an object with spreaded healthCard into cells from cellsForCards.
  */
 const setCards = (
   cellList: [string, CommonCell][],
@@ -87,7 +94,7 @@ const setCards = (
 
 /**
  * Returns an array with random empty cell witch suitable for healthCard.
- * Array lenght is equal AMOUNT_..._ITEMS.
+ * Array lenght is equal AMOUNT_HEALTH_ITEMS.
  */
 const getListForCards = (
   gameField: GameFieldCells,
