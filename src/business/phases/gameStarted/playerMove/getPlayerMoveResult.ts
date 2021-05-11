@@ -18,6 +18,10 @@ export const getPlayerMoveResult = (state: State) => {
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
 
+  const takeCard =
+    newCellWithPlayer?.name === "commonCell" &&
+    newCellWithPlayer.cardItem.length > 0;
+
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]
       ? true
@@ -47,6 +51,18 @@ export const getPlayerMoveResult = (state: State) => {
       };
       return newState;
     }
+
+    /*  case takeHealthCard: {
+      const newState: State = {
+        ...state,
+        dice: state.dice - 1,
+        gameState: {
+          type: "gameStarted.takeHealthCard",
+        },
+        doEffect: { type: "!openHealthCard" },
+      };
+      return newState;
+    } */
 
     case metEnemyCard: {
       const newState: State = {
