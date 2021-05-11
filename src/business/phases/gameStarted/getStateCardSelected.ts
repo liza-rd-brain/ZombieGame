@@ -49,25 +49,27 @@ const changeSelectedCard = (
 ) => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
-  const targetHealthCard = inventory[currentCardIndex];
+  const targetCard = inventory[currentCardIndex];
 
   /**
    * Return opposite
    */
-  const selectedHealthCard = {
-    ...targetHealthCard,
-    isSelected: !targetHealthCard?.isSelected,
+  const selectedCard = {
+    ...targetCard,
+    isSelected: !targetCard?.isSelected,
   };
 
-  const notSelectedHealthCard = {
-    ...targetHealthCard,
+  /*  const notSelectedCard = {
+    ...targetCard,
     isSelected: false,
-  };
+  }; */
 
   const newInventory = inventory.map((card, index) => {
     if (index === currentCardIndex) {
-      return selectedHealthCard;
-    } else return notSelectedHealthCard;
+      return { ...card, isSelected: !targetCard?.isSelected };
+    } else {
+      return { ...card, isSelected: false };
+    }
   });
 
   const newPlayerList: PlayerListType = {
