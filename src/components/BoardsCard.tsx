@@ -33,7 +33,7 @@ const StyledBoardsCard = styled.div<BoardsApperanceType>`
 export const BoardsCard = (props: BoardsApperanceType) => {
   return (
     <StyledBoardsCard {...props}>
-      {props.apperance === "open" ? "X" : null}
+      {props.apperance === "closed" ? null : "X"}
     </StyledBoardsCard>
   );
 };

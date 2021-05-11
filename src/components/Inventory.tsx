@@ -10,6 +10,7 @@ import {
   GameState,
 } from "../business/types";
 import { Health } from "./Health";
+import { BoardsCard } from "./BoardsCard";
 
 type HealthSlotType = {
   onClick: Function;
@@ -63,6 +64,21 @@ export const Inventory = (props: { index: number }) => {
               }}
             >
               <Health></Health>
+            </HealthSlot>
+          );
+        } else if (inventoryCard?.name === "boards") {
+          return (
+            <HealthSlot
+              key={inventoryCardindex}
+              highlighting={inventoryCard?.isSelected}
+              onClick={() => {
+                dispatch({
+                  type: "cardChoosed",
+                  payload: inventoryCardindex,
+                });
+              }}
+            >
+              <BoardsCard></BoardsCard>
             </HealthSlot>
           );
         } else {

@@ -1,7 +1,7 @@
 import { State, GameField, PlayerListType, CommonCell } from "../../../types";
 
 import { ActionType } from "../../../reducer";
-import { openHealthCard } from "./openHealthCard";
+import { openCard } from "./openCard";
 import { deleteHealthCard } from "./deleteHealthCard";
 import { changePlayerHealth } from "./changePlayerHealth";
 
@@ -30,9 +30,9 @@ export const takeHealthCard = (action: ActionType, state: State): State => {
 const getStateOpenCard = (state: State): State => {
   const { gameField, numberOfPlayer, playerList } = state;
   const playerCoordIndex = playerList[numberOfPlayer].coord;
-  const healthCell = gameField.values[playerCoordIndex];
+  const currCell = gameField.values[playerCoordIndex];
 
-  const cellWithOpenHealth = openHealthCard(healthCell);
+  const cellWithOpenHealth = openCard(currCell);
 
   const newGameField: GameField = {
     ...gameField,
@@ -54,16 +54,9 @@ const getStateCardTaken = (state: State): State => {
   // TODO: potential problem. Need validate of healthCard.
   const cardItems = gameField.values[player.coord].cardItem;
 
-  /**
-   * Extract cardItem with type healthItem. And from it extract HealthCardType
-   */
-  const healthCard = cardItems.filter((cardItem) => {
-    return cardItem?.name === "health";
-  });
-
   const newPlayer = {
     ...player,
-    inventory: [...player.inventory, ...healthCard],
+    inventory: [...player.inventory, ...cardItems],
   };
 
   const newPlayerList: PlayerListType = {
