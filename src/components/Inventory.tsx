@@ -8,11 +8,12 @@ import {
   PlayerListType,
   HealthCardType,
   GameState,
+  CardItem,
 } from "../business/types";
 import { Health } from "./Health";
 import { BoardsCard } from "./BoardsCard";
 
-type HealthSlotType = {
+type SlotType = {
   onClick: Function;
   highlighting?: boolean;
 };
@@ -24,7 +25,7 @@ const InventoryWrap = styled.div`
   align-content: flex-start;
 `;
 
-const HealthSlot = styled.div<HealthSlotType>`
+const Slot = styled.div<SlotType>`
   display: flex;
 
   & > * {
@@ -51,40 +52,35 @@ export const Inventory = (props: { index: number }) => {
   return (
     <InventoryWrap>
       {inventory.map((inventoryCard, inventoryCardindex) => {
-        if (inventoryCard?.name === "health") {
-          return (
-            <HealthSlot
-              key={inventoryCardindex}
-              highlighting={inventoryCard?.isSelected}
-              onClick={() => {
-                dispatch({
-                  type: "cardChoosed",
-                  payload: inventoryCardindex,
-                });
-              }}
-            >
-              <Health></Health>
-            </HealthSlot>
-          );
-        } else if (inventoryCard?.name === "boards") {
-          return (
-            <HealthSlot
-              key={inventoryCardindex}
-              highlighting={inventoryCard?.isSelected}
-              onClick={() => {
-                dispatch({
-                  type: "cardChoosed",
-                  payload: inventoryCardindex,
-                });
-              }}
-            >
-              <BoardsCard></BoardsCard>
-            </HealthSlot>
-          );
-        } else {
-          return null;
-        }
+        return (
+          <Slot
+            key={inventoryCardindex}
+            highlighting={inventoryCard?.isSelected}
+            onClick={() => {
+              dispatch({
+                type: "cardChoosed",
+                payload: inventoryCardindex,
+              });
+            }}
+          >
+            {getChildrenComponent(inventoryCard)}
+          </Slot>
+        );
       })}
     </InventoryWrap>
   );
+};
+
+const getChildrenComponent = (inventoryCard: CardItem) => {
+  switch (inventoryCard?.name) {
+    case "health": {
+      return <Health />;
+    }
+    case "boards": {
+      return <BoardsCard />;
+    }
+    default: {
+      return null;
+    }
+  }
 };
