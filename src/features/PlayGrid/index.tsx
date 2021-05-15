@@ -154,16 +154,8 @@ export const PlayGrid = () => {
   return (
     <>
       <GridItem vert={height} type={contextMenuState.type}>
-        {getFilledPlayGrid(
-          gameField,
-          playerList,
-          enemyList,
-          numberOfPlayer,
-          getContextMenu
-        )}
+        {getFilledPlayGrid(state, getContextMenu)}
       </GridItem>
-      <div id="modalMenu" />
-
       <ContextMenu
         type={contextMenuState.type}
         id={"contextMenu"}

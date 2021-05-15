@@ -5,21 +5,36 @@ import {
   PlayerListType,
   EnemyListType,
   CommonCell,
+  BarrierType,
+  MoveDirection,
+  AvailableCellListType,
+  CellType,
+  AvailableCellType,
+  State,
+  GameState,
 } from "../../business/types";
 
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
+import { getNeighboringCellList } from "../../business/phases/gameStarted/getNeighboringCellList";
+
+import { MOVE_DIRECTION_LIST } from "../../shared/config";
 
 type CellApperance = {
   hasMarker?: boolean;
+};
+
+type WallType = {
+  barrierItem?: BarrierType | undefined;
+  highlightningList: any /* (AvailableCellType | null)[]; */;
 };
 
 const Wrap = styled.div`
   position: relative;
 `;
 
-const Wall = styled.div<CommonCell>`
+const Wall = styled.div<WallType>`
   &:before {
     content: "";
     position: absolute;
@@ -49,15 +64,27 @@ const Wall = styled.div<CommonCell>`
 
     background-color: ${(props) => {
       if (props.barrierItem) {
+        const needHighlightning = props.highlightningList?.find(
+          (item: MoveDirection) => item === "bottom"
+        );
+
         switch (props.barrierItem.bottom) {
           case "wall": {
             return "#f09308;";
           }
           case "door": {
-            return " #584324;";
+            if (needHighlightning) {
+              return "#78ff2d";
+            } else {
+              return " #584324;";
+            }
           }
           case "window": {
-            return " #a3cdd8;";
+            if (needHighlightning) {
+              return "#78ff2d";
+            } else {
+              return " #a3cdd8;";
+            }
           }
           default:
             return "none";
@@ -111,15 +138,27 @@ const Wall = styled.div<CommonCell>`
 
     background-color: ${(props) => {
       if (props.barrierItem) {
+        const needHighlightning = props.highlightningList?.find(
+          (item: MoveDirection) => item === "left"
+        );
+
         switch (props.barrierItem.left) {
           case "wall": {
             return "#f09308";
           }
           case "door": {
-            return " #584324";
+            if (needHighlightning) {
+              return "#78ff2d";
+            } else {
+              return " #584324;";
+            }
           }
           case "window": {
-            return " #a3cdd8";
+            if (needHighlightning) {
+              return "#78ff2d";
+            } else {
+              return " #a3cdd8;";
+            }
           }
           default:
             return "#f09308";
@@ -130,6 +169,7 @@ const Wall = styled.div<CommonCell>`
     }};
   }
 `;
+
 const CellItem = styled.div<CellApperance>`
   position: relative;
   box-sizing: border-box;
@@ -141,7 +181,7 @@ const CellItem = styled.div<CellApperance>`
   color: lightgrey;
   background-color: ${(props) => {
     if (props.hasMarker) {
-      return " rgb(233, 207, 207)";
+      return " rgb(241, 237, 237)";
     }
   }};
 `;
@@ -235,22 +275,46 @@ const CellItemWall = styled.div<CommonCell>`
   }};
 `;
 
-export const getFilledPlayGrid = (
-  gameField: GameField,
-  playersList: PlayerListType,
-  enemyList: EnemyListType,
-  numberOfPlayer: number,
-  getContextMenu: Function
-) => {
+export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
+  const { gameField, playerList, numberOfPlayer, gameState, enemyList } = state;
   const orderGameCells = gameField.order;
+
+  const currPlayerCoord = playerList[numberOfPlayer].coord;
+
+  const availableCells =
+    playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
+
+  const neighboringCellList = getNeighboringCellList(
+    currPlayerCoord,
+    gameField
+  );
+
+  const highlightningList = getHighlightningList(
+    neighboringCellList,
+    gameField,
+    currPlayerCoord,
+    gameState
+  );
+  console.log(highlightningList);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
-    const hasMarker = playersList[
-      numberOfPlayer
-    ].availableCellsCoords?.includes(orderIndex);
+    const hasMarker = availableCells?.includes(orderIndex);
+
+    const currCell = gameField.values[currPlayerCoord];
+
+    const neighboringCellListCoord = neighboringCellList.map((cellItem) => {
+      const { direction, coord } = cellItem;
+      return coord;
+    });
+
+    const checkCellListCoord = neighboringCellListCoord.concat(currPlayerCoord);
+
+    const needCheckHighlightning = checkCellListCoord.find(
+      (coord) => orderIndex === coord
+    );
 
     switch (cellValues.name) {
       case "start":
@@ -258,7 +322,12 @@ export const getFilledPlayGrid = (
         return (
           <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
             {getCards(cellValues)}
-            {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
+            {getPlayersList(
+              orderIndex,
+              playerList,
+              numberOfPlayer,
+              getContextMenu
+            )}
             {`${hor}.${vert}`}
           </CellItem>
         );
@@ -268,11 +337,26 @@ export const getFilledPlayGrid = (
           <Wrap key={`${hor}.${vert}`}>
             <CellItem hasMarker={hasMarker}>
               {getCards(cellValues)}
-              {getPlayersList(orderIndex, playersList, numberOfPlayer,getContextMenu)}
+              {getPlayersList(
+                orderIndex,
+                playerList,
+                numberOfPlayer,
+                getContextMenu
+              )}
               {getEnemyList(orderIndex, enemyList)}
               {`${hor}.${vert}`}
             </CellItem>
-            <Wall {...cellValues}> </Wall>
+            <Wall
+              barrierItem={cellValues.barrierItem} /* {...cellValues} */
+              //Calculating, only if is cell with player
+              highlightningList={
+                needCheckHighlightning
+                  ? getHigtlightning(highlightningList, orderIndex)
+                  : null
+              }
+            >
+              {" "}
+            </Wall>
           </Wrap>
         );
       }
@@ -283,4 +367,101 @@ export const getFilledPlayGrid = (
   });
 
   return fullPlayerGrid;
+};
+
+const getHigtlightning = (
+  highlightningList: (AvailableCellType | null)[],
+  orderIndex: string
+) => {
+  const currList = highlightningList.filter((cellItem) => {
+    return cellItem?.coord === orderIndex;
+  });
+
+  const structuredList = currList.map((cellItem) => {
+    if (cellItem) {
+      const { direction, coord } = cellItem;
+      return direction;
+    } else {
+      return null;
+    }
+  });
+  return structuredList;
+};
+/**
+ * Check the neifhboring of that coord.
+ * Have they door or window
+ */
+const getHighlightningList = (
+  neighboringCellList: AvailableCellListType,
+  gameField: GameField,
+  currCoord: string,
+  gameState: GameState
+) /* : boolean */ => {
+  //Check currCellHasWall
+  console.log(currCoord);
+  const currCell = gameField.values[currCoord];
+
+  const availableCellList /* : AvailableCellListType */ = neighboringCellList
+    .map((cellItem) => {
+      const { direction, coord } = cellItem;
+      const currCellHasHole = checkCellOnHole(currCell, direction);
+      const nextCell = gameField.values[coord];
+      const oppositeDirection = getOppositeDirection(direction);
+      const nextCellHasHole = checkCellOnHole(nextCell, oppositeDirection);
+      if (currCellHasHole) {
+        const cellItemWithHall: AvailableCellType = {
+          direction,
+          coord: currCoord,
+        };
+
+        return cellItemWithHall;
+      } else if (nextCellHasHole) {
+        const cellItemWithHall: AvailableCellType = {
+          direction: oppositeDirection,
+          coord,
+        };
+        return cellItemWithHall;
+      } else {
+        return null;
+      }
+    })
+    .filter((availableCell) => availableCell !== null);
+
+  switch (gameState.type) {
+    case "gameStarted.applyCard.contextMenu":
+    case "gameStarted.applyCard":
+      /*       console.log(availableCellList); */
+      return availableCellList;
+
+    default:
+      return [];
+  }
+};
+
+const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
+  if (cell.name === "commonCell") {
+    const cellHasWindow =
+      cell.barrierItem?.[direction] === "window" ? true : false;
+    const cellHasDoor = cell.barrierItem?.[direction] === "door" ? true : false;
+    const cellHasHole = cellHasWindow || cellHasDoor;
+    return cellHasHole;
+  }
+  return false;
+};
+
+const getOppositeDirection = (direction: MoveDirection): MoveDirection => {
+  switch (direction) {
+    case "top": {
+      return "bottom";
+    }
+    case "bottom": {
+      return "top";
+    }
+    case "left": {
+      return "right";
+    }
+    case "right": {
+      return "left";
+    }
+  }
 };

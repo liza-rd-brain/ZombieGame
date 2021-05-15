@@ -11,40 +11,63 @@ import { canInteractWithCell } from "./canInteractWithCell";
  * If not - we give context menu: need heal or apply.
  */
 export const applyCard = (action: ActionType, state: State): State => {
-  const { numberOfPlayer } = state;
+  const { numberOfPlayer, playerList } = state;
   const [, , phaseInner] = state.gameState.type.split(".");
-  switch (action.type) {
-    case "req-healPlayer": {
-      /**
-       * Need to increase playerHealth
-       * Then remove card from inventory
-       * Can we do this simultaneously?
-       */
 
-      const indexChosenPlayer = action.payload;
-      const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+  const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
+    return card?.isSelected === true;
+  })?.name;
 
-      switch (isCurrPlayer) {
-        case true:
-          return getStateHealCurrPlayer(state);
+  switch (chosenCardType) {
+    case "health": {
+      switch (action.type) {
+        case "req-healPlayer": {
+          /**
+           * Need to increase playerHealth
+           * Then remove card from inventory
+           * Can we do this simultaneously?
+           */
 
-        case false: {
-          return getStateHealAnotherPlayer(state, indexChosenPlayer);
+          const indexChosenPlayer = action.payload;
+          const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+
+          switch (isCurrPlayer) {
+            case true:
+              return getStateHealCurrPlayer(state);
+
+            case false: {
+              return getStateHealAnotherPlayer(state, indexChosenPlayer);
+            }
+            default:
+              return state;
+          }
         }
+
+        case "req-shareHealthCard": {
+          const recipientPlayerNumber = action.payload;
+          return getStateGiveHealthCard(state, recipientPlayerNumber);
+        }
+        case "cardChoosed": {
+          const target = action.payload;
+          return getStateCardSelected(state, target);
+        }
+
         default:
           return state;
       }
     }
+    case "boards": {
+      console.log("boards");
+      switch (action.type) {
+        case "cardChoosed": {
+          const target = action.payload;
+          return getStateCardSelected(state, target);
+        }
 
-    case "req-shareHealthCard": {
-      const recipientPlayerNumber = action.payload;
-      return getStateGiveHealthCard(state, recipientPlayerNumber);
+        default:
+          return state;
+      }
     }
-    case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardSelected(state, target);
-    }
-
     default:
       return state;
   }

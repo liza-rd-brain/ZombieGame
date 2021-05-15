@@ -1,7 +1,7 @@
 import { CellsBarrierListType } from "../../business/types";
 
 // The array is convenient for iterating
-export const  CELLS_BARRIERS_LIST: CellsBarrierListType = [
+export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   {
     coord: { hor: 2, vert: 2 },
     barrier: {
@@ -253,7 +253,7 @@ export const  CELLS_BARRIERS_LIST: CellsBarrierListType = [
     coord: { hor: 3, vert: 7 },
     barrier: {
       top: null,
-      right: "door",
+      right: null,
       bottom: "wall",
       left: null,
     },
