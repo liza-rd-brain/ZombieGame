@@ -106,8 +106,6 @@ export const PlayGrid = () => {
       playerNumber: numberOfPlayer,
       coord: playerCoord,
     });
-
-    console.log("координаты", playerEl?.getBoundingClientRect());
   };
 
   useEffect(() => {

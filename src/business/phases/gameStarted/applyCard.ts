@@ -57,7 +57,6 @@ export const applyCard = (action: ActionType, state: State): State => {
       }
     }
     case "boards": {
-      console.log("boards");
       switch (action.type) {
         case "cardChoosed": {
           const target = action.payload;

@@ -28,6 +28,7 @@ type CellApperance = {
 type WallType = {
   barrierItem?: BarrierType | undefined;
   highlightningList: any /* (AvailableCellType | null)[]; */;
+  onClick: Function;
 };
 
 const Wrap = styled.div`
@@ -44,7 +45,7 @@ const Wall = styled.div<WallType>`
     z-index: 2;
     height: ${(props) => {
       if (props.barrierItem) {
-        switch (props.barrierItem.bottom) {
+        switch (props.barrierItem.bottom.name) {
           case "wall": {
             return "5px ";
           }
@@ -68,7 +69,7 @@ const Wall = styled.div<WallType>`
           (item: MoveDirection) => item === "bottom"
         );
 
-        switch (props.barrierItem.bottom) {
+        switch (props.barrierItem.bottom.name) {
           case "wall": {
             return "#f09308;";
           }
@@ -104,7 +105,7 @@ const Wall = styled.div<WallType>`
 
     width: ${(props) => {
       if (props.barrierItem) {
-        switch (props.barrierItem.left) {
+        switch (props.barrierItem.left.name) {
           case "wall": {
             return "5px ";
           }
@@ -142,7 +143,7 @@ const Wall = styled.div<WallType>`
           (item: MoveDirection) => item === "left"
         );
 
-        switch (props.barrierItem.left) {
+        switch (props.barrierItem.left.name) {
           case "wall": {
             return "#f09308";
           }
@@ -197,7 +198,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-top: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.top) {
+      switch (props.barrierItem.top.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -217,7 +218,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-bottom: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.bottom) {
+      switch (props.barrierItem.bottom.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -237,7 +238,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-left: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.left) {
+      switch (props.barrierItem.left.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -256,7 +257,7 @@ const CellItemWall = styled.div<CommonCell>`
   }};
   border-right: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.right) {
+      switch (props.barrierItem.right.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -297,7 +298,6 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     playerList,
     numberOfPlayer
   );
-  console.log(highlightningList);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
@@ -356,6 +356,9 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
                   ? getHigtlightning(highlightningList, orderIndex)
                   : null
               }
+              onClick={() => {
+                console.log("click");
+              }}
             >
               {" "}
             </Wall>
@@ -400,9 +403,7 @@ const getHighlightningList = (
   gameState: GameState,
   playerList: PlayerListType,
   numberOfPlayer: number
-) /* : boolean */ => {
-  //Check currCellHasWall
-  console.log(currCoord);
+) => {
   const currCell = gameField.values[currCoord];
 
   const availableCellList /* : AvailableCellListType */ = neighboringCellList
@@ -434,7 +435,6 @@ const getHighlightningList = (
   switch (gameState.type) {
     case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
-      /*       console.log(availableCellList); */
       const cardItemList = playerList[numberOfPlayer].inventory;
       const selectedCard = cardItemList.find(
         (cardItem) => cardItem?.isSelected === true
@@ -454,8 +454,9 @@ const getHighlightningList = (
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     const cellHasWindow =
-      cell.barrierItem?.[direction] === "window" ? true : false;
-    const cellHasDoor = cell.barrierItem?.[direction] === "door" ? true : false;
+      cell.barrierItem?.[direction].name === "window" ? true : false;
+    const cellHasDoor =
+      cell.barrierItem?.[direction].name === "door" ? true : false;
     const cellHasHole = cellHasWindow || cellHasDoor;
     return cellHasHole;
   }

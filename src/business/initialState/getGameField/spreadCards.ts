@@ -63,8 +63,7 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
   }, {});
 
   const gameFieldFull = { ...gameFieldCells, ...cellsWithAllCards };
-  console.log("cellsWithAllCards", cellsWithAllCards);
-  console.log("gameFieldFull", gameFieldFull);
+
   return gameFieldFull;
 };
 

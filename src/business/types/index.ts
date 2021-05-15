@@ -3,9 +3,10 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 
-// BarrierType. Later add "boards"
-export type BarrierKind = "wall" | "window" | "door" | null;
+export type BarrierName = "wall" | "window" | "door" | null;
+export type BarrierKind = { name: BarrierName; isOpen: boolean };
 
+/* export type BarrierKind = "wall" | "window" | "door"; */
 export type BarrierDirection = MoveDirection;
 
 // Kind of barriers of cell
