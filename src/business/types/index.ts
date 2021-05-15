@@ -3,8 +3,8 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 
-export type BarrierName = "wall" | "window" | "door" | null;
-export type BarrierKind = { name: BarrierName; isOpen: boolean };
+export type BarrierName = "wall" | "window" | "door";
+export type BarrierKind = { name: BarrierName; isOpen: boolean } | null;
 
 /* export type BarrierKind = "wall" | "window" | "door"; */
 export type BarrierDirection = MoveDirection;

@@ -45,7 +45,7 @@ const Wall = styled.div<WallType>`
     z-index: 2;
     height: ${(props) => {
       if (props.barrierItem) {
-        switch (props.barrierItem.bottom.name) {
+        switch (props.barrierItem.bottom?.name) {
           case "wall": {
             return "5px ";
           }
@@ -69,7 +69,7 @@ const Wall = styled.div<WallType>`
           (item: MoveDirection) => item === "bottom"
         );
 
-        switch (props.barrierItem.bottom.name) {
+        switch (props.barrierItem.bottom?.name) {
           case "wall": {
             return "#f09308;";
           }
@@ -105,7 +105,7 @@ const Wall = styled.div<WallType>`
 
     width: ${(props) => {
       if (props.barrierItem) {
-        switch (props.barrierItem.left.name) {
+        switch (props.barrierItem.left?.name) {
           case "wall": {
             return "5px ";
           }
@@ -143,7 +143,7 @@ const Wall = styled.div<WallType>`
           (item: MoveDirection) => item === "left"
         );
 
-        switch (props.barrierItem.left.name) {
+        switch (props.barrierItem.left?.name) {
           case "wall": {
             return "#f09308";
           }
@@ -198,7 +198,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-top: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.top.name) {
+      switch (props.barrierItem.top?.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -218,7 +218,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-bottom: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.bottom.name) {
+      switch (props.barrierItem.bottom?.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -238,7 +238,7 @@ const CellItemWall = styled.div<CommonCell>`
 
   border-left: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.left.name) {
+      switch (props.barrierItem.left?.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -257,7 +257,7 @@ const CellItemWall = styled.div<CommonCell>`
   }};
   border-right: ${(props) => {
     if (props.barrierItem) {
-      switch (props.barrierItem.right.name) {
+      switch (props.barrierItem.right?.name) {
         case "wall": {
           return "5px solid #f09308";
         }
@@ -454,9 +454,9 @@ const getHighlightningList = (
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     const cellHasWindow =
-      cell.barrierItem?.[direction].name === "window" ? true : false;
+      cell.barrierItem?.[direction]?.name === "window" ? true : false;
     const cellHasDoor =
-      cell.barrierItem?.[direction].name === "door" ? true : false;
+      cell.barrierItem?.[direction]?.name === "door" ? true : false;
     const cellHasHole = cellHasWindow || cellHasDoor;
     return cellHasHole;
   }
