@@ -24,6 +24,11 @@ type CellApperance = {
   hasMarker?: boolean;
 };
 
+type WallType = {
+  barrierItem?: BarrierType | undefined;
+  highlightningList: any /* (AvailableCellType | null)[]; */;
+};
+
 const Wrap = styled.div`
   position: relative;
 `;
@@ -52,6 +57,24 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
   const availableCells =
     playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
+
+  const currPlayerCoord = playerList[numberOfPlayer].coord;
+
+  const availableCells =
+    playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
+
+  const neighboringCellList = getNeighboringCellList(
+    currPlayerCoord,
+    gameField
+  );
+
+  const highlightningList = getHighlightningList(
+    neighboringCellList,
+    gameField,
+    currPlayerCoord,
+    gameState
+  );
+  console.log(highlightningList);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
@@ -100,4 +123,101 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
   });
 
   return fullPlayerGrid;
+};
+
+const getHigtlightning = (
+  highlightningList: (AvailableCellType | null)[],
+  orderIndex: string
+) => {
+  const currList = highlightningList.filter((cellItem) => {
+    return cellItem?.coord === orderIndex;
+  });
+
+  const structuredList = currList.map((cellItem) => {
+    if (cellItem) {
+      const { direction, coord } = cellItem;
+      return direction;
+    } else {
+      return null;
+    }
+  });
+  return structuredList;
+};
+/**
+ * Check the neifhboring of that coord.
+ * Have they door or window
+ */
+const getHighlightningList = (
+  neighboringCellList: AvailableCellListType,
+  gameField: GameField,
+  currCoord: string,
+  gameState: GameState
+) /* : boolean */ => {
+  //Check currCellHasWall
+  console.log(currCoord);
+  const currCell = gameField.values[currCoord];
+
+  const availableCellList /* : AvailableCellListType */ = neighboringCellList
+    .map((cellItem) => {
+      const { direction, coord } = cellItem;
+      const currCellHasHole = checkCellOnHole(currCell, direction);
+      const nextCell = gameField.values[coord];
+      const oppositeDirection = getOppositeDirection(direction);
+      const nextCellHasHole = checkCellOnHole(nextCell, oppositeDirection);
+      if (currCellHasHole) {
+        const cellItemWithHall: AvailableCellType = {
+          direction,
+          coord: currCoord,
+        };
+
+        return cellItemWithHall;
+      } else if (nextCellHasHole) {
+        const cellItemWithHall: AvailableCellType = {
+          direction: oppositeDirection,
+          coord,
+        };
+        return cellItemWithHall;
+      } else {
+        return null;
+      }
+    })
+    .filter((availableCell) => availableCell !== null);
+
+  switch (gameState.type) {
+    case "gameStarted.applyCard.contextMenu":
+    case "gameStarted.applyCard":
+      /*       console.log(availableCellList); */
+      return availableCellList;
+
+    default:
+      return [];
+  }
+};
+
+const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
+  if (cell.name === "commonCell") {
+    const cellHasWindow =
+      cell.barrierItem?.[direction] === "window" ? true : false;
+    const cellHasDoor = cell.barrierItem?.[direction] === "door" ? true : false;
+    const cellHasHole = cellHasWindow || cellHasDoor;
+    return cellHasHole;
+  }
+  return false;
+};
+
+const getOppositeDirection = (direction: MoveDirection): MoveDirection => {
+  switch (direction) {
+    case "top": {
+      return "bottom";
+    }
+    case "bottom": {
+      return "top";
+    }
+    case "left": {
+      return "right";
+    }
+    case "right": {
+      return "left";
+    }
+  }
 };
