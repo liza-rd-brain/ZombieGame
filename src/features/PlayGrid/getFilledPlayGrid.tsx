@@ -27,6 +27,7 @@ type CellApperance = {
 type WallType = {
   barrierItem?: BarrierType | undefined;
   highlightningList: any /* (AvailableCellType | null)[]; */;
+  onClick: Function;
 };
 
 const Wrap = styled.div`
@@ -76,7 +77,6 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     playerList,
     numberOfPlayer
   );
-  console.log(highlightningList);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
@@ -156,9 +156,7 @@ const getHighlightningList = (
   gameState: GameState,
   playerList: PlayerListType,
   numberOfPlayer: number
-) /* : boolean */ => {
-  //Check currCellHasWall
-  console.log(currCoord);
+) => {
   const currCell = gameField.values[currCoord];
 
   const availableCellList /* : AvailableCellListType */ = neighboringCellList
@@ -190,7 +188,6 @@ const getHighlightningList = (
   switch (gameState.type) {
     case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
-      /*       console.log(availableCellList); */
       const cardItemList = playerList[numberOfPlayer].inventory;
       const selectedCard = cardItemList.find(
         (cardItem) => cardItem?.isSelected === true
@@ -210,8 +207,9 @@ const getHighlightningList = (
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     const cellHasWindow =
-      cell.barrierItem?.[direction] === "window" ? true : false;
-    const cellHasDoor = cell.barrierItem?.[direction] === "door" ? true : false;
+      cell.barrierItem?.[direction].name === "window" ? true : false;
+    const cellHasDoor =
+      cell.barrierItem?.[direction].name === "door" ? true : false;
     const cellHasHole = cellHasWindow || cellHasDoor;
     return cellHasHole;
   }
