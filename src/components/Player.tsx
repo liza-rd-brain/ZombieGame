@@ -92,6 +92,7 @@ export const PlayerList = (props: PlayerListItem) => {
 
         const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
 
+        // TODO: Need a one component PlayerCard and functions for calculating props: needHighlightning, onClick and etc.
         switch (true) {
           case needHighlightning: {
             switch (true) {
@@ -123,7 +124,6 @@ export const PlayerList = (props: PlayerListItem) => {
                       isCurrent={numberOfPlayer == playerCardItem.orderNumber}
                       needHighlightning={true}
                       onClick={(e) => {
-                        console.log("playerClicked");
                         getContextMenu(playerCardItem.orderNumber);
                       }}
                     >
@@ -159,9 +159,12 @@ export const PlayerList = (props: PlayerListItem) => {
 };
 
 const getAvailableCellList = (state: State) => {
-  const { gameState, playerList, numberOfPlayer } = state;
-
-  const neighboringCellList = getNeighboringCellList(state);
+  const { gameState, playerList, numberOfPlayer, gameField } = state;
+  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const neighboringCellList = getNeighboringCellList(
+    prevPlayerCoord,
+    gameField
+  );
   const availableCellList: AvailableCellListType = neighboringCellList.filter(
     (cellItem) => {
       const { direction, coord } = cellItem;

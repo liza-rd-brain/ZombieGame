@@ -1,14 +1,14 @@
-import { State, AvailableCellListType } from "../../types";
+import { State, AvailableCellListType, GameField } from "../../types";
 import { MOVE_DIRECTION_LIST } from "../../../shared/config";
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
 
 /**
  * Returns the coordinates of neighboribgCells that lying in the GameField.
  */
-export const getNeighboringCellList = (state: State): AvailableCellListType => {
-  const { playerList, numberOfPlayer, gameField } = state;
-
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+export const getNeighboringCellList = (
+  prevPlayerCoord: string,
+  gameField: GameField
+): AvailableCellListType => {
   const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.map(
     (directionItem) => {
       return {
@@ -21,11 +21,10 @@ export const getNeighboringCellList = (state: State): AvailableCellListType => {
   /**
    * Returns the coordinates that lying in the GameField.
    */
-  const existanceInGameFieldCells: AvailableCellListType = coordNeighboringCells.filter(
-    (cellItem) => {
+  const existanceInGameFieldCells: AvailableCellListType =
+    coordNeighboringCells.filter((cellItem) => {
       const { direction, coord } = cellItem;
       return gameField.values[coord];
-    }
-  );
+    });
   return existanceInGameFieldCells;
 };

@@ -60,9 +60,8 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
    */
 
-  const canTakeNextCell = playerList[
-    numberOfPlayer
-  ].availableCellsCoords?.includes(nextPlayerCoord);
+  const canTakeNextCell =
+    playerList[numberOfPlayer].availableCellsCoords?.includes(nextPlayerCoord);
 
   switch (canTakeNextCell) {
     case true: {
@@ -88,9 +87,12 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  */
 
 const getPlayerWithAvailableCells = (state: State): State => {
-  const { numberOfPlayer } = state;
-
-  const neighboringCellList = getNeighboringCellList(state);
+  const { playerList, numberOfPlayer, gameField } = state;
+  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const neighboringCellList = getNeighboringCellList(
+    prevPlayerCoord,
+    gameField
+  );
 
   /**
    * Returns the coordinates of Cell that can be taken by player.
