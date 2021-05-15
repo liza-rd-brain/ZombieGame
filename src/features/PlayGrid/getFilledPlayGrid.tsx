@@ -187,9 +187,9 @@ const getHighlightningList = (
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     const cellHasWindow =
-      cell.barrierItem?.[direction].name === "window" ? true : false;
+      cell.barrierItem?.[direction]?.name === "window" ? true : false;
     const cellHasDoor =
-      cell.barrierItem?.[direction].name === "door" ? true : false;
+      cell.barrierItem?.[direction]?.name === "door" ? true : false;
     const cellHasHole = cellHasWindow || cellHasDoor;
     return cellHasHole;
   }
