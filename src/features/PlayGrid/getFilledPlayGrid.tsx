@@ -72,7 +72,9 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     neighboringCellList,
     gameField,
     currPlayerCoord,
-    gameState
+    gameState,
+    playerList,
+    numberOfPlayer
   );
   console.log(highlightningList);
 
@@ -151,7 +153,9 @@ const getHighlightningList = (
   neighboringCellList: AvailableCellListType,
   gameField: GameField,
   currCoord: string,
-  gameState: GameState
+  gameState: GameState,
+  playerList: PlayerListType,
+  numberOfPlayer: number
 ) /* : boolean */ => {
   //Check currCellHasWall
   console.log(currCoord);
@@ -187,7 +191,16 @@ const getHighlightningList = (
     case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
       /*       console.log(availableCellList); */
-      return availableCellList;
+      const cardItemList = playerList[numberOfPlayer].inventory;
+      const selectedCard = cardItemList.find(
+        (cardItem) => cardItem?.isSelected === true
+      );
+      const typeOfSelectedCard = selectedCard?.name;
+      if (typeOfSelectedCard === "boards") {
+        return availableCellList;
+      } else {
+        return [];
+      }
 
     default:
       return [];
