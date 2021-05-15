@@ -26,9 +26,11 @@ export const checkCellHasWall = (
 
 const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
-    const cellHasBarrier =
-      cell.barrierItem?.[direction]?.name === "wall" ? true : false;
-    return cellHasBarrier;
+    if (direction === "left" || direction === "bottom") {
+      const cellHasBarrier =
+        cell.barrierItem?.[direction]?.name === "wall" ? true : false;
+      return cellHasBarrier;
+    }
   }
   return false;
 };

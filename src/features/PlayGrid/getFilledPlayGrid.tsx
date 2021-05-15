@@ -187,95 +187,6 @@ const CellItem = styled.div<CellApperance>`
   }};
 `;
 
-// TODO: Take out style variable-?!
-const CellItemWall = styled.div<CommonCell>`
-  position: absolute;
-  z-index: 2;
-  box-sizing: border-box;
-  width: 30px;
-  height: 30px;
-  color: lightgrey;
-
-  border-top: ${(props) => {
-    if (props.barrierItem) {
-      switch (props.barrierItem.top?.name) {
-        case "wall": {
-          return "5px solid #f09308";
-        }
-        case "door": {
-          return "2px solid #584324";
-        }
-        case "window": {
-          return "2px solid #669aa7";
-        }
-        default:
-          return "none";
-      }
-    } else {
-      return "none";
-    }
-  }};
-
-  border-bottom: ${(props) => {
-    if (props.barrierItem) {
-      switch (props.barrierItem.bottom?.name) {
-        case "wall": {
-          return "5px solid #f09308";
-        }
-        case "door": {
-          return "2px solid #584324";
-        }
-        case "window": {
-          return "2px solid #669aa7";
-        }
-        default:
-          return "none";
-      }
-    } else {
-      return "none";
-    }
-  }};
-
-  border-left: ${(props) => {
-    if (props.barrierItem) {
-      switch (props.barrierItem.left?.name) {
-        case "wall": {
-          return "5px solid #f09308";
-        }
-        case "door": {
-          return "2px solid #584324";
-        }
-        case "window": {
-          return "2px solid #669aa7";
-        }
-        default:
-          return "none";
-      }
-    } else {
-      return "none";
-    }
-  }};
-  border-right: ${(props) => {
-    if (props.barrierItem) {
-      switch (props.barrierItem.right?.name) {
-        case "wall": {
-          return "5px solid #f09308";
-        }
-        case "door": {
-          return "2px solid #584324";
-        }
-        case "window": {
-          return "2px solid #669aa7";
-        }
-        default:
-          return "none";
-      }
-    } else {
-      return "none";
-    }
-  }};
-`;
-
 export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
   const { gameField, playerList, numberOfPlayer, gameState, enemyList } = state;
   const orderGameCells = gameField.order;
@@ -453,12 +364,16 @@ const getHighlightningList = (
 
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
-    const cellHasWindow =
-      cell.barrierItem?.[direction]?.name === "window" ? true : false;
-    const cellHasDoor =
-      cell.barrierItem?.[direction]?.name === "door" ? true : false;
-    const cellHasHole = cellHasWindow || cellHasDoor;
-    return cellHasHole;
+    if (direction === "left" || direction === "bottom") {
+      const cellHasWindow =
+        cell.barrierItem?.[direction]?.name === "window" ? true : false;
+      const cellHasDoor =
+        cell.barrierItem?.[direction]?.name === "door" ? true : false;
+      const cellHasHole = cellHasWindow || cellHasDoor;
+      return cellHasHole;
+    } else {
+      return false;
+    }
   }
   return false;
 };

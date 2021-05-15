@@ -7,7 +7,7 @@ export type BarrierName = "wall" | "window" | "door";
 export type BarrierKind = { name: BarrierName; isOpen: boolean } | null;
 
 /* export type BarrierKind = "wall" | "window" | "door"; */
-export type BarrierDirection = MoveDirection;
+export type BarrierDirection = "bottom" | "left";
 
 // Kind of barriers of cell
 export type BarrierType = Record<BarrierDirection, BarrierKind>;
