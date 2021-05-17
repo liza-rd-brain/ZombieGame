@@ -277,7 +277,6 @@ const getHigtlightningDirection = (
       return null;
     }
   });
-
   return structuredList;
 };
 
