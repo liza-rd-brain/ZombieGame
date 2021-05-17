@@ -69,20 +69,13 @@ export type BoardsCardType = {
   isSelected?: boolean;
 };
 
-// TODO: нужен ли отдельный тип, похоже на переусложнение
-export type HealthCell = {
-  name: "commonCell";
-  cardItem: CardItemList;
-  barrierItem?: BarrierType;
-};
-
 export type CommonCell = {
   name: "commonCell";
   cardItem: CardItemList;
   barrierItem?: BarrierType;
 };
 
-export type CellType = CommonCell | FinishCell | StartCell | HealthCell;
+export type CellType = CommonCell | FinishCell | StartCell;
 
 export type GameField = {
   order: Array<string>;
