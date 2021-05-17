@@ -2,7 +2,6 @@ import {
   CommonCell,
   GameFieldCells,
   HealthCardType,
-  HealthCell,
   CardItem,
 } from "../../types";
 
