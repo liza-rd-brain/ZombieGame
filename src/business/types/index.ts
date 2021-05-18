@@ -3,16 +3,19 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 
-export type BarrierName = "wall" | "window" | "door";
-export type BarrierKind = { name: BarrierName; isOpen: boolean } | null;
+export type BarrierName = "wall" | "window" | "door" | null;
+/* export type BarrierDirection = "bottom" | "left"; */
+export type BarrierItem = {
+  name: BarrierName;
+  direction: MoveDirection;
+  isOpen: boolean;
+};
+export type BarrierList = BarrierItem[];
 
-/* export type BarrierKind = "wall" | "window" | "door"; */
-export type BarrierDirection = "bottom" | "left";
-
-// Kind of barriers of cell
-export type BarrierType = Record<BarrierDirection, BarrierKind>;
-
-export type CellsBarrierType = { coord: CoordItem; barrier: BarrierType };
+export type CellsBarrierType = {
+  coord: CoordItem;
+  barrierList: BarrierList;
+};
 
 export type CellsBarrierListType = Array<CellsBarrierType>;
 
@@ -72,7 +75,7 @@ export type BoardsCardType = {
 export type CommonCell = {
   name: "commonCell";
   cardItem: CardItemList;
-  barrierItem?: BarrierType;
+  barrierList?: BarrierList;
 };
 
 export type CellType = CommonCell | FinishCell | StartCell;

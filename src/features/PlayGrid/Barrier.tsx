@@ -7,7 +7,7 @@ import { getNeighboringCellList } from "../../business/phases/gameStarted/getNei
 import {
   State,
   MoveDirection,
-  BarrierType,
+  BarrierItem,
   CommonCell,
   AvailableCellListType,
   GameField,
@@ -18,8 +18,9 @@ import {
 } from "../../business/types";
 
 type WallType = {
-  barrierItem?: BarrierType | undefined;
-  highlightningList: any /* (AvailableCellType | null)[]; */;
+  barrierItem?: BarrierItem;
+  //TODO: поправить тип?
+  highlightningList: (MoveDirection | null)[] | null;
   onClick: Function;
 };
 
@@ -36,10 +37,10 @@ const Wall = styled.div<WallType>`
     bottom: 0px;
     z-index: 2;
     height: ${(props) => {
-      if (props.barrierItem) {
-        switch (props.barrierItem.bottom?.name) {
+      if (props.barrierItem?.direction === "bottom") {
+        switch (props.barrierItem.name) {
           case "wall": {
-            return "5px ";
+            return "5px";
           }
           case "door": {
             return "3px";
@@ -51,17 +52,17 @@ const Wall = styled.div<WallType>`
             return "0px";
         }
       } else {
-        return "none";
+        return "0px";
       }
     }};
 
     background-color: ${(props) => {
       if (props.barrierItem) {
-        const needHighlightning = props.highlightningList?.find(
-          (item: MoveDirection) => item === "bottom"
-        );
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "bottom";
+        });
 
-        switch (props.barrierItem.bottom?.name) {
+        switch (props.barrierItem.name) {
           case "wall": {
             return "#f09308;";
           }
@@ -90,14 +91,13 @@ const Wall = styled.div<WallType>`
   &:after {
     content: "";
     position: absolute;
-    /*   width: 30px; */
     height: 50px;
     z-index: 2;
     bottom: 0px;
 
     width: ${(props) => {
-      if (props.barrierItem) {
-        switch (props.barrierItem.left?.name) {
+      if (props.barrierItem?.direction === "left") {
+        switch (props.barrierItem.name) {
           case "wall": {
             return "5px ";
           }
@@ -116,13 +116,14 @@ const Wall = styled.div<WallType>`
     }};
 
     height: ${(props) => {
-      if (props.barrierItem && props.barrierItem.left) {
-        return "50px";
-      } else if (
+      if (
         props.barrierItem &&
-        !props.barrierItem.left &&
-        !props.barrierItem.bottom
+        props.barrierItem.direction === "left" &&
+        props.barrierItem.name !== null
       ) {
+        return "50px";
+        //it is needed for now for pretty  wall painting
+      } else if (props.barrierItem && props.barrierItem.name === null) {
         return "5px";
       } else {
         return "0px";
@@ -131,11 +132,11 @@ const Wall = styled.div<WallType>`
 
     background-color: ${(props) => {
       if (props.barrierItem) {
-        const needHighlightning = props.highlightningList?.find(
-          (item: MoveDirection) => item === "left"
-        );
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "left";
+        });
 
-        switch (props.barrierItem.left?.name) {
+        switch (props.barrierItem.name) {
           case "wall": {
             return "#f09308";
           }
@@ -170,10 +171,11 @@ export const Barrier = (props: BarrierCoord) => {
   }));
 
   const { gameField, playerList, numberOfPlayer, gameState } = state;
-  
+
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
   const currPlayerCoord = playerList[numberOfPlayer].coord;
+
   const availableCells =
     playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
 
@@ -204,20 +206,26 @@ export const Barrier = (props: BarrierCoord) => {
 
   switch (cellValues.name) {
     case "commonCell": {
-      return (
-        <Wall
-          barrierItem={cellValues.barrierItem}
-          //Calculating, only if is cell with player
-          highlightningList={
-            needCheckHighlightning
-              ? getHigtlightning(highlightningList, orderIndex)
-              : null
-          }
-          onClick={() => getCallbackClick(state)}
-        >
-          {" "}
-        </Wall>
-      );
+      const barrierList = cellValues.barrierList?.map((barrier) => {
+        return (
+          <Wall
+            barrierItem={barrier}
+            //Calculating, only if is cell with player
+            highlightningList={
+              needCheckHighlightning
+                ? getHigtlightningDirection(highlightningList, orderIndex)
+                : null
+            }
+            onClick={
+              () =>
+                dispatch({ type: "req-fillHole" }) /* getCallbackClick(state) */
+            }
+          >
+            {" "}
+          </Wall>
+        );
+      });
+      return <>{barrierList}</>;
     }
     default: {
       return null;
@@ -225,7 +233,7 @@ export const Barrier = (props: BarrierCoord) => {
   }
 };
 
-const getHigtlightning = (
+const getHigtlightningDirection = (
   highlightningList: (AvailableCellType | null)[],
   orderIndex: string
 ) => {
@@ -258,7 +266,7 @@ const getHighlightningList = (
 ) => {
   const currCell = gameField.values[currCoord];
 
-  const availableCellList /* : AvailableCellListType */ = neighboringCellList
+  const availableCellList = neighboringCellList
     .map((cellItem) => {
       const { direction, coord } = cellItem;
       const currCellHasHole = checkCellOnHole(currCell, direction);
@@ -266,18 +274,18 @@ const getHighlightningList = (
       const oppositeDirection = getOppositeDirection(direction);
       const nextCellHasHole = checkCellOnHole(nextCell, oppositeDirection);
       if (currCellHasHole) {
-        const cellItemWithHall: AvailableCellType = {
+        const cellItemWithHole: AvailableCellType = {
           direction,
           coord: currCoord,
         };
 
-        return cellItemWithHall;
+        return cellItemWithHole;
       } else if (nextCellHasHole) {
-        const cellItemWithHall: AvailableCellType = {
+        const cellItemWithHole: AvailableCellType = {
           direction: oppositeDirection,
           coord,
         };
-        return cellItemWithHall;
+        return cellItemWithHole;
       } else {
         return null;
       }
@@ -303,37 +311,20 @@ const getHighlightningList = (
   }
 };
 
-const getCallbackClick = (state: State) => {
-  const { gameState, playerList, numberOfPlayer } = state;
-
-  const cardItemList = playerList[numberOfPlayer].inventory;
-  const selectedCard = cardItemList.find(
-    (cardItem) => cardItem?.isSelected === true
-  );
-  const typeOfSelectedCard = selectedCard?.name;
-
-  switch (gameState.type) {
-    case "gameStarted.applyCard": {
-      if (typeOfSelectedCard === "boards") {
-        console.log("click");
-        return null;
-      } else {
-        return null;
-      }
-    }
-    default: {
-      return null;
-    }
-  }
-};
-
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     if (direction === "left" || direction === "bottom") {
-      const cellHasWindow =
-        cell.barrierItem?.[direction]?.name === "window" ? true : false;
-      const cellHasDoor =
-        cell.barrierItem?.[direction]?.name === "door" ? true : false;
+      /*    const cellHasWindow = cell.barrierItem?.name === "window" ? true : false; */
+      const cellHasWindow = cell.barrierList?.find(
+        (barrier) => barrier.name === "window"
+      )
+        ? true
+        : false;
+      const cellHasDoor = cell.barrierList?.find(
+        (barrier) => barrier.name === "door"
+      )
+        ? true
+        : false;
       const cellHasHole = cellHasWindow || cellHasDoor;
       return cellHasHole;
     } else {
