@@ -26,13 +26,19 @@ export const checkCellHasWall = (
 
 const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
+    //Now in config just left and bottom walls
     if (direction === "left" || direction === "bottom") {
-      const cellHasBarrier =
-        cell.barrierItem?.[direction]?.name === "wall" ? true : false;
+      const cellHasBarrier = cell.barrierList?.find(
+        (barrier) => barrier.name === "wall" && barrier.direction === direction
+      )
+        ? true
+        : false;
+
       return cellHasBarrier;
+      /*   } */
     }
+    return false;
   }
-  return false;
 };
 
 const getOppositeDirection = (direction: MoveDirection): MoveDirection => {
