@@ -40,6 +40,7 @@ const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
         : false;
       const cellHasBarrier = cellHasWall || cellHasClosedHole;
       return cellHasBarrier;
+      /*   } */
     }
     return false;
   }
