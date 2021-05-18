@@ -51,15 +51,43 @@ const Wall = styled.div<WallType>`
           default:
             return "0px";
         }
+      } else if (
+        props.barrierItem &&
+        props.barrierItem.direction === "left" &&
+        props.barrierItem.name !== null
+      ) {
+        return "50px";
+        //it is needed for now for pretty  wall painting
+      } else if (props.barrierItem && props.barrierItem.name === null) {
+        return "5px";
       } else {
         return "0px";
+      }
+    }};
+    width: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        switch (props.barrierItem.name) {
+          case "wall": {
+            return "5px ";
+          }
+          case "door": {
+            return "3px";
+          }
+          case "window": {
+            return "3px";
+          }
+          default:
+            return "5px";
+        }
+      } else {
+        return "none";
       }
     }};
 
     background-color: ${(props) => {
       if (props.barrierItem) {
         const needHighlightning = props.highlightningList?.find((item) => {
-          return item === "bottom";
+          return item === "bottom" || "left";
         });
 
         switch (props.barrierItem.name) {
@@ -81,7 +109,7 @@ const Wall = styled.div<WallType>`
             }
           }
           default:
-            return "none";
+            return "#f09308";
         }
       } else {
         return "none";
@@ -91,74 +119,46 @@ const Wall = styled.div<WallType>`
   &:after {
     content: "";
     position: absolute;
+    width: 50px;
     height: 50px;
-    z-index: 2;
-    bottom: 0px;
 
-    width: ${(props) => {
+    top: ${(props) => {
       if (props.barrierItem?.direction === "left") {
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "5px ";
-          }
-          case "door": {
-            return "3px";
-          }
-          case "window": {
-            return "3px";
-          }
-          default:
-            return "5px";
-        }
-      } else {
-        return "none";
+        return "0";
       }
     }};
-
     height: ${(props) => {
-      if (
-        props.barrierItem &&
-        props.barrierItem.direction === "left" &&
-        props.barrierItem.name !== null
-      ) {
-        return "50px";
-        //it is needed for now for pretty  wall painting
-      } else if (props.barrierItem && props.barrierItem.name === null) {
-        return "5px";
-      } else {
-        return "0px";
+      if (props.barrierItem?.direction === "bottom" && props.barrierItem) {
+        return "20px";
+      }
+    }};
+    width: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "20px";
+      }
+    }};
+    bottom: ${(props) => {
+      if (props.barrierItem?.direction === "bottom") {
+        return "-10px";
+      }
+    }};
+    left: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "-10px";
       }
     }};
 
     background-color: ${(props) => {
       if (props.barrierItem) {
         const needHighlightning = props.highlightningList?.find((item) => {
-          return item === "left";
+          return item === "bottom" || "left";
         });
 
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "#f09308";
-          }
-          case "door": {
-            if (needHighlightning) {
-              return "#78ff2d";
-            } else {
-              return " #584324;";
-            }
-          }
-          case "window": {
-            if (needHighlightning) {
-              return "#78ff2d";
-            } else {
-              return " #a3cdd8;";
-            }
-          }
-          default:
-            return "#f09308";
+        if (needHighlightning) {
+          return "#79fe2f3d";
+        } else {
+          return "none";
         }
-      } else {
-        return "none";
       }
     }};
   }
@@ -209,16 +209,15 @@ export const Barrier = (props: BarrierCoord) => {
       const barrierList = cellValues.barrierList?.map((barrier) => {
         return (
           <Wall
+            key={barrier.direction}
             barrierItem={barrier}
-            //Calculating, only if is cell with player
             highlightningList={
               needCheckHighlightning
                 ? getHigtlightningDirection(highlightningList, orderIndex)
                 : null
             }
-            onClick={
-              () =>
-                dispatch({ type: "req-fillHole" }) /* getCallbackClick(state) */
+            onClick={() =>
+              dispatch({ type: "req-fillHole", payload: barrier.direction })
             }
           >
             {" "}
@@ -314,7 +313,6 @@ const getHighlightningList = (
 const checkCellOnHole = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     if (direction === "left" || direction === "bottom") {
-      /*    const cellHasWindow = cell.barrierItem?.name === "window" ? true : false; */
       const cellHasWindow = cell.barrierList?.find(
         (barrier) => barrier.name === "window"
       )
