@@ -88,7 +88,7 @@ const Wall = styled.div<WallType>`
           }
         }
       } else {
-        return "none";
+        return "0px";
       }
     }};
 

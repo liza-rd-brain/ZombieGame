@@ -5,13 +5,11 @@ export type MoveDirectionList = MoveDirection[];
 
 export type BarrierName = "wall" | "window" | "door" | null;
 /* export type BarrierDirection = "bottom" | "left"; */
-
 export type BarrierItem = {
   name: BarrierName;
   direction: MoveDirection;
   isOpen: boolean;
 };
-
 export type BarrierList = BarrierItem[];
 
 export type CellsBarrierType = {
