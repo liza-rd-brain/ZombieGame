@@ -200,7 +200,6 @@ const getStateHoleFilled = (
         } else return barrier;
       }
     );
-
     const newGameField = {
       ...gameField,
       values: {
