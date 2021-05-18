@@ -85,7 +85,7 @@ const Wall = styled.div<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem) {
+      if (props.barrierItem?.isOpen) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -111,6 +111,8 @@ const Wall = styled.div<WallType>`
           default:
             return "#f09308";
         }
+      } else if (props.barrierItem?.isOpen === false) {
+        return "#ca1e66;";
       } else {
         return "none";
       }
@@ -217,7 +219,10 @@ export const Barrier = (props: BarrierCoord) => {
                 : null
             }
             onClick={() =>
-              dispatch({ type: "req-fillHole", payload: barrier.direction })
+              dispatch({
+                type: "req-fillHole",
+                payload: { coord: orderIndex, direction: barrier.direction },
+              })
             }
           >
             {" "}

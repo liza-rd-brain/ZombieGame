@@ -5,7 +5,6 @@ import {
   PlayerListType,
   EnemyListType,
   CommonCell,
-  BarrierType,
   MoveDirection,
   AvailableCellListType,
   CellType,

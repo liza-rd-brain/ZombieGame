@@ -1,4 +1,9 @@
-import { State, PlayerListType, AvailableCellListType } from "../../types";
+import {
+  State,
+  PlayerListType,
+  AvailableCellListType,
+  MoveDirection,
+} from "../../types";
 import { ActionType } from "../../reducer";
 
 import { getStateCardSelected } from "./getStateCardSelected";
@@ -61,6 +66,12 @@ export const applyCard = (action: ActionType, state: State): State => {
         case "cardChoosed": {
           const target = action.payload;
           return getStateCardSelected(state, target);
+        }
+
+        case "req-fillHole": {
+          const { coord, direction } = action.payload;
+          console.log("заполнить проем", coord, direction);
+          return getStateHoleFilled(state, coord, direction);
         }
 
         default:
@@ -188,6 +199,37 @@ const getStateHealAnotherPlayer = (
     playerList: newPlayerList,
     gameState: { type: "gameStarted.playerMove" },
   };
+};
+
+const getStateHoleFilled = (
+  state: State,
+  coord: number,
+  direction: MoveDirection
+) => {
+  const { gameField } = state;
+  const cellWithChosedHole = gameField.values[coord];
+  if (cellWithChosedHole.name === "commonCell") {
+    const barriersWithClosedHole = cellWithChosedHole.barrierList?.map(
+      (barrier) => {
+        if (barrier.direction === direction) {
+          return { ...barrier, isOpen: false };
+        } else return barrier;
+      }
+    );
+    const newGameField = {
+      ...gameField,
+      values: {
+        ...gameField.values,
+        [coord]: {
+          ...gameField.values[coord],
+          barrierList: barriersWithClosedHole,
+        },
+      },
+    };
+    return { ...state, gameField: newGameField };
+  } else {
+    return state;
+  }
 };
 
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
