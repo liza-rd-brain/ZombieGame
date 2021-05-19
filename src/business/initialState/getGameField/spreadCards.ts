@@ -19,14 +19,14 @@ const cardsList: CardSet[] = [
   {
     card: {
       name: "health",
-      apperance: "open",
+      apperance: "closed",
     },
     amount: AMOUNT_HEALTH_ITEMS,
   },
   {
     card: {
       name: "boards",
-      apperance: "open",
+      apperance: "closed",
     },
     amount: AMOUNT_BOARDS_ITEMS,
   },
