@@ -103,18 +103,22 @@ const Wall = styled.div<WallType>`
     }};
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "5px ";
+        if (props.barrierItem?.isOpen === false) {
+          return "10px";
+        } else {
+          switch (props.barrierItem.name) {
+            case "wall": {
+              return "5px ";
+            }
+            case "door": {
+              return "3px";
+            }
+            case "window": {
+              return "3px";
+            }
+            default:
+              return "5px";
           }
-          case "door": {
-            return "3px";
-          }
-          case "window": {
-            return "3px";
-          }
-          default:
-            return "5px";
         }
       } else {
         return "none";
