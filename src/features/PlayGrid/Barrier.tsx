@@ -38,18 +38,22 @@ const Wall = styled.div<WallType>`
     z-index: 2;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "5px";
+        if (props.barrierItem?.isOpen === false) {
+          return "10px";
+        } else {
+          switch (props.barrierItem.name) {
+            case "wall": {
+              return "5px";
+            }
+            case "door": {
+              return "3px";
+            }
+            case "window": {
+              return "3px";
+            }
+            default:
+              return "0px";
           }
-          case "door": {
-            return "3px";
-          }
-          case "window": {
-            return "3px";
-          }
-          default:
-            return "0px";
         }
       } else if (
         props.barrierItem &&
@@ -66,18 +70,22 @@ const Wall = styled.div<WallType>`
     }};
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "5px ";
+        if (props.barrierItem?.isOpen === false) {
+          return "10px";
+        } else {
+          switch (props.barrierItem.name) {
+            case "wall": {
+              return "5px ";
+            }
+            case "door": {
+              return "3px";
+            }
+            case "window": {
+              return "3px";
+            }
+            default:
+              return "5px";
           }
-          case "door": {
-            return "3px";
-          }
-          case "window": {
-            return "3px";
-          }
-          default:
-            return "5px";
         }
       } else {
         return "none";
@@ -112,7 +120,7 @@ const Wall = styled.div<WallType>`
             return "#f09308";
         }
       } else if (props.barrierItem?.isOpen === false) {
-        return "#ca1e66;";
+        return "#66615d;";
       } else {
         return "none";
       }
@@ -120,6 +128,7 @@ const Wall = styled.div<WallType>`
   }
   &:after {
     content: "";
+
     position: absolute;
     width: 50px;
     height: 50px;

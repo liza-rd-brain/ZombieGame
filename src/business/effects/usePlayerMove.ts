@@ -23,7 +23,7 @@ export function usePlayerMove() {
               dispatch({
                 type: "req-cleanAvailableCells",
               }),
-            300
+            0
           );
           return () => {
             clearTimeout(timerMarkCell);

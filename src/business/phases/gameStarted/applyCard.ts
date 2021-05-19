@@ -134,18 +134,8 @@ const getStateGiveHealthCard = (
 const getStateHealCurrPlayer = (state: State): State => {
   const { playerList, numberOfPlayer } = state;
   const indexCurrPlayer = numberOfPlayer;
-  const currInventory = playerList[indexCurrPlayer].inventory;
-
-  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
-    (card) => {
-      return card?.name === "health";
-    }
-  );
-  const newInventory = currInventory.filter((card, indexOfCard) => {
-    return indexOfCard !== removedCardIndex;
-  });
   const newHealth = changeHealth(playerList, indexCurrPlayer);
-
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
   const newPlayerList: PlayerListType = {
     ...playerList,
     [indexCurrPlayer]: {
@@ -167,19 +157,8 @@ const getStateHealAnotherPlayer = (
   indexChosenPlayer: number
 ): State => {
   const { playerList, numberOfPlayer } = state;
-
   const indexCurrPlayer = numberOfPlayer;
-  const currInventory = playerList[indexCurrPlayer].inventory;
-
-  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
-    (card) => {
-      return card?.name === "health";
-    }
-  );
-  const newInventory = currInventory.filter((card, indexOfCard) => {
-    return indexOfCard !== removedCardIndex;
-  });
-
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
   const newHealth = changeHealth(playerList, indexChosenPlayer);
 
   const newPlayerList: PlayerListType = {
@@ -206,8 +185,11 @@ const getStateHoleFilled = (
   coord: number,
   direction: MoveDirection
 ) => {
-  const { gameField } = state;
+  const { gameField, playerList, numberOfPlayer } = state;
+  const indexCurrPlayer = numberOfPlayer;
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
   const cellWithChosedHole = gameField.values[coord];
+
   if (cellWithChosedHole.name === "commonCell") {
     const barriersWithClosedHole = cellWithChosedHole.barrierList?.map(
       (barrier) => {
@@ -216,6 +198,7 @@ const getStateHoleFilled = (
         } else return barrier;
       }
     );
+
     const newGameField = {
       ...gameField,
       values: {
@@ -226,7 +209,21 @@ const getStateHoleFilled = (
         },
       },
     };
-    return { ...state, gameField: newGameField };
+
+    const newPlayerList: PlayerListType = {
+      ...playerList,
+      [indexCurrPlayer]: {
+        ...playerList[indexCurrPlayer],
+        inventory: newInventory,
+      },
+    };
+    const newState: State = {
+      ...state,
+      gameField: newGameField,
+      playerList: newPlayerList,
+      gameState: { type: "gameStarted.playerMove" },
+    };
+    return newState;
   } else {
     return state;
   }
@@ -234,4 +231,23 @@ const getStateHoleFilled = (
 
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
   return playerList[indexTarget].health + 1;
+};
+
+const deleteSelectedCard = (
+  playerList: PlayerListType,
+  numberOfPlayer: number
+) => {
+  const indexCurrPlayer = numberOfPlayer;
+  const currInventory = playerList[indexCurrPlayer].inventory;
+
+  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
+    (card) => {
+      return card?.isSelected === true;
+    }
+  );
+
+  const newInventory = currInventory.filter((card, indexOfCard) => {
+    return indexOfCard !== removedCardIndex;
+  });
+  return newInventory;
 };
