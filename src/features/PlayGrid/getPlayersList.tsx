@@ -20,8 +20,7 @@ export const getPlayersList = (
   if (playersArr.length > 0) {
     return (
       <PlayerList
-        playerList={playersArr}
-        numberOfPlayer={numberOfPlayer}
+        playerListOnCell={playersArr}
         getContextMenu={getContextMenu}
       />
     );

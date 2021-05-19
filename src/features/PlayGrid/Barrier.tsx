@@ -160,7 +160,7 @@ const Wall = styled.div<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem) {
+      if (props.barrierItem?.isOpen) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });

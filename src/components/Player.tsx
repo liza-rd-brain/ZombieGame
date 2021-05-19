@@ -6,6 +6,7 @@ import {
   PlayerCardType,
   AvailableCellListType,
   State,
+  PlayerListType,
 } from "../business/types";
 import { getNeighboringCellList } from "../business/phases/gameStarted/getNeighboringCellList";
 import { canInteractWithCell } from "../business/phases/gameStarted/canInteractWithCell";
@@ -17,8 +18,7 @@ type PlayerItem = {
 };
 
 type PlayerListItem = {
-  playerList: PlayerCardType[];
-  numberOfPlayer: number;
+  playerListOnCell: PlayerCardType[];
   getContextMenu: Function;
 };
 
@@ -79,13 +79,18 @@ export const PlayerList = (props: PlayerListItem) => {
   const state = useSelector((state: State) => ({
     ...state,
   }));
+  const { playerList, numberOfPlayer } = state;
 
-  const { playerList, numberOfPlayer, getContextMenu } = props;
+  /**
+   *  playerListOnCell -is all player in one cell
+   */
+  const { playerListOnCell, getContextMenu } = props;
+
   const listForInteract = getAvailableCellList(state);
 
   return (
     <PlayerCardList>
-      {playerList.map((playerCardItem, index) => {
+      {playerListOnCell.map((playerCardItem, index) => {
         const needHighlightning = listForInteract.includes(
           playerCardItem.coord
         );
@@ -123,8 +128,14 @@ export const PlayerList = (props: PlayerListItem) => {
                       key={index}
                       isCurrent={numberOfPlayer == playerCardItem.orderNumber}
                       needHighlightning={true}
-                      onClick={(e) => {
-                        getContextMenu(playerCardItem.orderNumber);
+                      onClick={() => {
+                        playerClickedHandler(
+                          getContextMenu,
+                          playerCardItem,
+                          numberOfPlayer,
+                          playerList,
+                          dispatch
+                        );
                       }}
                     >
                       {playerCardItem.orderNumber + 1}
@@ -189,5 +200,32 @@ const getAvailableCellList = (state: State) => {
 
     default:
       return [];
+  }
+};
+
+const playerClickedHandler = (
+  getContextMenu: Function,
+  playerCardItem: PlayerCardType,
+  numberOfPlayer: number,
+  playerList: PlayerListType,
+  dispatch: Function
+) => {
+  const currPlayer = playerList[numberOfPlayer];
+  const chosedCard = currPlayer.inventory.find(
+    (card) => card?.isSelected === true
+  );
+  const typeOfChosedCard = chosedCard?.name;
+  switch (typeOfChosedCard) {
+    case "health": {
+      getContextMenu(playerCardItem.orderNumber);
+      break;
+    }
+    case "boards": {
+      dispatch({
+        type: "req-shareCard",
+        payload: playerCardItem.orderNumber,
+      });
+      break;
+    }
   }
 };

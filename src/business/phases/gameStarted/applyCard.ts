@@ -22,68 +22,65 @@ export const applyCard = (action: ActionType, state: State): State => {
   const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
     return card?.isSelected === true;
   })?.name;
+  switch (action.type) {
+    case "req-shareCard": {
+      const recipientPlayerNumber = action.payload;
+      return getStateGiveCard(state, recipientPlayerNumber);
+    }
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardSelected(state, target);
+    }
+    default: {
+      switch (chosenCardType) {
+        case "health": {
+          switch (action.type) {
+            case "req-healPlayer": {
+              /**
+               * Need to increase playerHealth
+               * Then remove card from inventory
+               * Can we do this simultaneously?
+               */
 
-  switch (chosenCardType) {
-    case "health": {
-      switch (action.type) {
-        case "req-healPlayer": {
-          /**
-           * Need to increase playerHealth
-           * Then remove card from inventory
-           * Can we do this simultaneously?
-           */
+              const indexChosenPlayer = action.payload;
+              const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
 
-          const indexChosenPlayer = action.payload;
-          const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+              switch (isCurrPlayer) {
+                case true:
+                  return getStateHealCurrPlayer(state);
 
-          switch (isCurrPlayer) {
-            case true:
-              return getStateHealCurrPlayer(state);
-
-            case false: {
-              return getStateHealAnotherPlayer(state, indexChosenPlayer);
+                case false: {
+                  return getStateHealAnotherPlayer(state, indexChosenPlayer);
+                }
+                default:
+                  return state;
+              }
             }
+
             default:
               return state;
           }
         }
+        case "boards": {
+          switch (action.type) {
+            case "req-fillHole": {
+              const { coord, direction } = action.payload;
+              console.log("заполнить проем", coord, direction);
+              return getStateHoleFilled(state, coord, direction);
+            }
 
-        case "req-shareHealthCard": {
-          const recipientPlayerNumber = action.payload;
-          return getStateGiveHealthCard(state, recipientPlayerNumber);
+            default:
+              return state;
+          }
         }
-        case "cardChoosed": {
-          const target = action.payload;
-          return getStateCardSelected(state, target);
-        }
-
         default:
           return state;
       }
     }
-    case "boards": {
-      switch (action.type) {
-        case "cardChoosed": {
-          const target = action.payload;
-          return getStateCardSelected(state, target);
-        }
-
-        case "req-fillHole": {
-          const { coord, direction } = action.payload;
-          console.log("заполнить проем", coord, direction);
-          return getStateHoleFilled(state, coord, direction);
-        }
-
-        default:
-          return state;
-      }
-    }
-    default:
-      return state;
   }
 };
 
-const getStateGiveHealthCard = (
+const getStateGiveCard = (
   state: State,
   recipientPlayerNumber: number
 ): State => {
@@ -95,9 +92,11 @@ const getStateGiveHealthCard = (
 
   const sharedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
-      return card?.name === "health";
+      return card?.isSelected;
+      /*    return card?.name === "health"; */
     }
   );
+
   const sharedCard = [...currentPlayerInventory][sharedCardIndex];
   const sharedCardWithoutHighlightning = { ...sharedCard, isSelected: false };
 

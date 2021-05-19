@@ -35,7 +35,7 @@ export type ActionType =
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-shareHealthCard"; payload: number };
+  | { type: "req-shareCard"; payload: number };
 
 export const reducer = (
   state: State = initialState,

@@ -164,7 +164,7 @@ export const PlayGrid = () => {
           className={"contextMenu"}
           onClick={() => {
             dispatch({
-              type: "req-shareHealthCard",
+              type: "req-shareCard",
               payload: contextMenuState.playerNumber,
             });
           }}
