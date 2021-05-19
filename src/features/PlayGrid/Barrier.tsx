@@ -187,9 +187,6 @@ export const Barrier = (props: BarrierCoord) => {
   const cellValues = gameField.values[orderIndex];
   const currPlayerCoord = playerList[numberOfPlayer].coord;
 
-  const availableCells =
-    playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
-
   const neighboringCellList = getNeighboringCellList(
     currPlayerCoord,
     gameField
@@ -224,15 +221,31 @@ export const Barrier = (props: BarrierCoord) => {
             barrierItem={barrier}
             highlightningList={
               needCheckHighlightning
-                ? getHigtlightningDirection(highlightningList, orderIndex)
+                ? getHigtlightningDirection(
+                    highlightningList,
+                    orderIndex,
+                    barrier.direction
+                  )
                 : null
             }
-            onClick={() =>
-              dispatch({
-                type: "req-fillHole",
-                payload: { coord: orderIndex, direction: barrier.direction },
+            onClick={() => {
+              const canCloseHole = highlightningList.find((cellType) => {
+                return (
+                  cellType?.coord === orderIndex &&
+                  cellType?.direction === barrier.direction
+                );
               })
-            }
+                ? true
+                : false;
+              if (canCloseHole) {
+                dispatch({
+                  type: "req-fillHole",
+                  payload: { coord: orderIndex, direction: barrier.direction },
+                });
+              } else {
+                return null;
+              }
+            }}
           >
             {" "}
           </Wall>
@@ -248,10 +261,11 @@ export const Barrier = (props: BarrierCoord) => {
 
 const getHigtlightningDirection = (
   highlightningList: (AvailableCellType | null)[],
-  orderIndex: string
+  orderIndex: string,
+  direction: MoveDirection
 ) => {
   const currList = highlightningList.filter((cellItem) => {
-    return cellItem?.coord === orderIndex;
+    return cellItem?.coord === orderIndex && cellItem?.direction === direction;
   });
 
   const structuredList = currList.map((cellItem) => {
@@ -262,6 +276,7 @@ const getHigtlightningDirection = (
       return null;
     }
   });
+
   return structuredList;
 };
 
