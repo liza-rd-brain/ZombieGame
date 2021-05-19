@@ -28,14 +28,18 @@ const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
   if (cell.name === "commonCell") {
     //Now in config just left and bottom walls
     if (direction === "left" || direction === "bottom") {
-      const cellHasBarrier = cell.barrierList?.find(
+      const cellHasWall = cell.barrierList?.find(
         (barrier) => barrier.name === "wall" && barrier.direction === direction
       )
         ? true
         : false;
-
+      const cellHasClosedHole = cell.barrierList?.find(
+        (barrier) => barrier.isOpen === false && barrier.direction === direction
+      )
+        ? true
+        : false;
+      const cellHasBarrier = cellHasWall || cellHasClosedHole;
       return cellHasBarrier;
-      /*   } */
     }
     return false;
   }
