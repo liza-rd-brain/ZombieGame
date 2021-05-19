@@ -232,7 +232,8 @@ export const Barrier = (props: BarrierCoord) => {
               const canCloseHole = highlightningList.find((cellType) => {
                 return (
                   cellType?.coord === orderIndex &&
-                  cellType?.direction === barrier.direction
+                  cellType?.direction === barrier.direction &&
+                  barrier.isOpen === true
                 );
               })
                 ? true
