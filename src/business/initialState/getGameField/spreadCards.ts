@@ -8,6 +8,7 @@ import {
 import {
   AMOUNT_HEALTH_ITEMS,
   AMOUNT_BOARDS_ITEMS,
+  APPERANCE_CARD,
 } from "../../../shared/config";
 
 type CardSet = {
@@ -19,14 +20,14 @@ const cardsList: CardSet[] = [
   {
     card: {
       name: "health",
-      apperance: "closed",
+      apperance: APPERANCE_CARD,
     },
     amount: AMOUNT_HEALTH_ITEMS,
   },
   {
     card: {
       name: "boards",
-      apperance: "closed",
+      apperance: APPERANCE_CARD,
     },
     amount: AMOUNT_BOARDS_ITEMS,
   },
