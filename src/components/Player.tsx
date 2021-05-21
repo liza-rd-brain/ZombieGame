@@ -91,79 +91,32 @@ export const PlayerList = (props: PlayerListItem) => {
   return (
     <PlayerCardList>
       {playerListOnCell.map((playerCardItem, index) => {
-        const needHighlightning = listForInteract.includes(
+        const canInteractWithPlayer = listForInteract.includes(
           playerCardItem.coord
         );
 
         const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
 
-        // TODO: Need a one component PlayerCard and functions for calculating props: needHighlightning, onClick and etc.
-        switch (true) {
-          case needHighlightning: {
-            switch (true) {
-              case isCurrentPlayer: {
-                return (
-                  <PlayerCard
-                    id={`player${playerCardItem.orderNumber}`}
-                    key={index}
-                    isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                    needHighlightning={true}
-                    onClick={() =>
-                      dispatch({
-                        type: "req-healPlayer",
-                        payload: playerCardItem.orderNumber,
-                      })
-                    }
-                  >
-                    {playerCardItem.orderNumber + 1}
-                  </PlayerCard>
-                );
-              }
-
-              case !isCurrentPlayer: {
-                return (
-                  <React.Fragment key={index}>
-                    <PlayerCard
-                      id={`player${playerCardItem.orderNumber}`}
-                      key={index}
-                      isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                      needHighlightning={true}
-                      onClick={() => {
-                        playerClickedHandler(
-                          getContextMenu,
-                          playerCardItem,
-                          numberOfPlayer,
-                          playerList,
-                          dispatch
-                        );
-                      }}
-                    >
-                      {playerCardItem.orderNumber + 1}
-                    </PlayerCard>
-                  </React.Fragment>
-                );
-              }
-              default:
-                return null;
-            }
-          }
-          case !needHighlightning: {
-            return (
-              <PlayerCard
-                id={`player${playerCardItem.orderNumber}`}
-                key={index}
-                isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-                onClick={() => {
-                  console.log("не можем вылечить!");
-                }}
-              >
-                {playerCardItem.orderNumber + 1}
-              </PlayerCard>
-            );
-          }
-          default:
-            return null;
-        }
+        return (
+          <PlayerCard
+            id={`player${playerCardItem.orderNumber}`}
+            key={index}
+            isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+            needHighlightning={canInteractWithPlayer}
+            onClick={() => {
+              playerClickedHandler(
+                getContextMenu,
+                playerCardItem,
+                numberOfPlayer,
+                playerList,
+                canInteractWithPlayer,
+                dispatch
+              );
+            }}
+          >
+            {playerCardItem.orderNumber + 1}
+          </PlayerCard>
+        );
       })}
     </PlayerCardList>
   );
@@ -208,6 +161,7 @@ const playerClickedHandler = (
   playerCardItem: PlayerCardType,
   numberOfPlayer: number,
   playerList: PlayerListType,
+  canInteractWithPlayer: boolean,
   dispatch: Function
 ) => {
   const currPlayer = playerList[numberOfPlayer];
@@ -215,9 +169,37 @@ const playerClickedHandler = (
     (card) => card?.isSelected === true
   );
   const typeOfChosedCard = chosedCard?.name;
+  const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
   switch (typeOfChosedCard) {
     case "health": {
-      getContextMenu(playerCardItem.orderNumber);
+      switch (canInteractWithPlayer) {
+        case true: {
+          switch (isCurrentPlayer) {
+            case true: {
+              dispatch({
+                type: "req-healPlayer",
+                payload: playerCardItem.orderNumber,
+              });
+              break;
+            }
+
+            case false: {
+              getContextMenu(playerCardItem.orderNumber);
+            }
+          }
+
+          break;
+        }
+
+        case false: {
+          console.log("не можем вылечить игрока");
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
       break;
     }
     case "boards": {
