@@ -61,6 +61,14 @@ const PlayerCard = styled.div<PlayerItem>`
     left: 0px;
     top: 0px;
   }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    left: -1px;
+    top: -1px;
+  }
 `;
 
 const PlayerCardList = styled.div`
