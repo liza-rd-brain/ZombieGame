@@ -170,10 +170,10 @@ const playerClickedHandler = (
   );
   const typeOfChosedCard = chosedCard?.name;
   const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
-  switch (typeOfChosedCard) {
-    case "health": {
-      switch (canInteractWithPlayer) {
-        case true: {
+  switch (canInteractWithPlayer) {
+    case true: {
+      switch (typeOfChosedCard) {
+        case "health": {
           switch (isCurrentPlayer) {
             case true: {
               dispatch({
@@ -190,24 +190,21 @@ const playerClickedHandler = (
 
           break;
         }
-
-        case false: {
-          console.log("не можем вылечить игрока");
-          break;
-        }
-
-        default: {
+        case "boards": {
+          dispatch({
+            type: "req-shareCard",
+            payload: playerCardItem.orderNumber,
+          });
           break;
         }
       }
       break;
     }
-    case "boards": {
-      dispatch({
-        type: "req-shareCard",
-        payload: playerCardItem.orderNumber,
-      });
+    case false: {
+      console.log("не можем взаимодействовать с игроком игрока");
       break;
     }
+    default:
+      break;
   }
 };
