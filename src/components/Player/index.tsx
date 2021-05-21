@@ -247,5 +247,7 @@ const calculateHighlightning = (
     default: {
       return false;
     }
+    default:
+      break;
   }
 };
