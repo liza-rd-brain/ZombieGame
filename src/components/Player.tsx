@@ -26,6 +26,8 @@ type ContextMenuType = {
   visible: boolean;
 };
 
+type TypeOfCard = "boards" | "health" | null;
+
 const PlayerCard = styled.div<PlayerItem>`
   background-color: #9f3f3f;
   border-radius: 50%;
@@ -87,6 +89,11 @@ export const PlayerList = (props: PlayerListItem) => {
   const { playerListOnCell, getContextMenu } = props;
 
   const listForInteract = getAvailableCellList(state);
+  const currPlayer = playerList[numberOfPlayer];
+  const chosedCard = currPlayer.inventory.find(
+    (card) => card?.isSelected === true
+  );
+  const typeOfChosedCard = chosedCard?.name || null;
 
   return (
     <PlayerCardList>
@@ -95,21 +102,22 @@ export const PlayerList = (props: PlayerListItem) => {
           playerCardItem.coord
         );
 
-        const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
-
         return (
           <PlayerCard
             id={`player${playerCardItem.orderNumber}`}
             key={index}
             isCurrent={numberOfPlayer == playerCardItem.orderNumber}
-            needHighlightning={canInteractWithPlayer}
+            needHighlightning={calculateHighlightning(
+              canInteractWithPlayer,
+              typeOfChosedCard
+            )}
             onClick={() => {
               playerClickedHandler(
                 getContextMenu,
                 playerCardItem,
                 numberOfPlayer,
-                playerList,
                 canInteractWithPlayer,
+                typeOfChosedCard,
                 dispatch
               );
             }}
@@ -160,15 +168,10 @@ const playerClickedHandler = (
   getContextMenu: Function,
   playerCardItem: PlayerCardType,
   numberOfPlayer: number,
-  playerList: PlayerListType,
   canInteractWithPlayer: boolean,
+  typeOfChosedCard: TypeOfCard,
   dispatch: Function
 ) => {
-  const currPlayer = playerList[numberOfPlayer];
-  const chosedCard = currPlayer.inventory.find(
-    (card) => card?.isSelected === true
-  );
-  const typeOfChosedCard = chosedCard?.name;
   const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
   switch (canInteractWithPlayer) {
     case true: {
@@ -206,5 +209,36 @@ const playerClickedHandler = (
     }
     default:
       break;
+  }
+};
+
+const calculateHighlightning = (
+  canInteractWithPlayer: boolean,
+  typeOfChosedCard: TypeOfCard
+) => {
+  switch (canInteractWithPlayer) {
+    case true: {
+      switch (typeOfChosedCard) {
+        case "boards": {
+          return false;
+        }
+
+        case "health": {
+          return true;
+        }
+
+        default: {
+          return false;
+        }
+      }
+    }
+
+    case false: {
+      return false;
+    }
+
+    default: {
+      return false;
+    }
   }
 };
