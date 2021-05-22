@@ -1,11 +1,11 @@
 import { MoveDirectionList } from "../../business/types";
 
-export const START_COORD = { hor: 4, vert: 6 };
+export const START_COORD = { hor: 3, vert: 5 };
 export const FINISH_COORD = { hor: 11, vert: 11 };
 export const INITIAL_PLAYER_HEALTH = 3;
-export const AMOUNT_HEALTH_ITEMS = 50;
-export const AMOUNT_BOARDS_ITEMS = 50;
-export const AMOUNT_PLAYERS = 2;
+export const AMOUNT_HEALTH_ITEMS = 0;
+export const AMOUNT_BOARDS_ITEMS = 90;
+export const AMOUNT_PLAYERS = 1;
 export const AMOUNT_ENEMIES = 0;
 export const APPERANCE_CARD = "open";
 

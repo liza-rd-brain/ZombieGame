@@ -33,7 +33,7 @@ const PlayerCard = styled.div<PlayerItem>`
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  margin: 2px;
+  margin: 0px;
   z-index: 3;
   text-align: center;
   padding: 4px;
@@ -57,18 +57,10 @@ const PlayerCard = styled.div<PlayerItem>`
         return "3px solid #34b834;";
       }
     }};
-
+    pointer-events: none;
     opacity: 0.5;
     padding: 4px;
 
-    left: -1px;
-    top: -1px;
-  }
-  &:after {
-    content: "";
-    position: absolute;
-    width: 27px;
-    height: 27px;
     left: -1px;
     top: -1px;
   }
@@ -82,6 +74,11 @@ const PlayerCardList = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: white;
+  padding: 3px;
+  /*  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%; */
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -202,11 +199,21 @@ const playerClickedHandler = (
           break;
         }
         case "boards": {
-          dispatch({
-            type: "req-shareCard",
-            payload: playerCardItem.orderNumber,
-          });
-          break;
+          /**
+           * For preventing sharing any cards with himself
+           */
+          switch (isCurrentPlayer) {
+            case true: {
+              break;
+            }
+            case false: {
+              dispatch({
+                type: "req-shareCard",
+                payload: playerCardItem.orderNumber,
+              });
+              break;
+            }
+          }
         }
       }
       break;

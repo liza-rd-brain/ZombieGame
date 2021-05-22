@@ -35,7 +35,7 @@ const Wall = styled.div<WallType>`
     width: 50px;
     height: 50px;
     bottom: 0px;
-    z-index: 2;
+    z-index: 5;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
         if (props.barrierItem?.isOpen === false) {
@@ -160,7 +160,7 @@ const Wall = styled.div<WallType>`
   }
   &:after {
     content: "";
-
+    z-index: 5;
     position: absolute;
     width: 50px;
     height: 50px;
