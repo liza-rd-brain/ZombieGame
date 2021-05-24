@@ -224,6 +224,7 @@ const getStateHoleFilled = (
       gameField: newGameField,
       playerList: newPlayerList,
       gameState: { type: "gameStarted.playerMove" },
+      doEffect: { type: "!checkAvailableNeighboringCell" },
     };
     return newState;
   } else {
