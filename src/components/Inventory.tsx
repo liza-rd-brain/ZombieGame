@@ -50,7 +50,7 @@ export const Inventory = (props: { index: number }) => {
   const inventory = playerList[props.index].inventory;
   return (
     <InventoryWrap>
-      {sortedInventory.map((inventoryCard, inventoryCardindex) => {
+      {inventory.map((inventoryCard, inventoryCardindex) => {
         return (
           <Slot
             key={inventoryCardindex}
