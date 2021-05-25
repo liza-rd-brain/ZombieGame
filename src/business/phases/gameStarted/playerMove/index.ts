@@ -1,11 +1,4 @@
-import {
-  GameField,
-  State,
-  GameFieldCells,
-  CellType,
-  MoveDirection,
-  AvailableCellListType,
-} from "../../../types";
+import { State, MoveDirection, AvailableCellListType } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
@@ -39,7 +32,6 @@ export const playerMove = (action: ActionType, state: State): State => {
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardSelected(state, target);
-      // TODO: Need get highlightning to playerCard with index indexChosenPlayer
     }
 
     default: {

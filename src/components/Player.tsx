@@ -153,7 +153,6 @@ const getAvailableCellList = (state: State) => {
     .concat(currPlayerCoord);
 
   switch (gameState.type) {
-    case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
       return availableCellsCoords;
 

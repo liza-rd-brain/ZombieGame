@@ -1,4 +1,4 @@
-import { CellType, CardItem } from "../../../types";
+import { CellType, CardItem } from "../../types";
 
 export const openCard = (cell: CellType): CellType => {
   if (cell.name === "commonCell") {

@@ -22,15 +22,18 @@ export const applyCard = (action: ActionType, state: State): State => {
   const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
     return card?.isSelected === true;
   })?.name;
+
   switch (action.type) {
     case "req-shareCard": {
       const recipientPlayerNumber = action.payload;
       return getStateGiveCard(state, recipientPlayerNumber);
     }
+
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardSelected(state, target);
     }
+
     default: {
       switch (chosenCardType) {
         case "health": {
@@ -61,6 +64,7 @@ export const applyCard = (action: ActionType, state: State): State => {
               return state;
           }
         }
+
         case "boards": {
           switch (action.type) {
             case "req-fillHole": {
@@ -73,6 +77,7 @@ export const applyCard = (action: ActionType, state: State): State => {
               return state;
           }
         }
+
         default:
           return state;
       }
@@ -96,7 +101,6 @@ const getStateGiveCard = (
   const sharedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
       return card?.isSelected;
-      /*    return card?.name === "health"; */
     }
   );
 

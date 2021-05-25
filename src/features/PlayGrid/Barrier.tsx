@@ -354,7 +354,6 @@ const getHighlightningList = (
     .filter((availableCell) => availableCell !== null);
 
   switch (gameState.type) {
-    case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
       const cardItemList = playerList[numberOfPlayer].inventory;
       const selectedCard = cardItemList.find(

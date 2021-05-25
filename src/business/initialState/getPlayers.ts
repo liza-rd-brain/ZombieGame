@@ -9,7 +9,6 @@ import {
 export const getPlayers = (): PlayerListType => {
   const startCoord = `${START_COORD.hor}.${START_COORD.vert}`;
   const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
-    //TODO : set start coord!
     const playerCard = {
       name: "player",
       health: INITIAL_PLAYER_HEALTH,
