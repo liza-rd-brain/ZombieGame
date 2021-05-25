@@ -9,6 +9,7 @@ export const getCards = (cell: CellType) => {
   const boardsCardItem = cell.cardItem.find(
     (cardItem) => cardItem?.name === "boards"
   );
+
   return (
     <>
       {healthCardItem ? <Health apperance={healthCardItem.apperance} /> : null}
