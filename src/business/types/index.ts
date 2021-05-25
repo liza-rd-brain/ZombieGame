@@ -33,7 +33,6 @@ export type PlayerCardType = {
   health: number;
   orderNumber: number;
   coord: string;
-  availableCellsCoords?: string[];
   inventory: CardItemList;
 };
 
@@ -114,6 +113,7 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
+  availableCellsCoords?: string[] | null;
 };
 
 export type GameState =

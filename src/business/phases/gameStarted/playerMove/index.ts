@@ -20,7 +20,7 @@ import { getNeighboringCellList } from "../getNeighboringCellList";
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      return getPlayerWithAvailableCells(state);
+      return getAvailableCells(state);
     }
 
     case "playerMoved": {
@@ -60,8 +60,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
    */
 
-  const canTakeNextCell =
-    playerList[numberOfPlayer].availableCellsCoords?.includes(nextPlayerCoord);
+  const canTakeNextCell = state.availableCellsCoords?.includes(nextPlayerCoord);
 
   switch (canTakeNextCell) {
     case true: {
@@ -86,7 +85,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
 
-const getPlayerWithAvailableCells = (state: State): State => {
+const getAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
   const neighboringCellList = getNeighboringCellList(
@@ -112,13 +111,7 @@ const getPlayerWithAvailableCells = (state: State): State => {
 
   return {
     ...state,
-    playerList: {
-      ...state.playerList,
-      [numberOfPlayer]: {
-        ...state.playerList[numberOfPlayer],
-        availableCellsCoords: availableCellsCoords,
-      },
-    },
+    availableCellsCoords,
   };
 };
 
@@ -127,11 +120,10 @@ const getPlayerWithAvailableCells = (state: State): State => {
  */
 const getStateClearedAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
-  const currPlayer = playerList[numberOfPlayer];
-  delete currPlayer.availableCellsCoords;
+
   return {
     ...state,
-    playerList: { ...state.playerList, [numberOfPlayer]: currPlayer },
     doEffect: { type: "!getPlayerMoveResult" },
+    availableCellsCoords: null,
   };
 };
