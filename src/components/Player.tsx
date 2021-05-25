@@ -1,4 +1,3 @@
-import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -6,11 +5,9 @@ import {
   PlayerCardType,
   AvailableCellListType,
   State,
-  PlayerListType,
 } from "../business/types";
 import { getNeighboringCellList } from "../business/phases/gameStarted/getNeighboringCellList";
 import { canInteractWithCell } from "../business/phases/gameStarted/canInteractWithCell";
-import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -75,10 +72,6 @@ const PlayerCardList = styled.div`
   font-weight: bold;
   color: white;
   padding: 3px;
-  /*  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%; */
 `;
 
 export const PlayerList = (props: PlayerListItem) => {

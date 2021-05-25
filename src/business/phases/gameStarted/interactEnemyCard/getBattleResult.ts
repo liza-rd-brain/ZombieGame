@@ -48,7 +48,6 @@ const getStatePlayetLoseHealth = (state: State): State => {
     },
   };
 
-  // TODO: заменить на switchToNextPlayer
   // TODO :  режим боя должен вестись до победы\побега\проигрыша
   if (isPlayerAlive) {
     const newState: State = {
@@ -66,7 +65,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
     return newState;
   } else {
     console.log(`игрок №${numberOfPlayer} погиб`);
-    //TODO :общая часть state?
+
     return {
       ...state,
       gameState: { type: "endGame" },
@@ -82,7 +81,6 @@ const getStatePLayerWon = (state: State): State => {
   const newEnemyList = { ...enemyList };
   delete newEnemyList[currentCoord];
 
-  // TODO: заменить на switchToNextPlayer
   return {
     ...state,
     enemyList: newEnemyList,
