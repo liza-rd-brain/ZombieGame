@@ -66,7 +66,7 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: 0,
         gameState: {
-          type: "gameStarted.getOrder",
+          type: "gameStarted.getPlayersOrder",
         },
         doEffect: {
           type: "!getNextPlayer",

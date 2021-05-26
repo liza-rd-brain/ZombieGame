@@ -129,6 +129,6 @@ export type GameState =
       type: "gameStarted.applyCard";
     }
   | { type: "gameStarted.interactEnemyCard" }
-  | { type: "gameStarted.getOrder" }
+  | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

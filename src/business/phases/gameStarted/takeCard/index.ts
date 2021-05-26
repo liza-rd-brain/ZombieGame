@@ -1,7 +1,7 @@
 import { State, GameField, PlayerListType, CommonCell } from "../../../types";
 
 import { ActionType } from "../../../reducer";
-import { openCard } from "../shared/openCard";
+import { openCard } from "./openCard";
 import { deleteCard } from "./deleteCard";
 
 export const takeCard = (action: ActionType, state: State): State => {
@@ -83,7 +83,7 @@ const getStateDeletedCard = (state: State): State => {
     ...state,
     gameField: newGameField,
     gameState: {
-      type: "gameStarted.getOrder",
+      type: "gameStarted.getPlayersOrder",
     },
     doEffect: {
       type: "!getNextPlayer",

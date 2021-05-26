@@ -5,9 +5,9 @@ import {
   PlayerCardType,
   AvailableCellListType,
   State,
-} from "../business/types";
-import { getNeighboringCellList } from "../business/phases/gameStarted/shared/getNeighboringCellList";
-import { canInteractWithCell } from "../business/phases/gameStarted/canInteractWithCell";
+} from "../../business/types";
+import { getNeighboringCellList } from "../../business/phases/gameStarted/common/getNeighboringCellList";
+import { canInteractWithCell } from "./canInteractWithCell";
 
 type PlayerItem = {
   isCurrent: boolean;

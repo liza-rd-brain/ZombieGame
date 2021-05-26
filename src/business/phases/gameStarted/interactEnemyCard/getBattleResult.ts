@@ -54,7 +54,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
       ...state,
       dice: 0,
       gameState: {
-        type: "gameStarted.getOrder",
+        type: "gameStarted.getPlayersOrder",
       },
       doEffect: {
         type: "!getNextPlayer",
@@ -86,7 +86,7 @@ const getStatePLayerWon = (state: State): State => {
     enemyList: newEnemyList,
     dice: 0,
     gameState: {
-      type: "gameStarted.getOrder",
+      type: "gameStarted.getPlayersOrder",
     },
     doEffect: {
       type: "!getNextPlayer",

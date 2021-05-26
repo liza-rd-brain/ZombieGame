@@ -4,10 +4,10 @@ import {
   trownDice,
   playerMove,
   takeCard,
-  getOrder,
   interactEnemyCard,
   applyCard,
 } from "./phases/gameStarted";
+import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, HealthCardType } from "./types";
 import { DOMElement } from "react";
@@ -69,8 +69,8 @@ export const reducer = (
           return interactEnemyCard(action, state);
         }
 
-        case "getOrder": {
-          return getOrder(action, state);
+        case "getPlayersOrder": {
+          return getPlayersOrder(action, state);
         }
 
         default:
