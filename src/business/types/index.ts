@@ -56,6 +56,7 @@ export type StartCell = {
 export type HealthCardType = {
   name: "health";
   apperance: "closed" | "open";
+  isSelected?: boolean;
 };
 
 // TODO: нужен ли отдельный тип, похоже на переусложнение

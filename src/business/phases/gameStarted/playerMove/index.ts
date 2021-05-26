@@ -14,7 +14,7 @@ import { getNextPlayerCoord } from "../getNextPlayerCoord";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
-import { getStateCardChosed } from "../getStateCardChosed";
+import { getStateCardSelected } from "../getStateCardSelected";
 import { getNeighboringCellList } from "../getNeighboringCellList";
 
 export const playerMove = (action: ActionType, state: State): State => {
@@ -38,14 +38,8 @@ export const playerMove = (action: ActionType, state: State): State => {
 
     case "cardChoosed": {
       const target = action.payload;
-      return getStateCardChosed(state, target);
-        // TODO: Need get highlightning to playerCard with index indexChosenPlayer
-    }
-
-    case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardChosed(state, target);
-        // TODO: Need get highlightning to playerCard with index indexChosenPlayer
+      return getStateCardSelected(state, target);
+      // TODO: Need get highlightning to playerCard with index indexChosenPlayer
     }
 
     default: {

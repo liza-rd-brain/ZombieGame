@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
@@ -15,16 +15,12 @@ type GridProps = {
 
 type ContextMenuType = {
   type: "visible" | "hidden";
+  coord?: { x?: number; y?: number };
 };
 
 type WrapType = {};
 
 const GridItem = styled.div<GridProps>`
- /*  pointer-events: ${(props) => {
-    if (props.type === "visible") {
-      return "none";
-    } else return "auto";
-  }}; */
   outline: 2px solid lightgray;
   margin: 0 auto;
   width: 100%;
@@ -59,14 +55,16 @@ const ContextMenu = styled.div<ContextMenuType>`
   justify-content: start;
   padding: 21px 0 0 12px;
   box-sizing: border-box;
-`;
-
-const Wrap = styled.div<WrapType>`
-  display: block;
-  position: absolute;
-  width: 70px;
-  height: 60px;
-  background-color: white;
+  left: ${(props) => {
+    if (props.coord?.x) {
+      return `${props.coord?.x + 50}px`;
+    } else {
+      return "0px";
+    }
+  }};
+  top: ${(props) => {
+    return `${props.coord?.y}px`;
+  }};
 `;
 
 const Button = styled.button`
@@ -74,33 +72,20 @@ const Button = styled.button`
   width: 70px;
 `;
 
-const CloseButton = styled.button`
-  width: 15px;
-  height: 15px;
-  padding: 0;
-  outline: 1px solid black;
-  border: none;
-  top: 0;
-  position: absolute;
-  right: 0;
-  line-height: 12px;
-
-  &:hover {
-    color: red;
-  }
-`;
-
-type contextMenuType = {
-  type: "visible" | "hidden";
-  numberOfPlayer?: number;
-};
 export const PlayGrid = () => {
   const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
     ...state,
   }));
 
+  type contextMenuType = {
+    type: "visible" | "hidden";
+    playerNumber?: Number;
+    coord?: { x?: number; y?: number };
+  };
+
   const initialContextMenuState: contextMenuType = { type: "hidden" };
+
   const [contextMenuState, updatecontextMenuState] = useState(
     initialContextMenuState
   );
@@ -109,14 +94,62 @@ export const PlayGrid = () => {
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
+  const playerEl = document.getElementById(`player${numberOfPlayer}`);
+  const playerCoord = {
+    x: playerEl?.getBoundingClientRect().x,
+    y: playerEl?.getBoundingClientRect().y,
+  };
 
   const getContextMenu = (numberOfPlayer: number) => {
-    console.log("показать контекстное меню", numberOfPlayer);
     updatecontextMenuState({
       type: "visible",
-      numberOfPlayer,
+      playerNumber: numberOfPlayer,
+      coord: playerCoord,
     });
+
+    console.log("координаты", playerEl?.getBoundingClientRect());
   };
+
+  useEffect(() => {
+    switch (contextMenuState.type) {
+      case "visible": {
+        const bodyElement = document.querySelector("body");
+
+        const callback = (e: MouseEvent) => {
+          /**
+           * Its for avoiding event on currentPlayer
+           */
+          if (
+            e.target ===
+            document.getElementById(`player${state.numberOfPlayer}`)
+          ) {
+            e.stopPropagation();
+          }
+
+          updatecontextMenuState((prevState) => {
+            return { ...prevState, type: "hidden" };
+          });
+
+          bodyElement?.removeEventListener("click", callback, {
+            capture: true,
+          });
+        };
+
+        bodyElement?.addEventListener("click", callback, {
+          capture: true,
+        });
+
+        return () => {
+          bodyElement?.removeEventListener("click", callback, {
+            capture: true,
+          });
+        };
+      }
+
+      default:
+        break;
+    }
+  }, [contextMenuState.type]);
 
   return (
     <>
@@ -131,15 +164,18 @@ export const PlayGrid = () => {
       </GridItem>
       <div id="modalMenu" />
 
-      <ContextMenu type={contextMenuState.type}>
+      <ContextMenu
+        type={contextMenuState.type}
+        id={"contextMenu"}
+        className={"contextMenu"}
+        coord={contextMenuState.coord}
+      >
         <Button
+          className={"contextMenu"}
           onClick={() => {
-            updatecontextMenuState({
-              type: "hidden",
-            });
             dispatch({
               type: "req-shareHealthCard",
-              payload: contextMenuState.numberOfPlayer,
+              payload: contextMenuState.playerNumber,
             });
           }}
         >
@@ -147,26 +183,14 @@ export const PlayGrid = () => {
         </Button>
         <Button
           onClick={() => {
-            updatecontextMenuState({
-              type: "hidden",
-            });
             dispatch({
               type: "req-healPlayer",
-              payload: contextMenuState.numberOfPlayer,
+              payload: contextMenuState.playerNumber,
             });
           }}
         >
           лечить
         </Button>
-        <CloseButton
-          onClick={() => {
-            updatecontextMenuState({
-              type: "hidden",
-            });
-          }}
-        >
-          &#10006;
-        </CloseButton>
       </ContextMenu>
     </>
   );

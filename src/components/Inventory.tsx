@@ -45,17 +45,7 @@ export const Inventory = (props: { index: number }) => {
     ...state,
   }));
 
-  type AppranceType = { highlightning?: boolean }[];
-
   const inventory = playerList[props.index].inventory;
-
-  /*   const initialApperance: AppranceType = [{ highlightning: false }]; */
-  const initialApperance: AppranceType = inventory.map((inventoryItem) => {
-    return {
-      highlightning: false,
-    };
-  });
-  const [apperance, setApperance] = useState(initialApperance);
 
   return (
     <InventoryWrap>
@@ -64,24 +54,8 @@ export const Inventory = (props: { index: number }) => {
           return (
             <HealthSlot
               key={inventoryCardindex}
-              highlighting={
-                apperance[inventoryCardindex]
-                  ? apperance[inventoryCardindex].highlightning
-                  : false
-              }
+              highlighting={inventoryCard?.isSelected}
               onClick={() => {
-                setApperance((prevApperance) => {
-                  return inventory.map((inventoryItem, index) => {
-                    if (index === inventoryCardindex) {
-                      return {
-                        highlightning: prevApperance[inventoryCardindex]
-                          ? !prevApperance[inventoryCardindex].highlightning
-                          : true,
-                      };
-                    } else return { highlightning: false };
-                  });
-                });
-
                 dispatch({
                   type: "cardChoosed",
                   payload: inventoryCardindex,
@@ -91,6 +65,8 @@ export const Inventory = (props: { index: number }) => {
               <Health></Health>
             </HealthSlot>
           );
+        } else {
+          return null;
         }
       })}
     </InventoryWrap>

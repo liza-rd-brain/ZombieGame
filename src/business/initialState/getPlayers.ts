@@ -1,15 +1,20 @@
 import { PlayerListType } from "../types";
 
-import { AMOUNT_PLAYERS, INITIAL_PLAYER_HEALTH } from "../../shared/config";
+import {
+  AMOUNT_PLAYERS,
+  INITIAL_PLAYER_HEALTH,
+  START_COORD,
+} from "../../shared/config";
 
 export const getPlayers = (): PlayerListType => {
+  const startCoord = `${START_COORD.hor}.${START_COORD.vert}`;
   const playersList = new Array(AMOUNT_PLAYERS).fill(0).map((player, index) => {
     //TODO : set start coord!
     const playerCard = {
       name: "player",
       health: INITIAL_PLAYER_HEALTH,
       orderNumber: index,
-      coord: "0.0",
+      coord: startCoord,
       inventory: [],
     };
     return [index, playerCard];

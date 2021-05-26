@@ -16,8 +16,7 @@ import { store } from "./business/store";
 import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
 
 const Field = styled.div`
-  position: relative;
-  /*   width: 450px; */
+
   margin: 0 auto;
 `;
 
@@ -26,6 +25,7 @@ const Game = styled.div`
   margin: 40px auto;
   display: flex;
   justify-content: center;
+  height: 100vh;
 `;
 
 const LeftPanel = styled.div`

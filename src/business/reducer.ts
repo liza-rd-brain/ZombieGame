@@ -31,7 +31,6 @@ export type ActionType =
   | { type: "cardChoosed"; payload: number }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }
-  | { type: "req-contextMenu"; payload: number }
   | { type: "req-shareHealthCard"; payload: number };
 
 export const reducer = (
