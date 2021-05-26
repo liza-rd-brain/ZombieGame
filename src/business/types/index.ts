@@ -2,15 +2,22 @@ export type CoordItem = { hor: number; vert: number };
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
-// BarrierType. Later add "boards"
-export type BarrierKind = "wall" | "window" | "door" | null;
 
-export type BarrierDirection = MoveDirection;
+export type BarrierName = "wall" | "window" | "door" | null;
+/* export type BarrierDirection = "bottom" | "left"; */
 
-// Kind of barriers of cell
-export type BarrierType = Record<BarrierDirection, BarrierKind>;
+export type BarrierItem = {
+  name: BarrierName;
+  direction: MoveDirection;
+  isOpen: boolean;
+};
 
-export type CellsBarrierType = { coord: CoordItem; barrier: BarrierType };
+export type BarrierList = BarrierItem[];
+
+export type CellsBarrierType = {
+  coord: CoordItem;
+  barrierList: BarrierList;
+};
 
 export type CellsBarrierListType = Array<CellsBarrierType>;
 
@@ -18,6 +25,7 @@ export type AvailableCellType = {
   direction: MoveDirection;
   coord: string;
 };
+
 export type AvailableCellListType = AvailableCellType[];
 
 export type PlayerCardType = {
@@ -29,7 +37,8 @@ export type PlayerCardType = {
   inventory: CardItemList;
 };
 
-export type CardItem = HealthCardType | null;
+export type CardItem = HealthCardType | BoardsCardType | null;
+
 export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
@@ -59,20 +68,19 @@ export type HealthCardType = {
   isSelected?: boolean;
 };
 
-// TODO: нужен ли отдельный тип, похоже на переусложнение
-export type HealthCell = {
-  name: "commonCell";
-  cardItem: CardItemList;
-  barrierItem?: BarrierType;
+export type BoardsCardType = {
+  name: "boards";
+  apperance: "closed" | "open";
+  isSelected?: boolean;
 };
 
 export type CommonCell = {
   name: "commonCell";
   cardItem: CardItemList;
-  barrierItem?: BarrierType;
+  barrierList?: BarrierList;
 };
 
-export type CellType = CommonCell | FinishCell | StartCell | HealthCell;
+export type CellType = CommonCell | FinishCell | StartCell;
 
 export type GameField = {
   order: Array<string>;

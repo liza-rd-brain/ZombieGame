@@ -106,8 +106,6 @@ export const PlayGrid = () => {
       playerNumber: numberOfPlayer,
       coord: playerCoord,
     });
-
-    console.log("координаты", playerEl?.getBoundingClientRect());
   };
 
   useEffect(() => {
@@ -154,16 +152,8 @@ export const PlayGrid = () => {
   return (
     <>
       <GridItem vert={height} type={contextMenuState.type}>
-        {getFilledPlayGrid(
-          gameField,
-          playerList,
-          enemyList,
-          numberOfPlayer,
-          getContextMenu
-        )}
+        {getFilledPlayGrid(state, getContextMenu)}
       </GridItem>
-      <div id="modalMenu" />
-
       <ContextMenu
         type={contextMenuState.type}
         id={"contextMenu"}
@@ -174,7 +164,7 @@ export const PlayGrid = () => {
           className={"contextMenu"}
           onClick={() => {
             dispatch({
-              type: "req-shareHealthCard",
+              type: "req-shareCard",
               payload: contextMenuState.playerNumber,
             });
           }}

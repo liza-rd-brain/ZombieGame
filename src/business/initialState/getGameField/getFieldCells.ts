@@ -79,7 +79,7 @@ const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
     string,
     CellType
   ] => {
-    const { coord, barrier } = cellBarrier;
+    const { coord, barrierList } = cellBarrier;
     const cellIndex = `${coord.hor}.${coord.vert}`;
 
     const cellWithoutBarrier = emptyField[cellIndex];
@@ -87,7 +87,7 @@ const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
     if (cellWithoutBarrier.name === "commonCell") {
       const cellWithBarrier = {
         ...cellWithoutBarrier,
-        barrierItem: barrier,
+        barrierList: barrierList,
       };
 
       return [cellIndex, cellWithBarrier];
@@ -96,9 +96,8 @@ const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
     }
   });
 
-  const cellsWithBarriers: GameFieldCells = Object.fromEntries(
-    cellsWithBarrierList
-  );
+  const cellsWithBarriers: GameFieldCells =
+    Object.fromEntries(cellsWithBarrierList);
 
   const fieldCellsWithWalls = { ...emptyField, ...cellsWithBarriers };
   return fieldCellsWithWalls;

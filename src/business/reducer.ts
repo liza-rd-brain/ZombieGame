@@ -31,7 +31,11 @@ export type ActionType =
   | { type: "cardChoosed"; payload: number }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }
-  | { type: "req-shareHealthCard"; payload: number };
+  | {
+      type: "req-fillHole";
+      payload: { coord: number; direction: MoveDirection };
+    }
+  | { type: "req-shareCard"; payload: number };
 
 export const reducer = (
   state: State = initialState,

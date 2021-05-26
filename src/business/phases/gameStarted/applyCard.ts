@@ -1,4 +1,9 @@
-import { State, PlayerListType, AvailableCellListType } from "../../types";
+import {
+  State,
+  PlayerListType,
+  AvailableCellListType,
+  MoveDirection,
+} from "../../types";
 import { ActionType } from "../../reducer";
 
 import { getStateCardSelected } from "./getStateCardSelected";
@@ -11,46 +16,71 @@ import { canInteractWithCell } from "./canInteractWithCell";
  * If not - we give context menu: need heal or apply.
  */
 export const applyCard = (action: ActionType, state: State): State => {
-  const { numberOfPlayer } = state;
+  const { numberOfPlayer, playerList } = state;
   const [, , phaseInner] = state.gameState.type.split(".");
+
+  const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
+    return card?.isSelected === true;
+  })?.name;
   switch (action.type) {
-    case "req-healPlayer": {
-      /**
-       * Need to increase playerHealth
-       * Then remove card from inventory
-       * Can we do this simultaneously?
-       */
-
-      const indexChosenPlayer = action.payload;
-      const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
-
-      switch (isCurrPlayer) {
-        case true:
-          return getStateHealCurrPlayer(state);
-
-        case false: {
-          return getStateHealAnotherPlayer(state, indexChosenPlayer);
-        }
-        default:
-          return state;
-      }
-    }
-
-    case "req-shareHealthCard": {
+    case "req-shareCard": {
       const recipientPlayerNumber = action.payload;
-      return getStateGiveHealthCard(state, recipientPlayerNumber);
+      return getStateGiveCard(state, recipientPlayerNumber);
     }
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardSelected(state, target);
     }
+    default: {
+      switch (chosenCardType) {
+        case "health": {
+          switch (action.type) {
+            case "req-healPlayer": {
+              /**
+               * Need to increase playerHealth
+               * Then remove card from inventory
+               * Can we do this simultaneously?
+               */
 
-    default:
-      return state;
+              const indexChosenPlayer = action.payload;
+              const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+
+              switch (isCurrPlayer) {
+                case true:
+                  return getStateHealCurrPlayer(state);
+
+                case false: {
+                  return getStateHealAnotherPlayer(state, indexChosenPlayer);
+                }
+                default:
+                  return state;
+              }
+            }
+
+            default:
+              return state;
+          }
+        }
+        case "boards": {
+          switch (action.type) {
+            case "req-fillHole": {
+              const { coord, direction } = action.payload;
+              console.log("заполнить проем", coord, direction);
+              return getStateHoleFilled(state, coord, direction);
+            }
+
+            default:
+              return state;
+          }
+        }
+        default:
+          return state;
+      }
+    }
   }
 };
 
-const getStateGiveHealthCard = (
+const getStateGiveCard = (
   state: State,
   recipientPlayerNumber: number
 ): State => {
@@ -62,9 +92,11 @@ const getStateGiveHealthCard = (
 
   const sharedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
     (card) => {
-      return card?.name === "health";
+      return card?.isSelected;
+      /*    return card?.name === "health"; */
     }
   );
+
   const sharedCard = [...currentPlayerInventory][sharedCardIndex];
   const sharedCardWithoutHighlightning = { ...sharedCard, isSelected: false };
 
@@ -101,18 +133,8 @@ const getStateGiveHealthCard = (
 const getStateHealCurrPlayer = (state: State): State => {
   const { playerList, numberOfPlayer } = state;
   const indexCurrPlayer = numberOfPlayer;
-  const currInventory = playerList[indexCurrPlayer].inventory;
-
-  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
-    (card) => {
-      return card?.name === "health";
-    }
-  );
-  const newInventory = currInventory.filter((card, indexOfCard) => {
-    return indexOfCard !== removedCardIndex;
-  });
   const newHealth = changeHealth(playerList, indexCurrPlayer);
-
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
   const newPlayerList: PlayerListType = {
     ...playerList,
     [indexCurrPlayer]: {
@@ -134,19 +156,8 @@ const getStateHealAnotherPlayer = (
   indexChosenPlayer: number
 ): State => {
   const { playerList, numberOfPlayer } = state;
-
   const indexCurrPlayer = numberOfPlayer;
-  const currInventory = playerList[indexCurrPlayer].inventory;
-
-  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
-    (card) => {
-      return card?.name === "health";
-    }
-  );
-  const newInventory = currInventory.filter((card, indexOfCard) => {
-    return indexOfCard !== removedCardIndex;
-  });
-
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
   const newHealth = changeHealth(playerList, indexChosenPlayer);
 
   const newPlayerList: PlayerListType = {
@@ -168,6 +179,74 @@ const getStateHealAnotherPlayer = (
   };
 };
 
+const getStateHoleFilled = (
+  state: State,
+  coord: number,
+  direction: MoveDirection
+) => {
+  const { gameField, playerList, numberOfPlayer } = state;
+  const indexCurrPlayer = numberOfPlayer;
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+  const cellWithChosedHole = gameField.values[coord];
+
+  if (cellWithChosedHole.name === "commonCell") {
+    const barriersWithClosedHole = cellWithChosedHole.barrierList?.map(
+      (barrier) => {
+        if (barrier.direction === direction) {
+          return { ...barrier, isOpen: false };
+        } else return barrier;
+      }
+    );
+
+    const newGameField = {
+      ...gameField,
+      values: {
+        ...gameField.values,
+        [coord]: {
+          ...gameField.values[coord],
+          barrierList: barriersWithClosedHole,
+        },
+      },
+    };
+
+    const newPlayerList: PlayerListType = {
+      ...playerList,
+      [indexCurrPlayer]: {
+        ...playerList[indexCurrPlayer],
+        inventory: newInventory,
+      },
+    };
+    const newState: State = {
+      ...state,
+      gameField: newGameField,
+      playerList: newPlayerList,
+      gameState: { type: "gameStarted.playerMove" },
+    };
+    return newState;
+  } else {
+    return state;
+  }
+};
+
 const changeHealth = (playerList: PlayerListType, indexTarget: number) => {
   return playerList[indexTarget].health + 1;
+};
+
+const deleteSelectedCard = (
+  playerList: PlayerListType,
+  numberOfPlayer: number
+) => {
+  const indexCurrPlayer = numberOfPlayer;
+  const currInventory = playerList[indexCurrPlayer].inventory;
+
+  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
+    (card) => {
+      return card?.isSelected === true;
+    }
+  );
+
+  const newInventory = currInventory.filter((card, indexOfCard) => {
+    return indexOfCard !== removedCardIndex;
+  });
+  return newInventory;
 };
