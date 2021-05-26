@@ -3,12 +3,10 @@ import {
   PlayerListType,
   AvailableCellListType,
   MoveDirection,
-} from "../../types";
-import { ActionType } from "../../reducer";
+} from "../../../types";
+import { ActionType } from "../../../reducer";
 
 import { getStateCardSelected } from "./getStateCardSelected";
-import { getNeighboringCellList } from "./getNeighboringCellList";
-import { canInteractWithCell } from "./canInteractWithCell";
 
 /**
  *  In payload get order number of chosen for interact player.

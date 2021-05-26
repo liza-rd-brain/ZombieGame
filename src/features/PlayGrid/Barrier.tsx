@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getNeighboringCellList } from "../../business/phases/gameStarted/getNeighboringCellList";
+import { getNeighboringCellList } from "../../business/phases/gameStarted/shared/getNeighboringCellList";
 
 import {
   State,

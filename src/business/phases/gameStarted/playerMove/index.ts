@@ -3,12 +3,12 @@ import { State, MoveDirection, AvailableCellListType } from "../../../types";
 import { ActionType } from "../../../reducer";
 import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
 
-import { getNextPlayerCoord } from "../getNextPlayerCoord";
+import { getNextPlayerCoord } from "../shared/getNextPlayerCoord";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
-import { getStateCardSelected } from "../getStateCardSelected";
-import { getNeighboringCellList } from "../getNeighboringCellList";
+import { getStateCardSelected } from "../shared/getStateCardSelected";
+import { getNeighboringCellList } from "../shared/getNeighboringCellList";
 
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {

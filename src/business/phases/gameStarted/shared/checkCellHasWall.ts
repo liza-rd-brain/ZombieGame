@@ -1,4 +1,4 @@
-import { State, PlayerListType, MoveDirection, CellType } from "../../types";
+import { State, PlayerListType, MoveDirection, CellType } from "../../../types";
 
 /**
  * Returns true if current or next cell has wall
