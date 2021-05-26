@@ -89,9 +89,10 @@ export type GameField = {
 export type GameFieldCells = Record<string, CellType>;
 
 export type TypeEffect =
-  | { type: "!openHealthCard" }
+  | { type: "!openCard" }
+  | { type: "!takeCard" }
   | { type: "!changePlayerHealth" }
-  | { type: "!deleteHealthCard" }
+  | { type: "!deleteCard" }
   | { type: "!getNextPlayer" }
   | { type: "!checkApperanceEnemyCard" }
   | { type: "!openEnemyCard" }
@@ -100,7 +101,6 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
-  | { type: "!takeHealthCard" }
   | { type: "!healPlayer" }
   | null;
 
@@ -123,7 +123,7 @@ export type GameState =
       type: "gameStarted.playerMove";
     }
   | {
-      type: "gameStarted.takeHealthCard";
+      type: "gameStarted.takeCard";
     }
   | {
       type: "gameStarted.applyCard";

@@ -10,11 +10,11 @@ export function useOpenCard() {
   useEffect(
     function openCard() {
       switch (doEffect?.type) {
-        case "!openHealthCard": {
+        case "!openCard": {
           const timerOpen = setTimeout(
             () =>
               dispatch({
-                type: "req-openHealthCard",
+                type: "req-openCard",
               }),
             1000
           );
@@ -23,16 +23,16 @@ export function useOpenCard() {
           };
         }
 
-        case "!takeHealthCard": {
-          const timerTakeHealthCard = setTimeout(
+        case "!takeCard": {
+          const timerTakeCard = setTimeout(
             () =>
               dispatch({
-                type: "req-takeHealthCard",
+                type: "req-takeCard",
               }),
             500
           );
           return () => {
-            clearTimeout(timerTakeHealthCard);
+            clearTimeout(timerTakeCard);
           };
         }
         case "!changePlayerHealth": {
@@ -48,16 +48,16 @@ export function useOpenCard() {
           };
         }
 
-        case "!deleteHealthCard": {
-          const timerDeleteHealthCard = setTimeout(
+        case "!deleteCard": {
+          const timerDeleteCard = setTimeout(
             () =>
               dispatch({
-                type: "req-deleteHealthCard",
+                type: "req-deleteCard",
               }),
             500
           );
           return () => {
-            clearTimeout(timerDeleteHealthCard);
+            clearTimeout(timerDeleteCard);
           };
         }
         case "!getNextPlayer": {

@@ -4,18 +4,17 @@ import { ActionType } from "../../../reducer";
 import { openCard } from "../shared/openCard";
 import { deleteCard } from "./deleteCard";
 
-
-export const takeHealthCard = (action: ActionType, state: State): State => {
+export const takeCard = (action: ActionType, state: State): State => {
   switch (action.type) {
-    case "req-openHealthCard": {
+    case "req-openCard": {
       return getStateOpenCard(state);
     }
 
-    case "req-takeHealthCard": {
+    case "req-takeCard": {
       return getStateCardTaken(state);
     }
 
-    case "req-deleteHealthCard": {
+    case "req-deleteCard": {
       return getStateDeletedCard(state);
     }
 
@@ -39,7 +38,7 @@ const getStateOpenCard = (state: State): State => {
   return {
     ...state,
     gameField: newGameField,
-    doEffect: { type: "!takeHealthCard" },
+    doEffect: { type: "!takeCard" },
   };
 };
 
@@ -47,8 +46,6 @@ const getStateCardTaken = (state: State): State => {
   const { gameField, numberOfPlayer, playerList } = state;
   const player = playerList[numberOfPlayer];
 
-  // We know for sure,that on cell lying only healthCard.
-  // TODO: potential problem. Need validate of healthCard?.
   const cardItems = gameField.values[player.coord].cardItem;
 
   const newPlayer = {
@@ -63,7 +60,7 @@ const getStateCardTaken = (state: State): State => {
 
   return {
     ...state,
-    doEffect: { type: "!deleteHealthCard" },
+    doEffect: { type: "!deleteCard" },
     playerList: newPlayerList,
   };
 };

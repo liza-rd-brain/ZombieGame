@@ -48,9 +48,6 @@ export const Inventory = (props: { index: number }) => {
   }));
 
   const inventory = playerList[props.index].inventory;
-/*   const healthCards = inventory.filter((card) => card?.name === "health");
-  const boardsCards = inventory.filter((card) => card?.name === "boards");
-  const sortedInventory = healthCards.concat(boardsCards); */
   return (
     <InventoryWrap>
       {inventory.map((inventoryCard, inventoryCardindex) => {
