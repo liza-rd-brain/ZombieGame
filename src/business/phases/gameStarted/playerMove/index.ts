@@ -10,7 +10,7 @@ import { changePlayerCoord } from "./changePlayerCoord";
 import { getStateCardSelected } from "../common/getStateCardSelected";
 import { getNeighboringCellList } from "../common/getNeighboringCellList";
 
-export const playerMove = (action: ActionType, state: State): State => {
+export const playerMove = ( state: State,action: ActionType): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
       return getAvailableCells(state);

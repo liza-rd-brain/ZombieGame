@@ -1,7 +1,7 @@
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
-export const waitingStart = (action: ActionType, state: State): State => {
+export const waitingStart = ( state: State,action: ActionType): State => {
   switch (action.type) {
     case "clickedStartButton": {
       return {

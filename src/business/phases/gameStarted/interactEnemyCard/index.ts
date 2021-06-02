@@ -4,7 +4,7 @@ import { ActionType } from "../../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
 
-export const interactEnemyCard = (action: ActionType, state: State): State => {
+export const interactEnemyCard = ( state: State,action: ActionType): State => {
   switch (action.type) {
     case "req-checkEnemyCard": {
       return getStateCheckApperance(state);
