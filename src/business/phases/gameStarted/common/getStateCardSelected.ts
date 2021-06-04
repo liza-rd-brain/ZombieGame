@@ -1,15 +1,16 @@
-import { State, PlayerListType } from "../../../types";
+import { State, PlayerListType, CardItem } from "../../../types";
 
 /**
  * We need to give highlighting to healthCard
  */
-export const getStateCardSelected = (
-  state: State,
-  currentCardIndex: number
-) => {
+type TargerCard = {
+  index: number;
+  card: CardItem;
+};
+export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
   const { numberOfPlayer } = state;
 
-  const newPlayerList = changeSelectedCard(state, currentCardIndex);
+  const newPlayerList = changeSelectedCard(state, targerCard.index);
   const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
     (card) => {
       return card?.isSelected === true;
@@ -50,19 +51,6 @@ const changeSelectedCard = (
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
   const targetCard = inventory[currentCardIndex];
-
-  /**
-   * Return opposite
-   */
-  const selectedCard = {
-    ...targetCard,
-    isSelected: !targetCard?.isSelected,
-  };
-
-  /*  const notSelectedCard = {
-    ...targetCard,
-    isSelected: false,
-  }; */
 
   const newInventory = inventory.map((card, index) => {
     if (index === currentCardIndex) {
