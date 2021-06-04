@@ -52,10 +52,6 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
   const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
-
-  const availableCells =
-    playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
      

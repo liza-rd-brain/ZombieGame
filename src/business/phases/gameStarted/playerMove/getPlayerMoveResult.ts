@@ -14,9 +14,6 @@ export const getPlayerMoveResult = (state: State) => {
 
   const takeFinish = newCellWithPlayer?.name === "finish";
 
-  const takeCard =
-    newCellWithPlayer?.name === "commonCell" &&
-    newCellWithPlayer.cardItem.length > 0;
 
   const takeCard =
     newCellWithPlayer?.name === "commonCell" &&
