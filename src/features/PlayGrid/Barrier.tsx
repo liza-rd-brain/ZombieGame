@@ -88,38 +88,6 @@ const Wall = styled.div<WallType>`
               return "5px";
           }
         }
-      } else if (
-        props.barrierItem &&
-        props.barrierItem.direction === "left" &&
-        props.barrierItem.name !== null
-      ) {
-        return "50px";
-        //it is needed for now for pretty  wall painting
-      } else if (props.barrierItem && props.barrierItem.name === null) {
-        return "5px";
-      } else {
-        return "0px";
-      }
-    }};
-    width: ${(props) => {
-      if (props.barrierItem?.direction === "left") {
-        if (props.barrierItem?.isOpen === false) {
-          return "10px";
-        } else {
-          switch (props.barrierItem.name) {
-            case "wall": {
-              return "5px ";
-            }
-            case "door": {
-              return "3px";
-            }
-            case "window": {
-              return "3px";
-            }
-            default:
-              return "5px";
-          }
-        }
       } else {
         return "none";
       }
