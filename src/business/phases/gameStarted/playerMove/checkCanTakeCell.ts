@@ -1,6 +1,6 @@
 import { State, PlayerListType, MoveDirection, CellType } from "../../../types";
 
-import { checkCellHasWall } from "../checkCellHasWall";
+import { checkCellHasWall } from "../common/checkCellHasWall";
 /** Cheking the cases when can't take the cell. In default we think that can. */
 export const checkCanTakeCell = (
   state: State,

@@ -3,11 +3,11 @@ import { waitingStart } from "./phases/waitingStart";
 import {
   trownDice,
   playerMove,
-  takeHealthCard,
-  getOrder,
+  takeCard,
   interactEnemyCard,
   applyCard,
 } from "./phases/gameStarted";
+import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, HealthCardType } from "./types";
 import { DOMElement } from "react";
@@ -16,9 +16,9 @@ export type ActionType =
   | { type: "clickedStartButton" }
   | { type: "diceThrown"; payload: number }
   | { type: "playerMoved"; payload: MoveDirection }
-  | { type: "req-openHealthCard" }
+  | { type: "req-openCard" }
   | { type: "req-changePlayerHealth" }
-  | { type: "req-deleteHealthCard" }
+  | { type: "req-deleteCard" }
   | { type: "req-getNextPlayer" }
   | { type: "req-checkEnemyCard" }
   | { type: "req-openEnemyCard" }
@@ -27,7 +27,7 @@ export type ActionType =
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
-  | { type: "req-takeHealthCard" }
+  | { type: "req-takeCard" }
   | { type: "cardChoosed"; payload: number }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }
@@ -58,8 +58,8 @@ export const reducer = (
           return playerMove(action, state);
         }
 
-        case "takeHealthCard": {
-          return takeHealthCard(action, state);
+        case "takeCard": {
+          return takeCard(action, state);
         }
         case "applyCard": {
           return applyCard(action, state);
@@ -69,8 +69,8 @@ export const reducer = (
           return interactEnemyCard(action, state);
         }
 
-        case "getOrder": {
-          return getOrder(action, state);
+        case "getPlayersOrder": {
+          return getPlayersOrder(action, state);
         }
 
         default:

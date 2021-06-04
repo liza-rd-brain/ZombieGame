@@ -34,7 +34,7 @@ const getStateCheckApperance = (state: State): State => {
   const currentCoord = playerList[numberOfPlayer].coord;
 
   const isNeedOpenEnemyCard =
-  enemyList[currentCoord].apperance === "open" ? false : true;
+    enemyList[currentCoord].apperance === "open" ? false : true;
 
   switch (true) {
     case isNeedOpenEnemyCard: {
@@ -61,6 +61,10 @@ const getStateCheckApperance = (state: State): State => {
 const getStateOpenCard = (state: State): State => {
   const { enemyList, playerList, numberOfPlayer } = state;
   const currentCoord = playerList[numberOfPlayer].coord;
+  /**
+   * Need separate method for open EnemyCard
+   * Because it dont lying structurally on cell
+   */
   const newEnemyList = openEnemyCard(enemyList, currentCoord);
 
   return {

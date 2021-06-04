@@ -52,7 +52,7 @@ const getTextStatus = (
       return "бросить кубик";
     case "gameStarted.playerMove":
       return "сделать ход";
-    case "gameStarted.takeHealthCard":
+    case "gameStarted.takeCard":
       return "открываем карточку";
     case "gameStarted.applyCard":
       return "применить карточку";

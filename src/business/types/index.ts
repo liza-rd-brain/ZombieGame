@@ -33,7 +33,6 @@ export type PlayerCardType = {
   health: number;
   orderNumber: number;
   coord: string;
-  availableCellsCoords?: string[];
   inventory: CardItemList;
 };
 
@@ -90,9 +89,10 @@ export type GameField = {
 export type GameFieldCells = Record<string, CellType>;
 
 export type TypeEffect =
-  | { type: "!openHealthCard" }
+  | { type: "!openCard" }
+  | { type: "!takeCard" }
   | { type: "!changePlayerHealth" }
-  | { type: "!deleteHealthCard" }
+  | { type: "!deleteCard" }
   | { type: "!getNextPlayer" }
   | { type: "!checkApperanceEnemyCard" }
   | { type: "!openEnemyCard" }
@@ -101,7 +101,6 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
-  | { type: "!takeHealthCard" }
   | { type: "!healPlayer" }
   | null;
 
@@ -114,6 +113,7 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   numberOfPlayer: number;
+  availableCellsCoords?: string[] | null;
 };
 
 export type GameState =
@@ -123,15 +123,12 @@ export type GameState =
       type: "gameStarted.playerMove";
     }
   | {
-      type: "gameStarted.takeHealthCard";
+      type: "gameStarted.takeCard";
     }
   | {
       type: "gameStarted.applyCard";
     }
-  | {
-      type: "gameStarted.applyCard.contextMenu";
-    }
   | { type: "gameStarted.interactEnemyCard" }
-  | { type: "gameStarted.getOrder" }
+  | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

@@ -48,7 +48,6 @@ export const Inventory = (props: { index: number }) => {
   }));
 
   const inventory = playerList[props.index].inventory;
-
   return (
     <InventoryWrap>
       {inventory.map((inventoryCard, inventoryCardindex) => {

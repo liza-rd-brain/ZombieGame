@@ -14,10 +14,6 @@ export const getPlayerMoveResult = (state: State) => {
 
   const takeFinish = newCellWithPlayer?.name === "finish";
 
-  const takeHealthCard =
-    newCellWithPlayer?.name === "commonCell" &&
-    newCellWithPlayer?.cardItem.some((cardItem) => cardItem?.name === "health");
-
   const takeCard =
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
@@ -45,9 +41,9 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: state.dice - 1,
         gameState: {
-          type: "gameStarted.takeHealthCard",
+          type: "gameStarted.takeCard",
         },
-        doEffect: { type: "!openHealthCard" },
+        doEffect: { type: "!openCard" },
       };
       return newState;
     }
@@ -70,7 +66,7 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: 0,
         gameState: {
-          type: "gameStarted.getOrder",
+          type: "gameStarted.getPlayersOrder",
         },
         doEffect: {
           type: "!getNextPlayer",

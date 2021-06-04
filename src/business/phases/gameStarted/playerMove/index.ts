@@ -1,26 +1,19 @@
-import {
-  GameField,
-  State,
-  GameFieldCells,
-  CellType,
-  MoveDirection,
-  AvailableCellListType,
-} from "../../../types";
+import { State, MoveDirection, AvailableCellListType } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
 
-import { getNextPlayerCoord } from "../getNextPlayerCoord";
+import { getNextPlayerCoord } from "../common/getNextPlayerCoord";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 import { changePlayerCoord } from "./changePlayerCoord";
-import { getStateCardSelected } from "../getStateCardSelected";
-import { getNeighboringCellList } from "../getNeighboringCellList";
+import { getStateCardSelected } from "../common/getStateCardSelected";
+import { getNeighboringCellList } from "../common/getNeighboringCellList";
 
 export const playerMove = (action: ActionType, state: State): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      return getPlayerWithAvailableCells(state);
+      return getAvailableCells(state);
     }
 
     case "playerMoved": {
@@ -39,7 +32,6 @@ export const playerMove = (action: ActionType, state: State): State => {
     case "cardChoosed": {
       const target = action.payload;
       return getStateCardSelected(state, target);
-      // TODO: Need get highlightning to playerCard with index indexChosenPlayer
     }
 
     default: {
@@ -60,8 +52,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
    */
 
-  const canTakeNextCell =
-    playerList[numberOfPlayer].availableCellsCoords?.includes(nextPlayerCoord);
+  const canTakeNextCell = state.availableCellsCoords?.includes(nextPlayerCoord);
 
   switch (canTakeNextCell) {
     case true: {
@@ -86,7 +77,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
 
-const getPlayerWithAvailableCells = (state: State): State => {
+const getAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
   const neighboringCellList = getNeighboringCellList(
@@ -112,13 +103,7 @@ const getPlayerWithAvailableCells = (state: State): State => {
 
   return {
     ...state,
-    playerList: {
-      ...state.playerList,
-      [numberOfPlayer]: {
-        ...state.playerList[numberOfPlayer],
-        availableCellsCoords: availableCellsCoords,
-      },
-    },
+    availableCellsCoords,
   };
 };
 
@@ -127,11 +112,10 @@ const getPlayerWithAvailableCells = (state: State): State => {
  */
 const getStateClearedAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
-  const currPlayer = playerList[numberOfPlayer];
-  delete currPlayer.availableCellsCoords;
+
   return {
     ...state,
-    playerList: { ...state.playerList, [numberOfPlayer]: currPlayer },
     doEffect: { type: "!getPlayerMoveResult" },
+    availableCellsCoords: null,
   };
 };

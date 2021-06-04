@@ -1,6 +1,6 @@
 import { EnemyListType, GameField, CommonCell, CellType } from "../types";
 
-import { AMOUNT_ENEMIES } from "../../shared/config";
+import { AMOUNT_ENEMIES, APPERANCE_CARD } from "../../shared/config";
 
 export const getEnemies = (gameField: GameField): EnemyListType => {
   const emptyCellsList = getEmptyList(gameField);
@@ -61,7 +61,7 @@ const getListOfEnemy = (enemiesCoords: string[]) => {
       name: "enemy",
       power: 1,
       coord: coord,
-      apperance: "closed",
+      apperance: APPERANCE_CARD,
     };
     return [enemyCard.coord, enemyCard];
   });

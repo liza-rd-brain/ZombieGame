@@ -1,5 +1,5 @@
-import { State, AvailableCellListType, GameField } from "../../types";
-import { MOVE_DIRECTION_LIST } from "../../../shared/config";
+import { State, AvailableCellListType, GameField } from "../../../types";
+import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
 
 /**

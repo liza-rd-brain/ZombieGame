@@ -2,8 +2,6 @@ import { Health, BoardsCard } from "../../components";
 import { CellType } from "../../business/types";
 
 export const getCards = (cell: CellType) => {
-  /*   switch (cell.name) {
-    case "commonCell": { */
   const healthCardItem = cell.cardItem.find(
     (cardItem) => cardItem?.name === "health"
   );
@@ -11,6 +9,7 @@ export const getCards = (cell: CellType) => {
   const boardsCardItem = cell.cardItem.find(
     (cardItem) => cardItem?.name === "boards"
   );
+
   return (
     <>
       {healthCardItem ? <Health apperance={healthCardItem.apperance} /> : null}
@@ -19,6 +18,4 @@ export const getCards = (cell: CellType) => {
       ) : null}
     </>
   );
-  /*    }
-  } */
 };

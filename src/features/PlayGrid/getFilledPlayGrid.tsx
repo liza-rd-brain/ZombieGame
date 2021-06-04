@@ -50,53 +50,33 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
   const currPlayerCoord = playerList[numberOfPlayer].coord;
 
-  const availableCells =
-    playerList[numberOfPlayer].availableCellsCoords?.concat(currPlayerCoord);
+  const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
     const hasMarker = availableCells?.includes(orderIndex);
-
-    switch (cellValues.name) {
-      case "start":
-      case "finish": {
-        return (
-          <CellItem key={`${hor}.${vert}`} hasMarker={hasMarker}>
-            {getCards(cellValues)}
-            {getPlayersList(
-              orderIndex,
-              playerList,
-              numberOfPlayer,
-              getContextMenu
-            )}
-            {`${hor}.${vert}`}
-          </CellItem>
-        );
-      }
-      case "commonCell": {
-        return (
-          <Wrap key={`${hor}.${vert}`}>
-            <CellItem hasMarker={hasMarker}>
-              {getCards(cellValues)}
-              {getPlayersList(
-                orderIndex,
-                playerList,
-                numberOfPlayer,
-                getContextMenu
-              )}
-              {getEnemyList(orderIndex, enemyList)}
-              {`${hor}.${vert}`}
-            </CellItem>
-            <Barrier orderIndex={orderIndex}></Barrier>
-          </Wrap>
-        );
-      }
-      default: {
-        return null;
-      }
-    }
+    return (
+      <Wrap key={`${hor}.${vert}`}>
+        <CellItem hasMarker={hasMarker}>
+          {getCards(cellValues)}
+          {getPlayersList(
+            orderIndex,
+            playerList,
+            numberOfPlayer,
+            getContextMenu
+          )}
+          {cellValues.name === "commonCell"
+            ? getEnemyList(orderIndex, enemyList)
+            : null}
+          {`${hor}.${vert}`}
+        </CellItem>
+        {cellValues.name === "commonCell" ? (
+          <Barrier orderIndex={orderIndex}></Barrier>
+        ) : null}
+      </Wrap>
+    );
   });
 
   return fullPlayerGrid;

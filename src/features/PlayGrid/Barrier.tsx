@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getNeighboringCellList } from "../../business/phases/gameStarted/getNeighboringCellList";
+import { getNeighboringCellList } from "../../business/phases/gameStarted/common/getNeighboringCellList";
 
 import {
   State,
@@ -35,7 +35,7 @@ const Wall = styled.div<WallType>`
     width: 50px;
     height: 50px;
     bottom: 0px;
-    z-index: 2;
+    z-index: 5;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
         if (props.barrierItem?.isOpen === false) {
@@ -68,6 +68,7 @@ const Wall = styled.div<WallType>`
         return "0px";
       }
     }};
+
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         if (props.barrierItem?.isOpen === false) {
@@ -128,7 +129,7 @@ const Wall = styled.div<WallType>`
   }
   &:after {
     content: "";
-
+    z-index: 5;
     position: absolute;
     width: 50px;
     height: 50px;
@@ -322,7 +323,6 @@ const getHighlightningList = (
     .filter((availableCell) => availableCell !== null);
 
   switch (gameState.type) {
-    case "gameStarted.applyCard.contextMenu":
     case "gameStarted.applyCard":
       const cardItemList = playerList[numberOfPlayer].inventory;
       const selectedCard = cardItemList.find(
