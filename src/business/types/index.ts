@@ -9,6 +9,7 @@ export type BarrierName = "wall" | "window" | "door" | null;
 export type BarrierItem = {
   name: BarrierName;
   direction: MoveDirection;
+  //TODO: Need to correct isOpen. Wall can`t be open!
   isOpen: boolean;
 };
 

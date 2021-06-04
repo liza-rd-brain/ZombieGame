@@ -10,7 +10,7 @@ import { changePlayerCoord } from "./changePlayerCoord";
 import { getStateCardSelected } from "../common/getStateCardSelected";
 import { getNeighboringCellList } from "../common/getNeighboringCellList";
 
-export const playerMove = ( state: State,action: ActionType): State => {
+export const playerMove = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
       return getAvailableCells(state);
@@ -77,7 +77,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  * Current player get field "availableForTake" with coordinate of cells that can be taken
  */
 
-const getAvailableCells = (state: State): State => {
+export const getAvailableCells = (state: State): State => {
   const { playerList, numberOfPlayer, gameField } = state;
   const prevPlayerCoord = playerList[numberOfPlayer].coord;
   const neighboringCellList = getNeighboringCellList(
