@@ -37,7 +37,7 @@ export type PlayerCardType = {
   inventory: CardItemList;
 };
 
-export type CardItem = HealthCardType | BoardsCardType | null;
+export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 
 export type CardItemList = CardItem[];
 
@@ -70,6 +70,12 @@ export type HealthCardType = {
 
 export type BoardsCardType = {
   name: "boards";
+  apperance: "closed" | "open";
+  isSelected?: boolean;
+};
+
+export type WeaponCardType = {
+  name: "weapon";
   apperance: "closed" | "open";
   isSelected?: boolean;
 };

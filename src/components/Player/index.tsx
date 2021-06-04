@@ -23,7 +23,7 @@ type ContextMenuType = {
   visible: boolean;
 };
 
-type TypeOfCard = "boards" | "health" | null;
+type TypeOfCard = "boards" | "health" | "weapon" | null;
 
 const PlayerCard = styled.div<PlayerItem>`
   background-color: #9f3f3f;
@@ -207,6 +207,9 @@ const playerClickedHandler = (
             }
           }
         }
+        /* default: {
+          break;
+        } */
       }
       break;
     }
