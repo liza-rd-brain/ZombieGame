@@ -3,8 +3,9 @@ import { State } from "../../../types";
 import { ActionType } from "../../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
+import { getStateCardSelected } from "../common/getStateCardSelected";
 
-export const interactEnemyCard = ( state: State,action: ActionType): State => {
+export const interactEnemyCard = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkEnemyCard": {
       return getStateCheckApperance(state);
@@ -22,6 +23,12 @@ export const interactEnemyCard = ( state: State,action: ActionType): State => {
     case "req-getBattleResult": {
       return getBattleResult(state);
     }
+    case "cardChoosed": {
+      const target = action.payload;
+      return getStateCardSelected(state, target);
+    }
+
+    
 
     default: {
       return state;
@@ -77,9 +84,22 @@ const getStateOpenCard = (state: State): State => {
 };
 
 const getStateDiceIsThrown = (state: State, dice: number): State => {
-  return {
-    ...state,
-    dice: dice,
-    doEffect: { type: "!getBattleResult" },
-  };
+  const [phaseOuter, phaseInner] = state.gameState.type.split(".");
+  switch (phaseOuter) {
+    case "fightOrKeepBattle": {
+      return {
+        ...state,
+        dice: dice,
+        doEffect: { type: "!getBattleResult" },
+        /*         gameState: { type: "gameStarted.interactEnemyCard" }, */
+      };
+    }
+    default: {
+      return {
+        ...state,
+        dice: dice,
+        doEffect: { type: "!getBattleResult" },
+      };
+    }
+  }
 };

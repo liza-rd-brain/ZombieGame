@@ -41,7 +41,8 @@ export type ActionType =
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-shareCard"; payload: number };
+  | { type: "req-shareCard"; payload: number }
+  | { type: "req-hitEnemy" };
 
 export const reducer = (
   state: State = initialState,

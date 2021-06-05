@@ -7,10 +7,14 @@ type TargerCard = {
   index: number;
   card: CardItem;
 };
+
 export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
+  // TODO: Need to restrict select unneceserry card -?!
+  // Add switch on type of cards
   const { numberOfPlayer } = state;
 
   const newPlayerList = changeSelectedCard(state, targerCard.index);
+
   const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
     (card) => {
       return card?.isSelected === true;
@@ -19,6 +23,9 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     ? true
     : false;
 
+  const cardType = targerCard.card?.name;
+  // The difference between weaponCard and other  card that weapon are usedin the battle.
+  //Obviously we need other stateWithoutSelectedCard for weapon
   const stateWithSelectedCard: State = {
     ...state,
     playerList: newPlayerList,
@@ -31,7 +38,10 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     ...state,
     playerList: newPlayerList,
     gameState: {
-      type: "gameStarted.playerMove",
+      type:
+        cardType === "weapon"
+          ? "gameStarted.interactEnemyCard.fightOrKeepBattle"
+          : "gameStarted.playerMove",
     },
   };
 
@@ -67,5 +77,6 @@ const changeSelectedCard = (
       inventory: newInventory,
     },
   };
+
   return newPlayerList;
 };

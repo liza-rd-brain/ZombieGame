@@ -1,6 +1,7 @@
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { EnemyCardType } from "../business/types";
+import { EnemyCardType, State } from "../business/types";
 
 type EnemyArray = {
   list: EnemyCardType[];
@@ -37,11 +38,30 @@ const EnemiesCardList = styled.div`
 `;
 
 export const EnemyList = (props: EnemyArray) => {
+  const dispatch = useDispatch();
+  const state = useSelector((state: State) => ({
+    ...state,
+  }));
+  const { numberOfPlayer, playerList } = state;
   const enemyArray = props.list;
   return (
     <EnemiesCardList>
-      {enemyArray.map((item, index) => (
-        <EnemyCard key={index} {...item} />
+      {enemyArray.map((enemyCard, index) => (
+        <EnemyCard
+          key={index}
+          {...enemyCard}
+          onClick={() => {
+            const canFight =
+              playerList[numberOfPlayer].coord === enemyCard.coord;
+            if (canFight) {
+              dispatch({
+                type: "req-hitEnemy",
+              });
+            } else {
+              return null;
+            }
+          }}
+        />
       ))}
     </EnemiesCardList>
   );

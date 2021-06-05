@@ -11,7 +11,7 @@ import { getStateHoleFilled } from "./getStateHoleFilled";
  * If this number = indexCurrPlayer we heal player.
  * If not - we give context menu: need heal or apply.
  */
-export const applyCard = ( state: State,action: ActionType): State => {
+export const applyCard = (state: State, action: ActionType): State => {
   const { numberOfPlayer, playerList } = state;
   const [, , phaseInner] = state.gameState.type.split(".");
 
@@ -69,6 +69,17 @@ export const applyCard = ( state: State,action: ActionType): State => {
               return getStateHoleFilled(state, coord, direction);
             }
 
+            default:
+              return state;
+          }
+        }
+
+        case "weapon": {
+          switch (action.type) {
+            case "req-hitEnemy": {
+              console.log("ударили врага!");
+              return state;
+            }
             default:
               return state;
           }
