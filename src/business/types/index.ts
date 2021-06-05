@@ -136,6 +136,7 @@ export type GameState =
       type: "gameStarted.applyCard";
     }
   | { type: "gameStarted.interactEnemyCard" }
+  | { type: "gameStarted.interactEnemyCard.fightOrKeepBattle" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

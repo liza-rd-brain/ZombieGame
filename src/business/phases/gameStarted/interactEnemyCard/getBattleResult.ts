@@ -6,7 +6,7 @@ export const getBattleResult = (state: State): State => {
   switch (dice) {
     case 1:
     case 2: {
-      return getStatePlayerRunsAway(state);
+      return getStatePlayerCanFight(state);
     }
 
     case 3: {
@@ -14,11 +14,20 @@ export const getBattleResult = (state: State): State => {
     }
 
     case 4: {
-      return getStatePLayerWon(state);
+      return getStatePlayerRunsAway(state);
     }
     default:
       return state;
   }
+};
+
+const getStatePlayerCanFight = (state: State): State => {
+  //Player can use weapon or rethrow dice
+  return {
+    ...state,
+    dice: 0,
+    gameState: { type: "gameStarted.interactEnemyCard.fightOrKeepBattle" },
+  };
 };
 
 const getStatePlayerRunsAway = (state: State): State => {
@@ -28,7 +37,6 @@ const getStatePlayerRunsAway = (state: State): State => {
     ...state,
     dice: 1,
     gameState: {
-      ...state,
       type: "gameStarted.playerMove",
     },
     doEffect: { type: "!checkAvailableNeighboringCell" },
