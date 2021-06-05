@@ -57,6 +57,7 @@ const getTextStatus = (
     case "gameStarted.applyCard":
       return "применить карточку";
     case "gameStarted.interactEnemyCard":
+    case "gameStarted.interactEnemyCard.fightOrKeepBattle":
       switch (doEffect?.type) {
         case "!openEnemyCard": {
           return "открываем карточку";
@@ -68,25 +69,28 @@ const getTextStatus = (
           switch (dice) {
             case 1:
             case 2: {
-              return `выпало ${dice}: игрок спасается бегством `;
+              return `выпало ${dice}: игрок применяет оружие или бросает кубик `;
             }
             case 3: {
               return `выпало ${dice}: игрок теряет 1 здоровье`;
             }
             case 4: {
-              return `выпало ${dice}: враг побежден`;
+              return `выпало ${dice}: игрок спасается бегством `;
             }
             default:
-              return " ";
+              return "сделать ход";
           }
         }
         default:
-          return " ";
+          return "сделать ход";
       }
+
+    /*   case "gameStarted.interactEnemyCard.fightOrKeepBattle":
+      return "применить  оружие или бросить кубик"; */
 
     case "endGame":
       return gameResult;
     default:
-      return " ";
+      return "";
   }
 };
