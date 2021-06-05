@@ -12,6 +12,7 @@ import {
 } from "../business/types";
 import { Health } from "./Health";
 import { BoardsCard } from "./BoardsCard";
+import { WeaponCard } from "./WeaponCard";
 
 type SlotType = {
   onClick: Function;
@@ -58,7 +59,7 @@ export const Inventory = (props: { index: number }) => {
             onClick={() => {
               dispatch({
                 type: "cardChoosed",
-                payload: inventoryCardindex,
+                payload: { index: inventoryCardindex, card: inventoryCard },
               });
             }}
           >
@@ -77,6 +78,9 @@ const getChildrenComponent = (inventoryCard: CardItem) => {
     }
     case "boards": {
       return <BoardsCard />;
+    }
+    case "weapon": {
+      return <WeaponCard />;
     }
     default: {
       return null;
