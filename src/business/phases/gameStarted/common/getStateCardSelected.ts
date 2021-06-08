@@ -38,10 +38,9 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     ...state,
     playerList: newPlayerList,
     gameState: {
-      type:
-        cardType === "weapon"
+      type: /* cardType === "weapon"
           ? "gameStarted.interactWithEnemy"
-          : "gameStarted.playerMove",
+          :  */ "gameStarted.playerMove",
     },
   };
 

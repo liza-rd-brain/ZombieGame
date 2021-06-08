@@ -13,7 +13,7 @@ import { getStateHoleFilled } from "./getStateHoleFilled";
  */
 export const applyCard = (state: State, action: ActionType): State => {
   const { numberOfPlayer, playerList } = state;
-  const [, , phaseInner] = state.gameState.type.split(".");
+
 
   const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
     return card?.isSelected === true;

@@ -1,4 +1,4 @@
-import { State } from "../../../types";
+import { State, PlayerListType, CardItem } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
@@ -16,16 +16,23 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
     }
 
     case "diceThrown": {
-      const dice = action.payload;
-      return trownBattleDice(state, dice);
+      /*  const dice = action.payload; */
+      return trownBattleDice(state, action);
     }
 
     case "req-getBattleResult": {
       return getBattleResult(state);
     }
     case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardSelected(state, target);
+      return selectCard(state, action);
+    }
+    case "req-hitEnemy": {
+      /*  return useWeapon() */
+      if (state.gameState.type === "gameStarted.interactWithEnemy.applyCard") {
+        console.log("ударили врага");
+      }
+
+      return state;
     }
 
     default: {
@@ -63,23 +70,100 @@ const checkCardApperance = (state: State): State => {
   }
 };
 
-const trownBattleDice = (state: State, dice: number): State => {
-  const [phaseOuter, phaseInner] = state.gameState.type.split(".");
-  switch (phaseOuter) {
-    case "fightOrKeepBattle": {
-      return {
+const trownBattleDice = (state: State, action: ActionType): State => {
+  switch (action.type) {
+    case "diceThrown": {
+      switch (state.doEffect?.type) {
+        case "!throwBattleDice": {
+          return {
+            ...state,
+            dice: action.payload,
+            doEffect: { type: "!getBattleResult" },
+            gameState: { type: "gameStarted.interactWithEnemy" },
+          };
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+
+    default:
+      return state;
+  }
+};
+
+type TargerCard = {
+  index: number;
+  card: CardItem;
+};
+
+const selectCard = (state: State, action: ActionType) => {
+  const { numberOfPlayer } = state;
+  switch (action.type) {
+    case "cardChoosed": {
+      const newPlayerList = changeSelectedCard(state, action.payload.index);
+
+      const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
+        (card) => {
+          return card?.isSelected === true;
+        }
+      )
+        ? true
+        : false;
+
+      const cardType = action.payload.card?.name;
+      // The difference between weaponCard and other  card that weapon are usedin the battle.
+      //Obviously we need other stateWithoutSelectedCard for weapon
+      const stateWithSelectedCard: State = {
         ...state,
-        dice: dice,
-        doEffect: { type: "!getBattleResult" },
-        /*         gameState: { type: "gameStarted.interactWithEnemy" }, */
+        playerList: newPlayerList,
+        gameState: { type: "gameStarted.interactWithEnemy.applyCard" },
       };
+
+      const stateWithoutSelectedCard: State = {
+        ...state,
+        playerList: newPlayerList,
+        gameState: { type: "gameStarted.interactWithEnemy.makeBattleAction" },
+      };
+
+      switch (hasAnyCardSelected) {
+        case true:
+          return stateWithSelectedCard;
+        case false:
+          return stateWithoutSelectedCard;
+      }
     }
     default: {
-      return {
-        ...state,
-        dice: dice,
-        doEffect: { type: "!getBattleResult" },
-      };
+      return state;
     }
   }
+};
+
+const changeSelectedCard = (
+  state: State,
+  currentCardIndex: number
+  /*   hasCurrentCardHighlightning: boolean */
+) => {
+  const { playerList, numberOfPlayer } = state;
+  const inventory = playerList[numberOfPlayer].inventory;
+  const targetCard = inventory[currentCardIndex];
+
+  const newInventory = inventory.map((card, index) => {
+    if (index === currentCardIndex) {
+      return { ...card, isSelected: !targetCard?.isSelected };
+    } else {
+      return { ...card, isSelected: false };
+    }
+  });
+
+  const newPlayerList: PlayerListType = {
+    ...playerList,
+    [numberOfPlayer]: {
+      ...playerList[numberOfPlayer],
+      inventory: newInventory,
+    },
+  };
+
+  return newPlayerList;
 };
