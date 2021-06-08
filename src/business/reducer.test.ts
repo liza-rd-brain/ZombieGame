@@ -6,7 +6,7 @@ import {
   playerMove,
   takeCard,
   trownDice,
-  interactEnemyCard,
+  interactWithEnemy,
   applyCard,
   getPlayersOrder,
 } from "./phases/gameStarted";

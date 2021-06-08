@@ -40,7 +40,7 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     gameState: {
       type:
         cardType === "weapon"
-          ? "gameStarted.interactEnemyCard.fightOrKeepBattle"
+          ? "gameStarted.interactWithEnemy.fightOrKeepBattle"
           : "gameStarted.playerMove",
     },
   };

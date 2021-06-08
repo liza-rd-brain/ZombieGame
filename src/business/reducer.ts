@@ -4,7 +4,7 @@ import {
   trownDice,
   playerMove,
   takeCard,
-  interactEnemyCard,
+  interactWithEnemy,
   applyCard,
 } from "./phases/gameStarted";
 import { getPlayersOrder } from "./phases/gameStarted";
@@ -72,8 +72,8 @@ export const reducer = (
           return applyCard(state, action);
         }
 
-        case "interactEnemyCard": {
-          return interactEnemyCard(state, action);
+        case "interactWithEnemy": {
+          return interactWithEnemy(state, action);
         }
 
         case "getPlayersOrder": {

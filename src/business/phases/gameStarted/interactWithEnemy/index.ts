@@ -5,7 +5,7 @@ import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
 import { getStateCardSelected } from "../common/getStateCardSelected";
 
-export const interactEnemyCard = (state: State, action: ActionType): State => {
+export const interactWithEnemy = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkEnemyCard": {
       return getStateCheckApperance(state);
@@ -91,7 +91,7 @@ const getStateDiceIsThrown = (state: State, dice: number): State => {
         ...state,
         dice: dice,
         doEffect: { type: "!getBattleResult" },
-        /*         gameState: { type: "gameStarted.interactEnemyCard" }, */
+        /*         gameState: { type: "gameStarted.interactWithEnemy" }, */
       };
     }
     default: {
