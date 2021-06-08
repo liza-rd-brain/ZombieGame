@@ -109,6 +109,7 @@ export type TypeEffect =
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!healPlayer" }
+  | { type: "!makeBattleAction" }
   | null;
 
 export type State = {
@@ -136,7 +137,6 @@ export type GameState =
       type: "gameStarted.applyCard";
     }
   | { type: "gameStarted.interactWithEnemy" }
-  | { type: "gameStarted.interactWithEnemy.fightOrKeepBattle" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

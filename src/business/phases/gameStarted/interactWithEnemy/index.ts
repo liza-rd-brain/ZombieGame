@@ -17,7 +17,7 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
 
     case "diceThrown": {
       const dice = action.payload;
-      return getStateDiceIsThrown(state, dice);
+      return trownBattleDice(state, dice);
     }
 
     case "req-getBattleResult": {
@@ -63,7 +63,7 @@ const checkCardApperance = (state: State): State => {
   }
 };
 
-const getStateDiceIsThrown = (state: State, dice: number): State => {
+const trownBattleDice = (state: State, dice: number): State => {
   const [phaseOuter, phaseInner] = state.gameState.type.split(".");
   switch (phaseOuter) {
     case "fightOrKeepBattle": {

@@ -73,7 +73,8 @@ export const reducer = (
         }
 
         case "interactWithEnemy": {
-          return interactWithEnemy(state, action);
+          return interactWithEnemy
+          (state, action);
         }
 
         case "getPlayersOrder": {

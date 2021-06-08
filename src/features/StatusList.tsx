@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
@@ -27,14 +28,46 @@ const Status = styled.div`
 `;
 
 export const StatusList = () => {
+  type statusType = { message: string; prevEffect: string | null };
+  const initialStatus: statusType = { message: "", prevEffect: "" };
+  const [status, updateStatus] = useState(initialStatus);
+
   const { dice, playerList, gameState, doEffect, gameResult } = useSelector(
     (state: State) => ({
       ...state,
     })
   );
+
+  const newStatus = getTextStatus(gameState, doEffect, dice, gameResult);
+  const batlePhrase = "pежим боя";
+  useEffect(() => {
+    updateStatus((prevStatus) => {
+      if (gameState.type === "gameStarted.interactWithEnemy") {
+        return {
+          message: `${batlePhrase}: ${newStatus}`,
+          prevEffect: null,
+        };
+      } else {
+        return {
+          message: newStatus,
+          prevEffect: null,
+        };
+      }
+
+      /*     return prevStatus.prevEffect === "!throwBattleDice"
+        ? {
+            message: `${prevStatus.message}.${newStatus}`,
+            prevEffect: doEffect?.type || null,
+          }
+        : {
+            message: newStatus,
+            prevEffect: doEffect?.type || null,
+          }; */
+    });
+  }, [gameState.type, doEffect?.type]);
   return (
     <>
-      <Status>{getTextStatus(gameState, doEffect, dice, gameResult)}</Status>
+      <Status>{status.message}</Status>
       <PlayerStatus />
       {/*    <PlayersStatusList /> */}
     </>
@@ -56,15 +89,19 @@ const getTextStatus = (
       return "открываем карточку";
     case "gameStarted.applyCard":
       return "применить карточку";
-    case "gameStarted.interactEnemyCard":
-    case "gameStarted.interactEnemyCard.fightOrKeepBattle":
+    case "gameStarted.interactWithEnemy":
+      /*    case "interactWithEnemy.fightOrKeepBattle": */
       switch (doEffect?.type) {
         case "!openEnemyCard": {
           return "открываем карточку";
         }
         case "!throwBattleDice": {
-          return "pежим боя: бросить кубик";
+          return "бросить кубик";
         }
+        case "!makeBattleAction": {
+          return "бросить кубик или применить оружие";
+        }
+
         case "!getBattleResult": {
           switch (dice) {
             case 1:
@@ -85,7 +122,7 @@ const getTextStatus = (
           return "сделать ход";
       }
 
-    /*   case "gameStarted.interactEnemyCard.fightOrKeepBattle":
+    /*   case "gameStarted.interactWithEnemy.fightOrKeepBattle":
       return "применить  оружие или бросить кубик"; */
 
     case "endGame":

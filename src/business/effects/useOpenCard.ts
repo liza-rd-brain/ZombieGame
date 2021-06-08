@@ -88,7 +88,7 @@ export function useOpenCard() {
         case "!getBattleResult": {
           const timerGetResult = setTimeout(
             () => dispatch({ type: "req-getBattleResult" }),
-            1000
+            2000
           );
 
           return () => {

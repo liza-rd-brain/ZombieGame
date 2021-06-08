@@ -14,7 +14,6 @@ export const getPlayerMoveResult = (state: State) => {
 
   const takeFinish = newCellWithPlayer?.name === "finish";
 
-
   const takeCard =
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
@@ -41,7 +40,6 @@ export const getPlayerMoveResult = (state: State) => {
     }
 
     case takeCard: {
-      //Rename ..HealthCard to ...Card
       const newState: State = {
         ...state,
         dice: state.dice - 1,
