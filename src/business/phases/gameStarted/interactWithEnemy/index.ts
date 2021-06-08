@@ -8,11 +8,11 @@ import { getStateCardSelected } from "../common/getStateCardSelected";
 export const interactWithEnemy = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkEnemyCard": {
-      return getStateCheckApperance(state);
+      return checkCardApperance(state);
     }
 
     case "req-openEnemyCard": {
-      return getStateOpenCard(state);
+      return openEnemyCard(state);
     }
 
     case "diceThrown": {
@@ -28,15 +28,13 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
       return getStateCardSelected(state, target);
     }
 
-    
-
     default: {
       return state;
     }
   }
 };
 
-const getStateCheckApperance = (state: State): State => {
+const checkCardApperance = (state: State): State => {
   const { enemyList, playerList, numberOfPlayer } = state;
   const currentCoord = playerList[numberOfPlayer].coord;
 
@@ -63,24 +61,6 @@ const getStateCheckApperance = (state: State): State => {
       return state;
     }
   }
-};
-
-const getStateOpenCard = (state: State): State => {
-  const { enemyList, playerList, numberOfPlayer } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
-  /**
-   * Need separate method for open EnemyCard
-   * Because it dont lying structurally on cell
-   */
-  const newEnemyList = openEnemyCard(enemyList, currentCoord);
-
-  return {
-    ...state,
-    enemyList: newEnemyList,
-    //для отрисовки статуса!
-    doEffect: { type: "!throwBattleDice" },
-    dice: 0,
-  };
 };
 
 const getStateDiceIsThrown = (state: State, dice: number): State => {
