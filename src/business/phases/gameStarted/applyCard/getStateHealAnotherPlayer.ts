@@ -1,6 +1,6 @@
 import { State, PlayerListType } from "../../../types";
 
-import { deleteSelectedCard } from "./deleteSelectedCard";
+import { deleteSelectedCard } from "../../common/deleteSelectedCard";
 import { changeHealth } from "./changeHealth";
 export const getStateHealAnotherPlayer = (
   state: State,

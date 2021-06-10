@@ -1,7 +1,7 @@
 import { State } from "../../../types";
 import { ActionType } from "../../../reducer";
 
-import { getStateCardSelected } from "../common/getStateCardSelected";
+import { getStateCardSelected } from "../../common/getStateCardSelected";
 import { getStateGiveCard } from "./getStateGiveCard";
 import { getStateHealCurrPlayer } from "./getStateHealCurrPlayer";
 import { getStateHealAnotherPlayer } from "./getStateHealAnotherPlayer";

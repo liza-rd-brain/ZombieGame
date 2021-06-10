@@ -1,6 +1,6 @@
 import { State, PlayerListType, MoveDirection } from "../../../types";
 
-import { deleteSelectedCard } from "./deleteSelectedCard";
+import { deleteSelectedCard } from "../../common/deleteSelectedCard";
 
 export const getStateHoleFilled = (
   state: State,

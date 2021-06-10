@@ -1,4 +1,4 @@
-import { State, PlayerListType, CardItem } from "../../../types";
+import { State, PlayerListType, CardItem } from "../../types";
 
 /**
  * We need to give highlighting to healthCard

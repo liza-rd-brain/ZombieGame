@@ -6,7 +6,7 @@ import {
   AvailableCellListType,
   State,
 } from "../../business/types";
-import { getNeighboringCellList } from "../../business/phases/gameStarted/common/getNeighboringCellList";
+import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
 
 type PlayerItem = {
