@@ -10,10 +10,10 @@ type EnemyArray = {
 const EnemyCard = styled.div<EnemyCardType>`
   position: absolute;
   border: 5px solid;
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   margin: 12px;
-
+  box-sizing: border-box;
   color: #c08f5e;
   font-size: 50px;
   text-align: start;

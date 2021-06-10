@@ -3,8 +3,8 @@ import { State, PlayerListType, CardItem, EnemyCardType } from "../../../types";
 import { ActionType } from "../../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
-import { getStateCardSelected } from "../common/getStateCardSelected";
-
+import { getStateCardSelected } from "../../common/getStateCardSelected";
+import { deleteSelectedCard } from "../../common/deleteSelectedCard";
 export const interactWithEnemy = (state: State, action: ActionType): State => {
   const [, phaseInner] = state.gameState.type.split(".");
 
@@ -72,12 +72,25 @@ const defeatEnemy = (state: State): State => {
   const currEnemyCoord = playerList[numberOfPlayer].coord;
   const currEnemy = enemyList[currEnemyCoord];
   const defeatedEnemy: EnemyCardType = { ...currEnemy, apperance: "defeated" };
+  const newEnemyList = {
+    ...state.enemyList,
+    [currEnemyCoord]: defeatedEnemy,
+  };
+
+  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+
+  const newPlayerList = {
+    ...playerList,
+    [numberOfPlayer]: {
+      ...playerList[numberOfPlayer],
+      inventory: newInventory,
+    },
+  };
+
   return {
     ...state,
-    enemyList: {
-      ...state.enemyList,
-      [currEnemyCoord]: defeatedEnemy,
-    },
+    enemyList: newEnemyList,
+    playerList: newPlayerList,
   };
 };
 
@@ -146,7 +159,6 @@ const selectCard = (state: State, action: ActionType) => {
         ? true
         : false;
 
-      const cardType = action.payload.card?.name;
       // The difference between weaponCard and other  card that weapon are usedin the battle.
       //Obviously we need other stateWithoutSelectedCard for weapon
       const stateWithSelectedCard: State = {
