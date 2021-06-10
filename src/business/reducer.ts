@@ -72,11 +72,6 @@ export const reducer = (
           return applyCard(state, action);
         }
 
-        case "interactWithEnemy": {
-          return interactWithEnemy
-          (state, action);
-        }
-
         case "getPlayersOrder": {
           return getPlayersOrder(state, action);
         }
@@ -84,6 +79,9 @@ export const reducer = (
         default:
           return state;
       }
+    }
+    case "interactWithEnemy": {
+      return interactWithEnemy(state, action);
     }
 
     case "endGame": {

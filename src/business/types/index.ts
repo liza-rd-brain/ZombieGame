@@ -133,9 +133,14 @@ export type GameState =
   | {
       type: "gameStarted.takeCard";
     }
+  | { type: "interactWithEnemy.getBattleResult" }
   | {
       type: "gameStarted.applyCard";
     }
+  | { type: "interactWithEnemy" }
+  | { type: "interactWithEnemy.throwBattleDice" }
+  | { type: "interactWithEnemy.makeBattleAction" }
+  | { type: "interactWithEnemy.applyCard" }
   | { type: "gameStarted.interactWithEnemy" }
   | { type: "gameStarted.interactWithEnemy.makeBattleAction" }
   | { type: "gameStarted.interactWithEnemy.applyCard" }

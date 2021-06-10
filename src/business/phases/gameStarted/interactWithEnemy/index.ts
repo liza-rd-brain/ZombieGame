@@ -6,37 +6,57 @@ import { getBattleResult } from "./getBattleResult";
 import { getStateCardSelected } from "../common/getStateCardSelected";
 
 export const interactWithEnemy = (state: State, action: ActionType): State => {
-  switch (action.type) {
-    case "req-checkEnemyCard": {
-      return checkCardApperance(state);
-    }
+  const [, phaseInner] = state.gameState.type.split(".");
 
-    case "req-openEnemyCard": {
-      return openEnemyCard(state);
+  switch (phaseInner) {
+    case "makeBattleAction": {
+      switch (action.type) {
+        case "diceThrown": {
+          /*  const dice = action.payload; */
+          return trownBattleDice(state, action);
+        }
+        default: {
+          return state;
+        }
+      }
     }
-
-    case "diceThrown": {
-      /*  const dice = action.payload; */
+    case "throwBattleDice": {
       return trownBattleDice(state, action);
     }
 
-    case "req-getBattleResult": {
-      return getBattleResult(state);
-    }
-    case "cardChoosed": {
-      return selectCard(state, action);
-    }
-    case "req-hitEnemy": {
-      /*  return useWeapon() */
-      if (state.gameState.type === "gameStarted.interactWithEnemy.applyCard") {
-        console.log("ударили врага");
-      }
-
-      return state;
-    }
-
     default: {
-      return state;
+      switch (action.type) {
+        case "req-checkEnemyCard": {
+          return checkCardApperance(state);
+        }
+
+        case "req-openEnemyCard": {
+          return openEnemyCard(state);
+        }
+
+        /*   case "diceThrown": {
+          return trownBattleDice(state, action);
+        } */
+
+         case "req-getBattleResult": {
+          return getBattleResult(state);
+        }
+        case "cardChoosed": {
+          return selectCard(state, action);
+        }
+        case "req-hitEnemy": {
+          /*  return useWeapon() */
+          if (state.gameState.type === "interactWithEnemy.applyCard") {
+            console.log("ударили врага");
+          }
+
+          return state;
+        }
+
+        default: {
+          return state;
+        }
+      }
     }
   }
 };
@@ -59,7 +79,8 @@ const checkCardApperance = (state: State): State => {
     case !isNeedOpenEnemyCard: {
       return {
         ...state,
-        doEffect: { type: "!throwBattleDice" },
+        gameState: { type: "interactWithEnemy.throwBattleDice" },
+        /*    doEffect: { type: "!throwBattleDice" }, */
         dice: 0,
       };
     }
@@ -73,19 +94,12 @@ const checkCardApperance = (state: State): State => {
 const trownBattleDice = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "diceThrown": {
-      switch (state.doEffect?.type) {
-        case "!throwBattleDice": {
-          return {
-            ...state,
-            dice: action.payload,
-            doEffect: { type: "!getBattleResult" },
-            gameState: { type: "gameStarted.interactWithEnemy" },
-          };
-        }
-        default: {
-          return state;
-        }
-      }
+      return {
+        ...state,
+        dice: action.payload,
+        gameState: { type: "interactWithEnemy" },
+        doEffect: { type: "!getBattleResult" },
+      };
     }
 
     default:
@@ -118,13 +132,13 @@ const selectCard = (state: State, action: ActionType) => {
       const stateWithSelectedCard: State = {
         ...state,
         playerList: newPlayerList,
-        gameState: { type: "gameStarted.interactWithEnemy.applyCard" },
+        gameState: { type: "interactWithEnemy.applyCard" },
       };
 
       const stateWithoutSelectedCard: State = {
         ...state,
         playerList: newPlayerList,
-        gameState: { type: "gameStarted.interactWithEnemy.makeBattleAction" },
+        gameState: { type: "interactWithEnemy.makeBattleAction" },
       };
 
       switch (hasAnyCardSelected) {

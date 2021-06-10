@@ -56,7 +56,7 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: state.dice - 1,
         gameState: {
-          type: "gameStarted.interactWithEnemy",
+          type: "interactWithEnemy",
         },
         doEffect: { type: "!checkApperanceEnemyCard" },
       };

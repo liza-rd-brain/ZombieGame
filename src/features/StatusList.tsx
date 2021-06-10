@@ -42,7 +42,7 @@ export const StatusList = () => {
   const batlePhrase = "pежим боя";
   useEffect(() => {
     updateStatus((prevStatus) => {
-      if (gameState.type.includes("gameStarted.interactWithEnemy")) {
+      if (gameState.type.includes("interactWithEnemy")) {
         return {
           message: `${batlePhrase}: ${newStatus}`,
           prevEffect: null,
@@ -90,17 +90,17 @@ const getTextStatus = (
     case "gameStarted.applyCard":
       return "применить карточку";
 
-    case "gameStarted.interactWithEnemy.applyCard":
-      return "применить оружие";
-    case "gameStarted.interactWithEnemy.makeBattleAction":
-    case "gameStarted.interactWithEnemy":
-      /*    case "interactWithEnemy.fightOrKeepBattle": */
+    /*   case "interactWithEnemy.applyCard":
+      return "применить оружие"; */
+    case "interactWithEnemy.throwBattleDice": {
+      return "бросить кубик";
+    }
+
+    case "interactWithEnemy.makeBattleAction":
+    case "interactWithEnemy":
       switch (doEffect?.type) {
         case "!openEnemyCard": {
           return "открываем карточку";
-        }
-        case "!throwBattleDice": {
-          return "бросить кубик";
         }
 
         case "!getBattleResult": {

@@ -26,7 +26,7 @@ const getStatePlayerCanFight = (state: State): State => {
   return {
     ...state,
     dice: 0,
-    gameState: { type: "gameStarted.interactWithEnemy.makeBattleAction" },
+    gameState: { type: "interactWithEnemy.makeBattleAction" },
   };
 };
 
