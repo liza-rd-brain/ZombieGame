@@ -136,7 +136,7 @@ const checkCardApperance = (state: State): State => {
       return {
         ...state,
         gameState: { type: "interactWithEnemy.throwBattleDice" },
-        /*    doEffect: { type: "!throwBattleDice" }, */
+
         dice: 0,
       };
     }

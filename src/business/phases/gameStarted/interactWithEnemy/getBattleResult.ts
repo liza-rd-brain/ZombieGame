@@ -35,11 +35,14 @@ const getStatePlayerRunsAway = (state: State): State => {
   // dice=1 - убегает на 1
   return {
     ...state,
-    dice: 1,
+    dice: 0,
     gameState: {
+      type: "gameStarted.trownDice",
+    },
+    /*     gameState: {
       type: "gameStarted.playerMove",
     },
-    doEffect: { type: "!checkAvailableNeighboringCell" },
+    doEffect: { type: "!checkAvailableNeighboringCell" }, */
   };
 };
 
@@ -61,12 +64,13 @@ const getStatePlayetLoseHealth = (state: State): State => {
     const newState: State = {
       ...state,
       dice: 0,
-      gameState: {
+      gameState: { type: "interactWithEnemy.throwBattleDice" },
+      /*    gameState: {
         type: "gameStarted.getPlayersOrder",
       },
       doEffect: {
         type: "!getNextPlayer",
-      },
+      }, */
       playerList: newPlayerList,
     };
 
@@ -81,23 +85,4 @@ const getStatePlayetLoseHealth = (state: State): State => {
       doEffect: null,
     };
   }
-};
-
-const getStatePLayerWon = (state: State): State => {
-  const { enemyList, numberOfPlayer, playerList } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
-  const newEnemyList = { ...enemyList };
-  delete newEnemyList[currentCoord];
-
-  return {
-    ...state,
-    enemyList: newEnemyList,
-    dice: 0,
-    gameState: {
-      type: "gameStarted.getPlayersOrder",
-    },
-    doEffect: {
-      type: "!getNextPlayer",
-    },
-  };
 };
