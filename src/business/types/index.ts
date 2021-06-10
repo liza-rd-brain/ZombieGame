@@ -108,6 +108,7 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
+  | { type: "!removeEnemyCard" }
   /* 
   | { type: "!applyCard" } */
   | null;

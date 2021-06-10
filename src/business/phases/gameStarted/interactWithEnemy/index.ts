@@ -35,6 +35,9 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
         case "req-defeatEnemy": {
           return defeatEnemy(state);
         }
+        case "req-removeEnemyCard": {
+          return removeEnemyCard(state);
+        }
 
         default: {
           return state;
@@ -67,6 +70,25 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
   }
 };
 
+const removeEnemyCard = (state: State): State => {
+  const { enemyList, numberOfPlayer, playerList } = state;
+  const currentCoord = playerList[numberOfPlayer].coord;
+  const newEnemyList = { ...enemyList };
+  delete newEnemyList[currentCoord];
+
+  return {
+    ...state,
+    enemyList: newEnemyList,
+    dice: 0,
+    gameState: {
+      type: "gameStarted.getPlayersOrder",
+    },
+    doEffect: {
+      type: "!getNextPlayer",
+    },
+  };
+};
+
 const defeatEnemy = (state: State): State => {
   const { numberOfPlayer, playerList, enemyList } = state;
   const currEnemyCoord = playerList[numberOfPlayer].coord;
@@ -91,6 +113,7 @@ const defeatEnemy = (state: State): State => {
     ...state,
     enemyList: newEnemyList,
     playerList: newPlayerList,
+    doEffect: { type: "!removeEnemyCard" },
   };
 };
 
