@@ -42,7 +42,7 @@ export type ActionType =
       payload: { coord: number; direction: MoveDirection };
     }
   | { type: "req-shareCard"; payload: number }
-  | { type: "req-hitEnemy" };
+  | { type: "req-defeatEnemy" };
 
 export const reducer = (
   state: State = initialState,

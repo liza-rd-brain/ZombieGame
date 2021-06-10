@@ -1,4 +1,4 @@
-import { State, PlayerListType, CardItem } from "../../../types";
+import { State, PlayerListType, CardItem, EnemyCardType } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
@@ -15,6 +15,27 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
           /*  const dice = action.payload; */
           return trownBattleDice(state, action);
         }
+
+        case "cardChoosed": {
+          return selectCard(state, action);
+        }
+
+        default: {
+          return state;
+        }
+      }
+    }
+
+    case "applyCard": {
+      switch (action.type) {
+        case "cardChoosed": {
+          return selectCard(state, action);
+        }
+
+        case "req-defeatEnemy": {
+          return defeatEnemy(state);
+        }
+
         default: {
           return state;
         }
@@ -34,23 +55,8 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
           return openEnemyCard(state);
         }
 
-        /*   case "diceThrown": {
-          return trownBattleDice(state, action);
-        } */
-
-         case "req-getBattleResult": {
+        case "req-getBattleResult": {
           return getBattleResult(state);
-        }
-        case "cardChoosed": {
-          return selectCard(state, action);
-        }
-        case "req-hitEnemy": {
-          /*  return useWeapon() */
-          if (state.gameState.type === "interactWithEnemy.applyCard") {
-            console.log("ударили врага");
-          }
-
-          return state;
         }
 
         default: {
@@ -59,6 +65,20 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
       }
     }
   }
+};
+
+const defeatEnemy = (state: State): State => {
+  const { numberOfPlayer, playerList, enemyList } = state;
+  const currEnemyCoord = playerList[numberOfPlayer].coord;
+  const currEnemy = enemyList[currEnemyCoord];
+  const defeatedEnemy: EnemyCardType = { ...currEnemy, apperance: "defeated" };
+  return {
+    ...state,
+    enemyList: {
+      ...state.enemyList,
+      [currEnemyCoord]: defeatedEnemy,
+    },
+  };
 };
 
 const checkCardApperance = (state: State): State => {

@@ -47,7 +47,7 @@ export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  apperance: "closed" | "open";
+  apperance: "closed" | "open" | "defeated";
 };
 
 export type EnemyListType = Record<string, EnemyCardType>;
@@ -141,9 +141,6 @@ export type GameState =
   | { type: "interactWithEnemy.throwBattleDice" }
   | { type: "interactWithEnemy.makeBattleAction" }
   | { type: "interactWithEnemy.applyCard" }
-  | { type: "gameStarted.interactWithEnemy" }
-  | { type: "gameStarted.interactWithEnemy.makeBattleAction" }
-  | { type: "gameStarted.interactWithEnemy.applyCard" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

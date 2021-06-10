@@ -13,6 +13,16 @@ const EnemyCard = styled.div<EnemyCardType>`
   width: 15px;
   height: 15px;
   margin: 12px;
+
+  color: #c08f5e;
+  font-size: 50px;
+  text-align: start;
+  vertical-align: bottom;
+  line-height: 0.1;
+  text-transform: unset;
+  font-family: sans-serif;
+  text-indent: -5px;
+
   background-color: ${(props) => {
     if (props.apperance === "closed") {
       return "lightgray";
@@ -55,13 +65,15 @@ export const EnemyList = (props: EnemyArray) => {
               playerList[numberOfPlayer].coord === enemyCard.coord;
             if (canFight) {
               dispatch({
-                type: "req-hitEnemy",
+                type: "req-defeatEnemy",
               });
             } else {
               return null;
             }
           }}
-        />
+        >
+          {enemyCard.apperance === "defeated" ? "x" : null}
+        </EnemyCard>
       ))}
     </EnemiesCardList>
   );

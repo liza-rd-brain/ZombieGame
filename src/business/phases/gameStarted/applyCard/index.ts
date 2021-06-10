@@ -14,7 +14,6 @@ import { getStateHoleFilled } from "./getStateHoleFilled";
 export const applyCard = (state: State, action: ActionType): State => {
   const { numberOfPlayer, playerList } = state;
 
-
   const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
     return card?.isSelected === true;
   })?.name;
@@ -69,17 +68,6 @@ export const applyCard = (state: State, action: ActionType): State => {
               return getStateHoleFilled(state, coord, direction);
             }
 
-            default:
-              return state;
-          }
-        }
-
-        case "weapon": {
-          switch (action.type) {
-            case "req-hitEnemy": {
-              console.log("ударили врага!");
-              return state;
-            }
             default:
               return state;
           }

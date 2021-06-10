@@ -95,6 +95,9 @@ const getTextStatus = (
     case "interactWithEnemy.throwBattleDice": {
       return "бросить кубик";
     }
+    case "interactWithEnemy.applyCard": {
+      return "применить оружие";
+    }
 
     case "interactWithEnemy.makeBattleAction":
     case "interactWithEnemy":
