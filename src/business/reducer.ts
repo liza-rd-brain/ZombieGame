@@ -10,7 +10,7 @@ import {
 import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import { MoveDirection, State, CardItem } from "./types";
-import { DOMElement } from "react";
+
 
 export type ActionType =
   | { type: "clickedStartButton" }

@@ -28,8 +28,8 @@ const Status = styled.div`
 `;
 
 export const StatusList = () => {
-  type statusType = { message: string; prevEffect: string | null };
-  const initialStatus: statusType = { message: "", prevEffect: "" };
+  type statusType = string;
+  const initialStatus: statusType = "";
   const [status, updateStatus] = useState(initialStatus);
 
   const { dice, playerList, gameState, doEffect, gameResult } = useSelector(
@@ -41,33 +41,21 @@ export const StatusList = () => {
   const newStatus = getTextStatus(gameState, doEffect, dice, gameResult);
   const batlePhrase = "pежим боя";
   useEffect(() => {
-    updateStatus((prevStatus) => {
+    updateStatus(() => {
       if (gameState.type.includes("interactWithEnemy")) {
-        return {
-          message: `${batlePhrase}: ${newStatus}`,
-          prevEffect: null,
-        };
+        if (gameState.type === "interactWithEnemy") {
+          return newStatus;
+        } else {
+          return `${batlePhrase}: ${newStatus}`;
+        }
       } else {
-        return {
-          message: newStatus,
-          prevEffect: null,
-        };
+        return newStatus;
       }
-
-      /*     return prevStatus.prevEffect === "!throwBattleDice"
-        ? {
-            message: `${prevStatus.message}.${newStatus}`,
-            prevEffect: doEffect?.type || null,
-          }
-        : {
-            message: newStatus,
-            prevEffect: doEffect?.type || null,
-          }; */
     });
   }, [gameState.type, doEffect?.type]);
   return (
     <>
-      <Status>{status.message}</Status>
+      <Status>{status}</Status>
       <PlayerStatus />
       {/*    <PlayersStatusList /> */}
     </>
