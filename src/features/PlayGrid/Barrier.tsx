@@ -29,6 +29,21 @@ type BarrierCoord = {
 };
 
 const Wall = styled.div<WallType>`
+  cursor: ${(props) => {
+    switch (props.barrierItem?.name) {
+      case "wall": {
+        return "default";
+      }
+      case "door": {
+        return "pointer";
+      }
+      case "window": {
+        return "pointer";
+      }
+      default:
+        return "default";
+    }
+  }};
   &:before {
     content: "";
     position: absolute;

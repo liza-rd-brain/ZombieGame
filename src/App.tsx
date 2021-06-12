@@ -30,6 +30,7 @@ const Game = styled.div`
   display: flex;
   justify-content: center;
   height: 100vh;
+  cursor: default;
 `;
 
 const LeftPanel = styled.div`

@@ -14,6 +14,7 @@ const DiceWrap = styled.div`
 
 const DiceButton = styled.button`
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 const DiceNumber = styled.div`

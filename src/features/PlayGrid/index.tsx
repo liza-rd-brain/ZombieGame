@@ -46,6 +46,7 @@ const ContextMenu = styled.div<ContextMenuType>`
       return "none";
     }
   }};
+
   flex-direction: column;
   position: absolute;
   width: 100px;

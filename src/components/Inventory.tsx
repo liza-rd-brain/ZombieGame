@@ -27,11 +27,11 @@ const InventoryWrap = styled.div`
 
 const Slot = styled.div<SlotType>`
   display: flex;
+  cursor: pointer;
 
   & > * {
     margin: 2px;
     position: relative;
-    /*  box-sizing: border-box; */
   }
 
   outline: ${(props) => {
