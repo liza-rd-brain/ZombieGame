@@ -17,7 +17,7 @@ const Status = styled.div`
   width: 200px;
   min-height: 18px;
   width: 250px;
-  height: 60px;
+  height: 100px;
   border: 1px solid lightgray;
   background-color: #fff2d9;
   text-align: center;
