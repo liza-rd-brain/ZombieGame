@@ -1,4 +1,4 @@
-import { State } from "../../../types";
+import { State } from "../../types";
 
 export const getBattleResult = (state: State): State => {
   const { dice } = state;
@@ -31,18 +31,12 @@ const getStatePlayerCanFight = (state: State): State => {
 };
 
 const getStatePlayerRunsAway = (state: State): State => {
-  // Полностью передать управление в playerMove?!
-  // dice=1 - убегает на 1
   return {
     ...state,
     dice: 0,
     gameState: {
       type: "gameStarted.trownDice",
     },
-    /*     gameState: {
-      type: "gameStarted.playerMove",
-    },
-    doEffect: { type: "!checkAvailableNeighboringCell" }, */
   };
 };
 
@@ -59,18 +53,11 @@ const getStatePlayetLoseHealth = (state: State): State => {
     },
   };
 
-  // TODO :  режим боя должен вестись до победы\побега\проигрыша
   if (isPlayerAlive) {
     const newState: State = {
       ...state,
       dice: 0,
       gameState: { type: "interactWithEnemy.throwBattleDice" },
-      /*    gameState: {
-        type: "gameStarted.getPlayersOrder",
-      },
-      doEffect: {
-        type: "!getNextPlayer",
-      }, */
       playerList: newPlayerList,
     };
 
