@@ -6,7 +6,7 @@ export const INITIAL_PLAYER_HEALTH = 3;
 export const AMOUNT_HEALTH_ITEMS = 0;
 export const AMOUNT_BOARDS_ITEMS =0;
 export const AMOUNT_WEAPONS_ITEMS = 40;
-export const AMOUNT_PLAYERS = 2;
+export const AMOUNT_PLAYERS = 1;
 export const AMOUNT_ENEMIES = 60;
 export const APPERANCE_CARD = "open";
 

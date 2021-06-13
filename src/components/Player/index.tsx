@@ -71,7 +71,8 @@ const PlayerCardList = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: white;
-  padding: 3px;
+  /*   padding: 3px; */
+  margin: 3px;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {

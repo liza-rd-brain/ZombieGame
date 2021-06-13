@@ -15,13 +15,16 @@ const EnemyCard = styled.div<EnemyCardType>`
   margin: 12px;
   box-sizing: border-box;
   color: #c08f5e;
-  font-size: 50px;
+  font-size: 47px;
   text-align: start;
   vertical-align: bottom;
-  line-height: 0.1;
+  line-height: 0.15;
   text-transform: unset;
   font-family: sans-serif;
-  text-indent: -5px;
+  text-indent: -4px;
+  background-color: navy;
+  border-color: navy;
+  cursor: pointer;
 
   background-color: ${(props) => {
     if (props.apperance === "closed") {
@@ -36,6 +39,13 @@ const EnemyCard = styled.div<EnemyCardType>`
       return "lightgray";
     } else {
       return "navy";
+    }
+  }};
+  cursor: ${(props) => {
+    if (props.apperance === "closed") {
+      return "default";
+    } else {
+      return "pointer";
     }
   }};
 `;
