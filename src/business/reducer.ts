@@ -45,32 +45,32 @@ export const reducer = (
 
   switch (phaseOuter) {
     case "waitingStart": {
-      return waitingStart(action, state);
+      return waitingStart(state,action);
     }
 
     case "gameStarted": {
       switch (phaseInner) {
         case "trownDice": {
-          return trownDice(action, state);
+          return trownDice(state,action);
         }
 
         case "playerMove": {
-          return playerMove(action, state);
+          return playerMove(state,action);
         }
 
         case "takeCard": {
-          return takeCard(action, state);
+          return takeCard(state,action);
         }
         case "applyCard": {
-          return applyCard(action, state);
+          return applyCard(state,action);
         }
 
         case "interactEnemyCard": {
-          return interactEnemyCard(action, state);
+          return interactEnemyCard(state,action);
         }
 
         case "getPlayersOrder": {
-          return getPlayersOrder(action, state);
+          return getPlayersOrder(state,action);
         }
 
         default:
@@ -79,7 +79,7 @@ export const reducer = (
     }
 
     case "endGame": {
-      return endGame(action, state);
+      return endGame(state,action);
     }
 
     default:

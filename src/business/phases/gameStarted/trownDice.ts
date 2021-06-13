@@ -2,7 +2,7 @@ import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
 
-export const trownDice = (action: ActionType, state: State): State => {
+export const trownDice = ( state: State,action: ActionType): State => {
   switch (action.type) {
     case "diceThrown": {
       return {

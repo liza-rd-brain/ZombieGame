@@ -2,7 +2,7 @@ import { AMOUNT_PLAYERS } from "../../../shared/config";
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
-export const getPlayersOrder = (action: ActionType, state: State): State => {
+export const getPlayersOrder = ( state: State,action: ActionType): State => {
   const numberCurrPlayer = state.numberOfPlayer;
   const maxPlayersNumber = AMOUNT_PLAYERS - 1;
   const minPlayersNumber = 0;

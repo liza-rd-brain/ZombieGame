@@ -37,12 +37,11 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
    * currCardSet -curr set of cards
    * from cardset making object with cards
    */
-  const cellsWithAllCards = cardsList.reduce((filledСells, currCardSet) => {
+  const cellsWithAllCards = cardsList.reduce((filledСells,  currCardSet) => {
     const gameFieldCellsWithPrevios = { ...gameFieldCells, ...filledСells };
 
     const cellsForCards = getListForCards(
       gameFieldCellsWithPrevios,
-      filledСells,
       currCardSet
     );
 
@@ -58,6 +57,7 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
   }, {});
 
   const gameFieldFull = { ...gameFieldCells, ...cellsWithAllCards };
+
   return gameFieldFull;
 };
 
@@ -86,12 +86,11 @@ const setCards = (
 };
 
 /**
- * Returns an array with random empty cell witch suitable for healthCard.
+ * Returns an array with random empty cell witch suitable for card.
  * Array lenght is equal AMOUNT_..._ITEMS.
  */
 const getListForCards = (
   gameField: GameFieldCells,
-  filledСells: GameFieldCells,
   currCardSet: CardSet
 ): [string, CommonCell][] => {
   const listGameField = Object.entries(gameField);
@@ -99,6 +98,7 @@ const getListForCards = (
   /**
    * This array contains only empty cells
    */
+   
   const emptyCellsList = listGameField.filter((cellItem): cellItem is [
     string,
     CommonCell

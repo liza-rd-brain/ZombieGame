@@ -52,7 +52,9 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
   const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
 
+
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
+     
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 

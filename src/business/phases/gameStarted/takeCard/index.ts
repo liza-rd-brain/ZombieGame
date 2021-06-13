@@ -4,7 +4,7 @@ import { ActionType } from "../../../reducer";
 import { openCard } from "./openCard";
 import { deleteCard } from "./deleteCard";
 
-export const takeCard = (action: ActionType, state: State): State => {
+export const takeCard = ( state: State,action: ActionType): State => {
   switch (action.type) {
     case "req-openCard": {
       return getStateOpenCard(state);
