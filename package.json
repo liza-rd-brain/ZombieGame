@@ -1,5 +1,6 @@
 {
-  "name": "my-app",
+  "name": "zombie-game",
+  "homepage":"https://minakovalisa.github.io/ZombieGame/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -22,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +44,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.9"
+    "@types/styled-components": "^5.1.9",
+    "gh-pages": "^3.2.0"
   }
 }
