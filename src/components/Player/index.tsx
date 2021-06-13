@@ -58,8 +58,8 @@ const PlayerCard = styled.div<PlayerItem>`
     opacity: 0.5;
     padding: 4px;
 
-    left: 0px;
-    top: 0px;
+    left: -3px;
+    top: -3px;
   }
 `;
 
