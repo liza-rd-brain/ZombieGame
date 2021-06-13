@@ -191,6 +191,7 @@ const playerClickedHandler = (
 
           break;
         }
+        case "weapon":
         case "boards": {
           /**
            * For preventing sharing any cards with himself
@@ -208,9 +209,6 @@ const playerClickedHandler = (
             }
           }
         }
-        /* default: {
-          break;
-        } */
       }
       break;
     }
