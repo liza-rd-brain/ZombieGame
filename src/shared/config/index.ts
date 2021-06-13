@@ -7,8 +7,8 @@ export const AMOUNT_HEALTH_ITEMS = 20;
 export const AMOUNT_BOARDS_ITEMS =20;
 export const AMOUNT_WEAPONS_ITEMS = 20;
 export const AMOUNT_PLAYERS = 2;
-export const AMOUNT_ENEMIES = 30;
-export const APPERANCE_CARD = "closed";
+export const AMOUNT_ENEMIES = 0;
+export const APPERANCE_CARD = "open";
 
 export const MAX_HEALTH_AMOUNT = 7;
 

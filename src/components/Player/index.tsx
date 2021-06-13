@@ -88,6 +88,8 @@ export const PlayerList = (props: PlayerListItem) => {
   const { playerListOnCell, getContextMenu } = props;
 
   const listForInteract = getAvailableCellList(state);
+  const currPlayerCoord = playerList[numberOfPlayer].coord;
+  const listForHealing = listForInteract.concat(currPlayerCoord);
   const currPlayer = playerList[numberOfPlayer];
   const chosedCard = currPlayer.inventory.find(
     (card) => card?.isSelected === true
@@ -100,6 +102,7 @@ export const PlayerList = (props: PlayerListItem) => {
         const canInteractWithPlayer = listForInteract.includes(
           playerCardItem.coord
         );
+        const canHealPlayer = listForHealing.includes(playerCardItem.coord);
 
         return (
           <PlayerCard
@@ -108,6 +111,7 @@ export const PlayerList = (props: PlayerListItem) => {
             isCurrent={numberOfPlayer == playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
               canInteractWithPlayer,
+              canHealPlayer,
               typeOfChosedCard
             )}
             onClick={() => {
@@ -144,14 +148,10 @@ const getAvailableCellList = (state: State) => {
     }
   );
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
-
-  const availableCellsCoords = availableCellList
-    .map((cellItem) => {
-      const { direction, coord } = cellItem;
-      return coord;
-    })
-    .concat(currPlayerCoord);
+  const availableCellsCoords = availableCellList.map((cellItem) => {
+    const { direction, coord } = cellItem;
+    return coord;
+  });
 
   switch (gameState.type) {
     case "gameStarted.applyCard":
@@ -223,30 +223,33 @@ const playerClickedHandler = (
 
 const calculateHighlightning = (
   canInteractWithPlayer: boolean,
+  canHealPlayer: boolean,
   typeOfChosedCard: TypeOfCard
 ) => {
-  switch (canInteractWithPlayer) {
+  switch (canHealPlayer) {
     case true: {
       switch (typeOfChosedCard) {
-        case "boards": {
-          return false;
-        }
-
         case "health": {
           return true;
         }
 
+        case "weapon":
+        case "boards": {
+          switch (canInteractWithPlayer) {
+            case true: {
+              return true;
+            }
+            case false: {
+              return false;
+            }
+          }
+        }
         default: {
           return false;
         }
       }
     }
-
     case false: {
-      return false;
-    }
-
-    default: {
       return false;
     }
   }
