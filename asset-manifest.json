@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/ZombieGame/static/js/main.2eee3970.chunk.js",
-    "main.js.map": "/ZombieGame/static/js/main.2eee3970.chunk.js.map",
+    "main.js": "/ZombieGame/static/js/main.0f97784e.chunk.js",
+    "main.js.map": "/ZombieGame/static/js/main.0f97784e.chunk.js.map",
     "runtime-main.js": "/ZombieGame/static/js/runtime-main.7576872d.js",
     "runtime-main.js.map": "/ZombieGame/static/js/runtime-main.7576872d.js.map",
     "static/js/2.0411575f.chunk.js": "/ZombieGame/static/js/2.0411575f.chunk.js",
@@ -14,6 +14,6 @@
   "entrypoints": [
     "static/js/runtime-main.7576872d.js",
     "static/js/2.0411575f.chunk.js",
-    "static/js/main.2eee3970.chunk.js"
+    "static/js/main.0f97784e.chunk.js"
   ]
 }
