@@ -1,2 +1,3 @@
 Inspired by Eugeny Kolodin' "Zombie in the house" board game.
-[ZombieGame](https://minakovalisa.github.io/ZombieGame/)
+
+[Live demo (WIP)](https://minakovalisa.github.io/ZombieGame/)
