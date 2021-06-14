@@ -1,15 +1,20 @@
-import { State, PlayerListType } from "../../../types";
+import { State, PlayerListType, CardItem } from "../../types";
 
 /**
  * We need to give highlighting to healthCard
  */
-export const getStateCardSelected = (
-  state: State,
-  currentCardIndex: number
-) => {
+type TargerCard = {
+  index: number;
+  card: CardItem;
+};
+
+export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
+  // TODO: Need to restrict select unneceserry card -?!
+  // Add switch on type of cards
   const { numberOfPlayer } = state;
 
-  const newPlayerList = changeSelectedCard(state, currentCardIndex);
+  const newPlayerList = changeSelectedCard(state, targerCard.index);
+
   const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
     (card) => {
       return card?.isSelected === true;
@@ -18,6 +23,9 @@ export const getStateCardSelected = (
     ? true
     : false;
 
+  const cardType = targerCard.card?.name;
+  // The difference between weaponCard and other  card that weapon are usedin the battle.
+  //Obviously we need other stateWithoutSelectedCard for weapon
   const stateWithSelectedCard: State = {
     ...state,
     playerList: newPlayerList,
@@ -30,7 +38,9 @@ export const getStateCardSelected = (
     ...state,
     playerList: newPlayerList,
     gameState: {
-      type: "gameStarted.playerMove",
+      type: /* cardType === "weapon"
+          ? "gameStarted.interactWithEnemy"
+          :  */ "gameStarted.playerMove",
     },
   };
 
@@ -51,19 +61,6 @@ const changeSelectedCard = (
   const inventory = playerList[numberOfPlayer].inventory;
   const targetCard = inventory[currentCardIndex];
 
-  /**
-   * Return opposite
-   */
-  const selectedCard = {
-    ...targetCard,
-    isSelected: !targetCard?.isSelected,
-  };
-
-  /*  const notSelectedCard = {
-    ...targetCard,
-    isSelected: false,
-  }; */
-
   const newInventory = inventory.map((card, index) => {
     if (index === currentCardIndex) {
       return { ...card, isSelected: !targetCard?.isSelected };
@@ -79,5 +76,6 @@ const changeSelectedCard = (
       inventory: newInventory,
     },
   };
+
   return newPlayerList;
 };

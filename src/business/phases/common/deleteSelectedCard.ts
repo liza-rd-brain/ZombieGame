@@ -1,4 +1,4 @@
-import { PlayerListType } from "../../../types";
+import { PlayerListType } from "../../types";
 
 export const deleteSelectedCard = (
   playerList: PlayerListType,

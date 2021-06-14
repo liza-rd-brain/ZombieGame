@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -12,6 +11,7 @@ import {
 } from "../business/types";
 import { Health } from "./Health";
 import { BoardsCard } from "./BoardsCard";
+import { WeaponCard } from "./WeaponCard";
 
 type SlotType = {
   onClick: Function;
@@ -27,11 +27,11 @@ const InventoryWrap = styled.div`
 
 const Slot = styled.div<SlotType>`
   display: flex;
+  cursor: pointer;
 
   & > * {
     margin: 2px;
     position: relative;
-    /*  box-sizing: border-box; */
   }
 
   outline: ${(props) => {
@@ -58,7 +58,7 @@ export const Inventory = (props: { index: number }) => {
             onClick={() => {
               dispatch({
                 type: "cardChoosed",
-                payload: inventoryCardindex,
+                payload: { index: inventoryCardindex, card: inventoryCard },
               });
             }}
           >
@@ -77,6 +77,9 @@ const getChildrenComponent = (inventoryCard: CardItem) => {
     }
     case "boards": {
       return <BoardsCard />;
+    }
+    case "weapon": {
+      return <WeaponCard />;
     }
     default: {
       return null;

@@ -4,13 +4,13 @@ import {
   trownDice,
   playerMove,
   takeCard,
-  interactEnemyCard,
+  interactWithEnemy,
   applyCard,
 } from "./phases/gameStarted";
 import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State, HealthCardType } from "./types";
-import { DOMElement } from "react";
+import { MoveDirection, State, CardItem } from "./types";
+
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -28,14 +28,22 @@ export type ActionType =
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
   | { type: "req-takeCard" }
-  | { type: "cardChoosed"; payload: number }
+  | {
+      type: "cardChoosed";
+      payload: {
+        index: number;
+        card: CardItem;
+      };
+    }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }
   | {
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-shareCard"; payload: number };
+  | { type: "req-shareCard"; payload: number }
+  | { type: "req-defeatEnemy" }
+  | { type: "req-removeEnemyCard" };
 
 export const reducer = (
   state: State = initialState,
@@ -45,41 +53,40 @@ export const reducer = (
 
   switch (phaseOuter) {
     case "waitingStart": {
-      return waitingStart(state,action);
+      return waitingStart(state, action);
     }
 
     case "gameStarted": {
       switch (phaseInner) {
         case "trownDice": {
-          return trownDice(state,action);
+          return trownDice(state, action);
         }
 
         case "playerMove": {
-          return playerMove(state,action);
+          return playerMove(state, action);
         }
 
         case "takeCard": {
-          return takeCard(state,action);
+          return takeCard(state, action);
         }
         case "applyCard": {
-          return applyCard(state,action);
-        }
-
-        case "interactEnemyCard": {
-          return interactEnemyCard(state,action);
+          return applyCard(state, action);
         }
 
         case "getPlayersOrder": {
-          return getPlayersOrder(state,action);
+          return getPlayersOrder(state, action);
         }
 
         default:
           return state;
       }
     }
+    case "interactWithEnemy": {
+      return interactWithEnemy(state, action);
+    }
 
     case "endGame": {
-      return endGame(state,action);
+      return endGame(state, action);
     }
 
     default:

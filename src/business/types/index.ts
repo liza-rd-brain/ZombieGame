@@ -37,7 +37,7 @@ export type PlayerCardType = {
   inventory: CardItemList;
 };
 
-export type CardItem = HealthCardType | BoardsCardType | null;
+export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 
 export type CardItemList = CardItem[];
 
@@ -47,7 +47,7 @@ export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  apperance: "closed" | "open";
+  apperance: "closed" | "open" | "defeated";
 };
 
 export type EnemyListType = Record<string, EnemyCardType>;
@@ -70,6 +70,12 @@ export type HealthCardType = {
 
 export type BoardsCardType = {
   name: "boards";
+  apperance: "closed" | "open";
+  isSelected?: boolean;
+};
+
+export type WeaponCardType = {
+  name: "weapon";
   apperance: "closed" | "open";
   isSelected?: boolean;
 };
@@ -102,7 +108,9 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
-  | { type: "!healPlayer" }
+  | { type: "!removeEnemyCard" }
+  /* 
+  | { type: "!applyCard" } */
   | null;
 
 export type State = {
@@ -126,10 +134,14 @@ export type GameState =
   | {
       type: "gameStarted.takeCard";
     }
+  | { type: "interactWithEnemy.getBattleResult" }
   | {
       type: "gameStarted.applyCard";
     }
-  | { type: "gameStarted.interactEnemyCard" }
+  | { type: "interactWithEnemy" }
+  | { type: "interactWithEnemy.throwBattleDice" }
+  | { type: "interactWithEnemy.makeBattleAction" }
+  | { type: "interactWithEnemy.applyCard" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };

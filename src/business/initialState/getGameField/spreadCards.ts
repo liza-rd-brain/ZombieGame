@@ -4,6 +4,7 @@ import {
   AMOUNT_HEALTH_ITEMS,
   AMOUNT_BOARDS_ITEMS,
   APPERANCE_CARD,
+  AMOUNT_WEAPONS_ITEMS,
 } from "../../../shared/config";
 
 type CardSet = {
@@ -26,7 +27,16 @@ const cardsList: CardSet[] = [
     },
     amount: AMOUNT_BOARDS_ITEMS,
   },
+  {
+    card: {
+      name: "weapon",
+      apperance: APPERANCE_CARD,
+    },
+    amount: AMOUNT_WEAPONS_ITEMS,
+  },
 ];
+
+
 
 /**
  * Returns an object in structure of FieldCells with spreaded cards in random picked cells.
@@ -37,7 +47,7 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
    * currCardSet -curr set of cards
    * from cardset making object with cards
    */
-  const cellsWithAllCards = cardsList.reduce((filledСells,  currCardSet) => {
+  const cellsWithAllCards = cardsList.reduce((filledСells, currCardSet) => {
     const gameFieldCellsWithPrevios = { ...gameFieldCells, ...filledСells };
 
     const cellsForCards = getListForCards(
@@ -57,7 +67,6 @@ export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
   }, {});
 
   const gameFieldFull = { ...gameFieldCells, ...cellsWithAllCards };
-
   return gameFieldFull;
 };
 
@@ -98,7 +107,7 @@ const getListForCards = (
   /**
    * This array contains only empty cells
    */
-   
+
   const emptyCellsList = listGameField.filter((cellItem): cellItem is [
     string,
     CommonCell

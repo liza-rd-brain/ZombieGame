@@ -1,4 +1,4 @@
-import { State } from "../../../types";
+import { State } from "../../types";
 
 export const getBattleResult = (state: State): State => {
   const { dice } = state;
@@ -6,7 +6,7 @@ export const getBattleResult = (state: State): State => {
   switch (dice) {
     case 1:
     case 2: {
-      return getStatePlayerRunsAway(state);
+      return getStatePlayerCanFight(state);
     }
 
     case 3: {
@@ -14,24 +14,29 @@ export const getBattleResult = (state: State): State => {
     }
 
     case 4: {
-      return getStatePLayerWon(state);
+      return getStatePlayerRunsAway(state);
     }
     default:
       return state;
   }
 };
 
-const getStatePlayerRunsAway = (state: State): State => {
-  // Полностью передать управление в playerMove?!
-  // dice=1 - убегает на 1
+const getStatePlayerCanFight = (state: State): State => {
+  //Player can use weapon or rethrow dice
   return {
     ...state,
-    dice: 1,
+    dice: 0,
+    gameState: { type: "interactWithEnemy.makeBattleAction" },
+  };
+};
+
+const getStatePlayerRunsAway = (state: State): State => {
+  return {
+    ...state,
+    dice: 0,
     gameState: {
-      ...state,
-      type: "gameStarted.playerMove",
+      type: "gameStarted.trownDice",
     },
-    doEffect: { type: "!checkAvailableNeighboringCell" },
   };
 };
 
@@ -48,17 +53,11 @@ const getStatePlayetLoseHealth = (state: State): State => {
     },
   };
 
-  // TODO :  режим боя должен вестись до победы\побега\проигрыша
   if (isPlayerAlive) {
     const newState: State = {
       ...state,
       dice: 0,
-      gameState: {
-        type: "gameStarted.getPlayersOrder",
-      },
-      doEffect: {
-        type: "!getNextPlayer",
-      },
+      gameState: { type: "interactWithEnemy.throwBattleDice" },
       playerList: newPlayerList,
     };
 
@@ -73,23 +72,4 @@ const getStatePlayetLoseHealth = (state: State): State => {
       doEffect: null,
     };
   }
-};
-
-const getStatePLayerWon = (state: State): State => {
-  const { enemyList, numberOfPlayer, playerList } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
-  const newEnemyList = { ...enemyList };
-  delete newEnemyList[currentCoord];
-
-  return {
-    ...state,
-    enemyList: newEnemyList,
-    dice: 0,
-    gameState: {
-      type: "gameStarted.getPlayersOrder",
-    },
-    doEffect: {
-      type: "!getNextPlayer",
-    },
-  };
 };

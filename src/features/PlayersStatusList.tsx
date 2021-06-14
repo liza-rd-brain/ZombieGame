@@ -18,7 +18,8 @@ type AmountOfPlayers = {
 };
 
 const PlayersListWrap = styled.div<AmountOfPlayers>`
-  width: 130px;
+  /*  width: 130px; */
+  width: 100%;
   height: 100px;
   /*   border: 1px solid lightgray; */
   display: grid;
@@ -28,6 +29,7 @@ const PlayersListWrap = styled.div<AmountOfPlayers>`
     return `repeat(${props.amount} ,25px)`;
   }};
   pointer-events: none;
+  margin: 0 30px;
 `;
 
 const CharacterAvatar = styled.div`

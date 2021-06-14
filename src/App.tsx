@@ -12,7 +12,13 @@ import {
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
-import { useOpenCard, useEndScreen, usePlayerMove } from "./business/effects";
+import {
+  useOpenCard,
+  useEndScreen,
+  usePlayerMove,
+  useInteractWithEnemy,
+} from "./business/effects";
+import { PlayerStatus } from "./features/PlayerStatus";
 
 const Field = styled.div`
   margin: 0 auto;
@@ -24,11 +30,12 @@ const Game = styled.div`
   display: flex;
   justify-content: center;
   height: 100vh;
+  cursor: default;
 `;
 
 const LeftPanel = styled.div`
   width: 300px;
-  height: 400px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -36,6 +43,8 @@ const LeftPanel = styled.div`
   flex-grow: 0;
   align-items: start;
   margin: 0 30px;
+  padding: 50px 0;
+  box-sizing: border-box;
 `;
 
 const RightPanel = styled.div`
@@ -46,6 +55,8 @@ const GameControls = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  padding: 0 15px;
+  box-sizing: border-box;
 `;
 
 export function GetApp() {
@@ -54,6 +65,7 @@ export function GetApp() {
   useOpenCard();
   usePlayerMove();
   useEndScreen();
+  useInteractWithEnemy();
 
   const getGameScreen = () => {
     switch (gameState.type) {
@@ -78,6 +90,7 @@ export function GetApp() {
                 <Dice />
                 <MoveControls />
               </GameControls>
+              {/*   <PlayerStatus /> */}
             </LeftPanel>
           </>
         );

@@ -6,7 +6,7 @@ import {
   AvailableCellListType,
   State,
 } from "../../business/types";
-import { getNeighboringCellList } from "../../business/phases/gameStarted/common/getNeighboringCellList";
+import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
 
 type PlayerItem = {
@@ -23,7 +23,7 @@ type ContextMenuType = {
   visible: boolean;
 };
 
-type TypeOfCard = "boards" | "health" | null;
+type TypeOfCard = "boards" | "health" | "weapon" | null;
 
 const PlayerCard = styled.div<PlayerItem>`
   background-color: #9f3f3f;
@@ -58,8 +58,8 @@ const PlayerCard = styled.div<PlayerItem>`
     opacity: 0.5;
     padding: 4px;
 
-    left: 0px;
-    top: 0px;
+    left: -3px;
+    top: -3px;
   }
 `;
 
@@ -71,7 +71,8 @@ const PlayerCardList = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: white;
-  padding: 3px;
+  /*   padding: 3px; */
+  margin: 3px;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -87,6 +88,8 @@ export const PlayerList = (props: PlayerListItem) => {
   const { playerListOnCell, getContextMenu } = props;
 
   const listForInteract = getAvailableCellList(state);
+  const currPlayerCoord = playerList[numberOfPlayer].coord;
+  const listForHealing = listForInteract.concat(currPlayerCoord);
   const currPlayer = playerList[numberOfPlayer];
   const chosedCard = currPlayer.inventory.find(
     (card) => card?.isSelected === true
@@ -99,6 +102,7 @@ export const PlayerList = (props: PlayerListItem) => {
         const canInteractWithPlayer = listForInteract.includes(
           playerCardItem.coord
         );
+        const canHealPlayer = listForHealing.includes(playerCardItem.coord);
 
         return (
           <PlayerCard
@@ -107,6 +111,7 @@ export const PlayerList = (props: PlayerListItem) => {
             isCurrent={numberOfPlayer == playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
               canInteractWithPlayer,
+              canHealPlayer,
               typeOfChosedCard
             )}
             onClick={() => {
@@ -143,14 +148,10 @@ const getAvailableCellList = (state: State) => {
     }
   );
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
-
-  const availableCellsCoords = availableCellList
-    .map((cellItem) => {
-      const { direction, coord } = cellItem;
-      return coord;
-    })
-    .concat(currPlayerCoord);
+  const availableCellsCoords = availableCellList.map((cellItem) => {
+    const { direction, coord } = cellItem;
+    return coord;
+  });
 
   switch (gameState.type) {
     case "gameStarted.applyCard":
@@ -190,6 +191,7 @@ const playerClickedHandler = (
 
           break;
         }
+        case "weapon":
         case "boards": {
           /**
            * For preventing sharing any cards with himself
@@ -221,30 +223,33 @@ const playerClickedHandler = (
 
 const calculateHighlightning = (
   canInteractWithPlayer: boolean,
+  canHealPlayer: boolean,
   typeOfChosedCard: TypeOfCard
 ) => {
-  switch (canInteractWithPlayer) {
+  switch (canHealPlayer) {
     case true: {
       switch (typeOfChosedCard) {
-        case "boards": {
-          return false;
-        }
-
         case "health": {
           return true;
         }
 
+        case "weapon":
+        case "boards": {
+          switch (canInteractWithPlayer) {
+            case true: {
+              return true;
+            }
+            case false: {
+              return false;
+            }
+          }
+        }
         default: {
           return false;
         }
       }
     }
-
     case false: {
-      return false;
-    }
-
-    default: {
       return false;
     }
   }

@@ -6,12 +6,12 @@ import {
   playerMove,
   takeCard,
   trownDice,
-  interactEnemyCard,
+  interactWithEnemy,
   applyCard,
   getPlayersOrder,
 } from "./phases/gameStarted";
 
-import { getNeighboringCellList } from "./phases/gameStarted/common";
+import { getNeighboringCellList } from "./phases/common";
 import { getAvailableCells } from "./phases/gameStarted/playerMove";
 import { State, CellType, BarrierList, BarrierItem, CommonCell } from "./types";
 

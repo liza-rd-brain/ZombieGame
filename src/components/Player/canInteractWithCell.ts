@@ -4,7 +4,7 @@ import {
   MoveDirection,
   CellType,
 } from "../../business/types";
-import { checkCellHasWall } from "../../business/phases/gameStarted/common";
+import { checkCellHasWall } from "../../business/phases/common";
 /** Cheking the cases when can't take the cell. In default we think that can. */
 export const canInteractWithCell = (
   state: State,

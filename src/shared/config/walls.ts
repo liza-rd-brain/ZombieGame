@@ -50,6 +50,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       },
     ],
   },
+
   {
     coord: { hor: 2, vert: 6 },
     barrierList: [
@@ -60,6 +61,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       },
     ],
   },
+  
   {
     coord: { hor: 2, vert: 7 },
     barrierList: [
