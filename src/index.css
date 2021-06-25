@@ -1,5 +1,17 @@
 @import-normalize;
 
+body {
+  max-width: 1920px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  background-image: url("assets/backgrounds/47074.jpg");
+  background-size: 310px;
+}
+
 h2 {
   margin: 0;
 }
