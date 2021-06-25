@@ -36,6 +36,7 @@ const GridItem = styled.div<GridProps>`
   > * {
     transform: rotate(90deg);
   }
+  background-color: white;
 `;
 
 const ContextMenu = styled.div<ContextMenuType>`

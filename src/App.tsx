@@ -1,7 +1,7 @@
 import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
-
+import "./index.css";
 import {
   PlayGrid,
   MoveControls,
@@ -29,11 +29,13 @@ const Game = styled.div`
   margin: 40px auto;
   display: flex;
   justify-content: center;
-  height: 100vh;
+
   cursor: default;
+  & > * {
+  }
 `;
 
-const LeftPanel = styled.div`
+const RightPanel = styled.div`
   width: 300px;
   height: 600px;
   display: flex;
@@ -45,10 +47,18 @@ const LeftPanel = styled.div`
   margin: 0 30px;
   padding: 50px 0;
   box-sizing: border-box;
+  & > * {
+  }
 `;
 
-const RightPanel = styled.div`
+const LeftPanel = styled.div`
   display: flex;
+  align-self: start;
+  background-color: white;
+  height: 100px;
+  margin: 0 30px;
+  border-radius: 5px;
+  padding: 5px 0;
 `;
 
 const GameControls = styled.div`
@@ -78,20 +88,20 @@ export function GetApp() {
       default:
         return (
           <>
-            <RightPanel>
+            <LeftPanel>
               <PlayersStatusList />
-            </RightPanel>
+            </LeftPanel>
             <Field>
               <PlayGrid />
             </Field>
-            <LeftPanel>
+            <RightPanel>
               <StatusList />
               <GameControls>
                 <Dice />
                 <MoveControls />
               </GameControls>
               {/*   <PlayerStatus /> */}
-            </LeftPanel>
+            </RightPanel>
           </>
         );
     }

@@ -58,7 +58,7 @@ const ArrowContainer = styled.div`
   & > * {
     padding: 6px;
     box-sizing: border-box;
-
+    background-color: white;
   }
 `;
 

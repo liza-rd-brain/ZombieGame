@@ -10,6 +10,7 @@ const DiceWrap = styled.div`
   width: 100px;
   height: 100px;
   display: grid;
+  background-color: white;
 `;
 
 const DiceButton = styled.button`
