@@ -156,6 +156,7 @@ export const PlayGrid = () => {
       <GridItem vert={height} type={contextMenuState.type}>
         {getFilledPlayGrid(state, getContextMenu)}
       </GridItem>
+
       <ContextMenu
         type={contextMenuState.type}
         id={"contextMenu"}

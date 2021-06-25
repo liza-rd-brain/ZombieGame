@@ -1,23 +1,17 @@
 import styled from "styled-components";
-
-import { HealthCardType } from "../business/types";
+import { CommonCard } from "./CommonCard/CommonCard";
 
 type HealthApperanceType = {
   apperance?: "closed" | "open";
+  className?: string;
 };
 
-export const StyledHealthCard = styled.div<HealthApperanceType>`
-  position: absolute;
-  border: 5px solid;
-  width: 15px;
-  height: 15px;
-  margin: 12px;
-
+export const StyledHealthCard = styled(CommonCard)<HealthApperanceType>`
   background-color: ${(props) => {
-    if (props.apperance === "closed") {
-      return "gray";
-    } else {
+    if (props.apperance !== "closed") {
       return "green";
+    } else {
+      return "";
     }
   }};
 

@@ -2,18 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { EnemyCardType, State } from "../business/types";
+import { CommonCard } from "./CommonCard/CommonCard";
 
 type EnemyArray = {
   list: EnemyCardType[];
 };
 
-const EnemyCard = styled.div<EnemyCardType>`
-  position: absolute;
+const EnemyCard = styled(CommonCard)<EnemyCardType>`
+  /*   position: absolute;
   border: 5px solid;
   width: 25px;
   height: 25px;
   margin: 12px;
-  box-sizing: border-box;
+  box-sizing: border-box; */
   color: #c08f5e;
   font-size: 47px;
   text-align: start;
@@ -22,25 +23,25 @@ const EnemyCard = styled.div<EnemyCardType>`
   text-transform: unset;
   font-family: sans-serif;
   text-indent: -4px;
-  background-color: navy;
-  border-color: navy;
+
   cursor: pointer;
 
   background-color: ${(props) => {
-    if (props.apperance === "closed") {
-      return "gray";
-    } else {
+    if (props.apperance !== "closed") {
       return "navy";
+    } else {
+      return "";
     }
   }};
 
   border-color: ${(props) => {
-    if (props.apperance === "closed") {
-      return "gray";
-    } else {
+    if (props.apperance !== "closed") {
       return "navy";
+    } else {
+      return "";
     }
   }};
+
   cursor: ${(props) => {
     if (props.apperance === "closed") {
       return "default";

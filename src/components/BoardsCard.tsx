@@ -1,23 +1,19 @@
 import styled from "styled-components";
+import { CommonCard } from "./CommonCard/CommonCard";
 
 type BoardsApperanceType = {
   apperance?: "closed" | "open";
 };
 
-const StyledBoardsCard = styled.div<BoardsApperanceType>`
-  position: absolute;
-  border: 1px solid;
-  width: 20px;
-  height: 20px;
-  margin: 12px;
+const StyledBoardsCard = styled(CommonCard)<BoardsApperanceType>`
   color: black;
   font-size: 20px;
   text-align: center;
   background-color: ${(props) => {
-    if (props.apperance === "closed") {
-      return "gray";
-    } else {
+    if (props.apperance !== "closed") {
       return "white";
+    } else {
+      return "";
     }
   }};
 
