@@ -1,19 +1,23 @@
 import styled from "styled-components";
-import { CommonCard } from "./CommonCard/CommonCard";
+import { CommonCard } from "../CommonCard/CommonCard";
+import img from "./boards.png";
 
 type BoardsApperanceType = {
   apperance?: "closed" | "open";
 };
 
 const StyledBoardsCard = styled(CommonCard)<BoardsApperanceType>`
-  color: black;
-  font-size: 20px;
-  text-align: center;
   background-color: ${(props) => {
-    if (props.apperance !== "closed") {
-      return "white";
+    if (props.apperance === "open") {
+      return "unset";
+    }
+  }};
+
+  background-image: ${(props) => {
+    if (props.apperance === "open") {
+      return `url(${img})`;
     } else {
-      return "";
+      return "none";
     }
   }};
 

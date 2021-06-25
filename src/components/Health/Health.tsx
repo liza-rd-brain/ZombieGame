@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { CommonCard } from "./CommonCard/CommonCard";
+import { CommonCard } from "../CommonCard/CommonCard";
+import img from "./health3.png";
 
 type HealthApperanceType = {
   apperance?: "closed" | "open";
@@ -8,18 +9,24 @@ type HealthApperanceType = {
 
 export const StyledHealthCard = styled(CommonCard)<HealthApperanceType>`
   background-color: ${(props) => {
-    if (props.apperance !== "closed") {
-      return "green";
-    } else {
-      return "";
+    if (props.apperance === "open") {
+      return "unset";
     }
   }};
 
   border-color: ${(props) => {
-    if (props.apperance === "closed") {
+    if (props.apperance !== "closed") {
       return "gray";
     } else {
       return "green";
+    }
+  }};
+
+  background-image: ${(props) => {
+    if (props.apperance === "open") {
+      return `url(${img})`;
+    } else {
+      return "none";
     }
   }};
 `;

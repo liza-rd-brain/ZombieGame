@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { EnemyCardType, State } from "../business/types";
-import { CommonCard } from "./CommonCard/CommonCard";
+import { EnemyCardType, State } from "../../business/types";
+import { CommonCard } from "../CommonCard/CommonCard";
+
+import img from "./zombie.png";
 
 type EnemyArray = {
   list: EnemyCardType[];
@@ -27,10 +29,8 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
   cursor: pointer;
 
   background-color: ${(props) => {
-    if (props.apperance !== "closed") {
-      return "navy";
-    } else {
-      return "";
+    if (props.apperance === "open") {
+      return "unset";
     }
   }};
 
@@ -47,6 +47,14 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
       return "default";
     } else {
       return "pointer";
+    }
+  }};
+
+  background-image: ${(props) => {
+    if (props.apperance === "open") {
+      return `url(${img})`;
+    } else {
+      return "none";
     }
   }};
 `;

@@ -9,8 +9,8 @@ import {
   GameState,
   CardItem,
 } from "../business/types";
-import { Health } from "./Health";
-import { BoardsCard } from "./BoardsCard";
+import { Health } from "./Health/Health";
+import { BoardsCard } from "./Boards/BoardsCard";
 import { WeaponCard } from "./WeaponCard";
 
 type SlotType = {
