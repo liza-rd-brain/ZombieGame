@@ -1,27 +1,26 @@
 import styled from "styled-components";
-import { CommonCard } from "./CommonCard/CommonCard";
+import { CommonCard } from "../CommonCard/CommonCard";
+import img from "./weapon.png";
 
 type WeaponApperanceType = {
   apperance?: "closed" | "open";
 };
 
 const StyledWeaponCard = styled(CommonCard)<WeaponApperanceType>`
-  color: red;
-  font-size: 20px;
-  text-align: center;
   background-color: ${(props) => {
-    if (props.apperance !== "closed") {
-      return "white";
-    } else {
-      return "";
+    if (props.apperance === "open") {
+      return "unset";
     }
   }};
 
   border-color: ${(props) => {
-    if (props.apperance === "closed") {
+    if (props.apperance === "open") {
       return "gray";
-    } else {
-      return "gray";
+    }
+  }};
+  background-image: ${(props) => {
+    if (props.apperance === "open") {
+      return `url(${img})`;
     }
   }};
 `;

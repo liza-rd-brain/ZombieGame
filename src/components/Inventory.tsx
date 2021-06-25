@@ -11,7 +11,7 @@ import {
 } from "../business/types";
 import { Health } from "./Health/Health";
 import { BoardsCard } from "./Boards/BoardsCard";
-import { WeaponCard } from "./WeaponCard";
+import { WeaponCard } from "./Weapon/WeaponCard";
 
 type SlotType = {
   onClick: Function;

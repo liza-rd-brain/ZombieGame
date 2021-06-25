@@ -16,15 +16,11 @@ const StyledBoardsCard = styled(CommonCard)<BoardsApperanceType>`
   background-image: ${(props) => {
     if (props.apperance === "open") {
       return `url(${img})`;
-    } else {
-      return "none";
     }
   }};
 
   border-color: ${(props) => {
-    if (props.apperance === "closed") {
-      return "gray";
-    } else {
+    if (props.apperance === "open") {
       return "gray";
     }
   }};

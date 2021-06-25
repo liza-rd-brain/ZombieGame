@@ -35,10 +35,8 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
   }};
 
   border-color: ${(props) => {
-    if (props.apperance !== "closed") {
+    if (props.apperance === "open") {
       return "navy";
-    } else {
-      return "";
     }
   }};
 
@@ -53,8 +51,6 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
   background-image: ${(props) => {
     if (props.apperance === "open") {
       return `url(${img})`;
-    } else {
-      return "none";
     }
   }};
 `;

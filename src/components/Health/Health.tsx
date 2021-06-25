@@ -15,18 +15,14 @@ export const StyledHealthCard = styled(CommonCard)<HealthApperanceType>`
   }};
 
   border-color: ${(props) => {
-    if (props.apperance !== "closed") {
+    if (props.apperance !== "open") {
       return "gray";
-    } else {
-      return "green";
     }
   }};
 
   background-image: ${(props) => {
     if (props.apperance === "open") {
       return `url(${img})`;
-    } else {
-      return "none";
     }
   }};
 `;
