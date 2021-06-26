@@ -73,13 +73,13 @@ export const Inventory = (props: { index: number }) => {
 const getChildrenComponent = (inventoryCard: CardItem) => {
   switch (inventoryCard?.name) {
     case "health": {
-      return <Health />;
+      return <Health apperance={inventoryCard.apperance} />;
     }
     case "boards": {
-      return <BoardsCard />;
+      return <BoardsCard apperance={inventoryCard.apperance} />;
     }
     case "weapon": {
-      return <WeaponCard />;
+      return <WeaponCard apperance={inventoryCard.apperance} />;
     }
     default: {
       return null;
