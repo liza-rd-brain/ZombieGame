@@ -22,6 +22,7 @@ import { MOVE_DIRECTION_LIST } from "../../shared/config";
 
 type CellApperance = {
   hasMarker?: boolean;
+  isNeedSepareteCards: boolean;
 };
 
 const Wrap = styled.div`
@@ -29,6 +30,7 @@ const Wrap = styled.div`
 `;
 
 const CellItem = styled.div<CellApperance>`
+  display: flex;
   position: relative;
   box-sizing: border-box;
   border: 1px solid lightgray;
@@ -42,6 +44,32 @@ const CellItem = styled.div<CellApperance>`
       return " rgb(241, 224, 224)";
     }
   }};
+
+  & > :first-child {
+    top: ${(props) => {
+      if (props.isNeedSepareteCards) {
+        return "-10px";
+      }
+    }};
+    left: ${(props) => {
+      if (props.isNeedSepareteCards) {
+        return "-10px";
+      }
+    }};
+  }
+  & > :last-child {
+    top: ${(props) => {
+      if (props.isNeedSepareteCards) {
+        return "10px";
+      }
+    }};
+
+    left: ${(props) => {
+      if (props.isNeedSepareteCards) {
+        return "15px";
+      }
+    }};
+  }
 `;
 
 export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
@@ -57,9 +85,21 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     const [hor, vert] = orderIndex.split(".");
 
     const hasMarker = availableCells?.includes(orderIndex);
+
+    const [playerX, playerY] = currPlayerCoord.split(".");
+    const isPhaseCardsSeparate =
+      gameState.type.includes("interactWithEnemy") ||
+      gameState.type === "gameStarted.takeCard";
+
+    const isNeedSepareteCards =
+      isPhaseCardsSeparate && playerX === hor && playerY === vert;
+
     return (
       <Wrap key={`${hor}.${vert}`}>
-        <CellItem hasMarker={hasMarker}>
+        <CellItem
+          hasMarker={hasMarker}
+          isNeedSepareteCards={isNeedSepareteCards}
+        >
           {getCards(cellValues)}
           {getPlayersList(
             orderIndex,
@@ -81,3 +121,5 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
   return fullPlayerGrid;
 };
+
+const isNeedSeparete = () => {};

@@ -29,7 +29,7 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
   cursor: pointer;
 
   background-color: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.apperance === "open" || "defeated") {
       return "unset";
     }
   }};
@@ -49,7 +49,7 @@ const EnemyCard = styled(CommonCard)<EnemyCardType>`
   }};
 
   background-image: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.apperance === "open" || "defeated") {
       return `url(${img})`;
     }
   }};

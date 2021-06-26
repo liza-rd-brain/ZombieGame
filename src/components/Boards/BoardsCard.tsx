@@ -29,7 +29,7 @@ const StyledBoardsCard = styled(CommonCard)<BoardsApperanceType>`
 export const BoardsCard = (props: BoardsApperanceType) => {
   return (
     <StyledBoardsCard {...props}>
-      {props.apperance === "closed" ? null : "X"}
+      {/*  {props.apperance === "closed" ? null : "X"} */}
     </StyledBoardsCard>
   );
 };

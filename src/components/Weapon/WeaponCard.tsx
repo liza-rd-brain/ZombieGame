@@ -28,7 +28,7 @@ const StyledWeaponCard = styled(CommonCard)<WeaponApperanceType>`
 export const WeaponCard = (props: WeaponApperanceType) => {
   return (
     <StyledWeaponCard {...props}>
-      {props.apperance === "closed" ? null : "O"}
+      {/*      {props.apperance === "closed" ? null : "O"} */}
     </StyledWeaponCard>
   );
 };

@@ -20,5 +20,5 @@ const StyledCommonCard = styled.div`
 `;
 
 export const CommonCard = (props: any) => (
-  <StyledCommonCard className={props.className}></StyledCommonCard>
+  <StyledCommonCard {...props}></StyledCommonCard>
 );

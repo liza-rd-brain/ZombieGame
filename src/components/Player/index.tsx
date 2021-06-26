@@ -30,8 +30,8 @@ type TypeOfCard = "boards" | "health" | "weapon" | null;
 const PlayerCard = styled.div<PlayerItem>`
   /*   background-color: #9f3f3f; */
 
-  width: 20px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   margin: 0px;
   z-index: 3;
   text-align: center;
@@ -39,7 +39,8 @@ const PlayerCard = styled.div<PlayerItem>`
   box-sizing: border-box;
   cursor: default;
   background-repeat: no-repeat;
-  background-position: -9px;
+  background-position: 0px;
+  background-color: white;
   /*  background-color: ${(props) => {
     if (props.isCurrent) {
       return "red";
@@ -47,7 +48,8 @@ const PlayerCard = styled.div<PlayerItem>`
   }}; */
 
   background-image: url(${img});
-  background-size: 40px;
+  background-size: 30px;
+  border: 1px solid black;
 
   &:before {
     content: "";
