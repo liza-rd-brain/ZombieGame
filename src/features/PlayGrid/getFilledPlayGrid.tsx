@@ -1,28 +1,17 @@
 import styled from "styled-components";
 
-import {
-  GameField,
-  PlayerListType,
-  EnemyListType,
-  CommonCell,
-  MoveDirection,
-  AvailableCellListType,
-  CellType,
-  AvailableCellType,
-  State,
-  GameState,
-} from "../../business/types";
-
+import { State, PlayGridMode } from "../../business/types";
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
 import { Barrier } from "./Barrier";
 
-import { MOVE_DIRECTION_LIST } from "../../shared/config";
+import { PLAY_GRID_MODE } from "../../shared/config";
 
 type CellApperance = {
   hasMarker?: boolean;
   isNeedSepareteCards: boolean;
+  mode: PlayGridMode;
 };
 
 const Wrap = styled.div`
@@ -33,15 +22,22 @@ const CellItem = styled.div<CellApperance>`
   display: flex;
   position: relative;
   box-sizing: border-box;
-  border: 1px solid lightgray;
+
   font-size: 14px;
   text-align: right;
   width: 50px;
   height: 50px;
   color: lightgrey;
+
+  border: ${(props) => {
+    if (props.mode === "cssStyle") {
+      return "1px solid lightgray";
+    }
+  }};
+
   background-color: ${(props) => {
     if (props.hasMarker) {
-      return " rgb(241, 224, 224)";
+      return " rgb(224 91 91 / 40%)";
     }
   }};
 
@@ -99,6 +95,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
         <CellItem
           hasMarker={hasMarker}
           isNeedSepareteCards={isNeedSepareteCards}
+          mode={PLAY_GRID_MODE}
         >
           {getCards(cellValues)}
           {getPlayersList(
@@ -110,7 +107,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
           {cellValues.name === "commonCell"
             ? getEnemyList(orderIndex, enemyList)
             : null}
-          {`${hor}.${vert}`}
+          {PLAY_GRID_MODE === "cssStyle" ? `${hor}.${vert}` : null}
         </CellItem>
         {cellValues.name === "commonCell" ? (
           <Barrier orderIndex={orderIndex}></Barrier>

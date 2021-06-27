@@ -15,13 +15,17 @@ import {
   PlayerListType,
   CellType,
   AvailableCellType,
+  PlayGridMode,
 } from "../../business/types";
+
+import { PLAY_GRID_MODE } from "../../shared/config";
 
 type WallType = {
   barrierItem?: BarrierItem;
   //TODO: поправить тип?
   highlightningList: (MoveDirection | null)[] | null;
   onClick: Function;
+  mode: PlayGridMode;
 };
 
 type BarrierCoord = {
@@ -44,7 +48,14 @@ const Wall = styled.div<WallType>`
         return "default";
     }
   }};
+
   &:before {
+    display: ${(props) => {
+      if (props.mode === "image") {
+        return "none";
+      }
+    }};
+
     content: "";
     position: absolute;
     width: 50px;
@@ -142,7 +153,14 @@ const Wall = styled.div<WallType>`
       }
     }};
   }
+
   &:after {
+    display: ${(props) => {
+      if (props.mode === "image") {
+        return "none";
+      }
+    }};
+
     content: "";
     z-index: 5;
     position: absolute;
@@ -244,6 +262,7 @@ export const Barrier = (props: BarrierCoord) => {
                   )
                 : null
             }
+            mode={PLAY_GRID_MODE}
             onClick={() => {
               const canCloseHole = highlightningList.find((cellType) => {
                 return (

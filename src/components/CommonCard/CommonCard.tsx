@@ -3,7 +3,7 @@ import img from "./brain.svg";
 
 export const StyledCommonCard = css`
   position: absolute;
-  border: 1px solid;
+  border: 1px solid gray;
   width: 34px;
   height: 34px;
   margin: 4px;

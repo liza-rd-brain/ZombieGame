@@ -13,11 +13,12 @@ type EnemyArray = {
 const EnemyCard = styled.div<EnemyCardType>`
   ${StyledCommonCard}
   /*   position: absolute;
-  border: 5px solid;
+
   width: 25px;
   height: 25px;
   margin: 12px;
   box-sizing: border-box; */
+  border: 1px solid;
   color: #c08f5e;
   font-size: 47px;
   text-align: start;
@@ -30,7 +31,7 @@ const EnemyCard = styled.div<EnemyCardType>`
   cursor: pointer;
 
   background-color: ${(props) => {
-    if (props.apperance === "open" || "defeated") {
+    if (props.apperance === "open" || props.apperance === "defeated") {
       return "unset";
     }
   }};
@@ -50,7 +51,7 @@ const EnemyCard = styled.div<EnemyCardType>`
   }};
 
   background-image: ${(props) => {
-    if (props.apperance === "open" || "defeated") {
+    if (props.apperance === "open" || props.apperance === "defeated") {
       return `url(${img})`;
     }
   }};

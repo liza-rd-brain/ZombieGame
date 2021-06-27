@@ -12,7 +12,8 @@ export const AMOUNT_BOARDS_ITEMS = 20;
 export const AMOUNT_WEAPONS_ITEMS = 20;
 export const AMOUNT_PLAYERS = 1;
 export const AMOUNT_ENEMIES = 20;
-export const CARD_APPERANCE: CardApperance = "open";
+
+export const CARD_APPERANCE: CardApperance = "closed";
 
 export const PLAY_GRID_MODE: PlayGridMode = "image";
 

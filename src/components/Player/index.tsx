@@ -28,8 +28,6 @@ type ContextMenuType = {
 type TypeOfCard = "boards" | "health" | "weapon" | null;
 
 const PlayerCard = styled.div<PlayerItem>`
-  /*   background-color: #9f3f3f; */
-
   width: 34px;
   height: 34px;
   margin: 0px;
@@ -41,12 +39,6 @@ const PlayerCard = styled.div<PlayerItem>`
   background-repeat: no-repeat;
   background-position: 0px;
   background-color: white;
-  /*  background-color: ${(props) => {
-    if (props.isCurrent) {
-      return "red";
-    }
-  }}; */
-
   background-image: url(${img});
   background-size: 30px;
   border: 1px solid black;

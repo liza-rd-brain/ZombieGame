@@ -1,3 +1,6 @@
+export type PlayGridMode = "image" | "cssStyle";
+export type CardApperance = "closed" | "open";
+
 export type CoordItem = { hor: number; vert: number };
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
@@ -42,8 +45,6 @@ export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
-
-export type CardApperance = "closed" | "open";
 
 export type EnemyCardType = {
   name: "enemy";
@@ -147,5 +148,3 @@ export type GameState =
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
-
-export type PlayGridMode = "image" | "cssStyle";
