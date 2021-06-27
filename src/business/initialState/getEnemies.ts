@@ -1,6 +1,6 @@
 import { EnemyListType, GameField, CommonCell, CellType } from "../types";
 
-import { AMOUNT_ENEMIES, APPERANCE_CARD } from "../../shared/config";
+import { AMOUNT_ENEMIES, CARD_APPERANCE } from "../../shared/config";
 
 export const getEnemies = (gameField: GameField): EnemyListType => {
   const emptyCellsList = getEmptyList(gameField);
@@ -15,13 +15,12 @@ export const getEnemies = (gameField: GameField): EnemyListType => {
  */
 const getEmptyList = (gameField: GameField): [string, CommonCell][] => {
   const listCells = Object.entries(gameField.values);
-  const emptyCellsList = listCells.filter((cellItem): cellItem is [
-    string,
-    CommonCell
-  ] => {
-    const [, item] = cellItem;
-    return item.name === "commonCell" && item.cardItem.length === 0;
-  });
+  const emptyCellsList = listCells.filter(
+    (cellItem): cellItem is [string, CommonCell] => {
+      const [, item] = cellItem;
+      return item.name === "commonCell" && item.cardItem.length === 0;
+    }
+  );
   return emptyCellsList;
 };
 
@@ -61,7 +60,7 @@ const getListOfEnemy = (enemiesCoords: string[]) => {
       name: "enemy",
       power: 1,
       coord: coord,
-      apperance: APPERANCE_CARD,
+      apperance: CARD_APPERANCE,
     };
     return [enemyCard.coord, enemyCard];
   });

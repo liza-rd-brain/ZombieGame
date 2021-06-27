@@ -1,4 +1,8 @@
-import { MoveDirectionList } from "../../business/types";
+import {
+  MoveDirectionList,
+  CardApperance,
+  PlayGridMode,
+} from "../../business/types";
 
 export const START_COORD = { hor: 0, vert: 0 };
 export const FINISH_COORD = { hor: 11, vert: 11 };
@@ -8,7 +12,9 @@ export const AMOUNT_BOARDS_ITEMS = 20;
 export const AMOUNT_WEAPONS_ITEMS = 20;
 export const AMOUNT_PLAYERS = 1;
 export const AMOUNT_ENEMIES = 20;
-export const APPERANCE_CARD = "open";
+export const CARD_APPERANCE: CardApperance = "open";
+
+export const PLAY_GRID_MODE: PlayGridMode = "image";
 
 export const MAX_HEALTH_AMOUNT = 7;
 

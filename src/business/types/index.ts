@@ -43,11 +43,13 @@ export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PlayerCardType>;
 
+export type CardApperance = "closed" | "open";
+
 export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  apperance: "closed" | "open" | "defeated";
+  apperance: CardApperance | "defeated";
 };
 
 export type EnemyListType = Record<string, EnemyCardType>;
@@ -64,19 +66,19 @@ export type StartCell = {
 
 export type HealthCardType = {
   name: "health";
-  apperance: "closed" | "open";
+  apperance: CardApperance;
   isSelected?: boolean;
 };
 
 export type BoardsCardType = {
   name: "boards";
-  apperance: "closed" | "open";
+  apperance: CardApperance;
   isSelected?: boolean;
 };
 
 export type WeaponCardType = {
   name: "weapon";
-  apperance: "closed" | "open";
+  apperance: CardApperance;
   isSelected?: boolean;
 };
 
@@ -145,3 +147,5 @@ export type GameState =
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
+
+export type PlayGridMode = "image" | "cssStyle";
