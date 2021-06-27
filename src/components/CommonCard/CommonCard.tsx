@@ -1,11 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import img from "./brain.svg";
 
-type CommonCardType = {
-  className?: string;
-};
-
-const StyledCommonCard = styled.div`
+export const StyledCommonCard = css`
   position: absolute;
   border: 1px solid;
   width: 34px;
@@ -18,7 +14,3 @@ const StyledCommonCard = styled.div`
   background-repeat: no-repeat;
   background-position: 1px;
 `;
-
-export const CommonCard = (props: any) => (
-  <StyledCommonCard {...props}></StyledCommonCard>
-);

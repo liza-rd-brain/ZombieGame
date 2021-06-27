@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./health3.png";
 
 type HealthApperanceType = {
@@ -7,7 +7,8 @@ type HealthApperanceType = {
   className?: string;
 };
 
-export const StyledHealthCard = styled(CommonCard)<HealthApperanceType>`
+export const StyledHealthCard = styled.div<HealthApperanceType>`
+  ${StyledCommonCard}
   background-color: ${(props) => {
     if (props.apperance === "open") {
       return "unset";

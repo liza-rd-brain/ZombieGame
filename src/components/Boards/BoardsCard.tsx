@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { CommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./boards.png";
 
 type BoardsApperanceType = {
   apperance?: "closed" | "open";
 };
 
-const StyledBoardsCard = styled(CommonCard)<BoardsApperanceType>`
+const StyledBoardsCard = styled.div<BoardsApperanceType>`
+  ${StyledCommonCard}
   background-color: ${(props) => {
     if (props.apperance === "open") {
       return "unset";

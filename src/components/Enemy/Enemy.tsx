@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { EnemyCardType, State } from "../../business/types";
-import { CommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../CommonCard/CommonCard";
 
 import img from "./zombie.png";
 
@@ -10,7 +10,8 @@ type EnemyArray = {
   list: EnemyCardType[];
 };
 
-const EnemyCard = styled(CommonCard)<EnemyCardType>`
+const EnemyCard = styled.div<EnemyCardType>`
+  ${StyledCommonCard}
   /*   position: absolute;
   border: 5px solid;
   width: 25px;

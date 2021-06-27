@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { CommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./weapon.png";
 
 type WeaponApperanceType = {
   apperance?: "closed" | "open";
 };
 
-const StyledWeaponCard = styled(CommonCard)<WeaponApperanceType>`
+const StyledWeaponCard = styled.div<WeaponApperanceType>`
+  ${StyledCommonCard}
   background-color: ${(props) => {
     if (props.apperance === "open") {
       return "unset";
