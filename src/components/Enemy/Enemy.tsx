@@ -18,8 +18,7 @@ const EnemyCard = styled.div<EnemyCardType>`
   height: 25px;
   margin: 12px;
   box-sizing: border-box; */
-  border: 1px solid;
-  color: #c08f5e;
+
   font-size: 47px;
   text-align: start;
   vertical-align: bottom;
@@ -33,12 +32,6 @@ const EnemyCard = styled.div<EnemyCardType>`
   background-color: ${(props) => {
     if (props.apperance === "open" || props.apperance === "defeated") {
       return "unset";
-    }
-  }};
-
-  border-color: ${(props) => {
-    if (props.apperance === "open") {
-      return "navy";
     }
   }};
 

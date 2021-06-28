@@ -37,19 +37,19 @@ const CellItem = styled.div<CellApperance>`
 
   background-color: ${(props) => {
     if (props.hasMarker) {
-      return " rgb(224 91 91 / 40%)";
+      return "rgb(55 163 0 / 77%);";
     }
   }};
 
   & > :first-child {
     top: ${(props) => {
       if (props.isNeedSepareteCards) {
-        return "-10px";
+        return "-5px";
       }
     }};
     left: ${(props) => {
       if (props.isNeedSepareteCards) {
-        return "-10px";
+        return "-21px";
       }
     }};
   }
@@ -62,7 +62,7 @@ const CellItem = styled.div<CellApperance>`
 
     left: ${(props) => {
       if (props.isNeedSepareteCards) {
-        return "15px";
+        return "10px";
       }
     }};
   }

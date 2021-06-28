@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
-import img from "./health3.png";
+import img from "./health.png";
 
 type HealthApperanceType = {
   apperance?: "closed" | "open";
@@ -12,12 +12,6 @@ export const StyledHealthCard = styled.div<HealthApperanceType>`
   background-color: ${(props) => {
     if (props.apperance === "open") {
       return "unset";
-    }
-  }};
-
-  border-color: ${(props) => {
-    if (props.apperance !== "open") {
-      return "gray";
     }
   }};
 

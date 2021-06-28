@@ -1,16 +1,12 @@
 import styled, { css } from "styled-components";
-import img from "./brain.svg";
+import img from "./brain.png";
 
 export const StyledCommonCard = css`
   position: absolute;
-  border: 1px solid gray;
-  width: 34px;
-  height: 34px;
-  margin: 4px;
-  background-color: #b8b47d;
+  width: 50px;
+  height: 50px;
   background-image: url(${img});
-  background-size: 30px;
-  background-blend-mode: soft-light;
+  background-size: 44px;
   background-repeat: no-repeat;
-  background-position: 1px;
+  background-position: 3px;
 `;
