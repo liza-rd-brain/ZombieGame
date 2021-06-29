@@ -1,16 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
 import styled from "styled-components";
 
 import { FINISH_COORD } from "../../shared/config";
-import { State } from "../../business/types";
-
+import { State, PlayGridMode } from "../../business/types";
 import { getFilledPlayGrid } from "./getFilledPlayGrid";
+import { PLAY_GRID_MODE } from "../../shared/config";
+
+import img from "./house.png";
 
 type GridProps = {
   vert: number;
-  type: "visible" | "hidden";
+  /*   type: "visible" | "hidden"; */
+  mode: PlayGridMode;
 };
 
 type ContextMenuType = {
@@ -21,7 +23,12 @@ type ContextMenuType = {
 type WrapType = {};
 
 const GridItem = styled.div<GridProps>`
-  outline: 2px solid lightgray;
+  outline: ${(props) => {
+    if (props.mode === "cssStyle") {
+      return "2px solid lightgray";
+    }
+  }};
+
   margin: 0 auto;
   width: 100%;
   transform: rotate(270deg);
@@ -36,6 +43,16 @@ const GridItem = styled.div<GridProps>`
   > * {
     transform: rotate(90deg);
   }
+
+  background-image: ${(props) => {
+    if (props.mode === "image") {
+      return `url(${img})`;
+    }
+  }};
+
+  background-color: white;
+  background-size: 600px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 `;
 
 const ContextMenu = styled.div<ContextMenuType>`
@@ -152,9 +169,15 @@ export const PlayGrid = () => {
 
   return (
     <>
-      <GridItem vert={height} type={contextMenuState.type}>
+      <GridItem
+        key={"grid"}
+        vert={height}
+        /*  type={contextMenuState.type} */
+        mode={PLAY_GRID_MODE}
+      >
         {getFilledPlayGrid(state, getContextMenu)}
       </GridItem>
+
       <ContextMenu
         type={contextMenuState.type}
         id={"contextMenu"}

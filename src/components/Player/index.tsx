@@ -9,6 +9,8 @@ import {
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
 
+import img from "./player.png";
+
 type PlayerItem = {
   isCurrent: boolean;
   needHighlightning?: boolean;
@@ -26,23 +28,19 @@ type ContextMenuType = {
 type TypeOfCard = "boards" | "health" | "weapon" | null;
 
 const PlayerCard = styled.div<PlayerItem>`
-  background-color: #9f3f3f;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   margin: 0px;
   z-index: 3;
   text-align: center;
-  padding: 4px;
+  padding: 2px;
   box-sizing: border-box;
   cursor: default;
-
-  background-color: ${(props) => {
-    if (props.isCurrent) {
-      return "red";
-    }
-  }};
-
+  background-repeat: no-repeat;
+  background-position: 0px;
+  background-image: url(${img});
+  background-size: 44px;
+  background-position: 3px;
   &:before {
     content: "";
     position: absolute;
@@ -70,9 +68,6 @@ const PlayerCardList = styled.div`
   z-index: 3;
   font-size: 12px;
   font-weight: bold;
-  color: white;
-  /*   padding: 3px; */
-  margin: 3px;
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -124,9 +119,7 @@ export const PlayerList = (props: PlayerListItem) => {
                 dispatch
               );
             }}
-          >
-            {playerCardItem.orderNumber + 1}
-          </PlayerCard>
+          ></PlayerCard>
         );
       })}
     </PlayerCardList>

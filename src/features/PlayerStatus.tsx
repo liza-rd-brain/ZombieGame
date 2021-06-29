@@ -20,6 +20,7 @@ const PlayerStatusCard = styled.div`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  background-color: white;
 `;
 
 const CharacterAvatar = styled.div`
@@ -52,6 +53,7 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 export const PlayerStatus = () => {
   const { numberOfPlayer } = useSelector((state: State) => ({
     ...state,

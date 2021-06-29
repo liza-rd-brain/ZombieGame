@@ -1,5 +1,5 @@
-export { Health } from "./Health";
+export { Health } from "./Health/Health";
 export { PlayerList } from "./Player";
-export { EnemyList } from "./Enemy";
-export { BoardsCard } from "./BoardsCard";
-export { WeaponCard } from "./WeaponCard";
+export { EnemyList } from "./Enemy/Enemy";
+export { BoardsCard } from "./Boards/BoardsCard";
+export { WeaponCard } from "./Weapon/WeaponCard";

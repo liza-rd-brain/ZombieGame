@@ -3,7 +3,7 @@ import { CommonCell, GameFieldCells, CardItem } from "../../types";
 import {
   AMOUNT_HEALTH_ITEMS,
   AMOUNT_BOARDS_ITEMS,
-  APPERANCE_CARD,
+  CARD_APPERANCE,
   AMOUNT_WEAPONS_ITEMS,
 } from "../../../shared/config";
 
@@ -16,27 +16,25 @@ const cardsList: CardSet[] = [
   {
     card: {
       name: "health",
-      apperance: APPERANCE_CARD,
+      apperance: CARD_APPERANCE,
     },
     amount: AMOUNT_HEALTH_ITEMS,
   },
   {
     card: {
       name: "boards",
-      apperance: APPERANCE_CARD,
+      apperance: CARD_APPERANCE,
     },
     amount: AMOUNT_BOARDS_ITEMS,
   },
   {
     card: {
       name: "weapon",
-      apperance: APPERANCE_CARD,
+      apperance: CARD_APPERANCE,
     },
     amount: AMOUNT_WEAPONS_ITEMS,
   },
 ];
-
-
 
 /**
  * Returns an object in structure of FieldCells with spreaded cards in random picked cells.
@@ -108,14 +106,13 @@ const getListForCards = (
    * This array contains only empty cells
    */
 
-  const emptyCellsList = listGameField.filter((cellItem): cellItem is [
-    string,
-    CommonCell
-  ] => {
-    const [, item] = cellItem;
+  const emptyCellsList = listGameField.filter(
+    (cellItem): cellItem is [string, CommonCell] => {
+      const [, item] = cellItem;
 
-    return item.name === "commonCell" && item.cardItem.length === 0;
-  });
+      return item.name === "commonCell" && item.cardItem.length === 0;
+    }
+  );
 
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
   const amoutCurrentCards = currCardSet.amount;

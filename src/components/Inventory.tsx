@@ -9,9 +9,9 @@ import {
   GameState,
   CardItem,
 } from "../business/types";
-import { Health } from "./Health";
-import { BoardsCard } from "./BoardsCard";
-import { WeaponCard } from "./WeaponCard";
+import { Health } from "./Health/Health";
+import { BoardsCard } from "./Boards/BoardsCard";
+import { WeaponCard } from "./Weapon/WeaponCard";
 
 type SlotType = {
   onClick: Function;
@@ -73,13 +73,13 @@ export const Inventory = (props: { index: number }) => {
 const getChildrenComponent = (inventoryCard: CardItem) => {
   switch (inventoryCard?.name) {
     case "health": {
-      return <Health />;
+      return <Health apperance={inventoryCard.apperance} />;
     }
     case "boards": {
-      return <BoardsCard />;
+      return <BoardsCard apperance={inventoryCard.apperance} />;
     }
     case "weapon": {
-      return <WeaponCard />;
+      return <WeaponCard apperance={inventoryCard.apperance} />;
     }
     default: {
       return null;

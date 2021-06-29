@@ -29,7 +29,6 @@ const PlayersListWrap = styled.div<AmountOfPlayers>`
     return `repeat(${props.amount} ,25px)`;
   }};
   pointer-events: none;
-  margin: 0 30px;
 `;
 
 const CharacterAvatar = styled.div`

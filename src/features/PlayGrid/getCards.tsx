@@ -1,7 +1,8 @@
 import { Health, BoardsCard, WeaponCard } from "../../components";
 import { CellType } from "../../business/types";
+import styled from "styled-components";
 
-export const getCards = (cell: CellType) => {
+export const getCards = (cell: CellType, hor: string, vert: string) => {
   const healthCardItem = cell.cardItem.find(
     (cardItem) => cardItem?.name === "health"
   );
@@ -15,12 +16,24 @@ export const getCards = (cell: CellType) => {
 
   return (
     <>
-      {healthCardItem ? <Health apperance={healthCardItem.apperance} /> : null}
+      {healthCardItem ? (
+        <Health
+          apperance={healthCardItem.apperance}
+          className={""}
+          key={`${hor}.${vert}.health`}
+        />
+      ) : null}
       {boardsCardItem ? (
-        <BoardsCard apperance={boardsCardItem.apperance} />
+        <BoardsCard
+          apperance={boardsCardItem.apperance}
+          key={`${hor}.${vert}.boards`}
+        />
       ) : null}
       {weaponCardItem ? (
-        <WeaponCard apperance={weaponCardItem.apperance} />
+        <WeaponCard
+          apperance={weaponCardItem.apperance}
+          key={`${hor}.${vert}.weapon`}
+        />
       ) : null}
     </>
   );
