@@ -51,9 +51,16 @@ const CellItem = styled.div<CellApperance>`
 const UnderlayerItem = styled.div<UnderlayerType>`
   position: relative;
   display: flex;
-  width: 100px;
+  width: 134px;
   height: 100px;
-  background-color: rgb(129 128 72/ 77%);
+  background-color: rgb(47 84 96 / 77%);
+  left: -30px;
+  bottom: 120px;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0px 0px 12px 1px rgb(62 76 81 / 98%);
+
   left: ${(props) => {
     return `${Number(props.coordX) * 50 - 30}px`;
   }};
@@ -71,6 +78,15 @@ const UnderlayerItem = styled.div<UnderlayerType>`
   flex-direction: row;
 
   align-items: center;
+`;
+
+const Test = styled.div`
+  position: absolute;
+  z-index: 0;
+  top: 40px;
+  width: 600px;
+  height: 600px;
+  background-color: rgb(229 203 138 / 53%);
 `;
 
 export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
@@ -96,8 +112,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
       isPhaseCardsSeparate && playerX === hor && playerY === vert;
 
     const cardList = (
-      <React.Fragment>
-        {" "}
+      <>
         {getCards(cellValues, hor, vert)}
         {getPlayersList(
           orderIndex,
@@ -110,7 +125,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
         {cellValues.name === "commonCell"
           ? getEnemyList(orderIndex, enemyList, hor, vert)
           : null}
-      </React.Fragment>
+      </>
     );
 
     switch (isNeedSepareteCards) {
@@ -137,9 +152,12 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
                 </Wrap>
 
                 {ReactDOM.createPortal(
-                  <UnderlayerItem coordX={hor} coordY={vert}>
-                    {cardList}{" "}
-                  </UnderlayerItem>,
+                  <>
+                    <Test />
+                    <UnderlayerItem coordX={hor} coordY={vert}>
+                      {cardList}{" "}
+                    </UnderlayerItem>{" "}
+                  </>,
                   fieildElem
                 )}
               </React.Fragment>

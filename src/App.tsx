@@ -26,6 +26,7 @@ const Field = styled.div`
 
 const Game = styled.div`
   width: 900px;
+  height: 600px;
   margin: 40px auto;
   display: flex;
   justify-content: center;
@@ -69,6 +70,14 @@ const GameControls = styled.div`
   box-sizing: border-box;
 `;
 
+const Test = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 600px;
+  height: 600px;
+  background-color: rgb(218 222 201 / 77%);
+`;
+
 export function GetApp() {
   const { gameState } = useSelector((state: State) => ({ ...state }));
 
@@ -92,6 +101,7 @@ export function GetApp() {
               <PlayersStatusList />
             </LeftPanel>
             <Field id="field">
+              {/*        <Test /> */}
               <PlayGrid />
             </Field>
             <RightPanel>

@@ -13,7 +13,7 @@ export const AMOUNT_WEAPONS_ITEMS = 30;
 export const AMOUNT_PLAYERS = 1;
 export const AMOUNT_ENEMIES = 30;
 
-export const CARD_APPERANCE: CardApperance = "open";
+export const CARD_APPERANCE: CardApperance = "closed";
 
 export const PLAY_GRID_MODE: PlayGridMode = "image";
 
