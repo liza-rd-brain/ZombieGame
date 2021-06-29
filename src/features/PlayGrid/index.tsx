@@ -11,7 +11,7 @@ import img from "./house.png";
 
 type GridProps = {
   vert: number;
-  type: "visible" | "hidden";
+  /*   type: "visible" | "hidden"; */
   mode: PlayGridMode;
 };
 
@@ -170,8 +170,9 @@ export const PlayGrid = () => {
   return (
     <>
       <GridItem
+        key={"grid"}
         vert={height}
-        type={contextMenuState.type}
+        /*  type={contextMenuState.type} */
         mode={PLAY_GRID_MODE}
       >
         {getFilledPlayGrid(state, getContextMenu)}

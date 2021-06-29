@@ -12,12 +12,6 @@ type EnemyArray = {
 
 const EnemyCard = styled.div<EnemyCardType>`
   ${StyledCommonCard}
-  /*   position: absolute;
-
-  width: 25px;
-  height: 25px;
-  margin: 12px;
-  box-sizing: border-box; */
 
   font-size: 47px;
   text-align: start;
@@ -54,7 +48,8 @@ const EnemiesCardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: absolute;
-  font-size: 10px;
+  /*   width: 50px;
+  height: 50px; */
 `;
 
 export const EnemyList = (props: EnemyArray) => {
@@ -64,27 +59,30 @@ export const EnemyList = (props: EnemyArray) => {
   }));
   const { numberOfPlayer, playerList } = state;
   const enemyArray = props.list;
+
   return (
     <EnemiesCardList>
-      {enemyArray.map((enemyCard, index) => (
-        <EnemyCard
-          key={index}
-          {...enemyCard}
-          onClick={() => {
-            const canFight =
-              playerList[numberOfPlayer].coord === enemyCard.coord;
-            if (canFight) {
-              dispatch({
-                type: "req-defeatEnemy",
-              });
-            } else {
-              return null;
-            }
-          }}
-        >
-          {enemyCard.apperance === "defeated" ? "x" : null}
-        </EnemyCard>
-      ))}
+      {enemyArray.map((enemyCard, index) => {
+        return (
+          <EnemyCard
+            key={index}
+            {...enemyCard}
+            onClick={() => {
+              const canFight =
+                playerList[numberOfPlayer].coord === enemyCard.coord;
+              if (canFight) {
+                dispatch({
+                  type: "req-defeatEnemy",
+                });
+              } else {
+                return null;
+              }
+            }}
+          >
+            {/*  {enemyCard.apperance === "defeated" ? "x" : null} */}
+          </EnemyCard>
+        );
+      })}
     </EnemiesCardList>
   );
 };

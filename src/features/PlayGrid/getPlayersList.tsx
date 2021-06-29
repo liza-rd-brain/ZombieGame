@@ -6,7 +6,9 @@ export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
   numberOfPlayer: number,
-  getContextMenu: Function
+  getContextMenu: Function,
+  hor: string,
+  vert: string
 ) => {
   let playersArr: PlayerCardType[] = [];
 

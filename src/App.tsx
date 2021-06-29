@@ -91,7 +91,7 @@ export function GetApp() {
             <LeftPanel>
               <PlayersStatusList />
             </LeftPanel>
-            <Field>
+            <Field id="field">
               <PlayGrid />
             </Field>
             <RightPanel>
