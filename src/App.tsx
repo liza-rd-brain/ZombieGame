@@ -97,9 +97,7 @@ export function GetApp() {
       default:
         return (
           <>
-            <LeftPanel>
-              <PlayersStatusList />
-            </LeftPanel>
+            <LeftPanel>{/*  <PlayersStatusList /> */}</LeftPanel>
             <Field id="field">
               {/*        <Test /> */}
               <PlayGrid />
@@ -110,7 +108,7 @@ export function GetApp() {
                 <Dice />
                 <MoveControls />
               </GameControls>
-              {/*   <PlayerStatus /> */}
+              {/*  <PlayerStatus /> */}
             </RightPanel>
           </>
         );

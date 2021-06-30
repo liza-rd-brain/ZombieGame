@@ -57,7 +57,6 @@ export const StatusList = () => {
     <>
       <Status>{status}</Status>
       <PlayerStatus />
-      {/*    <PlayersStatusList /> */}
     </>
   );
 };

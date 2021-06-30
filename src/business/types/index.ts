@@ -1,5 +1,6 @@
 export type PlayGridMode = "image" | "cssStyle";
 export type CardApperance = "closed" | "open";
+export type CardsNameType = "boards" | "health" | "weapon";
 
 export type CoordItem = { hor: number; vert: number };
 

@@ -2,19 +2,27 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import {
-  State,
-  PlayerListType,
-  HealthCardType,
-  GameState,
-  CardItem,
-} from "../business/types";
+import { State, CardItem, CardItemList } from "../business/types";
 import { Health } from "./Health/Health";
 import { BoardsCard } from "./Boards/BoardsCard";
 import { WeaponCard } from "./Weapon/WeaponCard";
+import { StyledCommonCard } from "./CommonCard/CommonCard";
+
+import health from "../components/Health/health.png";
+import boards from "../components/Boards/boards.png";
+import weapon from "../components/Weapon/weapon.png";
 
 type SlotType = {
-  onClick: Function;
+  /*   onClick: Function; */
+  highlighting?: boolean;
+};
+
+type StructuredInventory = Record<string, number>;
+
+type CardsNameType = "boards" | "health" | "weapon";
+
+type ImageType = {
+  type: CardsNameType;
   highlighting?: boolean;
 };
 
@@ -23,6 +31,42 @@ const InventoryWrap = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
+`;
+
+const InwentoryRow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  align-items: center;
+`;
+
+//Todo: can replace switch to calculated props?
+const Image = styled.div<ImageType>`
+  width: 50px;
+  height: 50px;
+  background-size: 44px;
+  background-repeat: no-repeat;
+  background-position: 3px;
+  background-image: ${(props) => {
+    switch (props.type) {
+      case "health": {
+        return `url(${health})`;
+      }
+
+      case "boards": {
+        return `url(${boards})`;
+      }
+
+      case "weapon": {
+        return `url(${weapon})`;
+      }
+    }
+  }};
+`;
+
+const Counter = styled.div`
+  margin-left: 10px;
+  font-size: 22px;
 `;
 
 const Slot = styled.div<SlotType>`
@@ -47,28 +91,64 @@ export const Inventory = (props: { index: number }) => {
     ...state,
   }));
 
-  const inventory = playerList[props.index].inventory;
+  const inventory: CardItemList = playerList[props.index].inventory;
+
+  const structuredInventory: StructuredInventory = inventory.reduce(
+    (prevItem: StructuredInventory, currentItem) => {
+      if (currentItem) {
+        const prevItemObj = prevItem[currentItem.name];
+
+        if (prevItemObj) {
+          return {
+            ...prevItem,
+            [currentItem.name]: prevItem[currentItem.name] + 1,
+          };
+        } else {
+          return { ...prevItem, [currentItem.name]: 1 };
+        }
+      } else return {};
+    },
+    {}
+  );
+  console.log(structuredInventory);
+
+  const isCardSelected = (name: CardsNameType, inventory: CardItemList) => {
+    const selectedCard = inventory.find((card: CardItem) => card?.isSelected);
+    return selectedCard ? true : false;
+  };
+
   return (
     <InventoryWrap>
-      {inventory.map((inventoryCard, inventoryCardindex) => {
-        return (
-          <Slot
-            key={inventoryCardindex}
-            highlighting={inventoryCard?.isSelected}
-            onClick={() => {
-              dispatch({
-                type: "cardChoosed",
-                payload: { index: inventoryCardindex, card: inventoryCard },
-              });
-            }}
-          >
-            {getChildrenComponent(inventoryCard)}
-          </Slot>
-        );
-      })}
+      <InwentoryRow>
+        <Image
+          type="health"
+          highlighting={isCardSelected("health", inventory)}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "health" },
+            });
+          }}
+        ></Image>
+        <Counter> x {structuredInventory["health"] || 0}</Counter>
+      </InwentoryRow>
+      <InwentoryRow>
+        <Image type="boards"></Image>
+        <Counter> x {structuredInventory["boards"] || 0}</Counter>
+      </InwentoryRow>
+      <InwentoryRow>
+        <Image type="weapon"></Image>
+        <Counter> x {structuredInventory["weapon"] || 0}</Counter>
+      </InwentoryRow>
+
+      <InwentoryRow></InwentoryRow>
+      <InwentoryRow></InwentoryRow>
     </InventoryWrap>
   );
 };
+
+{
+}
 
 const getChildrenComponent = (inventoryCard: CardItem) => {
   switch (inventoryCard?.name) {
