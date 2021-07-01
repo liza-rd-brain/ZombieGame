@@ -6,7 +6,7 @@ export const selectCard = (state: State, action: ActionType) => {
   const { numberOfPlayer } = state;
   switch (action.type) {
     case "cardChoosed": {
-      const newPlayerList = changeSelectedCard(state, action.payload);
+      const newPlayerList = changeSelectedCard(state, action.payload.type);
 
       const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory
         .cardSelected

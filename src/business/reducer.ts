@@ -29,7 +29,7 @@ export type ActionType =
   | { type: "req-takeCard" }
   | {
       type: "cardChoosed";
-      payload: TypeOfCard;
+      payload: { type: TypeOfCard };
     }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }

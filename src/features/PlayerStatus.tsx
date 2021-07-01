@@ -14,7 +14,7 @@ type HealthSlotType = {
 
 const PlayerStatusCard = styled.div`
   width: 250px;
-  height: 200px;
+  height: 220px;
   border: 1px solid lightgray;
   padding: 10px;
   box-sizing: border-box;
@@ -66,10 +66,10 @@ export const PlayerStatus = () => {
         <CharacterAvatar>игрок {`${numberOfPlayer + 1}`}</CharacterAvatar>
       </Column> */}
       <Column>
-        {/*   <HealthStatus>
+        <HealthStatus>
           {`здоровье:  `}
           <HealthSlots index={numberOfPlayer}></HealthSlots>
-        </HealthStatus> */}
+        </HealthStatus>
         <InventoryStatus>
           {/*    {`предметы:  `} */}
           <Inventory index={numberOfPlayer} />

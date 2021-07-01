@@ -1,4 +1,9 @@
-import { State, MoveDirection, AvailableCellListType } from "../../../types";
+import {
+  State,
+  MoveDirection,
+  AvailableCellListType,
+  TypeOfCard,
+} from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { MOVE_DIRECTION_LIST } from "../../../../shared/config";
@@ -30,8 +35,8 @@ export const playerMove = (state: State, action: ActionType): State => {
     }
 
     case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardSelected(state, target);
+      const typeofCard: TypeOfCard = action.payload.type;
+      return getStateCardSelected(state, typeofCard);
     }
 
     default: {

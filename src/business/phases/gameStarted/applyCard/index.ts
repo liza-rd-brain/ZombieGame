@@ -23,7 +23,7 @@ export const applyCard = (state: State, action: ActionType): State => {
     }
 
     case "cardChoosed": {
-      const typeOfSelect = action.payload;
+      const typeOfSelect = action.payload.type;
       return getStateCardSelected(state, typeOfSelect);
     }
 

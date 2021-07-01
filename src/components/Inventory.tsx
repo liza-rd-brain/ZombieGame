@@ -57,6 +57,11 @@ const Image = styled.div<ImageType>`
       }
     }
   }};
+  outline: ${(props) => {
+    if (props.highlighting === true) {
+      return "1px solid red ";
+    }
+  }};
 `;
 
 const Counter = styled.div`
@@ -93,22 +98,40 @@ export const Inventory = (props: { index: number }) => {
       <InwentoryRow>
         <Image
           type="health"
-          /*   highlighting={isCardSelected("health", inventory)}
+          highlighting={inventory.cardSelected === "health"}
           onClick={() => {
             dispatch({
               type: "cardChoosed",
               payload: { type: "health" },
             });
-          }} */
+          }}
         ></Image>
         <Counter> x {inventory["health"] || 0}</Counter>
       </InwentoryRow>
       <InwentoryRow>
-        <Image type="boards"></Image>
+        <Image
+          type="boards"
+          highlighting={inventory.cardSelected === "boards"}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "boards" },
+            });
+          }}
+        ></Image>
         <Counter> x {inventory["boards"] || 0}</Counter>
       </InwentoryRow>
       <InwentoryRow>
-        <Image type="weapon"></Image>
+        <Image
+          type="weapon"
+          highlighting={inventory.cardSelected === "weapon"}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "weapon" },
+            });
+          }}
+        ></Image>
         <Counter> x {inventory["weapon"] || 0}</Counter>
       </InwentoryRow>
 

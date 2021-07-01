@@ -1,12 +1,14 @@
-import { State, PlayerListType, CardItem, TypeOfCard } from "../../types";
+import {
+  State,
+  PlayerListType,
+  CardItem,
+  TypeOfCard,
+  InventoryType,
+} from "../../types";
 
 /**
  * We need to give highlighting to healthCard
  */
-type TargerCard = {
-  index: number;
-  card: CardItem;
-};
 
 export const getStateCardSelected = (
   state: State,
@@ -53,16 +55,54 @@ export const getStateCardSelected = (
 const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
+  if (typeOfSelect !== null) {
+    const isTheSameSelectType = inventory.cardSelected === typeOfSelect;
+    const hasCards = inventory[typeOfSelect] !== 0;
 
-  const newInventory = { ...inventory, isSelected: typeOfSelect };
+    switch (hasCards) {
+      case true: {
+        switch (isTheSameSelectType) {
+          case true: {
+            const newInventoryCardUnSelected: InventoryType = {
+              ...inventory,
+              cardSelected: null,
+            };
 
-  const newPlayerList: PlayerListType = {
-    ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
-      inventory: newInventory,
-    },
-  };
+            const newPlayerList: PlayerListType = {
+              ...playerList,
+              [numberOfPlayer]: {
+                ...playerList[numberOfPlayer],
+                inventory: newInventoryCardUnSelected,
+              },
+            };
 
-  return newPlayerList;
+            return newPlayerList;
+          }
+
+          case false: {
+            const newInventoryCardSelected: InventoryType = {
+              ...inventory,
+              cardSelected: typeOfSelect,
+            };
+
+            const newPlayerList: PlayerListType = {
+              ...playerList,
+              [numberOfPlayer]: {
+                ...playerList[numberOfPlayer],
+                inventory: newInventoryCardSelected,
+              },
+            };
+
+            return newPlayerList;
+          }
+        }
+      }
+
+      case false: {
+        return playerList;
+      }
+    }
+  } else {
+    return playerList;
+  }
 };
