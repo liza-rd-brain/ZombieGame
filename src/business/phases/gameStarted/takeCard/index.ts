@@ -1,4 +1,9 @@
-import { State, GameField, PlayerListType, CommonCell } from "../../../types";
+import {
+  State,
+  GameField,
+  PlayerListType,
+  InventoryType,
+} from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { openCard } from "./openCard";
@@ -48,9 +53,41 @@ const getStateCardTaken = (state: State): State => {
 
   const cardItems = gameField.values[player.coord].cardItem;
 
+  const emptyInventory = {
+    boards: 0,
+    health: 0,
+    weapon: 0,
+    cardSelected: null,
+  };
+
+  let structuredCardItems: InventoryType = cardItems.reduce(
+    (prevItem, currentItem) => {
+      if (currentItem) {
+        const prevItemObj = prevItem[currentItem.name];
+
+        if (prevItemObj) {
+          return {
+            ...prevItem,
+            [currentItem.name]: prevItem[currentItem.name] + 1,
+          };
+        } else {
+          return { ...prevItem, [currentItem.name]: 1 };
+        }
+      } else return emptyInventory;
+    },
+    emptyInventory
+  );
+
+  const newInventory = {
+    ...player.inventory,
+    boards: player.inventory.boards + structuredCardItems.boards,
+    health: player.inventory.health + structuredCardItems.health,
+    weapon: player.inventory.weapon + structuredCardItems.weapon,
+  };
+
   const newPlayer = {
     ...player,
-    inventory: [...player.inventory, ...cardItems],
+    inventory: newInventory,
   };
 
   const newPlayerList: PlayerListType = {

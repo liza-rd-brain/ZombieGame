@@ -1,17 +1,10 @@
-import { State, PlayerListType } from "../../types";
+import { State, PlayerListType, TypeOfCard } from "../../types";
 
-export const changeSelectedCard = (state: State, currentCardIndex: number) => {
+export const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
-  const targetCard = inventory[currentCardIndex];
 
-  const newInventory = inventory.map((card, index) => {
-    if (index === currentCardIndex) {
-      return { ...card, isSelected: !targetCard?.isSelected };
-    } else {
-      return { ...card, isSelected: false };
-    }
-  });
+  const newInventory = { ...inventory, cardSelected: typeOfSelect };
 
   const newPlayerList: PlayerListType = {
     ...playerList,

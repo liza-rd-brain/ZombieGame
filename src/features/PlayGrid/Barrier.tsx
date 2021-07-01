@@ -359,10 +359,8 @@ const getHighlightningList = (
   switch (gameState.type) {
     case "gameStarted.applyCard":
       const cardItemList = playerList[numberOfPlayer].inventory;
-      const selectedCard = cardItemList.find(
-        (cardItem) => cardItem?.isSelected === true
-      );
-      const typeOfSelectedCard = selectedCard?.name;
+      const typeOfSelectedCard = cardItemList.cardSelected;
+      /*  const typeOfSelectedCard = selectedCard?.name; */
       if (typeOfSelectedCard === "boards") {
         return availableCellList;
       } else {

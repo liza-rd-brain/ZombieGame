@@ -2,11 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, CardItem, CardItemList } from "../business/types";
+import { State, CardItem, InventoryType, TypeOfCard } from "../business/types";
 import { Health } from "./Health/Health";
 import { BoardsCard } from "./Boards/BoardsCard";
 import { WeaponCard } from "./Weapon/WeaponCard";
-import { StyledCommonCard } from "./CommonCard/CommonCard";
 
 import health from "../components/Health/health.png";
 import boards from "../components/Boards/boards.png";
@@ -17,12 +16,8 @@ type SlotType = {
   highlighting?: boolean;
 };
 
-type StructuredInventory = Record<string, number>;
-
-type CardsNameType = "boards" | "health" | "weapon";
-
 type ImageType = {
-  type: CardsNameType;
+  type: TypeOfCard;
   highlighting?: boolean;
 };
 
@@ -91,54 +86,30 @@ export const Inventory = (props: { index: number }) => {
     ...state,
   }));
 
-  const inventory: CardItemList = playerList[props.index].inventory;
-
-  const structuredInventory: StructuredInventory = inventory.reduce(
-    (prevItem: StructuredInventory, currentItem) => {
-      if (currentItem) {
-        const prevItemObj = prevItem[currentItem.name];
-
-        if (prevItemObj) {
-          return {
-            ...prevItem,
-            [currentItem.name]: prevItem[currentItem.name] + 1,
-          };
-        } else {
-          return { ...prevItem, [currentItem.name]: 1 };
-        }
-      } else return {};
-    },
-    {}
-  );
-  console.log(structuredInventory);
-
-  const isCardSelected = (name: CardsNameType, inventory: CardItemList) => {
-    const selectedCard = inventory.find((card: CardItem) => card?.isSelected);
-    return selectedCard ? true : false;
-  };
+  const inventory: InventoryType = playerList[props.index].inventory;
 
   return (
     <InventoryWrap>
       <InwentoryRow>
         <Image
           type="health"
-          highlighting={isCardSelected("health", inventory)}
+          /*   highlighting={isCardSelected("health", inventory)}
           onClick={() => {
             dispatch({
               type: "cardChoosed",
               payload: { type: "health" },
             });
-          }}
+          }} */
         ></Image>
-        <Counter> x {structuredInventory["health"] || 0}</Counter>
+        <Counter> x {inventory["health"] || 0}</Counter>
       </InwentoryRow>
       <InwentoryRow>
         <Image type="boards"></Image>
-        <Counter> x {structuredInventory["boards"] || 0}</Counter>
+        <Counter> x {inventory["boards"] || 0}</Counter>
       </InwentoryRow>
       <InwentoryRow>
         <Image type="weapon"></Image>
-        <Counter> x {structuredInventory["weapon"] || 0}</Counter>
+        <Counter> x {inventory["weapon"] || 0}</Counter>
       </InwentoryRow>
 
       <InwentoryRow></InwentoryRow>

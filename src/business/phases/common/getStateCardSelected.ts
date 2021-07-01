@@ -1,4 +1,4 @@
-import { State, PlayerListType, CardItem } from "../../types";
+import { State, PlayerListType, CardItem, TypeOfCard } from "../../types";
 
 /**
  * We need to give highlighting to healthCard
@@ -8,22 +8,20 @@ type TargerCard = {
   card: CardItem;
 };
 
-export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
+export const getStateCardSelected = (
+  state: State,
+  typeOfSelect: TypeOfCard
+) => {
   // TODO: Need to restrict select unneceserry card -?!
   // Add switch on type of cards
   const { numberOfPlayer } = state;
 
-  const newPlayerList = changeSelectedCard(state, targerCard.index);
+  const newPlayerList = changeSelectedCard(state, typeOfSelect);
 
-  const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
-    (card) => {
-      return card?.isSelected === true;
-    }
-  )
+  const selectedCard = newPlayerList[numberOfPlayer].inventory.cardSelected
     ? true
     : false;
 
-  const cardType = targerCard.card?.name;
   // The difference between weaponCard and other  card that weapon are usedin the battle.
   //Obviously we need other stateWithoutSelectedCard for weapon
   const stateWithSelectedCard: State = {
@@ -44,7 +42,7 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     },
   };
 
-  switch (hasAnyCardSelected) {
+  switch (selectedCard) {
     case true:
       return stateWithSelectedCard;
     case false:
@@ -52,22 +50,11 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
   }
 };
 
-const changeSelectedCard = (
-  state: State,
-  currentCardIndex: number
-  /*   hasCurrentCardHighlightning: boolean */
-) => {
+const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
-  const targetCard = inventory[currentCardIndex];
 
-  const newInventory = inventory.map((card, index) => {
-    if (index === currentCardIndex) {
-      return { ...card, isSelected: !targetCard?.isSelected };
-    } else {
-      return { ...card, isSelected: false };
-    }
-  });
+  const newInventory = { ...inventory, isSelected: typeOfSelect };
 
   const newPlayerList: PlayerListType = {
     ...playerList,

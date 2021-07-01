@@ -14,9 +14,7 @@ import { getStateHoleFilled } from "./getStateHoleFilled";
 export const applyCard = (state: State, action: ActionType): State => {
   const { numberOfPlayer, playerList } = state;
 
-  const chosenCardType = playerList[numberOfPlayer].inventory.find((card) => {
-    return card?.isSelected === true;
-  })?.name;
+  const chosenCardType = playerList[numberOfPlayer].inventory.cardSelected;
 
   switch (action.type) {
     case "req-shareCard": {
@@ -25,8 +23,8 @@ export const applyCard = (state: State, action: ActionType): State => {
     }
 
     case "cardChoosed": {
-      const target = action.payload;
-      return getStateCardSelected(state, target);
+      const typeOfSelect = action.payload;
+      return getStateCardSelected(state, typeOfSelect);
     }
 
     default: {

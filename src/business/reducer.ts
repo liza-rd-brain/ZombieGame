@@ -9,8 +9,7 @@ import {
 } from "./phases/gameStarted";
 import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State, CardItem } from "./types";
-
+import { MoveDirection, State, TypeOfCard } from "./types";
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -30,10 +29,7 @@ export type ActionType =
   | { type: "req-takeCard" }
   | {
       type: "cardChoosed";
-      payload: {
-        index: number;
-        card: CardItem;
-      };
+      payload: TypeOfCard;
     }
   | { type: "req-choosePlayer" }
   | { type: "req-healPlayer"; payload: number }

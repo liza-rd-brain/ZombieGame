@@ -6,13 +6,10 @@ export const selectCard = (state: State, action: ActionType) => {
   const { numberOfPlayer } = state;
   switch (action.type) {
     case "cardChoosed": {
-      const newPlayerList = changeSelectedCard(state, action.payload.index);
+      const newPlayerList = changeSelectedCard(state, action.payload);
 
-      const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
-        (card) => {
-          return card?.isSelected === true;
-        }
-      )
+      const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory
+        .cardSelected
         ? true
         : false;
 

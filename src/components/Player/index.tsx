@@ -5,6 +5,7 @@ import {
   PlayerCardType,
   AvailableCellListType,
   State,
+  TypeOfCard,
 } from "../../business/types";
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
@@ -24,8 +25,6 @@ type PlayerListItem = {
 type ContextMenuType = {
   visible: boolean;
 };
-
-type TypeOfCard = "boards" | "health" | "weapon" | null;
 
 const PlayerCard = styled.div<PlayerItem>`
   width: 50px;
@@ -86,10 +85,9 @@ export const PlayerList = (props: PlayerListItem) => {
   const currPlayerCoord = playerList[numberOfPlayer].coord;
   const listForHealing = listForInteract.concat(currPlayerCoord);
   const currPlayer = playerList[numberOfPlayer];
-  const chosedCard = currPlayer.inventory.find(
-    (card) => card?.isSelected === true
-  );
-  const typeOfChosedCard = chosedCard?.name || null;
+  const typeOfChosedCard = currPlayer.inventory.cardSelected;
+
+  /*  const typeOfChosedCard = chosedCard?.name || null; */
 
   return (
     <PlayerCardList>
