@@ -155,8 +155,8 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
                   <>
                     <Test />
                     <UnderlayerItem coordX={hor} coordY={vert}>
-                      {cardList}{" "}
-                    </UnderlayerItem>{" "}
+                      {cardList}
+                    </UnderlayerItem>
                   </>,
                   fieildElem
                 )}

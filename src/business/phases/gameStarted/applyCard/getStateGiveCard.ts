@@ -16,11 +16,12 @@ export const getStateGiveCard = (
     const newCurrentPlayerInventory = {
       ...currentPlayerInventory,
       [sharedCardType]: currentPlayerInventory[sharedCardType] - 1,
+      cardSelected: null,
     };
 
     const newRecepientPlayerInventory = {
       ...recepientPlayerInventory,
-      [sharedCardType]: recepientPlayerInventory[sharedCardType] - 1,
+      [sharedCardType]: recepientPlayerInventory[sharedCardType] + 1,
     };
 
     const newPlayerList = {
@@ -39,6 +40,7 @@ export const getStateGiveCard = (
       ...state,
       playerList: newPlayerList,
       gameState: { type: "gameStarted.playerMove" },
+      doEffect: { type: "!checkAvailableNeighboringCell" },
     };
   } else {
     return state;

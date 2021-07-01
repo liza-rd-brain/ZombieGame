@@ -62,7 +62,6 @@ export const applyCard = (state: State, action: ActionType): State => {
           switch (action.type) {
             case "req-fillHole": {
               const { coord, direction } = action.payload;
-              console.log("заполнить проем", coord, direction);
               return getStateHoleFilled(state, coord, direction);
             }
 

@@ -32,6 +32,7 @@ export const getStateCardSelected = (
     gameState: {
       type: "gameStarted.applyCard",
     },
+    availableCellsCoords: null,
   };
 
   const stateWithoutSelectedCard: State = {
@@ -42,6 +43,7 @@ export const getStateCardSelected = (
           ? "gameStarted.interactWithEnemy"
           :  */ "gameStarted.playerMove",
     },
+    doEffect: { type: "!checkAvailableNeighboringCell" },
   };
 
   switch (selectedCard) {

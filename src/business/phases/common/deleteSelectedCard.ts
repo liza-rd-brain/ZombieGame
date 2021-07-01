@@ -13,6 +13,7 @@ export const deleteSelectedCard = (
     const newInventory: InventoryType = {
       ...currInventory,
       [removedCardType]: currInventory[removedCardType] - 1,
+      cardSelected: null,
     };
 
     return newInventory;

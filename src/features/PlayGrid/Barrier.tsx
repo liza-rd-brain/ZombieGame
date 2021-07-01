@@ -50,12 +50,12 @@ const Wall = styled.div<WallType>`
   }};
 
   &:before {
-    display: ${(props) => {
+    /*     display: ${(props) => {
       if (props.mode === "image") {
         return "none";
       }
     }};
-
+ */
     content: "";
     position: absolute;
     width: 50px;
@@ -120,46 +120,50 @@ const Wall = styled.div<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
-        const needHighlightning = props.highlightningList?.find((item) => {
-          return item === "bottom" || "left";
-        });
-
-        switch (props.barrierItem.name) {
-          case "wall": {
-            return "#f09308;";
-          }
-          case "door": {
-            if (needHighlightning) {
-              return "#78ff2d";
-            } else {
-              return " #584324;";
-            }
-          }
-          case "window": {
-            if (needHighlightning) {
-              return "#78ff2d";
-            } else {
-              return " #a3cdd8;";
-            }
-          }
-          default:
-            return "#f09308";
-        }
-      } else if (props.barrierItem?.isOpen === false) {
-        return "#66615d;";
-      } else {
+      if (props.mode === "image") {
         return "none";
+      } else {
+        if (props.barrierItem?.isOpen) {
+          const needHighlightning = props.highlightningList?.find((item) => {
+            return item === "bottom" || "left";
+          });
+
+          switch (props.barrierItem.name) {
+            case "wall": {
+              return "#f09308;";
+            }
+            case "door": {
+              if (needHighlightning) {
+                return "#78ff2d";
+              } else {
+                return " #584324;";
+              }
+            }
+            case "window": {
+              if (needHighlightning) {
+                return "#78ff2d";
+              } else {
+                return " #a3cdd8;";
+              }
+            }
+            default:
+              return "#f09308";
+          }
+        } else if (props.barrierItem?.isOpen === false) {
+          return "#66615d;";
+        } else {
+          return "none";
+        }
       }
     }};
   }
 
   &:after {
-    display: ${(props) => {
+    /*     display: ${(props) => {
       if (props.mode === "image") {
         return "none";
       }
-    }};
+    }}; */
 
     content: "";
     z-index: 5;
