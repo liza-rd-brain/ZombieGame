@@ -7,11 +7,10 @@ import { State, PlayGridMode } from "../../business/types";
 import { getFilledPlayGrid } from "./getFilledPlayGrid";
 import { PLAY_GRID_MODE } from "../../shared/config";
 
-import img from "./house.png";
+import img from "./house_2.png";
 
 type GridProps = {
   vert: number;
-  /*   type: "visible" | "hidden"; */
   mode: PlayGridMode;
 };
 
