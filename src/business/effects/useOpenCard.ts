@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { State } from "../types";
 
 export function useOpenCard() {
-
   const [doEffect] = useSelector((state: State) => [state.doEffect]);
   const dispatch = useDispatch();
 
@@ -36,6 +35,7 @@ export function useOpenCard() {
             clearTimeout(timerTakeCard);
           };
         }
+
         case "!changePlayerHealth": {
           const timerChangePlayerHealth = setTimeout(
             () =>

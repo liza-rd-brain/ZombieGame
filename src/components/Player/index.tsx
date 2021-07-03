@@ -40,6 +40,7 @@ const PlayerCard = styled.div<PlayerItem>`
   background-image: url(${img});
   background-size: 44px;
   background-position: 3px;
+
   &:before {
     content: "";
     position: absolute;
