@@ -62,6 +62,7 @@ const CommonWall = styled.div<WallType>`
     bottom: 0px;
     z-index: 5;
   }
+
   &:after {
     content: "";
     z-index: 5;
@@ -69,6 +70,49 @@ const CommonWall = styled.div<WallType>`
     width: 50px;
     height: 50px;
     z-index: 5;
+
+    top: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "0";
+      }
+    }};
+
+    height: ${(props) => {
+      if (props.barrierItem?.direction === "bottom" && props.barrierItem) {
+        return "20px";
+      }
+    }};
+
+    width: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "20px";
+      }
+    }};
+
+    bottom: ${(props) => {
+      if (props.barrierItem?.direction === "bottom") {
+        return "-10px";
+      }
+    }};
+
+    left: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "-10px";
+      }
+    }};
+
+    background-color: ${(props) => {
+      if (props.barrierItem?.isOpen) {
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "bottom" || "left";
+        });
+        if (needHighlightning) {
+          return "#79fe2f42";
+        } else {
+          return "none";
+        }
+      }
+    }};
   }
 `;
 
@@ -146,12 +190,6 @@ const WallImage = styled(CommonWall)<WallType>`
 
 const Wall = styled(CommonWall)<WallType>`
   &:before {
-    display: ${(props) => {
-      if (props.mode === "image") {
-        return "none";
-      }
-    }};
-
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
         if (props.barrierItem?.isOpen === false) {
@@ -237,52 +275,6 @@ const Wall = styled(CommonWall)<WallType>`
         return "#66615d;";
       } else {
         return "none";
-      }
-    }};
-  }
-
-  &:after {
-    display: ${(props) => {
-      if (props.mode === "image") {
-        return "none";
-      }
-    }};
-
-    top: ${(props) => {
-      if (props.barrierItem?.direction === "left") {
-        return "0";
-      }
-    }};
-    height: ${(props) => {
-      if (props.barrierItem?.direction === "bottom" && props.barrierItem) {
-        return "20px";
-      }
-    }};
-    width: ${(props) => {
-      if (props.barrierItem?.direction === "left") {
-        return "20px";
-      }
-    }};
-    bottom: ${(props) => {
-      if (props.barrierItem?.direction === "bottom") {
-        return "-10px";
-      }
-    }};
-    left: ${(props) => {
-      if (props.barrierItem?.direction === "left") {
-        return "-10px";
-      }
-    }};
-    background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
-        const needHighlightning = props.highlightningList?.find((item) => {
-          return item === "bottom" || "left";
-        });
-        if (needHighlightning) {
-          return "#79fe2f3d";
-        } else {
-          return "none";
-        }
       }
     }};
   }
