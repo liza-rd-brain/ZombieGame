@@ -44,9 +44,9 @@ const PlayerCard = styled.div<PlayerItem>`
   &:before {
     content: "";
     position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    width: 33px;
+    height: 33px;
+    border-radius: 3px;
     border: ${(props) => {
       if (props.needHighlightning) {
         return "3px solid #34b834;";
@@ -55,9 +55,8 @@ const PlayerCard = styled.div<PlayerItem>`
     pointer-events: none;
     opacity: 0.5;
     padding: 4px;
-
-    left: -3px;
-    top: -3px;
+    left: 2px;
+    top: 2px;
   }
 `;
 
