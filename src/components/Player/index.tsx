@@ -1,3 +1,5 @@
+import ReactDOM from "react-dom";
+
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -11,10 +13,15 @@ import { getNeighboringCellList } from "../../business/phases/common/getNeighbor
 import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
+import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
   needHighlightning?: boolean;
+};
+
+type PlayerCardListType = {
+  needSplitCard?: boolean;
 };
 
 type PlayerListItem = {
@@ -25,6 +32,23 @@ type PlayerListItem = {
 type ContextMenuType = {
   visible: boolean;
 };
+
+type PLayersPortalType = {
+  coordX: string;
+  coordY: string;
+};
+
+const PLayersPortal = styled.div<PLayersPortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
 
 const PlayerCard = styled.div<PlayerItem>`
   width: 50px;
@@ -49,7 +73,7 @@ const PlayerCard = styled.div<PlayerItem>`
     border-radius: 3px;
     border: ${(props) => {
       if (props.needHighlightning) {
-        return "3px solid #34b834;";
+        return "3px solid #34b834";
       }
     }};
     pointer-events: none;
@@ -60,13 +84,27 @@ const PlayerCard = styled.div<PlayerItem>`
   }
 `;
 
-const PlayerCardList = styled.div`
+const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   position: absolute;
   z-index: 3;
   font-size: 12px;
   font-weight: bold;
+
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCard) {
+        return "relative !important";
+      }
+    }};
+
+    margin: ${(props) => {
+      if (props.needSplitCard) {
+        return "0 -12px";
+      }
+    }};
+  }
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -87,14 +125,17 @@ export const PlayerList = (props: PlayerListItem) => {
   const currPlayer = playerList[numberOfPlayer];
   const typeOfChosedCard = currPlayer.inventory.cardSelected;
 
+  const needSplitCard = playerListOnCell.length > 1;
+
   /*  const typeOfChosedCard = chosedCard?.name || null; */
 
-  return (
-    <PlayerCardList>
+  const playerCardList = (
+    <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
         const canInteractWithPlayer = listForInteract.includes(
           playerCardItem.coord
         );
+
         const canHealPlayer = listForHealing.includes(playerCardItem.coord);
 
         return (
@@ -122,6 +163,31 @@ export const PlayerList = (props: PlayerListItem) => {
       })}
     </PlayerCardList>
   );
+
+  switch (needSplitCard) {
+    case false: {
+      return playerCardList;
+    }
+    case true: {
+      const fieildElem = document.getElementById("field");
+      switch (fieildElem) {
+        case null: {
+          return playerCardList;
+        }
+
+        default: {
+          const [hor, vert] = playerListOnCell[0].coord.split(".");
+          const portal = ReactDOM.createPortal(
+            <PLayersPortal coordX={hor} coordY={vert}>
+              {playerCardList}
+            </PLayersPortal>,
+            fieildElem
+          );
+          return portal;
+        }
+      }
+    }
+  }
 };
 
 const getAvailableCellList = (state: State) => {

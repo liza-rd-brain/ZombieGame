@@ -1,3 +1,4 @@
+import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 
@@ -8,7 +9,6 @@ import { getEnemyList } from "./getEnemyList";
 import { Barrier } from "./Barrier";
 
 import { PLAY_GRID_MODE } from "../../shared/config";
-import React from "react";
 
 type CellApperance = {
   needHighlightning?: boolean;
