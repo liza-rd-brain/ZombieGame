@@ -54,7 +54,6 @@ const PlayerCard = styled.div<PlayerItem>`
   width: 50px;
   height: 50px;
   margin: 0px;
-  z-index: 3;
   text-align: center;
   padding: 2px;
   box-sizing: border-box;
@@ -65,22 +64,46 @@ const PlayerCard = styled.div<PlayerItem>`
   background-size: 44px;
   background-position: 3px;
 
+  z-index: ${(props) => {
+    if (props.isCurrent) {
+      return "4";
+    } else {
+      return "3";
+    }
+  }};
+
   &:before {
     content: "";
     position: absolute;
-    width: 33px;
-    height: 33px;
-    border-radius: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 1px;
     border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid #34b834";
+      if (props.isCurrent) {
+        return "5px solid #8834b8";
       }
     }};
     pointer-events: none;
     opacity: 0.5;
     padding: 4px;
-    left: 2px;
-    top: 2px;
+    left: 4px;
+    top: 4px;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 1px;
+    border: ${(props) => {
+      if (props.needHighlightning) {
+        return "3px solid #8af38a";
+      }
+    }};
+    opacity: 0.5;
+    padding: 4px;
+    left: 0px;
+    top: 0px;
   }
 `;
 

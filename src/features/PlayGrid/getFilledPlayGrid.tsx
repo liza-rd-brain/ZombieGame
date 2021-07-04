@@ -43,7 +43,7 @@ const CellItem = styled.div<CellApperance>`
 
   background-color: ${(props) => {
     if (props.needHighlightning) {
-      return "rgb(55 163 0 / 77%);";
+      return "rgb(55 163 0 / 52%);";
     }
   }};
 `;
