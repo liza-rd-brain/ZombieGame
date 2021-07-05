@@ -117,6 +117,7 @@ const CommonWall = styled.div<WallType>`
 `;
 
 const WallImage = styled(CommonWall)<WallType>`
+  cursor: default;
   transform: ${(props) => {
     switch (props.barrierItem?.direction) {
       case "left": {
@@ -182,6 +183,60 @@ const WallImage = styled(CommonWall)<WallType>`
               return "unset";
             }
           }
+        }
+      }
+    }};
+  }
+  &:after {
+    content: "";
+    z-index: 5;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 5;
+
+    top: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "14px";
+      }
+    }};
+
+    width: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "50px";
+      }
+    }};
+
+    height: ${(props) => {
+      if (
+        props.barrierItem?.direction === "bottom" ||
+        props.barrierItem?.direction === "left"
+      ) {
+        return "20px";
+      }
+    }};
+
+    bottom: ${(props) => {
+      if (props.barrierItem?.direction === "bottom") {
+        return "-10px";
+      }
+    }};
+
+    left: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "-25px";
+      }
+    }};
+
+    background-color: ${(props) => {
+      if (props.barrierItem?.isOpen) {
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "bottom" || "left";
+        });
+        if (needHighlightning) {
+          return "#79fe2f42";
+        } else {
+          return "none";
         }
       }
     }};
