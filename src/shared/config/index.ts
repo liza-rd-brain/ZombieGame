@@ -7,10 +7,10 @@ import {
 export const START_COORD = { hor: 1, vert: 5 };
 export const FINISH_COORD = { hor: 11, vert: 11 };
 export const INITIAL_PLAYER_HEALTH = 3;
-export const AMOUNT_HEALTH_ITEMS = 0;
+export const AMOUNT_HEALTH_ITEMS = 30;
 export const AMOUNT_BOARDS_ITEMS = 60;
 export const AMOUNT_WEAPONS_ITEMS = 0;
-export const AMOUNT_PLAYERS = 1;
+export const AMOUNT_PLAYERS = 2;
 export const AMOUNT_ENEMIES = 0;
 
 export const CARD_APPERANCE: CardApperance = "open";

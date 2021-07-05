@@ -97,10 +97,9 @@ const PlayerCard = styled.div<PlayerItem>`
     border-radius: 1px;
     border: ${(props) => {
       if (props.needHighlightning) {
-        return "3px solid #8af38a";
+        return "3px solid rgb(55 163 0 / 52%);";
       }
     }};
-    opacity: 0.5;
     padding: 4px;
     left: 0px;
     top: 0px;
