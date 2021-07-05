@@ -1,30 +1,32 @@
 {
   "files": {
     "main.css": "/ZombieGame/static/css/main.888980b0.chunk.css",
-    "main.js": "/ZombieGame/static/js/main.01dee25d.chunk.js",
-    "main.js.map": "/ZombieGame/static/js/main.01dee25d.chunk.js.map",
+    "main.js": "/ZombieGame/static/js/main.f47677ed.chunk.js",
+    "main.js.map": "/ZombieGame/static/js/main.f47677ed.chunk.js.map",
     "runtime-main.js": "/ZombieGame/static/js/runtime-main.2bea161e.js",
     "runtime-main.js.map": "/ZombieGame/static/js/runtime-main.2bea161e.js.map",
-    "static/js/2.91d81c06.chunk.js": "/ZombieGame/static/js/2.91d81c06.chunk.js",
-    "static/js/2.91d81c06.chunk.js.map": "/ZombieGame/static/js/2.91d81c06.chunk.js.map",
+    "static/js/2.82b88cd9.chunk.js": "/ZombieGame/static/js/2.82b88cd9.chunk.js",
+    "static/js/2.82b88cd9.chunk.js.map": "/ZombieGame/static/js/2.82b88cd9.chunk.js.map",
     "static/js/3.c0c727fe.chunk.js": "/ZombieGame/static/js/3.c0c727fe.chunk.js",
     "static/js/3.c0c727fe.chunk.js.map": "/ZombieGame/static/js/3.c0c727fe.chunk.js.map",
     "index.html": "/ZombieGame/index.html",
     "static/css/main.888980b0.chunk.css.map": "/ZombieGame/static/css/main.888980b0.chunk.css.map",
-    "static/js/2.91d81c06.chunk.js.LICENSE.txt": "/ZombieGame/static/js/2.91d81c06.chunk.js.LICENSE.txt",
+    "static/js/2.82b88cd9.chunk.js.LICENSE.txt": "/ZombieGame/static/js/2.82b88cd9.chunk.js.LICENSE.txt",
     "static/media/index.css": "/ZombieGame/static/media/47074.ae26ca47.jpg",
     "static/media/boards.3824da3f.png": "/ZombieGame/static/media/boards.3824da3f.png",
-    "static/media/brain.bdd84960.png": "/ZombieGame/static/media/brain.bdd84960.png",
+    "static/media/brain_4.c48babfd.png": "/ZombieGame/static/media/brain_4.c48babfd.png",
+    "static/media/door2.026ae7fc.png": "/ZombieGame/static/media/door2.026ae7fc.png",
     "static/media/health.d3aa03e8.png": "/ZombieGame/static/media/health.d3aa03e8.png",
-    "static/media/house.4cae679c.png": "/ZombieGame/static/media/house.4cae679c.png",
     "static/media/player.78f136ce.png": "/ZombieGame/static/media/player.78f136ce.png",
     "static/media/weapon.b3c5e028.png": "/ZombieGame/static/media/weapon.b3c5e028.png",
-    "static/media/zombie.0f20e592.png": "/ZombieGame/static/media/zombie.0f20e592.png"
+    "static/media/window2.5b58d59d.png": "/ZombieGame/static/media/window2.5b58d59d.png",
+    "static/media/zombie.0f20e592.png": "/ZombieGame/static/media/zombie.0f20e592.png",
+    "static/media/zombie_defeated.6e922b33.png": "/ZombieGame/static/media/zombie_defeated.6e922b33.png"
   },
   "entrypoints": [
     "static/js/runtime-main.2bea161e.js",
-    "static/js/2.91d81c06.chunk.js",
+    "static/js/2.82b88cd9.chunk.js",
     "static/css/main.888980b0.chunk.css",
-    "static/js/main.01dee25d.chunk.js"
+    "static/js/main.f47677ed.chunk.js"
   ]
 }
