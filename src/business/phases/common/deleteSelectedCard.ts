@@ -1,4 +1,4 @@
-import { PlayerListType } from "../../types";
+import { InventoryType, PlayerListType } from "../../types";
 
 export const deleteSelectedCard = (
   playerList: PlayerListType,
@@ -7,14 +7,17 @@ export const deleteSelectedCard = (
   const indexCurrPlayer = numberOfPlayer;
   const currInventory = playerList[indexCurrPlayer].inventory;
 
-  const removedCardIndex = playerList[indexCurrPlayer].inventory.findIndex(
-    (card) => {
-      return card?.isSelected === true;
-    }
-  );
+  const removedCardType = playerList[indexCurrPlayer].inventory.cardSelected;
 
-  const newInventory = currInventory.filter((card, indexOfCard) => {
-    return indexOfCard !== removedCardIndex;
-  });
-  return newInventory;
+  if (removedCardType) {
+    const newInventory: InventoryType = {
+      ...currInventory,
+      [removedCardType]: currInventory[removedCardType] - 1,
+      cardSelected: null,
+    };
+
+    return newInventory;
+  } else {
+    return currInventory;
+  }
 };

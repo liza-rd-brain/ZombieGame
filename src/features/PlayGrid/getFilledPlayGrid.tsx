@@ -1,3 +1,4 @@
+import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 
@@ -8,11 +9,9 @@ import { getEnemyList } from "./getEnemyList";
 import { Barrier } from "./Barrier";
 
 import { PLAY_GRID_MODE } from "../../shared/config";
-import React from "react";
 
 type CellApperance = {
-  hasMarker?: boolean;
-  isNeedSepareteCards: boolean;
+  needHighlightning?: boolean;
   mode: PlayGridMode;
 };
 
@@ -20,6 +19,7 @@ type UnderlayerType = {
   coordX: string;
   coordY: string;
 };
+
 const Wrap = styled.div`
   position: relative;
 `;
@@ -42,8 +42,8 @@ const CellItem = styled.div<CellApperance>`
   }};
 
   background-color: ${(props) => {
-    if (props.hasMarker) {
-      return "rgb(55 163 0 / 77%);";
+    if (props.needHighlightning) {
+      return "rgb(55 163 0 / 52%);";
     }
   }};
 `;
@@ -70,23 +70,15 @@ const UnderlayerItem = styled.div<UnderlayerType>`
   }};
 
   & > * {
-    position: relative;
+    position: relative !important;
     margin: 30px 0;
     width: 50px;
     height: 50px;
+    z-index: 3;
   }
+
   flex-direction: row;
-
   align-items: center;
-`;
-
-const Test = styled.div`
-  position: absolute;
-  z-index: 0;
-  top: 40px;
-  width: 600px;
-  height: 600px;
-  background-color: rgb(229 203 138 / 53%);
 `;
 
 export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
@@ -101,19 +93,20 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
-    const hasMarker = availableCells?.includes(orderIndex);
+    const needHighlightning = availableCells?.includes(orderIndex);
 
     const [playerX, playerY] = currPlayerCoord.split(".");
+
     const isPhaseCardsSeparate =
       gameState.type.includes("interactWithEnemy") ||
       gameState.type === "gameStarted.takeCard";
 
+    //For creating portal
     const isNeedSepareteCards =
       isPhaseCardsSeparate && playerX === hor && playerY === vert;
 
     const cardList = (
       <>
-        {getCards(cellValues, hor, vert)}
         {getPlayersList(
           orderIndex,
           playerList,
@@ -122,6 +115,9 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
           hor,
           vert
         )}
+
+        {getCards(cellValues, hor, vert)}
+
         {cellValues.name === "commonCell"
           ? getEnemyList(orderIndex, enemyList, hor, vert)
           : null}
@@ -140,8 +136,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
               <React.Fragment key={`${hor}.${vert}`}>
                 <Wrap key={`${hor}.${vert}`}>
                   <CellItem
-                    hasMarker={hasMarker}
-                    isNeedSepareteCards={isNeedSepareteCards}
+                    needHighlightning={needHighlightning}
                     mode={PLAY_GRID_MODE}
                   >
                     {PLAY_GRID_MODE === "cssStyle" ? `${hor}.${vert}` : null}
@@ -153,10 +148,9 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
                 {ReactDOM.createPortal(
                   <>
-                    <Test />
                     <UnderlayerItem coordX={hor} coordY={vert}>
-                      {cardList}{" "}
-                    </UnderlayerItem>{" "}
+                      {cardList}
+                    </UnderlayerItem>
                   </>,
                   fieildElem
                 )}
@@ -170,8 +164,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
         return (
           <Wrap key={`${hor}.${vert}`}>
             <CellItem
-              hasMarker={hasMarker}
-              isNeedSepareteCards={isNeedSepareteCards}
+              needHighlightning={needHighlightning}
               mode={PLAY_GRID_MODE}
             >
               {cardList}

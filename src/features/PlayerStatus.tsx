@@ -14,12 +14,12 @@ type HealthSlotType = {
 
 const PlayerStatusCard = styled.div`
   width: 250px;
-  height: 200px;
+  height: 220px;
   border: 1px solid lightgray;
   padding: 10px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   background-color: white;
 `;
 
@@ -46,7 +46,7 @@ const HealthStatus = styled(Status)`
 `;
 
 const InventoryStatus = styled(Status)`
-  height: 100px;
+  /*   height: 100px; */
 `;
 
 const Column = styled.div`
@@ -62,16 +62,16 @@ export const PlayerStatus = () => {
   // TODO: why pass the index?
   return (
     <PlayerStatusCard>
-      <Column>
+      {/* <Column>
         <CharacterAvatar>игрок {`${numberOfPlayer + 1}`}</CharacterAvatar>
-      </Column>
+      </Column> */}
       <Column>
         <HealthStatus>
           {`здоровье:  `}
           <HealthSlots index={numberOfPlayer}></HealthSlots>
         </HealthStatus>
         <InventoryStatus>
-          {`предметы:  `}
+          {/*    {`предметы:  `} */}
           <Inventory index={numberOfPlayer} />
         </InventoryStatus>
       </Column>

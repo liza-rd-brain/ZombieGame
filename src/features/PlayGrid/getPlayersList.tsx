@@ -21,10 +21,12 @@ export const getPlayersList = (
   }
   if (playersArr.length > 0) {
     return (
-      <PlayerList
-        playerListOnCell={playersArr}
-        getContextMenu={getContextMenu}
-      />
+      (
+        <PlayerList
+          playerListOnCell={playersArr}
+          getContextMenu={getContextMenu}
+        />
+      ) || null
     );
   } else return null;
 };

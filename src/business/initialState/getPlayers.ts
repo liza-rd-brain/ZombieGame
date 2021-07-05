@@ -14,7 +14,8 @@ export const getPlayers = (): PlayerListType => {
       health: INITIAL_PLAYER_HEALTH,
       orderNumber: index,
       coord: startCoord,
-      inventory: [],
+      //TODO: Added const emptyInventory
+      inventory: { boards: 0, weapon: 0, health: 0, cardSelected: null },
     };
     return [index, playerCard];
   });

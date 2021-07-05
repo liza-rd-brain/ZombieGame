@@ -1,3 +1,5 @@
+import ReactDOM from "react-dom";
+
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -5,15 +7,21 @@ import {
   PlayerCardType,
   AvailableCellListType,
   State,
+  TypeOfCard,
 } from "../../business/types";
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
+import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
   needHighlightning?: boolean;
+};
+
+type PlayerCardListType = {
+  needSplitCard?: boolean;
 };
 
 type PlayerListItem = {
@@ -25,13 +33,27 @@ type ContextMenuType = {
   visible: boolean;
 };
 
-type TypeOfCard = "boards" | "health" | "weapon" | null;
+type PLayersPortalType = {
+  coordX: string;
+  coordY: string;
+};
+
+const PLayersPortal = styled.div<PLayersPortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
 
 const PlayerCard = styled.div<PlayerItem>`
   width: 50px;
   height: 50px;
   margin: 0px;
-  z-index: 3;
   text-align: center;
   padding: 2px;
   box-sizing: border-box;
@@ -41,33 +63,70 @@ const PlayerCard = styled.div<PlayerItem>`
   background-image: url(${img});
   background-size: 44px;
   background-position: 3px;
+
+  z-index: ${(props) => {
+    if (props.isCurrent) {
+      return "4";
+    } else {
+      return "3";
+    }
+  }};
+
   &:before {
     content: "";
     position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border-radius: 1px;
     border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid #34b834;";
+      if (props.isCurrent) {
+        return "5px solid #8834b8";
       }
     }};
     pointer-events: none;
     opacity: 0.5;
     padding: 4px;
-
-    left: -3px;
-    top: -3px;
+    left: 4px;
+    top: 4px;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 1px;
+    border: ${(props) => {
+      if (props.needHighlightning) {
+        return "3px solid rgb(55 163 0 / 52%);";
+      }
+    }};
+    padding: 4px;
+    left: 0px;
+    top: 0px;
   }
 `;
 
-const PlayerCardList = styled.div`
+const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   position: absolute;
   z-index: 3;
   font-size: 12px;
   font-weight: bold;
+
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCard) {
+        return "relative !important";
+      }
+    }};
+
+    margin: ${(props) => {
+      if (props.needSplitCard) {
+        return "0 -12px";
+      }
+    }};
+  }
 `;
 
 export const PlayerList = (props: PlayerListItem) => {
@@ -86,17 +145,19 @@ export const PlayerList = (props: PlayerListItem) => {
   const currPlayerCoord = playerList[numberOfPlayer].coord;
   const listForHealing = listForInteract.concat(currPlayerCoord);
   const currPlayer = playerList[numberOfPlayer];
-  const chosedCard = currPlayer.inventory.find(
-    (card) => card?.isSelected === true
-  );
-  const typeOfChosedCard = chosedCard?.name || null;
+  const typeOfChosedCard = currPlayer.inventory.cardSelected;
 
-  return (
-    <PlayerCardList>
+  const needSplitCard = playerListOnCell.length > 1;
+
+  /*  const typeOfChosedCard = chosedCard?.name || null; */
+
+  const playerCardList = (
+    <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
         const canInteractWithPlayer = listForInteract.includes(
           playerCardItem.coord
         );
+
         const canHealPlayer = listForHealing.includes(playerCardItem.coord);
 
         return (
@@ -124,6 +185,31 @@ export const PlayerList = (props: PlayerListItem) => {
       })}
     </PlayerCardList>
   );
+
+  switch (needSplitCard) {
+    case false: {
+      return playerCardList;
+    }
+    case true: {
+      const fieildElem = document.getElementById("field");
+      switch (fieildElem) {
+        case null: {
+          return playerCardList;
+        }
+
+        default: {
+          const [hor, vert] = playerListOnCell[0].coord.split(".");
+          const portal = ReactDOM.createPortal(
+            <PLayersPortal coordX={hor} coordY={vert}>
+              {playerCardList}
+            </PLayersPortal>,
+            fieildElem
+          );
+          return portal;
+        }
+      }
+    }
+  }
 };
 
 const getAvailableCellList = (state: State) => {

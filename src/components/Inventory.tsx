@@ -2,19 +2,22 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import {
-  State,
-  PlayerListType,
-  HealthCardType,
-  GameState,
-  CardItem,
-} from "../business/types";
+import { State, CardItem, InventoryType, TypeOfCard } from "../business/types";
 import { Health } from "./Health/Health";
 import { BoardsCard } from "./Boards/BoardsCard";
 import { WeaponCard } from "./Weapon/WeaponCard";
 
+import health from "../components/Health/health.png";
+import boards from "../components/Boards/boards.png";
+import weapon from "../components/Weapon/weapon.png";
+
 type SlotType = {
-  onClick: Function;
+  /*   onClick: Function; */
+  highlighting?: boolean;
+};
+
+type ImageType = {
+  type: TypeOfCard;
   highlighting?: boolean;
 };
 
@@ -23,6 +26,47 @@ const InventoryWrap = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
+`;
+
+const InwentoryRow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  align-items: center;
+`;
+
+//Todo: can replace switch to calculated props?
+const Image = styled.div<ImageType>`
+  width: 50px;
+  height: 50px;
+  background-size: 44px;
+  background-repeat: no-repeat;
+  background-position: 3px;
+  background-image: ${(props) => {
+    switch (props.type) {
+      case "health": {
+        return `url(${health})`;
+      }
+
+      case "boards": {
+        return `url(${boards})`;
+      }
+
+      case "weapon": {
+        return `url(${weapon})`;
+      }
+    }
+  }};
+  outline: ${(props) => {
+    if (props.highlighting === true) {
+      return "1px solid red ";
+    }
+  }};
+`;
+
+const Counter = styled.div`
+  margin-left: 10px;
+  font-size: 22px;
 `;
 
 const Slot = styled.div<SlotType>`
@@ -47,28 +91,58 @@ export const Inventory = (props: { index: number }) => {
     ...state,
   }));
 
-  const inventory = playerList[props.index].inventory;
+  const inventory: InventoryType = playerList[props.index].inventory;
+
   return (
     <InventoryWrap>
-      {inventory.map((inventoryCard, inventoryCardindex) => {
-        return (
-          <Slot
-            key={inventoryCardindex}
-            highlighting={inventoryCard?.isSelected}
-            onClick={() => {
-              dispatch({
-                type: "cardChoosed",
-                payload: { index: inventoryCardindex, card: inventoryCard },
-              });
-            }}
-          >
-            {getChildrenComponent(inventoryCard)}
-          </Slot>
-        );
-      })}
+      <InwentoryRow>
+        <Image
+          type="health"
+          highlighting={inventory.cardSelected === "health"}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "health" },
+            });
+          }}
+        ></Image>
+        <Counter> x {inventory["health"] || 0}</Counter>
+      </InwentoryRow>
+      <InwentoryRow>
+        <Image
+          type="boards"
+          highlighting={inventory.cardSelected === "boards"}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "boards" },
+            });
+          }}
+        ></Image>
+        <Counter> x {inventory["boards"] || 0}</Counter>
+      </InwentoryRow>
+      <InwentoryRow>
+        <Image
+          type="weapon"
+          highlighting={inventory.cardSelected === "weapon"}
+          onClick={() => {
+            dispatch({
+              type: "cardChoosed",
+              payload: { type: "weapon" },
+            });
+          }}
+        ></Image>
+        <Counter> x {inventory["weapon"] || 0}</Counter>
+      </InwentoryRow>
+
+      <InwentoryRow></InwentoryRow>
+      <InwentoryRow></InwentoryRow>
     </InventoryWrap>
   );
 };
+
+{
+}
 
 const getChildrenComponent = (inventoryCard: CardItem) => {
   switch (inventoryCard?.name) {

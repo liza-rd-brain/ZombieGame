@@ -27,5 +27,8 @@ export const getStateHealAnotherPlayer = (
     ...state,
     playerList: newPlayerList,
     gameState: { type: "gameStarted.playerMove" },
+    doEffect: {
+      type: "!checkAvailableNeighboringCell",
+    },
   };
 };

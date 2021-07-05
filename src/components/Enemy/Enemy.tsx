@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { EnemyCardType, State } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
 
-import img from "./zombie.png";
+import zombie from "./zombie.png";
+import zombie_defeated from "./zombie_defeated.png";
 
 type EnemyArray = {
   list: EnemyCardType[];
@@ -20,9 +21,7 @@ const EnemyCard = styled.div<EnemyCardType>`
   text-transform: unset;
   font-family: sans-serif;
   text-indent: -4px;
-
   cursor: pointer;
-
   background-color: ${(props) => {
     if (props.apperance === "open" || props.apperance === "defeated") {
       return "unset";
@@ -38,18 +37,20 @@ const EnemyCard = styled.div<EnemyCardType>`
   }};
 
   background-image: ${(props) => {
-    if (props.apperance === "open" || props.apperance === "defeated") {
-      return `url(${img})`;
+    switch (props.apperance) {
+      case "defeated": {
+        return `url(${zombie_defeated})`;
+      }
+      case "open": {
+        return `url(${zombie})`;
+      }
     }
   }};
 `;
 
 const EnemiesCardList = styled.div`
   display: flex;
-  flex-wrap: wrap;
   position: absolute;
-  /*   width: 50px;
-  height: 50px; */
 `;
 
 export const EnemyList = (props: EnemyArray) => {

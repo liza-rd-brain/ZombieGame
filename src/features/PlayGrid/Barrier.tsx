@@ -1,14 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
+
+import closedDoor from "../../assets/door2.png";
+import closedWindow from "../../assets/window2.png";
+import door from "../../assets/door.png";
+import window from "../../assets/window.png";
 
 import {
   State,
   MoveDirection,
   BarrierItem,
-  CommonCell,
   AvailableCellListType,
   GameField,
   GameState,
@@ -19,6 +23,7 @@ import {
 } from "../../business/types";
 
 import { PLAY_GRID_MODE } from "../../shared/config";
+import { switchCase } from "@babel/types";
 
 type WallType = {
   barrierItem?: BarrierItem;
@@ -32,7 +37,22 @@ type BarrierCoord = {
   orderIndex: string;
 };
 
-const Wall = styled.div<WallType>`
+const CommonWall = styled.div<WallType>`
+  pointer-events: ${(props) => {
+    if (props.barrierItem?.isOpen) {
+      const needHighlightning = props.highlightningList?.find((item) => {
+        return item === "bottom" || "left";
+      });
+      if (needHighlightning) {
+        return "defaulr";
+      } else {
+        return "none";
+      }
+    } else {
+      return "none";
+    }
+  }};
+
   cursor: ${(props) => {
     switch (props.barrierItem?.name) {
       case "wall": {
@@ -50,18 +70,146 @@ const Wall = styled.div<WallType>`
   }};
 
   &:before {
-    display: ${(props) => {
-      if (props.mode === "image") {
-        return "none";
-      }
-    }};
-
     content: "";
     position: absolute;
     width: 50px;
     height: 50px;
     bottom: 0px;
     z-index: 5;
+  }
+`;
+
+const WallImage = styled(CommonWall)<WallType>`
+  /*   cursor: default; */
+
+  transform: ${(props) => {
+    switch (props.barrierItem?.direction) {
+      case "left": {
+        return "rotate(90deg)";
+      }
+      default: {
+        return "null";
+      }
+    }
+  }};
+
+  &:before {
+    bottom: ${(props) => {
+      switch (props.barrierItem?.direction) {
+        case "bottom": {
+          return "-30px";
+        }
+        case "left": {
+          return "-55px";
+        }
+        default: {
+          return "null";
+        }
+      }
+    }};
+
+    left: ${(props) => {
+      switch (props.barrierItem?.direction) {
+        case "left": {
+          return "-25px";
+        }
+        default: {
+          return "null";
+        }
+      }
+    }};
+
+    background-size: 44px;
+    background-image: ${(props) => {
+      switch (props.barrierItem?.isOpen) {
+        case true: {
+          switch (props.barrierItem?.name) {
+            case "door": {
+              return `url(${door})`;
+            }
+            case "window": {
+              return `url(${window})`;
+            }
+            default: {
+              return "unset";
+            }
+          }
+        }
+        case false: {
+          switch (props.barrierItem?.name) {
+            case "door": {
+              return `url(${closedDoor})`;
+            }
+            case "window": {
+              return `url(${closedWindow})`;
+            }
+            default: {
+              return "unset";
+            }
+          }
+        }
+      }
+    }};
+  }
+  &:after {
+    content: "";
+    z-index: 5;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 5;
+
+    top: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "14px";
+      }
+    }};
+
+    width: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "50px";
+      }
+    }};
+
+    height: ${(props) => {
+      if (
+        props.barrierItem?.direction === "bottom" ||
+        props.barrierItem?.direction === "left"
+      ) {
+        return "20px";
+      }
+    }};
+
+    bottom: ${(props) => {
+      if (props.barrierItem?.direction === "bottom") {
+        return "-10px";
+      }
+    }};
+
+    left: ${(props) => {
+      if (props.barrierItem?.direction === "left") {
+        return "-25px";
+      }
+    }};
+
+    background-color: ${(props) => {
+      if (props.barrierItem?.isOpen) {
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "bottom" || "left";
+        });
+        if (needHighlightning) {
+          return "#79fe2f42";
+        } else {
+          return "none";
+        }
+      }
+    }};
+  }
+`;
+
+const Wall = styled(CommonWall)<WallType>`
+  &:before {
+    pointer-events: none;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
         if (props.barrierItem?.isOpen === false) {
@@ -94,7 +242,6 @@ const Wall = styled.div<WallType>`
         return "0px";
       }
     }};
-
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         if (props.barrierItem?.isOpen === false) {
@@ -118,13 +265,11 @@ const Wall = styled.div<WallType>`
         return "none";
       }
     }};
-
     background-color: ${(props) => {
       if (props.barrierItem?.isOpen) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
-
         switch (props.barrierItem.name) {
           case "wall": {
             return "#f09308;";
@@ -153,40 +298,38 @@ const Wall = styled.div<WallType>`
       }
     }};
   }
-
   &:after {
-    display: ${(props) => {
-      if (props.mode === "image") {
-        return "none";
-      }
-    }};
-
     content: "";
     z-index: 5;
     position: absolute;
     width: 50px;
     height: 50px;
+    z-index: 5;
 
     top: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         return "0";
       }
     }};
+
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom" && props.barrierItem) {
         return "20px";
       }
     }};
+
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         return "20px";
       }
     }};
+
     bottom: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
         return "-10px";
       }
     }};
+
     left: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         return "-10px";
@@ -198,9 +341,8 @@ const Wall = styled.div<WallType>`
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
-
         if (needHighlightning) {
-          return "#79fe2f3d";
+          return "#79fe2f42";
         } else {
           return "none";
         }
@@ -249,43 +391,92 @@ export const Barrier = (props: BarrierCoord) => {
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        return (
-          <Wall
-            key={barrier.direction}
-            barrierItem={barrier}
-            highlightningList={
-              needCheckHighlightning
-                ? getHigtlightningDirection(
-                    highlightningList,
-                    orderIndex,
-                    barrier.direction
-                  )
-                : null
-            }
-            mode={PLAY_GRID_MODE}
-            onClick={() => {
-              const canCloseHole = highlightningList.find((cellType) => {
-                return (
-                  cellType?.coord === orderIndex &&
-                  cellType?.direction === barrier.direction &&
-                  barrier.isOpen === true
-                );
-              })
-                ? true
-                : false;
-              if (canCloseHole) {
-                dispatch({
-                  type: "req-fillHole",
-                  payload: { coord: orderIndex, direction: barrier.direction },
-                });
-              } else {
-                return null;
-              }
-            }}
-          >
-            {" "}
-          </Wall>
-        );
+        switch (PLAY_GRID_MODE) {
+          case "cssStyle": {
+            return (
+              <Wall
+                key={barrier.direction}
+                barrierItem={barrier}
+                highlightningList={
+                  needCheckHighlightning
+                    ? getHigtlightningDirection(
+                        highlightningList,
+                        orderIndex,
+                        barrier.direction
+                      )
+                    : null
+                }
+                mode={PLAY_GRID_MODE}
+                onClick={() => {
+                  const canCloseHole = highlightningList.find((cellType) => {
+                    return (
+                      cellType?.coord === orderIndex &&
+                      cellType?.direction === barrier.direction &&
+                      barrier.isOpen === true
+                    );
+                  })
+                    ? true
+                    : false;
+                  if (canCloseHole) {
+                    dispatch({
+                      type: "req-fillHole",
+                      payload: {
+                        coord: orderIndex,
+                        direction: barrier.direction,
+                      },
+                    });
+                  } else {
+                    return null;
+                  }
+                }}
+              >
+                {" "}
+              </Wall>
+            );
+          }
+          case "image": {
+            return (
+              <WallImage
+                key={barrier.direction}
+                barrierItem={barrier}
+                highlightningList={
+                  needCheckHighlightning
+                    ? getHigtlightningDirection(
+                        highlightningList,
+                        orderIndex,
+                        barrier.direction
+                      )
+                    : null
+                }
+                mode={PLAY_GRID_MODE}
+                onClick={() => {
+                  const canCloseHole = highlightningList.find((cellType) => {
+                    return (
+                      cellType?.coord === orderIndex &&
+                      cellType?.direction === barrier.direction &&
+                      barrier.isOpen === true
+                    );
+                  })
+                    ? true
+                    : false;
+                  if (canCloseHole) {
+                    dispatch({
+                      type: "req-fillHole",
+                      payload: {
+                        coord: orderIndex,
+                        direction: barrier.direction,
+                      },
+                    });
+                  } else {
+                    return null;
+                  }
+                }}
+              >
+                {" "}
+              </WallImage>
+            );
+          }
+        }
       });
       return <>{barrierList}</>;
     }
@@ -359,10 +550,8 @@ const getHighlightningList = (
   switch (gameState.type) {
     case "gameStarted.applyCard":
       const cardItemList = playerList[numberOfPlayer].inventory;
-      const selectedCard = cardItemList.find(
-        (cardItem) => cardItem?.isSelected === true
-      );
-      const typeOfSelectedCard = selectedCard?.name;
+      const typeOfSelectedCard = cardItemList.cardSelected;
+      /*  const typeOfSelectedCard = selectedCard?.name; */
       if (typeOfSelectedCard === "boards") {
         return availableCellList;
       } else {

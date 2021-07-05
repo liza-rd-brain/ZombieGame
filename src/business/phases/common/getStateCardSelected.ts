@@ -1,29 +1,29 @@
-import { State, PlayerListType, CardItem } from "../../types";
+import {
+  State,
+  PlayerListType,
+  CardItem,
+  TypeOfCard,
+  InventoryType,
+} from "../../types";
 
 /**
  * We need to give highlighting to healthCard
  */
-type TargerCard = {
-  index: number;
-  card: CardItem;
-};
 
-export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
+export const getStateCardSelected = (
+  state: State,
+  typeOfSelect: TypeOfCard
+) => {
   // TODO: Need to restrict select unneceserry card -?!
   // Add switch on type of cards
   const { numberOfPlayer } = state;
 
-  const newPlayerList = changeSelectedCard(state, targerCard.index);
+  const newPlayerList = changeSelectedCard(state, typeOfSelect);
 
-  const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory.find(
-    (card) => {
-      return card?.isSelected === true;
-    }
-  )
+  const selectedCard = newPlayerList[numberOfPlayer].inventory.cardSelected
     ? true
     : false;
 
-  const cardType = targerCard.card?.name;
   // The difference between weaponCard and other  card that weapon are usedin the battle.
   //Obviously we need other stateWithoutSelectedCard for weapon
   const stateWithSelectedCard: State = {
@@ -32,6 +32,7 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
     gameState: {
       type: "gameStarted.applyCard",
     },
+    availableCellsCoords: null,
   };
 
   const stateWithoutSelectedCard: State = {
@@ -42,9 +43,10 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
           ? "gameStarted.interactWithEnemy"
           :  */ "gameStarted.playerMove",
     },
+    doEffect: { type: "!checkAvailableNeighboringCell" },
   };
 
-  switch (hasAnyCardSelected) {
+  switch (selectedCard) {
     case true:
       return stateWithSelectedCard;
     case false:
@@ -52,30 +54,57 @@ export const getStateCardSelected = (state: State, targerCard: TargerCard) => {
   }
 };
 
-const changeSelectedCard = (
-  state: State,
-  currentCardIndex: number
-  /*   hasCurrentCardHighlightning: boolean */
-) => {
+const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
   const { playerList, numberOfPlayer } = state;
   const inventory = playerList[numberOfPlayer].inventory;
-  const targetCard = inventory[currentCardIndex];
+  if (typeOfSelect !== null) {
+    const isTheSameSelectType = inventory.cardSelected === typeOfSelect;
+    const hasCards = inventory[typeOfSelect] !== 0;
 
-  const newInventory = inventory.map((card, index) => {
-    if (index === currentCardIndex) {
-      return { ...card, isSelected: !targetCard?.isSelected };
-    } else {
-      return { ...card, isSelected: false };
+    switch (hasCards) {
+      case true: {
+        switch (isTheSameSelectType) {
+          case true: {
+            const newInventoryCardUnSelected: InventoryType = {
+              ...inventory,
+              cardSelected: null,
+            };
+
+            const newPlayerList: PlayerListType = {
+              ...playerList,
+              [numberOfPlayer]: {
+                ...playerList[numberOfPlayer],
+                inventory: newInventoryCardUnSelected,
+              },
+            };
+
+            return newPlayerList;
+          }
+
+          case false: {
+            const newInventoryCardSelected: InventoryType = {
+              ...inventory,
+              cardSelected: typeOfSelect,
+            };
+
+            const newPlayerList: PlayerListType = {
+              ...playerList,
+              [numberOfPlayer]: {
+                ...playerList[numberOfPlayer],
+                inventory: newInventoryCardSelected,
+              },
+            };
+
+            return newPlayerList;
+          }
+        }
+      }
+
+      case false: {
+        return playerList;
+      }
     }
-  });
-
-  const newPlayerList: PlayerListType = {
-    ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
-      inventory: newInventory,
-    },
-  };
-
-  return newPlayerList;
+  } else {
+    return playerList;
+  }
 };
