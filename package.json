@@ -52,7 +52,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test --watchAll=false"
+      "pre-commit": "npx lint-staged"
     }
   }
 }
