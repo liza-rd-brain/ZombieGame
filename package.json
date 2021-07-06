@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "set CI=true yarn test"
+      "pre-commit": "CI=true react-scripts test"
     }
   }
 }
