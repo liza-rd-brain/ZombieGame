@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn build"
+      "pre-commit": "npx lint-staged"
     }
   }
 }
