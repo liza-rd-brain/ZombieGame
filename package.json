@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "set CI=true react-scripts test --env=jsdom"
+      "pre-commit": "yarn test --watchAll=false"
     }
   }
 }
