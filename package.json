@@ -52,7 +52,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'yo'"
+      "pre-commit": "set CI=true react-scripts test"
     }
   }
 }
