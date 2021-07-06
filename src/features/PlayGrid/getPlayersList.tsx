@@ -10,20 +10,21 @@ export const getPlayersList = (
   hor: string,
   vert: string
 ) => {
-  let playersArr: PlayerCardType[] = [];
+  const playerItemList = Object.entries(playersList);
 
-  for (let playerKey in playersList) {
-    const playerCard = playersList[playerKey];
-    const playerCoord = playerCard.coord;
-    if (playerCoord === index) {
-      playersArr.push(playersList[playerKey]);
-    }
-  }
-  if (playersArr.length > 0) {
+  const playerList = playerItemList.map((playerItem) => {
+    const [, item] = playerItem;
+    return item;
+  });
+
+  console.log("playerItemList", playerItemList);
+  console.log("playerList", playerList);
+
+  if (playerList.length > 0) {
     return (
       (
         <PlayerList
-          playerListOnCell={playersArr}
+          playerListOnCell={playerList}
           getContextMenu={getContextMenu}
         />
       ) || null

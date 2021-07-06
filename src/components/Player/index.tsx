@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom";
-
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -13,7 +12,6 @@ import { getNeighboringCellList } from "../../business/phases/common/getNeighbor
 import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
-import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -27,10 +25,6 @@ type PlayerCardListType = {
 type PlayerListItem = {
   playerListOnCell: PlayerCardType[];
   getContextMenu: Function;
-};
-
-type ContextMenuType = {
-  visible: boolean;
 };
 
 type PLayersPortalType = {
@@ -78,28 +72,33 @@ const PlayerCard = styled.div<PlayerItem>`
     width: 24px;
     height: 24px;
     border-radius: 1px;
+
     border: ${(props) => {
       if (props.isCurrent) {
         return "5px solid #8834b8";
       }
     }};
+
     pointer-events: none;
     opacity: 0.5;
     padding: 4px;
     left: 4px;
     top: 4px;
   }
+
   &:after {
     content: "";
     position: absolute;
     width: 36px;
     height: 36px;
     border-radius: 1px;
+
     border: ${(props) => {
       if (props.needHighlightning) {
         return "3px solid rgb(55 163 0 / 52%);";
       }
     }};
+
     padding: 4px;
     left: 0px;
     top: 0px;
@@ -139,12 +138,15 @@ export const PlayerList = (props: PlayerListItem) => {
   /**
    *  playerListOnCell -is all player in one cell
    */
+
+  //TODO: playerListOnCell, getContextMenu - this properties can be received from props
   const { playerListOnCell, getContextMenu } = props;
 
-  const listForInteract = getAvailableCellList(state);
+  const availableCellList = getAvailableCellList(state);
   const currPlayerCoord = playerList[numberOfPlayer].coord;
-  const listForHealing = listForInteract.concat(currPlayerCoord);
+  const listForHealing = availableCellList.concat(currPlayerCoord);
   const currPlayer = playerList[numberOfPlayer];
+
   const typeOfChosedCard = currPlayer.inventory.cardSelected;
 
   const needSplitCard = playerListOnCell.length > 1;
@@ -154,7 +156,7 @@ export const PlayerList = (props: PlayerListItem) => {
   const playerCardList = (
     <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
-        const canInteractWithPlayer = listForInteract.includes(
+        const canInteractWithPlayer = availableCellList.includes(
           playerCardItem.coord
         );
 
