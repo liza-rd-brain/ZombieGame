@@ -14,6 +14,7 @@ export const getPlayersOrder = (state: State, action: ActionType): State => {
 
   switch (action.type) {
     case "req-getNextPlayer": {
+      // return state;
       return {
         ...state,
         numberOfPlayer: nextPlayersNumber,
