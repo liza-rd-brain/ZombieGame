@@ -5,8 +5,7 @@ import { PlayerListType, PlayerCardType } from "../../business/types";
 export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
-  numberOfPlayer: number,
-  getContextMenu: Function
+  numberOfPlayer: number
 ) => {
   const playerItemList = Object.entries(playersList);
 
@@ -27,7 +26,6 @@ export const getPlayersList = (
       return (
         <PlayerList
           playerListOnCell={playerListOnCell}
-          getContextMenu={getContextMenu}
           playerList={playersList}
           numberOfPlayer={numberOfPlayer}
         />

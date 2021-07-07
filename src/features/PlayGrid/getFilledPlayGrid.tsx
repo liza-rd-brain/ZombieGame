@@ -81,7 +81,7 @@ const UnderlayerItem = styled.div<UnderlayerType>`
   align-items: center;
 `;
 
-export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
+export const getFilledPlayGrid = (state: State) => {
   const { gameField, playerList, numberOfPlayer, gameState, enemyList } = state;
   const orderGameCells = gameField.order;
 
@@ -107,7 +107,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
     const cardList = (
       <>
-        {getPlayersList(orderIndex, playerList, numberOfPlayer, getContextMenu)}
+        {getPlayersList(orderIndex, playerList, numberOfPlayer)}
 
         {getCards(cellValues, hor, vert)}
 

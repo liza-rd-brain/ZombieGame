@@ -13,6 +13,7 @@ import { getNeighboringCellList } from "../../business/phases/common/getNeighbor
 import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
+import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -25,21 +26,32 @@ type PlayerCardListType = {
 
 type PlayerListItem = {
   playerListOnCell: PlayerCardType[];
-  getContextMenu: Function;
   playerList: PlayerListType;
   numberOfPlayer: number;
 };
 
-type PLayersPortalType = {
+type PortalType = {
   coordX: string;
   coordY: string;
 };
 
-const PLayersPortal = styled.div<PLayersPortalType>`
+const PLayersPortal = styled.div<PortalType>`
   position: relative;
   display: flex;
   left: ${(props) => {
     return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
+
+const ContextMenuPortal = styled.div<PortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50 + 50}px`;
   }};
 
   bottom: ${(props) => {
@@ -131,23 +143,46 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   }
 `;
 
+type ContextMenuType = {
+  /*   isVisible: boolean; */
+  coord?: { x?: number; y?: number };
+};
+
+const ContextMenu = styled.div<ContextMenuType>`
+  display: block;
+  flex-direction: column;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+  justify-content: start;
+  padding: 21px 0 0 12px;
+  box-sizing: border-box;
+  left: ${(props) => {
+    if (props.coord?.x) {
+      return `${props.coord?.x + 50}px`;
+    } else {
+      return "0px";
+    }
+  }};
+  top: ${(props) => {
+    return `${props.coord?.y}px`;
+  }};
+`;
+
+const Button = styled.button`
+  height: 30px;
+  width: 70px;
+`;
+
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
   const state = useSelector((state: State) => ({
     ...state,
   }));
-  const { playerList, numberOfPlayer } = state;
 
-  /**
-   *  playerListOnCell -is all player in one cell
-   */
-
-  //TODO: playerListOnCell, getContextMenu - this properties can be received from props
-
-  const {
-    playerListOnCell,
-    getContextMenu /* , playerList, numberOfPlayer */,
-  } = props;
+  const { playerListOnCell, playerList, numberOfPlayer } = props;
 
   const availableCellList = getAvailableCellList(state);
   /*   console.log(availableCellList); */
@@ -173,7 +208,38 @@ export const PlayerList = (props: PlayerListItem) => {
 
         const canHealPlayer = listForHealing.includes(playerCardItem.coord);
 
-        return (
+        const contextMenu = (
+          <ContextMenu
+            key="contextMenu"
+            /*    isVisible={playerCardItem.showContextMenu || false} */
+            id={"contextMenu"}
+            className={"contextMenu"}
+            /*    coord={contextMenuState.coord} */
+          >
+            <Button
+              onClick={() => {
+                dispatch({
+                  type: "clickedContextMenu",
+                  payload: { card: playerCardItem, buttonType: "share" },
+                });
+              }}
+            >
+              передать
+            </Button>
+            <Button
+              onClick={() => {
+                dispatch({
+                  type: "clickedContextMenu",
+                  payload: { card: playerCardItem, buttonType: "heal" },
+                });
+              }}
+            >
+              лечить
+            </Button>
+          </ContextMenu>
+        );
+
+        const playerCard = (
           <PlayerCard
             id={`player${playerCardItem.orderNumber}`}
             key={index}
@@ -184,20 +250,45 @@ export const PlayerList = (props: PlayerListItem) => {
               typeOfChosedCard
             )}
             onClick={() =>
-              dispatch({ type: "playerWasClicked", payload: playerCardItem })
+              dispatch({ type: "clickedPlayer", payload: playerCardItem })
             }
-            /*   onClick={() => {
-              playerClickedHandler(
-                getContextMenu,
-                playerCardItem,
-                numberOfPlayer,
-                canInteractWithPlayer,
-                typeOfChosedCard,
-                dispatch
-              );
-            }} */
           ></PlayerCard>
         );
+
+        switch (playerCardItem.showContextMenu) {
+          case true: {
+            console.log(numberOfPlayer);
+
+            /**
+             *
+             */
+            const [hor, vert] = playerList[numberOfPlayer].coord.split(".");
+
+            const fieildElem = document.getElementById("field");
+            switch (fieildElem) {
+              case null: {
+                return playerCard;
+              }
+              default: {
+                const portal = ReactDOM.createPortal(
+                  <ContextMenuPortal coordX={hor} coordY={vert} key="portal">
+                    {contextMenu}
+                  </ContextMenuPortal>,
+                  fieildElem
+                );
+                return (
+                  <React.Fragment key="fragment">
+                    {playerCard}
+                    {portal}
+                  </React.Fragment>
+                );
+              }
+            }
+          }
+          default: {
+            return playerCard;
+          }
+        }
       })}
     </PlayerCardList>
   );
@@ -258,65 +349,6 @@ const getAvailableCellList = (state: State) => {
 
     default:
       return [];
-  }
-};
-
-const playerClickedHandler = (
-  getContextMenu: Function,
-  playerCardItem: PlayerCardType,
-  numberOfPlayer: number,
-  canInteractWithPlayer: boolean,
-  typeOfChosedCard: TypeOfCard,
-  dispatch: Function
-) => {
-  const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
-  switch (canInteractWithPlayer) {
-    case true: {
-      switch (typeOfChosedCard) {
-        case "health": {
-          switch (isCurrentPlayer) {
-            case true: {
-              dispatch({
-                type: "req-healPlayer",
-                payload: playerCardItem.orderNumber,
-              });
-              break;
-            }
-
-            case false: {
-              getContextMenu(playerCardItem.orderNumber);
-            }
-          }
-
-          break;
-        }
-        case "weapon":
-        case "boards": {
-          /**
-           * For preventing sharing any cards with himself
-           */
-          switch (isCurrentPlayer) {
-            case true: {
-              break;
-            }
-            case false: {
-              dispatch({
-                type: "req-shareCard",
-                payload: playerCardItem.orderNumber,
-              });
-              break;
-            }
-          }
-        }
-      }
-      break;
-    }
-    case false: {
-      console.log("не можем взаимодействовать с игроком ");
-      break;
-    }
-    default:
-      break;
   }
 };
 

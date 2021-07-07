@@ -9,6 +9,8 @@ export type MoveDirectionList = MoveDirection[];
 export type BarrierName = "wall" | "window" | "door" | null;
 /* export type BarrierDirection = "bottom" | "left"; */
 
+export type ContextMenuButtonType = "share" | "heal";
+
 export type BarrierItem = {
   name: BarrierName;
   direction: MoveDirection;
@@ -38,6 +40,7 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   inventory: InventoryType;
+  showContextMenu?: boolean;
 };
 
 export type InventoryType = {

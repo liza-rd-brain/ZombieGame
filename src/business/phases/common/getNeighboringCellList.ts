@@ -26,5 +26,6 @@ export const getNeighboringCellList = (
       const { direction, coord } = cellItem;
       return gameField.values[coord];
     });
+
   return existanceInGameFieldCells;
 };

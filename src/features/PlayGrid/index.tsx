@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -18,8 +19,6 @@ type ContextMenuType = {
   type: "visible" | "hidden";
   coord?: { x?: number; y?: number };
 };
-
-type WrapType = {};
 
 const GridItem = styled.div<GridProps>`
   outline: ${(props) => {
@@ -95,116 +94,19 @@ export const PlayGrid = () => {
     ...state,
   }));
 
-  type contextMenuType = {
-    type: "visible" | "hidden";
-    playerNumber?: Number;
-    coord?: { x?: number; y?: number };
-  };
-
-  const initialContextMenuState: contextMenuType = { type: "hidden" };
-
-  const [contextMenuState, updatecontextMenuState] = useState(
-    initialContextMenuState
-  );
-
   const { gameField, playerList, enemyList, numberOfPlayer } = state;
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;
-  const playerEl = document.getElementById(`player${numberOfPlayer}`);
-  const playerCoord = {
-    x: playerEl?.getBoundingClientRect().x,
-    y: playerEl?.getBoundingClientRect().y,
-  };
-
-  const getContextMenu = (numberOfPlayer: number) => {
-    updatecontextMenuState({
-      type: "visible",
-      playerNumber: numberOfPlayer,
-      coord: playerCoord,
-    });
-  };
-
-  useEffect(() => {
-    switch (contextMenuState.type) {
-      case "visible": {
-        const bodyElement = document.querySelector("body");
-
-        const callback = (e: MouseEvent) => {
-          /**
-           * Its for avoiding event on currentPlayer
-           */
-          if (
-            e.target ===
-            document.getElementById(`player${state.numberOfPlayer}`)
-          ) {
-            e.stopPropagation();
-          }
-
-          updatecontextMenuState((prevState) => {
-            return { ...prevState, type: "hidden" };
-          });
-
-          bodyElement?.removeEventListener("click", callback, {
-            capture: true,
-          });
-        };
-
-        bodyElement?.addEventListener("click", callback, {
-          capture: true,
-        });
-
-        return () => {
-          bodyElement?.removeEventListener("click", callback, {
-            capture: true,
-          });
-        };
-      }
-
-      default:
-        break;
-    }
-  }, [contextMenuState.type]);
 
   return (
-    <>
-      <GridItem
-        key={"grid"}
-        vert={height}
-        /*  type={contextMenuState.type} */
-        mode={PLAY_GRID_MODE}
-      >
-        {getFilledPlayGrid(state, getContextMenu)}
-      </GridItem>
-
-      <ContextMenu
-        type={contextMenuState.type}
-        id={"contextMenu"}
-        className={"contextMenu"}
-        coord={contextMenuState.coord}
-      >
-        <Button
-          className={"contextMenu"}
-          onClick={() => {
-            dispatch({
-              type: "req-shareCard",
-              payload: contextMenuState.playerNumber,
-            });
-          }}
-        >
-          передать
-        </Button>
-        <Button
-          onClick={() => {
-            dispatch({
-              type: "req-healPlayer",
-              payload: contextMenuState.playerNumber,
-            });
-          }}
-        >
-          лечить
-        </Button>
-      </ContextMenu>
-    </>
+    <GridItem
+      key={"grid"}
+      vert={height}
+      /*  type={contextMenuState.type} */
+      mode={PLAY_GRID_MODE}
+    >
+      {getFilledPlayGrid(state)}
+    </GridItem>
   );
 };

@@ -29,9 +29,50 @@ export const applyCard = (state: State, action: ActionType): State => {
       return getStateCardSelected(state, typeOfSelect);
     }
 
-    case "playerWasClicked": {
-      console.log("playerWasClicked");
+    case "clickedContextMenu": {
+      const recipientPlayerNumber = action.payload.card.orderNumber;
+      const typeOfAction = action.payload.buttonType;
+      switch (typeOfAction) {
+        case "heal": {
+          const newState = getStateHealAnotherPlayer(
+            state,
+            recipientPlayerNumber
+          );
 
+          const stateClosedContextMenu = {
+            ...newState,
+            playerList: {
+              ...newState.playerList,
+              [recipientPlayerNumber]: {
+                ...newState.playerList[recipientPlayerNumber],
+                showContextMenu: false,
+              },
+            },
+          };
+          return stateClosedContextMenu;
+        }
+        case "share": {
+          const newState = getStateGiveCard(state, recipientPlayerNumber);
+
+          const stateClosedContextMenu = {
+            ...newState,
+            playerList: {
+              ...newState.playerList,
+              [recipientPlayerNumber]: {
+                ...newState.playerList[recipientPlayerNumber],
+                showContextMenu: false,
+              },
+            },
+          };
+          return stateClosedContextMenu;
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+
+    case "clickedPlayer": {
       const clickedPlayerCard = action.payload;
       const currPlayer = playerList[numberOfPlayer];
       const isCurrentPlayer = clickedPlayerCard.orderNumber === numberOfPlayer;
@@ -57,8 +98,21 @@ export const applyCard = (state: State, action: ActionType): State => {
                 }
 
                 case false: {
-                  /*    getContextMenu(playerCardItem.orderNumber); */
-                  return state;
+                  /**
+                   * Open context menu at recipient  card
+                   */
+                  const newState: State = {
+                    ...state,
+                    playerList: {
+                      ...state.playerList,
+                      [clickedPlayerCard.orderNumber]: {
+                        ...state.playerList[clickedPlayerCard.orderNumber],
+                        showContextMenu: true,
+                      },
+                    },
+                  };
+
+                  return newState;
                 }
               }
             }

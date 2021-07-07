@@ -9,7 +9,13 @@ import {
 } from "./phases/gameStarted";
 import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, PlayerCardType, State, TypeOfCard } from "./types";
+import {
+  ContextMenuButtonType,
+  MoveDirection,
+  PlayerCardType,
+  State,
+  TypeOfCard,
+} from "./types";
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -40,7 +46,11 @@ export type ActionType =
   | { type: "req-shareCard"; payload: number }
   | { type: "req-defeatEnemy" }
   | { type: "req-removeEnemyCard" }
-  | { type: "playerWasClicked"; payload: PlayerCardType };
+  | { type: "clickedPlayer"; payload: PlayerCardType }
+  | {
+      type: "clickedContextMenu";
+      payload: { card: PlayerCardType; buttonType: ContextMenuButtonType };
+    };
 
 export const reducer = (
   state: State = initialState,
