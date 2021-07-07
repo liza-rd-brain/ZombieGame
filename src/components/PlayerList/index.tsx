@@ -140,6 +140,7 @@ export const PlayerList = (props: PlayerListItem) => {
    */
 
   //TODO: playerListOnCell, getContextMenu - this properties can be received from props
+
   const { playerListOnCell, getContextMenu } = props;
 
   const availableCellList = getAvailableCellList(state);
