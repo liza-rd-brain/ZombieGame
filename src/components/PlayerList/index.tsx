@@ -51,11 +51,11 @@ const ContextMenuPortal = styled.div<PortalType>`
   position: relative;
   display: flex;
   left: ${(props) => {
-    return `${Number(props.coordX) * 50 + 50}px`;
+    return `${Number(props.coordX) * 50 - 100}px`;
   }};
 
   bottom: ${(props) => {
-    return `${Number(props.coordY) * 50 + 50}px`;
+    return `${Number(props.coordY) * 50}px`;
   }};
 `;
 
@@ -161,7 +161,7 @@ const ContextMenu = styled.div<ContextMenuType>`
   box-sizing: border-box;
   left: ${(props) => {
     if (props.coord?.x) {
-      return `${props.coord?.x + 50}px`;
+      return `${props.coord?.x}px`;
     } else {
       return "0px";
     }
@@ -258,11 +258,36 @@ export const PlayerList = (props: PlayerListItem) => {
         switch (playerCardItem.showContextMenu) {
           case true: {
             console.log(numberOfPlayer);
+            const activePLayerCoord = playerList[numberOfPlayer].coord;
+            const currplayerCoord = playerCardItem.coord;
 
-            /**
-             *
-             */
-            const [hor, vert] = playerList[numberOfPlayer].coord.split(".");
+            const contextMenuCoord = getContextMenuCoord(
+              activePLayerCoord,
+              currplayerCoord
+            );
+            console.log(contextMenuCoord);
+
+            const [hor, vert] = contextMenuCoord.split(".");
+            /* 
+            const [recepientHor, recepientVert] =
+              playerCardItem.coord.split(".");
+
+            console.log(recepientHor, recepientVert);
+
+            const [currHor, currVert] =
+              playerList[numberOfPlayer].coord.split(".");
+
+            const hor =
+              Number(recepientHor) - Number(currHor) > 0
+                ? Number(currHor) + 1
+                : Number(currHor) - 1;
+
+            const vert =
+              Number(recepientVert) - Number(currVert) > 0
+                ? Number(currVert) + 1
+                : Number(currVert) - 1;
+
+            console.log(hor, vert); */
 
             const fieildElem = document.getElementById("field");
             switch (fieildElem) {
@@ -271,7 +296,11 @@ export const PlayerList = (props: PlayerListItem) => {
               }
               default: {
                 const portal = ReactDOM.createPortal(
-                  <ContextMenuPortal coordX={hor} coordY={vert} key="portal">
+                  <ContextMenuPortal
+                    coordX={String(hor)}
+                    coordY={String(vert)}
+                    key="portal"
+                  >
                     {contextMenu}
                   </ContextMenuPortal>,
                   fieildElem
@@ -383,5 +412,39 @@ const calculateHighlightning = (
     case false: {
       return false;
     }
+  }
+};
+
+const getContextMenuCoord = (
+  activePLayerCoord: string,
+  currplayerCoord: string
+) => {
+  const [horActive, vertActive] = activePLayerCoord.split(".");
+  const [horCurrent, vertCurrent] = currplayerCoord.split(".");
+
+  const differenceHor = getNewCoordHor(horCurrent, horActive);
+  const differenceVert = getNewCoordVert(vertCurrent, vertActive);
+  return `${differenceHor}.${differenceVert}`;
+};
+
+const getNewCoordHor = (firstNumber: string, secondNUmber: string) => {
+  const difference = Number(firstNumber) - Number(secondNUmber);
+  if (difference > 0) {
+    return Number(secondNUmber);
+  } else if (difference < 0) {
+    return Number(secondNUmber) + 3;
+  } else {
+    return Number(secondNUmber);
+  }
+};
+
+const getNewCoordVert = (firstNumber: string, secondNUmber: string) => {
+  const difference = Number(firstNumber) - Number(secondNUmber);
+  if (difference > 0) {
+    return Number(secondNUmber) + 2;
+  } else if (difference < 0) {
+    return Number(secondNUmber) + 1;
+  } else {
+    return Number(secondNUmber) + 1;
   }
 };
