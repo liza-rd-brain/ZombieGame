@@ -6,9 +6,7 @@ export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
   numberOfPlayer: number,
-  getContextMenu: Function,
-  hor: string,
-  vert: string
+  getContextMenu: Function
 ) => {
   const playerItemList = Object.entries(playersList);
 
@@ -30,6 +28,8 @@ export const getPlayersList = (
         <PlayerList
           playerListOnCell={playerListOnCell}
           getContextMenu={getContextMenu}
+          playerList={playersList}
+          numberOfPlayer={numberOfPlayer}
         />
       );
     }

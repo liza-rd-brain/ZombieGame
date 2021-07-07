@@ -104,8 +104,11 @@ const getStateCardTaken = (state: State): State => {
 
 const getStateDeletedCard = (state: State): State => {
   const { gameField, numberOfPlayer, playerList } = state;
+
   const playerCoordIndex = playerList[numberOfPlayer].coord;
+
   const currCell = gameField.values[playerCoordIndex];
+
   const cellWithoutCard = deleteCard(currCell);
 
   const newGameField: GameField = {

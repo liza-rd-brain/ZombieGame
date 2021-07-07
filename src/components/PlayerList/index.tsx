@@ -7,6 +7,7 @@ import {
   AvailableCellListType,
   State,
   TypeOfCard,
+  PlayerListType,
 } from "../../business/types";
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
@@ -25,6 +26,8 @@ type PlayerCardListType = {
 type PlayerListItem = {
   playerListOnCell: PlayerCardType[];
   getContextMenu: Function;
+  playerList: PlayerListType;
+  numberOfPlayer: number;
 };
 
 type PLayersPortalType = {
@@ -141,11 +144,18 @@ export const PlayerList = (props: PlayerListItem) => {
 
   //TODO: playerListOnCell, getContextMenu - this properties can be received from props
 
-  const { playerListOnCell, getContextMenu } = props;
+  const {
+    playerListOnCell,
+    getContextMenu /* , playerList, numberOfPlayer */,
+  } = props;
 
   const availableCellList = getAvailableCellList(state);
+  /*   console.log(availableCellList); */
+
   const currPlayerCoord = playerList[numberOfPlayer].coord;
+
   const listForHealing = availableCellList.concat(currPlayerCoord);
+
   const currPlayer = playerList[numberOfPlayer];
 
   const typeOfChosedCard = currPlayer.inventory.cardSelected;
@@ -173,7 +183,10 @@ export const PlayerList = (props: PlayerListItem) => {
               canHealPlayer,
               typeOfChosedCard
             )}
-            onClick={() => {
+            onClick={() =>
+              dispatch({ type: "playerWasClicked", payload: playerCardItem })
+            }
+            /*   onClick={() => {
               playerClickedHandler(
                 getContextMenu,
                 playerCardItem,
@@ -182,7 +195,7 @@ export const PlayerList = (props: PlayerListItem) => {
                 typeOfChosedCard,
                 dispatch
               );
-            }}
+            }} */
           ></PlayerCard>
         );
       })}
@@ -214,6 +227,10 @@ export const PlayerList = (props: PlayerListItem) => {
     }
   }
 };
+
+/**
+ * Show coordinates of cells with wich player can interact(apply card)
+ */
 
 const getAvailableCellList = (state: State) => {
   const { gameState, playerList, numberOfPlayer, gameField } = state;
@@ -295,7 +312,7 @@ const playerClickedHandler = (
       break;
     }
     case false: {
-      console.log("не можем взаимодействовать с игроком игрока");
+      console.log("не можем взаимодействовать с игроком ");
       break;
     }
     default:

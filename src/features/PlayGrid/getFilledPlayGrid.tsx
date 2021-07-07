@@ -107,14 +107,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
     const cardList = (
       <>
-        {getPlayersList(
-          orderIndex,
-          playerList,
-          numberOfPlayer,
-          getContextMenu,
-          hor,
-          vert
-        )}
+        {getPlayersList(orderIndex, playerList, numberOfPlayer, getContextMenu)}
 
         {getCards(cellValues, hor, vert)}
 

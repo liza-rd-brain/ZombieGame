@@ -21,5 +21,8 @@ export const getStateHealCurrPlayer = (state: State): State => {
     ...state,
     playerList: newPlayerList,
     gameState: { type: "gameStarted.playerMove" },
+    doEffect: {
+      type: "!checkAvailableNeighboringCell",
+    },
   };
 };
