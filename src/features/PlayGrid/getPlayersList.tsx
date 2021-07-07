@@ -12,22 +12,29 @@ export const getPlayersList = (
 ) => {
   const playerItemList = Object.entries(playersList);
 
-  const playerList = playerItemList.map((playerItem) => {
-    const [, item] = playerItem;
-    return item;
-  });
+  const playerListOnCell = playerItemList
+    .filter((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard.coord === index;
+    })
+    .map((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard;
+    });
 
-  console.log("playerItemList", playerItemList);
-  console.log("playerList", playerList);
+  const hasPlayerOncell = playerListOnCell.length > 0;
 
-  if (playerList.length > 0) {
-    return (
-      (
+  switch (hasPlayerOncell) {
+    case true: {
+      return (
         <PlayerList
-          playerListOnCell={playerList}
+          playerListOnCell={playerListOnCell}
           getContextMenu={getContextMenu}
         />
-      ) || null
-    );
-  } else return null;
+      );
+    }
+    case false: {
+      return null;
+    }
+  }
 };
