@@ -10,6 +10,7 @@ export const switchToNextPlayer = () => {
     dice: 0,
     gameState: {
       coordOfAvailableCells: null,
+      coordOfAvailableCards: null,
       type: "gameStarted.getPlayersOrder",
     },
     doEffect: {

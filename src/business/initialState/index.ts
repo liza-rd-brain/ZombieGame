@@ -9,7 +9,11 @@ const getInitialState = (): State => {
   const gameFieldWithoutEnemy = getGameField();
 
   return {
-    gameState: { type: "waitingStart", coordOfAvailableCells: null },
+    gameState: {
+      type: "waitingStart",
+      coordOfAvailableCells: null,
+      coordOfAvailableCards: null,
+    },
     dice: 0,
     gameResult: "",
     playerList: getPlayers(),

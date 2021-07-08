@@ -78,6 +78,7 @@ describe("test player can move on next cell", () => {
     ...initialState,
     gameState: {
       coordOfAvailableCells: ["4.7", "5.6", "4.5", "3.6"],
+      coordOfAvailableCards: null,
       type: "gameStarted.playerMove",
     },
     dice: 3,
@@ -229,6 +230,7 @@ describe("test player can move on next cell", () => {
       ...initialState,
       gameState: {
         coordOfAvailableCells: ["0.7", "0.5", "1.6"],
+        coordOfAvailableCards: null,
         type: "gameStarted.playerMove",
       },
       dice: 3,

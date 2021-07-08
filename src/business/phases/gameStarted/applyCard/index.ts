@@ -42,8 +42,52 @@ export const applyCard = (state: State, action: ActionType): State => {
       return getStateClickedPlayer(state, clickedPlayerCard);
     }
 
+    case "req-checkAvailableNeighboringCards": {
+      const coordOfAvailableCards = getAvailableCards(state);
+      return {
+        ...state,
+        gameState: { ...state.gameState, coordOfAvailableCards },
+      };
+    }
+
     default: {
       return state;
     }
   }
+};
+
+const getAvailableCards = (state: State) => {
+  const { gameState, playerList, activePlayerNumber, gameField } = state;
+
+  const activePlayerCoord = playerList[activePlayerNumber].coord;
+
+  const neighboringCellList = getNeighboringCellList(
+    activePlayerCoord,
+    gameField
+  );
+
+  const availableCellList: AvailableCellListType = neighboringCellList.filter(
+    (cellItem) => {
+      const { direction, coord } = cellItem;
+
+      return canInteractWithCell(state, coord, direction);
+    }
+  );
+
+  const availableCellsCoords = availableCellList
+    .map((cellItem) => {
+      const { direction, coord } = cellItem;
+      return coord;
+    })
+    .concat(activePlayerCoord);
+
+  return availableCellsCoords;
+
+  /*   switch (gameState.type) {
+    case "gameStarted.applyCard":
+      return availableCellsCoords;
+
+    default:
+      return [];
+  } */
 };

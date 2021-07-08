@@ -30,9 +30,11 @@ export const getStateCardSelected = (
     ...state,
     playerList: newPlayerList,
     gameState: {
+      ...state.gameState,
       type: "gameStarted.applyCard",
       coordOfAvailableCells: null,
     },
+    doEffect: { type: "!checkAvailableNeighboringCards" },
   };
 
   const stateWithoutSelectedCard: State = {
@@ -40,6 +42,7 @@ export const getStateCardSelected = (
     playerList: newPlayerList,
     gameState: {
       ...state.gameState,
+      coordOfAvailableCards: null,
       type: /* cardType === "weapon"
           ? "gameStarted.interactWithEnemy"
           :  */ "gameStarted.playerMove",

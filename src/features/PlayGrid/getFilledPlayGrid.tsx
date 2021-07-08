@@ -109,7 +109,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     const cardList = (
       <>
-        {getPlayersList(orderIndex, playerList, activePlayerNumber)}
+        {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
 
         {getCards(cellValues, hor, vert)}
 

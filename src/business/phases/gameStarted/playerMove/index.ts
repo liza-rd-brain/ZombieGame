@@ -66,7 +66,7 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
       const newState: State = {
         ...state,
         playerList: newPlayerList,
-        doEffect: { type: "!cleanMarkedCell" },
+        doEffect: { type: "!cleanAvailableCells" },
       };
       return newState;
     }

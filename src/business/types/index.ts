@@ -119,11 +119,10 @@ export type TypeEffect =
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
-  | { type: "!cleanMarkedCell" }
+  | { type: "!cleanAvailableCells" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!removeEnemyCard" }
-  /* 
-  | { type: "!applyCard" } */
+  | { type: "!checkAvailableNeighboringCards" }
   | null;
 
 export type State = {
@@ -138,7 +137,7 @@ export type State = {
 };
 
 export type GameState = GameStateTypes & {
-  /*   coordOfAvailableCards?: string[] | null; */
+  coordOfAvailableCards: string[] | null;
   coordOfAvailableCells: string[] | null;
 };
 

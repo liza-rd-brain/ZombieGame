@@ -1,11 +1,16 @@
 import { PlayerList } from "../../components";
 
-import { PlayerListType, PlayerCardType } from "../../business/types";
+import {
+  PlayerListType,
+  PlayerCardType,
+  GameState,
+} from "../../business/types";
 
 export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
-  numberOfPlayer: number
+  numberOfPlayer: number,
+  gameState: GameState
 ) => {
   const playerItemList = Object.entries(playersList);
 
@@ -28,6 +33,7 @@ export const getPlayersList = (
           playerListOnCell={playerListOnCell}
           playerList={playersList}
           numberOfPlayer={numberOfPlayer}
+          gameState={gameState}
         />
       );
     }

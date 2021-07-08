@@ -17,7 +17,7 @@ export function usePlayerMove() {
           break;
         }
 
-        case "!cleanMarkedCell": {
+        case "!cleanAvailableCells": {
           const timerMarkCell = setTimeout(
             () =>
               dispatch({

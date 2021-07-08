@@ -12,12 +12,15 @@ import {
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
+
 import {
   useOpenCard,
   useEndScreen,
   usePlayerMove,
   useInteractWithEnemy,
+  useApplyCard,
 } from "./business/effects";
+
 import { PlayerStatus } from "./features/PlayerStatus";
 
 const Field = styled.div`
@@ -85,6 +88,7 @@ export function GetApp() {
   usePlayerMove();
   useEndScreen();
   useInteractWithEnemy();
+  useApplyCard();
 
   const getGameScreen = () => {
     switch (gameState.type) {

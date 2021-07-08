@@ -8,6 +8,7 @@ import {
   State,
   TypeOfCard,
   PlayerListType,
+  GameState,
 } from "../../business/types";
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 import { canInteractWithCell } from "./canInteractWithCell";
@@ -28,6 +29,7 @@ type PlayerListItem = {
   playerListOnCell: PlayerCardType[];
   playerList: PlayerListType;
   numberOfPlayer: number;
+  gameState: GameState;
 };
 
 type PortalType = {
@@ -178,43 +180,25 @@ const Button = styled.button`
 
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
 
-  const { playerListOnCell, playerList, numberOfPlayer } = props;
+  const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
-  const availableCellList = getAvailableCellList(state);
-  /*   console.log(availableCellList); */
+  const coordOfAvailableCards = gameState.coordOfAvailableCards;
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
-
-  const listForHealing = availableCellList.concat(currPlayerCoord);
+  const activePlayerCoord = playerList[numberOfPlayer].coord;
 
   const currPlayer = playerList[numberOfPlayer];
-
   const typeOfChosedCard = currPlayer.inventory.cardSelected;
-
   const needSplitCard = playerListOnCell.length > 1;
-
-  /*  const typeOfChosedCard = chosedCard?.name || null; */
 
   const playerCardList = (
     <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
-        const canInteractWithPlayer = availableCellList.includes(
-          playerCardItem.coord
-        );
-
-        const canHealPlayer = listForHealing.includes(playerCardItem.coord);
-
         const contextMenu = (
           <ContextMenu
             key="contextMenu"
-            /*    isVisible={playerCardItem.showContextMenu || false} */
             id={"contextMenu"}
             className={"contextMenu"}
-            /*    coord={contextMenuState.coord} */
           >
             <Button
               onClick={() => {
@@ -245,9 +229,10 @@ export const PlayerList = (props: PlayerListItem) => {
             key={index}
             isCurrent={numberOfPlayer == playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
-              canInteractWithPlayer,
-              canHealPlayer,
-              typeOfChosedCard
+              coordOfAvailableCards,
+              typeOfChosedCard,
+              playerCardItem,
+              activePlayerCoord
             )}
             onClick={() =>
               dispatch({ type: "clickedPlayer", payload: playerCardItem })
@@ -330,69 +315,49 @@ export const PlayerList = (props: PlayerListItem) => {
   }
 };
 
-/**
- * Show coordinates of cells with wich player can interact(apply card)
- */
-
-const getAvailableCellList = (state: State) => {
-  const { gameState, playerList, activePlayerNumber, gameField } = state;
-  const prevPlayerCoord = playerList[activePlayerNumber].coord;
-  const neighboringCellList = getNeighboringCellList(
-    prevPlayerCoord,
-    gameField
-  );
-  const availableCellList: AvailableCellListType = neighboringCellList.filter(
-    (cellItem) => {
-      const { direction, coord } = cellItem;
-
-      return canInteractWithCell(state, coord, direction);
-    }
-  );
-
-  const availableCellsCoords = availableCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
-    return coord;
-  });
-
-  switch (gameState.type) {
-    case "gameStarted.applyCard":
-      return availableCellsCoords;
-
-    default:
-      return [];
-  }
-};
-
 const calculateHighlightning = (
-  canInteractWithPlayer: boolean,
-  canHealPlayer: boolean,
-  typeOfChosedCard: TypeOfCard
+  coordOfAvailableCards: string[] | null,
+  typeOfChosedCard: TypeOfCard,
+  playerCardItem: PlayerCardType,
+  activePlayerCoord: string
 ) => {
-  switch (canHealPlayer) {
-    case true: {
-      switch (typeOfChosedCard) {
-        case "health": {
-          return true;
-        }
+  const isActivePlayer = activePlayerCoord === playerCardItem.coord;
+  switch (coordOfAvailableCards) {
+    case null: {
+      return false;
+    }
+    default: {
+      const canInteractWithPlayer = coordOfAvailableCards.includes(
+        playerCardItem.coord
+      );
 
-        case "weapon":
-        case "boards": {
-          switch (canInteractWithPlayer) {
-            case true: {
+      switch (canInteractWithPlayer) {
+        case true: {
+          switch (typeOfChosedCard) {
+            case "health": {
               return true;
             }
-            case false: {
+
+            case "weapon":
+            case "boards": {
+              switch (!isActivePlayer) {
+                case true: {
+                  return true;
+                }
+                case false: {
+                  return false;
+                }
+              }
+            }
+            default: {
               return false;
             }
           }
         }
-        default: {
+        case false: {
           return false;
         }
       }
-    }
-    case false: {
-      return false;
     }
   }
 };

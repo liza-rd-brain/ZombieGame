@@ -30,6 +30,7 @@ export type ActionType =
   | { type: "req-getBattleResult" }
   | { type: "req-getEndScreen" }
   | { type: "req-checkAvailableNeighboringCell" }
+  | { type: "req-checkAvailableNeighboringCards" }
   | { type: "req-cleanAvailableCells" }
   | { type: "req-getPlayerMoveResult" }
   | { type: "req-takeCard" }
