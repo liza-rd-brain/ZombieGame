@@ -17,9 +17,7 @@ export const getPlayersOrder = (state: State, action: ActionType): State => {
       return {
         ...state,
         activePlayerNumber: nextPlayersNumber,
-        gameState: {
-          type: "gameStarted.trownDice",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.trownDice" },
       };
     }
 

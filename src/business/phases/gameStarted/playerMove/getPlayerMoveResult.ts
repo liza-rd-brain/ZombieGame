@@ -39,9 +39,7 @@ export const getPlayerMoveResult = (state: State) => {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameState: {
-          type: "gameStarted.takeCard",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.takeCard" },
         doEffect: { type: "!openCard" },
       };
       return newState;
@@ -51,9 +49,7 @@ export const getPlayerMoveResult = (state: State) => {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameState: {
-          type: "interactWithEnemy",
-        },
+        gameState: { ...state.gameState, type: "interactWithEnemy" },
         doEffect: { type: "!checkApperanceEnemyCard" },
       };
       return newState;
@@ -64,9 +60,7 @@ export const getPlayerMoveResult = (state: State) => {
       const newState: State = {
         ...state,
         dice: 0,
-        gameState: {
-          type: "gameStarted.getPlayersOrder",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
         doEffect: {
           type: "!getNextPlayer",
         },
@@ -78,9 +72,7 @@ export const getPlayerMoveResult = (state: State) => {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameState: {
-          type: "gameStarted.playerMove",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.playerMove" },
         doEffect: { type: "!checkAvailableNeighboringCell" },
       };
       return newState;

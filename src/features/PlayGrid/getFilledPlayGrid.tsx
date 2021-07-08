@@ -88,7 +88,8 @@ export const getFilledPlayGrid = (state: State) => {
 
   const currPlayerCoord = playerList[activePlayerNumber].coord;
 
-  const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
+  const availableCells =
+    state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];

@@ -29,6 +29,7 @@ export function usePlayerMove() {
             clearTimeout(timerMarkCell);
           };
         }
+
         case "!getPlayerMoveResult": {
           dispatch({
             type: "req-getPlayerMoveResult",

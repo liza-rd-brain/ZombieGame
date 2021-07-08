@@ -39,7 +39,7 @@ export const getStateGiveCard = (
     return {
       ...state,
       playerList: newPlayerList,
-      gameState: { type: "gameStarted.playerMove" },
+      gameState: { ...state.gameState, type: "gameStarted.playerMove" },
       doEffect: { type: "!checkAvailableNeighboringCell" },
     };
   } else {

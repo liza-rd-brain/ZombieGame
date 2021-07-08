@@ -26,7 +26,10 @@ const getStatePlayerCanFight = (state: State): State => {
   return {
     ...state,
     dice: 0,
-    gameState: { type: "interactWithEnemy.makeBattleAction" },
+    gameState: {
+      ...state.gameState,
+      type: "interactWithEnemy.makeBattleAction",
+    },
   };
 };
 
@@ -35,6 +38,7 @@ const getStatePlayerRunsAway = (state: State): State => {
     ...state,
     dice: 0,
     gameState: {
+      ...state.gameState,
       type: "gameStarted.trownDice",
     },
   };
@@ -57,7 +61,10 @@ const getStatePlayetLoseHealth = (state: State): State => {
     const newState: State = {
       ...state,
       dice: 0,
-      gameState: { type: "interactWithEnemy.throwBattleDice" },
+      gameState: {
+        ...state.gameState,
+        type: "interactWithEnemy.throwBattleDice",
+      },
       playerList: newPlayerList,
     };
 
@@ -67,7 +74,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
 
     return {
       ...state,
-      gameState: { type: "endGame" },
+      gameState: { ...state.gameState, type: "endGame" },
       gameResult: "Вы проиграли",
       doEffect: null,
     };

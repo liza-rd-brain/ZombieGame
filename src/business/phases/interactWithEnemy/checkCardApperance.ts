@@ -18,7 +18,10 @@ export const checkCardApperance = (state: State): State => {
     case !isNeedOpenEnemyCard: {
       return {
         ...state,
-        gameState: { type: "interactWithEnemy.throwBattleDice" },
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.throwBattleDice",
+        },
 
         dice: 0,
       };

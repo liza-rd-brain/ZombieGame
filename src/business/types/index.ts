@@ -135,10 +135,14 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   activePlayerNumber: number;
-  availableCellsCoords?: string[] | null;
 };
 
-export type GameState =
+export type GameState = GameStateTypes & {
+  /*   coordOfAvailableCards?: string[] | null; */
+  coordOfAvailableCells: string[] | null;
+};
+
+export type GameStateTypes =
   | { type: "waitingStart" }
   | { type: "gameStarted.trownDice" }
   | {

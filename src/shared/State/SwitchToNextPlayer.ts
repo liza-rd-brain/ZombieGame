@@ -9,6 +9,7 @@ export const switchToNextPlayer = () => {
   } = {
     dice: 0,
     gameState: {
+      coordOfAvailableCells: null,
       type: "gameStarted.getPlayersOrder",
     },
     doEffect: {

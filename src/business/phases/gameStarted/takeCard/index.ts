@@ -122,9 +122,7 @@ const getStateDeletedCard = (state: State): State => {
   return {
     ...state,
     gameField: newGameField,
-    gameState: {
-      type: "gameStarted.getPlayersOrder",
-    },
+    gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
     doEffect: {
       type: "!getNextPlayer",
     },

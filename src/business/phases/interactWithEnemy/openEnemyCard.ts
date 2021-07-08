@@ -18,7 +18,10 @@ export const openEnemyCard = (state: State): State => {
   return {
     ...state,
     enemyList: newEnemyList,
-    gameState: { type: "interactWithEnemy.throwBattleDice" },
+    gameState: {
+      ...state.gameState,
+      type: "interactWithEnemy.throwBattleDice",
+    },
     dice: 0,
   };
 };

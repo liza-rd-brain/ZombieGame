@@ -31,14 +31,15 @@ export const getStateCardSelected = (
     playerList: newPlayerList,
     gameState: {
       type: "gameStarted.applyCard",
+      coordOfAvailableCells: null,
     },
-    availableCellsCoords: null,
   };
 
   const stateWithoutSelectedCard: State = {
     ...state,
     playerList: newPlayerList,
     gameState: {
+      ...state.gameState,
       type: /* cardType === "weapon"
           ? "gameStarted.interactWithEnemy"
           :  */ "gameStarted.playerMove",

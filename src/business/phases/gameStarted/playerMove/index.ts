@@ -57,7 +57,8 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
    */
 
-  const canTakeNextCell = state.availableCellsCoords?.includes(nextPlayerCoord);
+  const canTakeNextCell =
+    state.gameState.coordOfAvailableCells?.includes(nextPlayerCoord);
 
   switch (canTakeNextCell) {
     case true: {
@@ -101,14 +102,14 @@ export const getAvailableCells = (state: State): State => {
     }
   );
 
-  const availableCellsCoords = availableCellList.map((cellItem) => {
+  const coordOfAvailableCells = availableCellList.map((cellItem) => {
     const { direction, coord } = cellItem;
     return coord;
   });
 
   return {
     ...state,
-    availableCellsCoords,
+    gameState: { ...state.gameState, coordOfAvailableCells },
   };
 };
 
@@ -121,6 +122,6 @@ const getStateClearedAvailableCells = (state: State): State => {
   return {
     ...state,
     doEffect: { type: "!getPlayerMoveResult" },
-    availableCellsCoords: null,
+    gameState: { ...state.gameState, coordOfAvailableCells: null },
   };
 };

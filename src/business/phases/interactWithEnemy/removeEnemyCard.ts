@@ -10,9 +10,7 @@ export const removeEnemyCard = (state: State): State => {
     ...state,
     enemyList: newEnemyList,
     dice: 0,
-    gameState: {
-      type: "gameStarted.getPlayersOrder",
-    },
+    gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
     doEffect: {
       type: "!getNextPlayer",
     },

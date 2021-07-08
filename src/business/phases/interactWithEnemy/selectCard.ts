@@ -18,13 +18,16 @@ export const selectCard = (state: State, action: ActionType) => {
       const stateWithSelectedCard: State = {
         ...state,
         playerList: newPlayerList,
-        gameState: { type: "interactWithEnemy.applyCard" },
+        gameState: { ...state.gameState, type: "interactWithEnemy.applyCard" },
       };
 
       const stateWithoutSelectedCard: State = {
         ...state,
         playerList: newPlayerList,
-        gameState: { type: "interactWithEnemy.makeBattleAction" },
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.makeBattleAction",
+        },
       };
 
       switch (hasAnyCardSelected) {

@@ -44,7 +44,7 @@ export const getStateHoleFilled = (
       ...state,
       gameField: newGameField,
       playerList: newPlayerList,
-      gameState: { type: "gameStarted.playerMove" },
+      gameState: { ...state.gameState, type: "gameStarted.playerMove" },
       doEffect: { type: "!checkAvailableNeighboringCell" },
     };
 
