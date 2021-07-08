@@ -2,8 +2,8 @@ import { State, EnemyCardType } from "../../types";
 import { deleteSelectedCard } from "../common/deleteSelectedCard";
 
 export const defeatEnemy = (state: State): State => {
-  const { numberOfPlayer, playerList, enemyList } = state;
-  const currEnemyCoord = playerList[numberOfPlayer].coord;
+  const { activePlayerNumber, playerList, enemyList } = state;
+  const currEnemyCoord = playerList[activePlayerNumber].coord;
   const currEnemy = enemyList[currEnemyCoord];
   const defeatedEnemy: EnemyCardType = { ...currEnemy, apperance: "defeated" };
   const newEnemyList = {
@@ -11,12 +11,12 @@ export const defeatEnemy = (state: State): State => {
     [currEnemyCoord]: defeatedEnemy,
   };
 
-  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+  const newInventory = deleteSelectedCard(playerList, activePlayerNumber);
 
   const newPlayerList = {
     ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
+    [activePlayerNumber]: {
+      ...playerList[activePlayerNumber],
       inventory: newInventory,
     },
   };

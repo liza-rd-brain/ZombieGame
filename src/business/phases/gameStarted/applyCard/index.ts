@@ -14,9 +14,9 @@ import { canInteractWithCell } from "../../../../components/PlayerList/canIntera
  * If not - we give context menu: need heal or apply.
  */
 export const applyCard = (state: State, action: ActionType): State => {
-  const { numberOfPlayer, playerList } = state;
+  const { activePlayerNumber, playerList } = state;
 
-  const chosenCardType = playerList[numberOfPlayer].inventory.cardSelected;
+  const chosenCardType = playerList[activePlayerNumber].inventory.cardSelected;
 
   switch (action.type) {
     case "req-shareCard": {
@@ -74,8 +74,9 @@ export const applyCard = (state: State, action: ActionType): State => {
 
     case "clickedPlayer": {
       const clickedPlayerCard = action.payload;
-      const currPlayer = playerList[numberOfPlayer];
-      const isCurrentPlayer = clickedPlayerCard.orderNumber === numberOfPlayer;
+      const currPlayer = playerList[activePlayerNumber];
+      const isCurrentPlayer =
+        clickedPlayerCard.orderNumber === activePlayerNumber;
 
       const cellsForInteract = getCellsForInteract(state);
 
@@ -86,7 +87,7 @@ export const applyCard = (state: State, action: ActionType): State => {
       );
 
       const typeOfChosedCard =
-        playerList[numberOfPlayer].inventory.cardSelected;
+        playerList[activePlayerNumber].inventory.cardSelected;
 
       switch (canInteractWithPlayer) {
         case true: {
@@ -157,7 +158,7 @@ export const applyCard = (state: State, action: ActionType): State => {
                */
 
               const indexChosenPlayer = action.payload;
-              const isCurrPlayer = indexChosenPlayer === numberOfPlayer;
+              const isCurrPlayer = indexChosenPlayer === activePlayerNumber;
 
               switch (isCurrPlayer) {
                 case true:
@@ -199,8 +200,8 @@ export const applyCard = (state: State, action: ActionType): State => {
  * Show coordinates of cells with wich player can interact(apply card)
  */
 const getCellsForInteract = (state: State) => {
-  const { gameState, playerList, numberOfPlayer, gameField } = state;
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const { gameState, playerList, activePlayerNumber, gameField } = state;
+  const prevPlayerCoord = playerList[activePlayerNumber].coord;
   const neighboringCellList = getNeighboringCellList(
     prevPlayerCoord,
     gameField

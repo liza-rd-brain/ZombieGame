@@ -94,7 +94,7 @@ export const PlayGrid = () => {
     ...state,
   }));
 
-  const { gameField, playerList, enemyList, numberOfPlayer } = state;
+  const { gameField, playerList, enemyList, activePlayerNumber } = state;
 
   const { vert: maxVert } = FINISH_COORD;
   const height = maxVert + 1;

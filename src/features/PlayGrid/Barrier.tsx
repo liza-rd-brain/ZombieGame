@@ -357,11 +357,11 @@ export const Barrier = (props: BarrierCoord) => {
     ...state,
   }));
 
-  const { gameField, playerList, numberOfPlayer, gameState } = state;
+  const { gameField, playerList, activePlayerNumber, gameState } = state;
 
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
+  const currPlayerCoord = playerList[activePlayerNumber].coord;
 
   const neighboringCellList = getNeighboringCellList(
     currPlayerCoord,
@@ -385,7 +385,7 @@ export const Barrier = (props: BarrierCoord) => {
     currPlayerCoord,
     gameState,
     playerList,
-    numberOfPlayer
+    activePlayerNumber
   );
 
   switch (cellValues.name) {

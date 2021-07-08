@@ -49,9 +49,9 @@ export const playerMove = (state: State, action: ActionType): State => {
  * Changing coordinates of player if he can take the cell in certain direction.
  */
 const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
-  const { playerList, numberOfPlayer, gameField } = state;
+  const { playerList, activePlayerNumber, gameField } = state;
 
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const prevPlayerCoord = playerList[activePlayerNumber].coord;
   const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
 
   /*   const canTakeNextCell = gameField.values[nextPlayerCoord].availableForTake;
@@ -83,8 +83,8 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
  */
 
 export const getAvailableCells = (state: State): State => {
-  const { playerList, numberOfPlayer, gameField } = state;
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const { playerList, activePlayerNumber, gameField } = state;
+  const prevPlayerCoord = playerList[activePlayerNumber].coord;
   const neighboringCellList = getNeighboringCellList(
     prevPlayerCoord,
     gameField
@@ -116,7 +116,7 @@ export const getAvailableCells = (state: State): State => {
  *Remove from current player availableCellList
  */
 const getStateClearedAvailableCells = (state: State): State => {
-  const { playerList, numberOfPlayer, gameField } = state;
+  const { playerList, activePlayerNumber, gameField } = state;
 
   return {
     ...state,

@@ -1,8 +1,8 @@
 import { State } from "../../types";
 
 export const checkCardApperance = (state: State): State => {
-  const { enemyList, playerList, numberOfPlayer } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
+  const { enemyList, playerList, activePlayerNumber } = state;
+  const currentCoord = playerList[activePlayerNumber].coord;
 
   const isNeedOpenEnemyCard =
     enemyList[currentCoord].apperance === "open" ? false : true;

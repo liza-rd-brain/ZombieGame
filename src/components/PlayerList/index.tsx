@@ -268,32 +268,13 @@ export const PlayerList = (props: PlayerListItem) => {
             console.log(contextMenuCoord);
 
             const [hor, vert] = contextMenuCoord.split(".");
-            /* 
-            const [recepientHor, recepientVert] =
-              playerCardItem.coord.split(".");
-
-            console.log(recepientHor, recepientVert);
-
-            const [currHor, currVert] =
-              playerList[numberOfPlayer].coord.split(".");
-
-            const hor =
-              Number(recepientHor) - Number(currHor) > 0
-                ? Number(currHor) + 1
-                : Number(currHor) - 1;
-
-            const vert =
-              Number(recepientVert) - Number(currVert) > 0
-                ? Number(currVert) + 1
-                : Number(currVert) - 1;
-
-            console.log(hor, vert); */
 
             const fieildElem = document.getElementById("field");
             switch (fieildElem) {
               case null: {
                 return playerCard;
               }
+
               default: {
                 const portal = ReactDOM.createPortal(
                   <ContextMenuPortal
@@ -314,6 +295,7 @@ export const PlayerList = (props: PlayerListItem) => {
               }
             }
           }
+
           default: {
             return playerCard;
           }
@@ -353,8 +335,8 @@ export const PlayerList = (props: PlayerListItem) => {
  */
 
 const getAvailableCellList = (state: State) => {
-  const { gameState, playerList, numberOfPlayer, gameField } = state;
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
+  const { gameState, playerList, activePlayerNumber, gameField } = state;
+  const prevPlayerCoord = playerList[activePlayerNumber].coord;
   const neighboringCellList = getNeighboringCellList(
     prevPlayerCoord,
     gameField

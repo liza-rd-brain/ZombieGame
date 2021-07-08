@@ -134,7 +134,7 @@ export type State = {
   enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
-  numberOfPlayer: number;
+  activePlayerNumber: number;
   availableCellsCoords?: string[] | null;
 };
 

@@ -6,9 +6,9 @@ export const getStateHealAnotherPlayer = (
   state: State,
   indexChosenPlayer: number
 ): State => {
-  const { playerList, numberOfPlayer } = state;
-  const indexCurrPlayer = numberOfPlayer;
-  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+  const { playerList, activePlayerNumber } = state;
+  const indexCurrPlayer = activePlayerNumber;
+  const newInventory = deleteSelectedCard(playerList, activePlayerNumber);
   const newHealth = changeHealth(playerList, indexChosenPlayer);
 
   const newPlayerList: PlayerListType = {

@@ -82,10 +82,11 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 `;
 
 export const getFilledPlayGrid = (state: State) => {
-  const { gameField, playerList, numberOfPlayer, gameState, enemyList } = state;
+  const { gameField, playerList, activePlayerNumber, gameState, enemyList } =
+    state;
   const orderGameCells = gameField.order;
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
+  const currPlayerCoord = playerList[activePlayerNumber].coord;
 
   const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
 
@@ -107,7 +108,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     const cardList = (
       <>
-        {getPlayersList(orderIndex, playerList, numberOfPlayer)}
+        {getPlayersList(orderIndex, playerList, activePlayerNumber)}
 
         {getCards(cellValues, hor, vert)}
 

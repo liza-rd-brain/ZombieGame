@@ -3,12 +3,12 @@ import { ActionType } from "../../reducer";
 import { changeSelectedCard } from "./changeSelectedCard";
 
 export const selectCard = (state: State, action: ActionType) => {
-  const { numberOfPlayer } = state;
+  const { activePlayerNumber } = state;
   switch (action.type) {
     case "cardChoosed": {
       const newPlayerList = changeSelectedCard(state, action.payload.type);
 
-      const hasAnyCardSelected = newPlayerList[numberOfPlayer].inventory
+      const hasAnyCardSelected = newPlayerList[activePlayerNumber].inventory
         .cardSelected
         ? true
         : false;

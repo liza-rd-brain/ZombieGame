@@ -1,12 +1,12 @@
 import { State } from "../../../types";
 
 export const changePlayerCoord = (state: State, newPlayerCoord: string) => {
-  const { playerList, numberOfPlayer } = state;
+  const { playerList, activePlayerNumber } = state;
 
   const newPlayerList = {
     ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
+    [activePlayerNumber]: {
+      ...playerList[activePlayerNumber],
       coord: newPlayerCoord,
     },
   };

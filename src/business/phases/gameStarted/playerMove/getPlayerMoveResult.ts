@@ -6,9 +6,9 @@ import { switchToNextPlayer } from "../../../../shared/State";
  */
 
 export const getPlayerMoveResult = (state: State) => {
-  const { gameField, playerList, numberOfPlayer, dice } = state;
+  const { gameField, playerList, activePlayerNumber, dice } = state;
 
-  const newPlayerCoord = playerList[numberOfPlayer].coord;
+  const newPlayerCoord = playerList[activePlayerNumber].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];
   const isLastStepOfMove = dice === 1;
 
@@ -17,7 +17,6 @@ export const getPlayerMoveResult = (state: State) => {
   const takeCard =
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
-
 
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]

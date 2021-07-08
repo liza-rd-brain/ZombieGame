@@ -41,15 +41,15 @@ const getStatePlayerRunsAway = (state: State): State => {
 };
 
 const getStatePlayetLoseHealth = (state: State): State => {
-  const { playerList, numberOfPlayer } = state;
-  const newPlayerHealth = playerList[numberOfPlayer].health - 1;
+  const { playerList, activePlayerNumber } = state;
+  const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
   const newPlayerList = {
     ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
-      health: playerList[numberOfPlayer].health - 1,
+    [activePlayerNumber]: {
+      ...playerList[activePlayerNumber],
+      health: playerList[activePlayerNumber].health - 1,
     },
   };
 
@@ -63,7 +63,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
 
     return newState;
   } else {
-    console.log(`игрок №${numberOfPlayer} погиб`);
+    console.log(`игрок №${activePlayerNumber} погиб`);
 
     return {
       ...state,

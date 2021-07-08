@@ -5,8 +5,8 @@ import { EnemyCardType, EnemyListType, State } from "../../types";
  * Because it dont lying structurally on cell
  */
 export const openEnemyCard = (state: State): State => {
-  const { enemyList, playerList, numberOfPlayer } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
+  const { enemyList, playerList, activePlayerNumber } = state;
+  const currentCoord = playerList[activePlayerNumber].coord;
 
   const currEnemyCard = enemyList[currentCoord];
   const openedEnemyCard: EnemyCardType = {

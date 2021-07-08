@@ -58,7 +58,7 @@ export const EnemyList = (props: EnemyArray) => {
   const state = useSelector((state: State) => ({
     ...state,
   }));
-  const { numberOfPlayer, playerList } = state;
+  const { activePlayerNumber, playerList } = state;
   const enemyArray = props.list;
 
   return (
@@ -70,7 +70,7 @@ export const EnemyList = (props: EnemyArray) => {
             {...enemyCard}
             onClick={() => {
               const canFight =
-                playerList[numberOfPlayer].coord === enemyCard.coord;
+                playerList[activePlayerNumber].coord === enemyCard.coord;
               if (canFight) {
                 dispatch({
                   type: "req-defeatEnemy",

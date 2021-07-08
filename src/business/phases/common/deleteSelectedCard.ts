@@ -2,12 +2,11 @@ import { InventoryType, PlayerListType } from "../../types";
 
 export const deleteSelectedCard = (
   playerList: PlayerListType,
-  numberOfPlayer: number
+  activePlayerNumber: number
 ) => {
-  const indexCurrPlayer = numberOfPlayer;
-  const currInventory = playerList[indexCurrPlayer].inventory;
+  const currInventory = playerList[activePlayerNumber].inventory;
 
-  const removedCardType = playerList[indexCurrPlayer].inventory.cardSelected;
+  const removedCardType = playerList[activePlayerNumber].inventory.cardSelected;
 
   if (removedCardType) {
     const newInventory: InventoryType = {

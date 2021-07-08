@@ -16,7 +16,7 @@ const getInitialState = (): State => {
     enemyList: getEnemies(gameFieldWithoutEnemy),
     gameField: gameFieldWithoutEnemy,
     doEffect: null,
-    numberOfPlayer: 0,
+    activePlayerNumber: 0,
   };
 };
 

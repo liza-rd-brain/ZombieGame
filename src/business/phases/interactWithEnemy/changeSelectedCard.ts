@@ -1,15 +1,15 @@
 import { State, PlayerListType, TypeOfCard } from "../../types";
 
 export const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
-  const { playerList, numberOfPlayer } = state;
-  const inventory = playerList[numberOfPlayer].inventory;
+  const { playerList, activePlayerNumber } = state;
+  const inventory = playerList[activePlayerNumber].inventory;
 
   const newInventory = { ...inventory, cardSelected: typeOfSelect };
 
   const newPlayerList: PlayerListType = {
     ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
+    [activePlayerNumber]: {
+      ...playerList[activePlayerNumber],
       inventory: newInventory,
     },
   };

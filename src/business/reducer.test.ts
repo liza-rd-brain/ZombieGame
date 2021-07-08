@@ -40,25 +40,25 @@ test("should change playersOrder", () => {
         inventory: { boards: 0, weapon: 0, health: 0, cardSelected: null },
       },
     },
-    numberOfPlayer: 0,
+    activePlayerNumber: 0,
   };
 
   const stateSwitchToFirstPlayer = reducer(stateZeroPlayer, {
     type: "req-getNextPlayer",
   });
 
-  expect(stateSwitchToFirstPlayer.numberOfPlayer).toBe(1);
+  expect(stateSwitchToFirstPlayer.activePlayerNumber).toBe(1);
   expect(stateSwitchToFirstPlayer.gameState).toEqual({
     type: "gameStarted.trownDice",
   });
 
-  const stateFirstPlayer: State = { ...stateZeroPlayer, numberOfPlayer: 1 };
+  const stateFirstPlayer: State = { ...stateZeroPlayer, activePlayerNumber: 1 };
 
   const stateswitchToZeroPlayer = reducer(stateFirstPlayer, {
     type: "req-getNextPlayer",
   });
 
-  expect(stateswitchToZeroPlayer.numberOfPlayer).toBe(0);
+  expect(stateswitchToZeroPlayer.activePlayerNumber).toBe(0);
   expect(stateswitchToZeroPlayer.gameState).toEqual({
     type: "gameStarted.trownDice",
   });
@@ -75,7 +75,7 @@ describe("test player can move on next cell", () => {
       type: "!checkAvailableNeighboringCell",
     },
     availableCellsCoords: ["4.7", "5.6", "4.5", "3.6"],
-    numberOfPlayer: 0,
+    activePlayerNumber: 0,
     playerList: {
       "0": {
         name: "player",
@@ -123,7 +123,8 @@ describe("test player can move on next cell", () => {
         payload: "top",
       });
 
-      const playerCoord = newState.playerList[newState.numberOfPlayer].coord;
+      const playerCoord =
+        newState.playerList[newState.activePlayerNumber].coord;
       const currentCell = newState.gameField.values[playerCoord];
 
       const noteExpectedBarrier: BarrierList = [
@@ -192,7 +193,8 @@ describe("test player can move on next cell", () => {
         payload: "top",
       });
 
-      const playerCoord = newState.playerList[newState.numberOfPlayer].coord;
+      const playerCoord =
+        newState.playerList[newState.activePlayerNumber].coord;
       const unTakenCell = newState.gameField.values[newPlayerCoord];
       console.log(playerCoord);
       //expect that player coordinate doesn`t  change
@@ -221,7 +223,7 @@ describe("test player can move on next cell", () => {
         type: "!checkAvailableNeighboringCell",
       },
       availableCellsCoords: ["0.7", "0.5", "1.6"],
-      numberOfPlayer: 0,
+      activePlayerNumber: 0,
       playerList: {
         "0": {
           name: "player",

@@ -1,8 +1,8 @@
 import { State } from "../../types";
 
 export const removeEnemyCard = (state: State): State => {
-  const { enemyList, numberOfPlayer, playerList } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
+  const { enemyList, activePlayerNumber, playerList } = state;
+  const currentCoord = playerList[activePlayerNumber].coord;
   const newEnemyList = { ...enemyList };
   delete newEnemyList[currentCoord];
 

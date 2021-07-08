@@ -55,7 +55,7 @@ const Column = styled.div`
 `;
 
 export const PlayerStatus = () => {
-  const { numberOfPlayer } = useSelector((state: State) => ({
+  const { activePlayerNumber } = useSelector((state: State) => ({
     ...state,
   }));
 
@@ -68,11 +68,11 @@ export const PlayerStatus = () => {
       <Column>
         <HealthStatus>
           {`здоровье:  `}
-          <HealthSlots index={numberOfPlayer}></HealthSlots>
+          <HealthSlots index={activePlayerNumber}></HealthSlots>
         </HealthStatus>
         <InventoryStatus>
           {/*    {`предметы:  `} */}
-          <Inventory index={numberOfPlayer} />
+          <Inventory index={activePlayerNumber} />
         </InventoryStatus>
       </Column>
     </PlayerStatusCard>

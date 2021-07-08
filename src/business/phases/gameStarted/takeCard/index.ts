@@ -29,8 +29,8 @@ export const takeCard = (state: State, action: ActionType): State => {
 };
 
 const getStateOpenCard = (state: State): State => {
-  const { gameField, numberOfPlayer, playerList } = state;
-  const playerCoordIndex = playerList[numberOfPlayer].coord;
+  const { gameField, activePlayerNumber, playerList } = state;
+  const playerCoordIndex = playerList[activePlayerNumber].coord;
   const currCell = gameField.values[playerCoordIndex];
 
   const cellWithOpenCard = openCard(currCell);
@@ -48,8 +48,8 @@ const getStateOpenCard = (state: State): State => {
 };
 
 const getStateCardTaken = (state: State): State => {
-  const { gameField, numberOfPlayer, playerList } = state;
-  const player = playerList[numberOfPlayer];
+  const { gameField, activePlayerNumber, playerList } = state;
+  const player = playerList[activePlayerNumber];
 
   const cardItems = gameField.values[player.coord].cardItem;
 
@@ -92,7 +92,7 @@ const getStateCardTaken = (state: State): State => {
 
   const newPlayerList: PlayerListType = {
     ...playerList,
-    [numberOfPlayer]: newPlayer,
+    [activePlayerNumber]: newPlayer,
   };
 
   return {
@@ -103,9 +103,9 @@ const getStateCardTaken = (state: State): State => {
 };
 
 const getStateDeletedCard = (state: State): State => {
-  const { gameField, numberOfPlayer, playerList } = state;
+  const { gameField, activePlayerNumber, playerList } = state;
 
-  const playerCoordIndex = playerList[numberOfPlayer].coord;
+  const playerCoordIndex = playerList[activePlayerNumber].coord;
 
   const currCell = gameField.values[playerCoordIndex];
 
