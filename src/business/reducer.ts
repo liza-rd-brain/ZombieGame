@@ -38,12 +38,10 @@ export type ActionType =
       payload: { type: TypeOfCard };
     }
   | { type: "req-choosePlayer" }
-  | { type: "req-healPlayer"; payload: number }
   | {
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-shareCard"; payload: number }
   | { type: "req-defeatEnemy" }
   | { type: "req-removeEnemyCard" }
   | { type: "clickedPlayer"; payload: PlayerCardType }

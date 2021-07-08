@@ -39,6 +39,7 @@ export const getStateHoleFilled = (
         inventory: newInventory,
       },
     };
+
     const newState: State = {
       ...state,
       gameField: newGameField,
@@ -46,6 +47,7 @@ export const getStateHoleFilled = (
       gameState: { type: "gameStarted.playerMove" },
       doEffect: { type: "!checkAvailableNeighboringCell" },
     };
+
     return newState;
   } else {
     return state;
