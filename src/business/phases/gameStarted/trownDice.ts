@@ -1,16 +1,13 @@
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 
-
-export const trownDice = ( state: State,action: ActionType): State => {
+export const trownDice = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "diceThrown": {
       return {
         ...state,
         dice: action.payload,
-        gameState: {
-          type: "gameStarted.playerMove",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.playerMove" },
         doEffect: { type: "!checkAvailableNeighboringCell" },
       };
     }

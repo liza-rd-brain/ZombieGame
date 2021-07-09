@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { EnemyCardType, State } from "../../business/types";
+import { EnemyCardType } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
 
 import zombie from "./zombie.png";
@@ -55,12 +55,8 @@ const EnemiesCardList = styled.div`
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-  const { numberOfPlayer, playerList } = state;
-  const enemyArray = props.list;
 
+  const enemyArray = props.list;
   return (
     <EnemiesCardList>
       {enemyArray.map((enemyCard, index) => {
@@ -69,19 +65,11 @@ export const EnemyList = (props: EnemyArray) => {
             key={index}
             {...enemyCard}
             onClick={() => {
-              const canFight =
-                playerList[numberOfPlayer].coord === enemyCard.coord;
-              if (canFight) {
-                dispatch({
-                  type: "req-defeatEnemy",
-                });
-              } else {
-                return null;
-              }
+              dispatch({
+                type: "clickedEnemy",
+              });
             }}
-          >
-            {/*  {enemyCard.apperance === "defeated" ? "x" : null} */}
-          </EnemyCard>
+          ></EnemyCard>
         );
       })}
     </EnemiesCardList>

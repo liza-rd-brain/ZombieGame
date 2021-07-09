@@ -7,7 +7,7 @@ export const trownBattleDice = (state: State, action: ActionType): State => {
       return {
         ...state,
         dice: action.payload,
-        gameState: { type: "interactWithEnemy" },
+        gameState: { ...state.gameState, type: "interactWithEnemy" },
         doEffect: { type: "!getBattleResult" },
       };
     }

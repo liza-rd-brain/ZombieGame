@@ -1,10 +1,4 @@
-import {
-  State,
-  PlayerListType,
-  CardItem,
-  TypeOfCard,
-  InventoryType,
-} from "../../types";
+import { State, PlayerListType, TypeOfCard, InventoryType } from "../../types";
 
 /**
  * We need to give highlighting to healthCard
@@ -16,29 +10,33 @@ export const getStateCardSelected = (
 ) => {
   // TODO: Need to restrict select unneceserry card -?!
   // Add switch on type of cards
-  const { numberOfPlayer } = state;
+  const { activePlayerNumber } = state;
 
   const newPlayerList = changeSelectedCard(state, typeOfSelect);
 
-  const selectedCard = newPlayerList[numberOfPlayer].inventory.cardSelected
+  const selectedCard = newPlayerList[activePlayerNumber].inventory.cardSelected
     ? true
     : false;
 
-  // The difference between weaponCard and other  card that weapon are usedin the battle.
+  // The difference between weaponCard and other card that weapon are used in the battle.
   //Obviously we need other stateWithoutSelectedCard for weapon
   const stateWithSelectedCard: State = {
     ...state,
     playerList: newPlayerList,
     gameState: {
+      ...state.gameState,
       type: "gameStarted.applyCard",
+      coordOfAvailableCells: null,
     },
-    availableCellsCoords: null,
+    doEffect: { type: "!checkAvailableNeighboringCards" },
   };
 
   const stateWithoutSelectedCard: State = {
     ...state,
     playerList: newPlayerList,
     gameState: {
+      ...state.gameState,
+      coordOfAvailableCards: null,
       type: /* cardType === "weapon"
           ? "gameStarted.interactWithEnemy"
           :  */ "gameStarted.playerMove",
@@ -55,8 +53,8 @@ export const getStateCardSelected = (
 };
 
 const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
-  const { playerList, numberOfPlayer } = state;
-  const inventory = playerList[numberOfPlayer].inventory;
+  const { playerList, activePlayerNumber } = state;
+  const inventory = playerList[activePlayerNumber].inventory;
   if (typeOfSelect !== null) {
     const isTheSameSelectType = inventory.cardSelected === typeOfSelect;
     const hasCards = inventory[typeOfSelect] !== 0;
@@ -72,8 +70,8 @@ const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
 
             const newPlayerList: PlayerListType = {
               ...playerList,
-              [numberOfPlayer]: {
-                ...playerList[numberOfPlayer],
+              [activePlayerNumber]: {
+                ...playerList[activePlayerNumber],
                 inventory: newInventoryCardUnSelected,
               },
             };
@@ -89,8 +87,8 @@ const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
 
             const newPlayerList: PlayerListType = {
               ...playerList,
-              [numberOfPlayer]: {
-                ...playerList[numberOfPlayer],
+              [activePlayerNumber]: {
+                ...playerList[activePlayerNumber],
                 inventory: newInventoryCardSelected,
               },
             };
@@ -98,6 +96,7 @@ const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
             return newPlayerList;
           }
         }
+        break;
       }
 
       case false: {

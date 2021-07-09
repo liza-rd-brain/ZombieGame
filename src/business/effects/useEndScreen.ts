@@ -22,6 +22,7 @@ export function useEndScreen() {
           break;
       }
     },
+    //eslint-disable-next-line
     [gameState.type, dispatch]
   );
 }

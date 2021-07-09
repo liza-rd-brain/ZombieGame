@@ -2,23 +2,20 @@ import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import "./index.css";
-import {
-  PlayGrid,
-  MoveControls,
-  Dice,
-  StatusList,
-  PlayersStatusList,
-} from "./features";
+import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
+
 import {
   useOpenCard,
   useEndScreen,
   usePlayerMove,
   useInteractWithEnemy,
+  useApplyCard,
 } from "./business/effects";
-import { PlayerStatus } from "./features/PlayerStatus";
+
+/* import { PlayerStatus } from "./features/PlayerStatus"; */
 
 const Field = styled.div`
   margin: 0 auto;
@@ -70,14 +67,6 @@ const GameControls = styled.div`
   box-sizing: border-box;
 `;
 
-const Test = styled.div`
-  position: absolute;
-  z-index: 1;
-  width: 600px;
-  height: 600px;
-  background-color: rgb(218 222 201 / 77%);
-`;
-
 export function GetApp() {
   const { gameState } = useSelector((state: State) => ({ ...state }));
 
@@ -85,6 +74,7 @@ export function GetApp() {
   usePlayerMove();
   useEndScreen();
   useInteractWithEnemy();
+  useApplyCard();
 
   const getGameScreen = () => {
     switch (gameState.type) {
@@ -99,7 +89,6 @@ export function GetApp() {
           <>
             <LeftPanel>{/*  <PlayersStatusList /> */}</LeftPanel>
             <Field id="field">
-              {/*        <Test /> */}
               <PlayGrid />
             </Field>
             <RightPanel>

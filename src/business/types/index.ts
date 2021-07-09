@@ -9,6 +9,8 @@ export type MoveDirectionList = MoveDirection[];
 export type BarrierName = "wall" | "window" | "door" | null;
 /* export type BarrierDirection = "bottom" | "left"; */
 
+export type ContextMenuButtonType = "share" | "heal";
+
 export type BarrierItem = {
   name: BarrierName;
   direction: MoveDirection;
@@ -38,6 +40,7 @@ export type PlayerCardType = {
   orderNumber: number;
   coord: string;
   inventory: InventoryType;
+  showContextMenu?: boolean;
 };
 
 export type InventoryType = {
@@ -116,11 +119,9 @@ export type TypeEffect =
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
-  | { type: "!cleanMarkedCell" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!removeEnemyCard" }
-  /* 
-  | { type: "!applyCard" } */
+  | { type: "!checkAvailableNeighboringCards" }
   | null;
 
 export type State = {
@@ -131,11 +132,15 @@ export type State = {
   enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
-  numberOfPlayer: number;
-  availableCellsCoords?: string[] | null;
+  activePlayerNumber: number;
 };
 
-export type GameState =
+export type GameState = GameStateTypes & {
+  coordOfAvailableCards: string[] | null;
+  coordOfAvailableCells: string[] | null;
+};
+
+export type GameStateTypes =
   | { type: "waitingStart" }
   | { type: "gameStarted.trownDice" }
   | {

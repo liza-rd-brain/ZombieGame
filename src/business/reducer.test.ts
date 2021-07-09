@@ -12,7 +12,7 @@ import {
 } from "./phases/gameStarted";
 
 import { getNeighboringCellList } from "./phases/common";
-import { getAvailableCells } from "./phases/gameStarted/playerMove";
+import { getAvailableCells } from "./phases/gameStarted/playerMove/getAvailableCells";
 import { State, CellType, BarrierList, BarrierItem, CommonCell } from "./types";
 
 test("test initial state", () => {
@@ -23,7 +23,12 @@ test("test initial state", () => {
 test("should change playersOrder", () => {
   const stateZeroPlayer: State = {
     ...initialState,
-    gameState: { type: "gameStarted.getPlayersOrder" },
+
+    gameState: {
+      ...initialState.gameState,
+      type: "gameStarted.getPlayersOrder",
+    },
+
     playerList: {
       "0": {
         name: "player",
@@ -32,6 +37,7 @@ test("should change playersOrder", () => {
         coord: "4.7",
         inventory: { boards: 0, weapon: 0, health: 0, cardSelected: null },
       },
+
       "1": {
         name: "player",
         health: 3,
@@ -40,42 +46,46 @@ test("should change playersOrder", () => {
         inventory: { boards: 0, weapon: 0, health: 0, cardSelected: null },
       },
     },
-    numberOfPlayer: 0,
+
+    activePlayerNumber: 0,
   };
 
   const stateSwitchToFirstPlayer = reducer(stateZeroPlayer, {
     type: "req-getNextPlayer",
   });
 
-  expect(stateSwitchToFirstPlayer.numberOfPlayer).toBe(1);
-  expect(stateSwitchToFirstPlayer.gameState).toEqual({
-    type: "gameStarted.trownDice",
-  });
+  expect(stateSwitchToFirstPlayer.activePlayerNumber).toBe(1);
 
-  const stateFirstPlayer: State = { ...stateZeroPlayer, numberOfPlayer: 1 };
+  expect(stateSwitchToFirstPlayer.gameState.type).toEqual(
+    "gameStarted.trownDice"
+  );
+
+  const stateFirstPlayer: State = { ...stateZeroPlayer, activePlayerNumber: 1 };
 
   const stateswitchToZeroPlayer = reducer(stateFirstPlayer, {
     type: "req-getNextPlayer",
   });
 
-  expect(stateswitchToZeroPlayer.numberOfPlayer).toBe(0);
-  expect(stateswitchToZeroPlayer.gameState).toEqual({
-    type: "gameStarted.trownDice",
-  });
+  expect(stateswitchToZeroPlayer.activePlayerNumber).toBe(0);
+
+  expect(stateswitchToZeroPlayer.gameState.type).toEqual(
+    "gameStarted.trownDice"
+  );
 });
 
 describe("test player can move on next cell", () => {
   const stateBeforeMove: State = {
     ...initialState,
     gameState: {
+      coordOfAvailableCells: ["4.7", "5.6", "4.5", "3.6"],
+      coordOfAvailableCards: null,
       type: "gameStarted.playerMove",
     },
     dice: 3,
     doEffect: {
       type: "!checkAvailableNeighboringCell",
     },
-    availableCellsCoords: ["4.7", "5.6", "4.5", "3.6"],
-    numberOfPlayer: 0,
+    activePlayerNumber: 0,
     playerList: {
       "0": {
         name: "player",
@@ -123,7 +133,8 @@ describe("test player can move on next cell", () => {
         payload: "top",
       });
 
-      const playerCoord = newState.playerList[newState.numberOfPlayer].coord;
+      const playerCoord =
+        newState.playerList[newState.activePlayerNumber].coord;
       const currentCell = newState.gameField.values[playerCoord];
 
       const noteExpectedBarrier: BarrierList = [
@@ -177,7 +188,10 @@ describe("test player can move on next cell", () => {
 
     const stateWithoutUnAnvailableCells = {
       ...stateBeforeMove,
-      availableCellsCoords: ["5.6", "4.5", "3.6"],
+      gameState: {
+        ...stateBeforeMove.gameState,
+        coordOfAvailableCells: ["5.6", "4.5", "3.6"],
+      },
     };
 
     closeBarrierList.map((barrier) => {
@@ -192,7 +206,8 @@ describe("test player can move on next cell", () => {
         payload: "top",
       });
 
-      const playerCoord = newState.playerList[newState.numberOfPlayer].coord;
+      const playerCoord =
+        newState.playerList[newState.activePlayerNumber].coord;
       const unTakenCell = newState.gameField.values[newPlayerCoord];
       console.log(playerCoord);
       //expect that player coordinate doesn`t  change
@@ -214,14 +229,16 @@ describe("test player can move on next cell", () => {
     const stateNextCellNonExistent: State = {
       ...initialState,
       gameState: {
+        coordOfAvailableCells: ["0.7", "0.5", "1.6"],
+        coordOfAvailableCards: null,
         type: "gameStarted.playerMove",
       },
       dice: 3,
       doEffect: {
         type: "!checkAvailableNeighboringCell",
       },
-      availableCellsCoords: ["0.7", "0.5", "1.6"],
-      numberOfPlayer: 0,
+
+      activePlayerNumber: 0,
       playerList: {
         "0": {
           name: "player",
@@ -245,8 +262,11 @@ describe("test player can move on next cell", () => {
   it("should check that player can`t move on cell if it last step and cell is occupied", () => {
     const stateOfLastStep = {
       ...stateBeforeMove,
+      gameState: {
+        ...stateBeforeMove.gameState,
+        coordOfAvailableCells: ["5.6", "4.5", "3.6"],
+      },
       dice: 1,
-      availableCellsCoords: ["5.6", "4.5", "3.6"],
     };
 
     const newState = reducer(stateOfLastStep, {

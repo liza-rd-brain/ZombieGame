@@ -9,7 +9,13 @@ import {
 } from "./phases/gameStarted";
 import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
-import { MoveDirection, State, TypeOfCard } from "./types";
+import {
+  ContextMenuButtonType,
+  MoveDirection,
+  PlayerCardType,
+  State,
+  TypeOfCard,
+} from "./types";
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -24,7 +30,7 @@ export type ActionType =
   | { type: "req-getBattleResult" }
   | { type: "req-getEndScreen" }
   | { type: "req-checkAvailableNeighboringCell" }
-  | { type: "req-cleanAvailableCells" }
+  | { type: "req-checkAvailableNeighboringCards" }
   | { type: "req-getPlayerMoveResult" }
   | { type: "req-takeCard" }
   | {
@@ -32,14 +38,17 @@ export type ActionType =
       payload: { type: TypeOfCard };
     }
   | { type: "req-choosePlayer" }
-  | { type: "req-healPlayer"; payload: number }
   | {
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-shareCard"; payload: number }
-  | { type: "req-defeatEnemy" }
-  | { type: "req-removeEnemyCard" };
+  | { type: "clickedEnemy" }
+  | { type: "req-removeEnemyCard" }
+  | { type: "clickedPlayer"; payload: PlayerCardType }
+  | {
+      type: "clickedContextMenu";
+      payload: { card: PlayerCardType; buttonType: ContextMenuButtonType };
+    };
 
 export const reducer = (
   state: State = initialState,

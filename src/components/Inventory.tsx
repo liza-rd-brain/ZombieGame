@@ -2,19 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, CardItem, InventoryType, TypeOfCard } from "../business/types";
-import { Health } from "./Health/Health";
-import { BoardsCard } from "./Boards/BoardsCard";
-import { WeaponCard } from "./Weapon/WeaponCard";
+import { State, InventoryType, TypeOfCard } from "../business/types";
 
 import health from "../components/Health/health.png";
 import boards from "../components/Boards/boards.png";
 import weapon from "../components/Weapon/weapon.png";
-
-type SlotType = {
-  /*   onClick: Function; */
-  highlighting?: boolean;
-};
 
 type ImageType = {
   type: TypeOfCard;
@@ -69,25 +61,9 @@ const Counter = styled.div`
   font-size: 22px;
 `;
 
-const Slot = styled.div<SlotType>`
-  display: flex;
-  cursor: pointer;
-
-  & > * {
-    margin: 2px;
-    position: relative;
-  }
-
-  outline: ${(props) => {
-    if (props.highlighting === true) {
-      return "1px solid red ";
-    }
-  }};
-`;
-
 export const Inventory = (props: { index: number }) => {
   const dispatch = useDispatch();
-  const { playerList, gameState } = useSelector((state: State) => ({
+  const { playerList } = useSelector((state: State) => ({
     ...state,
   }));
 
@@ -139,24 +115,4 @@ export const Inventory = (props: { index: number }) => {
       <InwentoryRow></InwentoryRow>
     </InventoryWrap>
   );
-};
-
-{
-}
-
-const getChildrenComponent = (inventoryCard: CardItem) => {
-  switch (inventoryCard?.name) {
-    case "health": {
-      return <Health apperance={inventoryCard.apperance} />;
-    }
-    case "boards": {
-      return <BoardsCard apperance={inventoryCard.apperance} />;
-    }
-    case "weapon": {
-      return <WeaponCard apperance={inventoryCard.apperance} />;
-    }
-    default: {
-      return null;
-    }
-  }
 };

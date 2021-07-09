@@ -81,13 +81,15 @@ const UnderlayerItem = styled.div<UnderlayerType>`
   align-items: center;
 `;
 
-export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
-  const { gameField, playerList, numberOfPlayer, gameState, enemyList } = state;
+export const getFilledPlayGrid = (state: State) => {
+  const { gameField, playerList, activePlayerNumber, gameState, enemyList } =
+    state;
   const orderGameCells = gameField.order;
 
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
+  const currPlayerCoord = playerList[activePlayerNumber].coord;
 
-  const availableCells = state.availableCellsCoords?.concat(currPlayerCoord);
+  const availableCells =
+    state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
@@ -107,14 +109,7 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
 
     const cardList = (
       <>
-        {getPlayersList(
-          orderIndex,
-          playerList,
-          numberOfPlayer,
-          getContextMenu,
-          hor,
-          vert
-        )}
+        {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
 
         {getCards(cellValues, hor, vert)}
 
@@ -127,10 +122,12 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
     switch (isNeedSepareteCards) {
       case true: {
         const fieildElem = document.getElementById("field");
+
         switch (fieildElem) {
           case null: {
             return null;
           }
+
           default: {
             return (
               <React.Fragment key={`${hor}.${vert}`}>
@@ -158,8 +155,8 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
             );
           }
         }
-        return null;
       }
+
       case false: {
         return (
           <Wrap key={`${hor}.${vert}`}>
@@ -176,6 +173,10 @@ export const getFilledPlayGrid = (state: State, getContextMenu: Function) => {
             ) : null}
           </Wrap>
         );
+      }
+
+      default: {
+        return null;
       }
     }
   });

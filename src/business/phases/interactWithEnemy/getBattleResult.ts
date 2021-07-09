@@ -26,7 +26,10 @@ const getStatePlayerCanFight = (state: State): State => {
   return {
     ...state,
     dice: 0,
-    gameState: { type: "interactWithEnemy.makeBattleAction" },
+    gameState: {
+      ...state.gameState,
+      type: "interactWithEnemy.makeBattleAction",
+    },
   };
 };
 
@@ -35,21 +38,22 @@ const getStatePlayerRunsAway = (state: State): State => {
     ...state,
     dice: 0,
     gameState: {
+      ...state.gameState,
       type: "gameStarted.trownDice",
     },
   };
 };
 
 const getStatePlayetLoseHealth = (state: State): State => {
-  const { playerList, numberOfPlayer } = state;
-  const newPlayerHealth = playerList[numberOfPlayer].health - 1;
+  const { playerList, activePlayerNumber } = state;
+  const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
   const newPlayerList = {
     ...playerList,
-    [numberOfPlayer]: {
-      ...playerList[numberOfPlayer],
-      health: playerList[numberOfPlayer].health - 1,
+    [activePlayerNumber]: {
+      ...playerList[activePlayerNumber],
+      health: playerList[activePlayerNumber].health - 1,
     },
   };
 
@@ -57,17 +61,20 @@ const getStatePlayetLoseHealth = (state: State): State => {
     const newState: State = {
       ...state,
       dice: 0,
-      gameState: { type: "interactWithEnemy.throwBattleDice" },
+      gameState: {
+        ...state.gameState,
+        type: "interactWithEnemy.throwBattleDice",
+      },
       playerList: newPlayerList,
     };
 
     return newState;
   } else {
-    console.log(`игрок №${numberOfPlayer} погиб`);
+    console.log(`игрок №${activePlayerNumber} погиб`);
 
     return {
       ...state,
-      gameState: { type: "endGame" },
+      gameState: { ...state.gameState, type: "endGame" },
       gameResult: "Вы проиграли",
       doEffect: null,
     };

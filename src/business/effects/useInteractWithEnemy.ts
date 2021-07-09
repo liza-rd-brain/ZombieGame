@@ -53,5 +53,6 @@ export function useInteractWithEnemy() {
         break;
       }
     }
+    //eslint-disable-next-line
   }, [doEffect]);
 }

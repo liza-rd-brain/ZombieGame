@@ -1,17 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, PlayerListType } from "../business/types";
-
-import { AMOUNT_PLAYERS, MAX_HEALTH_AMOUNT } from "../shared/config";
+import { AMOUNT_PLAYERS } from "../shared/config";
 import { HealthSlots } from "../components/HealthSlots";
 import { Inventory } from "../components/Inventory";
-
-type HealthSlotType = {
-  isFilled: boolean;
-};
 
 type AmountOfPlayers = {
   amount: number;

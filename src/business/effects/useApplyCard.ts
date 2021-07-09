@@ -3,23 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { State } from "../types";
 
-export function usePlayerMove() {
+export function useApplyCard() {
   const [doEffect] = useSelector((state: State) => [state.doEffect]);
   const dispatch = useDispatch();
 
   useEffect(
     function playerMove() {
       switch (doEffect?.type) {
-        case "!checkAvailableNeighboringCell": {
+        case "!checkAvailableNeighboringCards": {
           dispatch({
-            type: "req-checkAvailableNeighboringCell",
-          });
-          break;
-        }
-
-        case "!getPlayerMoveResult": {
-          dispatch({
-            type: "req-getPlayerMoveResult",
+            type: "req-checkAvailableNeighboringCards",
           });
           break;
         }

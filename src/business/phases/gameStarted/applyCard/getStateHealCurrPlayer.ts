@@ -4,10 +4,10 @@ import { deleteSelectedCard } from "../../common/deleteSelectedCard";
 import { changeHealth } from "./changeHealth";
 
 export const getStateHealCurrPlayer = (state: State): State => {
-  const { playerList, numberOfPlayer } = state;
-  const indexCurrPlayer = numberOfPlayer;
+  const { playerList, activePlayerNumber } = state;
+  const indexCurrPlayer = activePlayerNumber;
   const newHealth = changeHealth(playerList, indexCurrPlayer);
-  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+  const newInventory = deleteSelectedCard(playerList, activePlayerNumber);
   const newPlayerList: PlayerListType = {
     ...playerList,
     [indexCurrPlayer]: {
@@ -20,6 +20,9 @@ export const getStateHealCurrPlayer = (state: State): State => {
   return {
     ...state,
     playerList: newPlayerList,
-    gameState: { type: "gameStarted.playerMove" },
+    gameState: { ...state.gameState, type: "gameStarted.playerMove" },
+    doEffect: {
+      type: "!checkAvailableNeighboringCell",
+    },
   };
 };

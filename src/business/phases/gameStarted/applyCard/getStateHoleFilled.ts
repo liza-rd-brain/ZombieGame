@@ -7,9 +7,9 @@ export const getStateHoleFilled = (
   coord: number,
   direction: MoveDirection
 ) => {
-  const { gameField, playerList, numberOfPlayer } = state;
-  const indexCurrPlayer = numberOfPlayer;
-  const newInventory = deleteSelectedCard(playerList, numberOfPlayer);
+  const { gameField, playerList, activePlayerNumber } = state;
+  const indexCurrPlayer = activePlayerNumber;
+  const newInventory = deleteSelectedCard(playerList, activePlayerNumber);
   const cellWithChosedHole = gameField.values[coord];
 
   if (cellWithChosedHole.name === "commonCell") {
@@ -39,13 +39,15 @@ export const getStateHoleFilled = (
         inventory: newInventory,
       },
     };
+
     const newState: State = {
       ...state,
       gameField: newGameField,
       playerList: newPlayerList,
-      gameState: { type: "gameStarted.playerMove" },
+      gameState: { ...state.gameState, type: "gameStarted.playerMove" },
       doEffect: { type: "!checkAvailableNeighboringCell" },
     };
+
     return newState;
   } else {
     return state;

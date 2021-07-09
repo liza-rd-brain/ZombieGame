@@ -4,8 +4,8 @@ export const getStateGiveCard = (
   state: State,
   recipientPlayerNumber: number
 ): State => {
-  const { playerList, numberOfPlayer } = state;
-  const indexCurrPlayer = numberOfPlayer;
+  const { playerList, activePlayerNumber } = state;
+  const indexCurrPlayer = activePlayerNumber;
 
   const currentPlayerInventory = playerList[indexCurrPlayer].inventory;
   const recepientPlayerInventory = playerList[recipientPlayerNumber].inventory;
@@ -39,7 +39,7 @@ export const getStateGiveCard = (
     return {
       ...state,
       playerList: newPlayerList,
-      gameState: { type: "gameStarted.playerMove" },
+      gameState: { ...state.gameState, type: "gameStarted.playerMove" },
       doEffect: { type: "!checkAvailableNeighboringCell" },
     };
   } else {

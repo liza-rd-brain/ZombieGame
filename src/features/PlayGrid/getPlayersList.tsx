@@ -1,32 +1,40 @@
 import { PlayerList } from "../../components";
 
-import { PlayerListType, PlayerCardType } from "../../business/types";
+import { PlayerListType, GameState } from "../../business/types";
 
 export const getPlayersList = (
   index: string,
   playersList: PlayerListType,
   numberOfPlayer: number,
-  getContextMenu: Function,
-  hor: string,
-  vert: string
+  gameState: GameState
 ) => {
-  let playersArr: PlayerCardType[] = [];
+  const playerItemList = Object.entries(playersList);
 
-  for (let playerKey in playersList) {
-    const playerCard = playersList[playerKey];
-    const playerCoord = playerCard.coord;
-    if (playerCoord === index) {
-      playersArr.push(playersList[playerKey]);
+  const playerListOnCell = playerItemList
+    .filter((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard.coord === index;
+    })
+    .map((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard;
+    });
+
+  const hasPlayerOncell = playerListOnCell.length > 0;
+
+  switch (hasPlayerOncell) {
+    case true: {
+      return (
+        <PlayerList
+          playerListOnCell={playerListOnCell}
+          playerList={playersList}
+          numberOfPlayer={numberOfPlayer}
+          gameState={gameState}
+        />
+      );
+    }
+    case false: {
+      return null;
     }
   }
-  if (playersArr.length > 0) {
-    return (
-      (
-        <PlayerList
-          playerListOnCell={playersArr}
-          getContextMenu={getContextMenu}
-        />
-      ) || null
-    );
-  } else return null;
 };

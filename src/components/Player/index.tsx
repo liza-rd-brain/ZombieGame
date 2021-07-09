@@ -1,16 +1,13 @@
 import ReactDOM from "react-dom";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
   PlayerCardType,
-  AvailableCellListType,
-  State,
   TypeOfCard,
+  PlayerListType,
+  GameState,
 } from "../../business/types";
-import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
-import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
 import React from "react";
@@ -26,19 +23,17 @@ type PlayerCardListType = {
 
 type PlayerListItem = {
   playerListOnCell: PlayerCardType[];
-  getContextMenu: Function;
+  playerList: PlayerListType;
+  numberOfPlayer: number;
+  gameState: GameState;
 };
 
-type ContextMenuType = {
-  visible: boolean;
-};
-
-type PLayersPortalType = {
+type PortalType = {
   coordX: string;
   coordY: string;
 };
 
-const PLayersPortal = styled.div<PLayersPortalType>`
+const PLayersPortal = styled.div<PortalType>`
   position: relative;
   display: flex;
   left: ${(props) => {
@@ -47,6 +42,18 @@ const PLayersPortal = styled.div<PLayersPortalType>`
 
   bottom: ${(props) => {
     return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
+
+const ContextMenuPortal = styled.div<PortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50 - 100}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50}px`;
   }};
 `;
 
@@ -78,28 +85,33 @@ const PlayerCard = styled.div<PlayerItem>`
     width: 24px;
     height: 24px;
     border-radius: 1px;
+
     border: ${(props) => {
       if (props.isCurrent) {
         return "5px solid #8834b8";
       }
     }};
+
     pointer-events: none;
     opacity: 0.5;
     padding: 4px;
     left: 4px;
     top: 4px;
   }
+
   &:after {
     content: "";
     position: absolute;
     width: 36px;
     height: 36px;
     border-radius: 1px;
+
     border: ${(props) => {
       if (props.needHighlightning) {
         return "3px solid rgb(55 163 0 / 52%);";
       }
     }};
+
     padding: 4px;
     left: 0px;
     top: 0px;
@@ -129,59 +141,145 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   }
 `;
 
+type ContextMenuType = {
+  coord?: { x?: number; y?: number };
+};
+
+const ContextMenu = styled.div<ContextMenuType>`
+  display: block;
+  flex-direction: column;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+  justify-content: start;
+  padding: 21px 0 0 12px;
+  box-sizing: border-box;
+  left: ${(props) => {
+    if (props.coord?.x) {
+      return `${props.coord?.x}px`;
+    } else {
+      return "0px";
+    }
+  }};
+  top: ${(props) => {
+    return `${props.coord?.y}px`;
+  }};
+`;
+
+const Button = styled.button`
+  height: 30px;
+  width: 70px;
+`;
+
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-  const { playerList, numberOfPlayer } = state;
 
-  /**
-   *  playerListOnCell -is all player in one cell
-   */
-  const { playerListOnCell, getContextMenu } = props;
+  const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
-  const listForInteract = getAvailableCellList(state);
-  const currPlayerCoord = playerList[numberOfPlayer].coord;
-  const listForHealing = listForInteract.concat(currPlayerCoord);
+  const coordOfAvailableCards = gameState.coordOfAvailableCards;
+
+  const activePlayerCoord = playerList[numberOfPlayer].coord;
+
   const currPlayer = playerList[numberOfPlayer];
   const typeOfChosedCard = currPlayer.inventory.cardSelected;
-
   const needSplitCard = playerListOnCell.length > 1;
-
-  /*  const typeOfChosedCard = chosedCard?.name || null; */
 
   const playerCardList = (
     <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
-        const canInteractWithPlayer = listForInteract.includes(
-          playerCardItem.coord
+        const contextMenu = (
+          <ContextMenu
+            key="contextMenu"
+            id={"contextMenu"}
+            className={"contextMenu"}
+          >
+            <Button
+              onClick={() => {
+                dispatch({
+                  type: "clickedContextMenu",
+                  payload: { card: playerCardItem, buttonType: "share" },
+                });
+              }}
+            >
+              передать
+            </Button>
+            <Button
+              onClick={() => {
+                dispatch({
+                  type: "clickedContextMenu",
+                  payload: { card: playerCardItem, buttonType: "heal" },
+                });
+              }}
+            >
+              лечить
+            </Button>
+          </ContextMenu>
         );
 
-        const canHealPlayer = listForHealing.includes(playerCardItem.coord);
-
-        return (
+        const playerCard = (
           <PlayerCard
             id={`player${playerCardItem.orderNumber}`}
             key={index}
             isCurrent={numberOfPlayer == playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
-              canInteractWithPlayer,
-              canHealPlayer,
-              typeOfChosedCard
+              coordOfAvailableCards,
+              typeOfChosedCard,
+              playerCardItem,
+              activePlayerCoord
             )}
-            onClick={() => {
-              playerClickedHandler(
-                getContextMenu,
-                playerCardItem,
-                numberOfPlayer,
-                canInteractWithPlayer,
-                typeOfChosedCard,
-                dispatch
-              );
-            }}
+            onClick={() =>
+              dispatch({ type: "clickedPlayer", payload: playerCardItem })
+            }
           ></PlayerCard>
         );
+
+        switch (playerCardItem.showContextMenu) {
+          case true: {
+            console.log(numberOfPlayer);
+            const activePLayerCoord = playerList[numberOfPlayer].coord;
+            const currplayerCoord = playerCardItem.coord;
+
+            const contextMenuCoord = getContextMenuCoord(
+              activePLayerCoord,
+              currplayerCoord
+            );
+            console.log(contextMenuCoord);
+
+            const [hor, vert] = contextMenuCoord.split(".");
+
+            const fieildElem = document.getElementById("field");
+            switch (fieildElem) {
+              case null: {
+                return playerCard;
+              }
+
+              default: {
+                const portal = ReactDOM.createPortal(
+                  <ContextMenuPortal
+                    coordX={String(hor)}
+                    coordY={String(vert)}
+                    key="portal"
+                  >
+                    {contextMenu}
+                  </ContextMenuPortal>,
+                  fieildElem
+                );
+                return (
+                  <React.Fragment key="fragment">
+                    {playerCard}
+                    {portal}
+                  </React.Fragment>
+                );
+              }
+            }
+          }
+
+          default: {
+            return playerCard;
+          }
+        }
       })}
     </PlayerCardList>
   );
@@ -212,124 +310,83 @@ export const PlayerList = (props: PlayerListItem) => {
   }
 };
 
-const getAvailableCellList = (state: State) => {
-  const { gameState, playerList, numberOfPlayer, gameField } = state;
-  const prevPlayerCoord = playerList[numberOfPlayer].coord;
-  const neighboringCellList = getNeighboringCellList(
-    prevPlayerCoord,
-    gameField
-  );
-  const availableCellList: AvailableCellListType = neighboringCellList.filter(
-    (cellItem) => {
-      const { direction, coord } = cellItem;
-
-      return canInteractWithCell(state, coord, direction);
-    }
-  );
-
-  const availableCellsCoords = availableCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
-    return coord;
-  });
-
-  switch (gameState.type) {
-    case "gameStarted.applyCard":
-      return availableCellsCoords;
-
-    default:
-      return [];
-  }
-};
-
-const playerClickedHandler = (
-  getContextMenu: Function,
-  playerCardItem: PlayerCardType,
-  numberOfPlayer: number,
-  canInteractWithPlayer: boolean,
-  typeOfChosedCard: TypeOfCard,
-  dispatch: Function
-) => {
-  const isCurrentPlayer = playerCardItem.orderNumber == numberOfPlayer;
-  switch (canInteractWithPlayer) {
-    case true: {
-      switch (typeOfChosedCard) {
-        case "health": {
-          switch (isCurrentPlayer) {
-            case true: {
-              dispatch({
-                type: "req-healPlayer",
-                payload: playerCardItem.orderNumber,
-              });
-              break;
-            }
-
-            case false: {
-              getContextMenu(playerCardItem.orderNumber);
-            }
-          }
-
-          break;
-        }
-        case "weapon":
-        case "boards": {
-          /**
-           * For preventing sharing any cards with himself
-           */
-          switch (isCurrentPlayer) {
-            case true: {
-              break;
-            }
-            case false: {
-              dispatch({
-                type: "req-shareCard",
-                payload: playerCardItem.orderNumber,
-              });
-              break;
-            }
-          }
-        }
-      }
-      break;
-    }
-    case false: {
-      console.log("не можем взаимодействовать с игроком игрока");
-      break;
-    }
-    default:
-      break;
-  }
-};
-
 const calculateHighlightning = (
-  canInteractWithPlayer: boolean,
-  canHealPlayer: boolean,
-  typeOfChosedCard: TypeOfCard
+  coordOfAvailableCards: string[] | null,
+  typeOfChosedCard: TypeOfCard,
+  playerCardItem: PlayerCardType,
+  activePlayerCoord: string
 ) => {
-  switch (canHealPlayer) {
-    case true: {
-      switch (typeOfChosedCard) {
-        case "health": {
-          return true;
-        }
+  const isActivePlayer = activePlayerCoord === playerCardItem.coord;
+  switch (coordOfAvailableCards) {
+    case null: {
+      return false;
+    }
+    default: {
+      const canInteractWithPlayer = coordOfAvailableCards.includes(
+        playerCardItem.coord
+      );
 
-        case "weapon":
-        case "boards": {
-          switch (canInteractWithPlayer) {
-            case true: {
+      switch (canInteractWithPlayer) {
+        case true: {
+          switch (typeOfChosedCard) {
+            case "health": {
               return true;
             }
-            case false: {
+
+            case "weapon":
+            case "boards": {
+              switch (!isActivePlayer) {
+                case true: {
+                  return true;
+                }
+                case false: {
+                  return false;
+                }
+              }
+            }
+            default: {
               return false;
             }
           }
         }
-        default: {
+        case false: {
           return false;
         }
       }
     }
-    case false: {
-      return false;
-    }
+  }
+};
+
+const getContextMenuCoord = (
+  activePLayerCoord: string,
+  currplayerCoord: string
+) => {
+  const [horActive, vertActive] = activePLayerCoord.split(".");
+  const [horCurrent, vertCurrent] = currplayerCoord.split(".");
+
+  const differenceHor = getNewCoordHor(horCurrent, horActive);
+  const differenceVert = getNewCoordVert(vertCurrent, vertActive);
+  return `${differenceHor}.${differenceVert}`;
+};
+
+const getNewCoordHor = (firstNumber: string, secondNUmber: string) => {
+  const difference = Number(firstNumber) - Number(secondNUmber);
+  if (difference > 0) {
+    return Number(secondNUmber);
+  } else if (difference < 0) {
+    return Number(secondNUmber) + 3;
+  } else {
+    return Number(secondNUmber);
+  }
+};
+
+const getNewCoordVert = (firstNumber: string, secondNUmber: string) => {
+  const difference = Number(firstNumber) - Number(secondNUmber);
+  if (difference > 0) {
+    return Number(secondNUmber) + 2;
+  } else if (difference < 0) {
+    return Number(secondNUmber) + 1;
+  } else {
+    return Number(secondNUmber) + 1;
   }
 };

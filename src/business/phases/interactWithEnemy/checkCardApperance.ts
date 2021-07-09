@@ -1,8 +1,8 @@
 import { State } from "../../types";
 
 export const checkCardApperance = (state: State): State => {
-  const { enemyList, playerList, numberOfPlayer } = state;
-  const currentCoord = playerList[numberOfPlayer].coord;
+  const { enemyList, playerList, activePlayerNumber } = state;
+  const currentCoord = playerList[activePlayerNumber].coord;
 
   const isNeedOpenEnemyCard =
     enemyList[currentCoord].apperance === "open" ? false : true;
@@ -18,7 +18,10 @@ export const checkCardApperance = (state: State): State => {
     case !isNeedOpenEnemyCard: {
       return {
         ...state,
-        gameState: { type: "interactWithEnemy.throwBattleDice" },
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.throwBattleDice",
+        },
 
         dice: 0,
       };

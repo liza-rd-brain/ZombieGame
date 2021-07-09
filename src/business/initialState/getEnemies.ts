@@ -1,4 +1,4 @@
-import { EnemyListType, GameField, CommonCell, CellType } from "../types";
+import { EnemyListType, GameField, CommonCell } from "../types";
 
 import { AMOUNT_ENEMIES, CARD_APPERANCE } from "../../shared/config";
 

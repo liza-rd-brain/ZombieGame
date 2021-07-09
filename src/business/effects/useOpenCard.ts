@@ -72,6 +72,7 @@ export function useOpenCard() {
         }
       }
     },
+    //eslint-disable-next-line
     [doEffect]
   );
 }
