@@ -1,11 +1,5 @@
 import { canInteractWithCell } from "../../../../components/Player/canInteractWithCell";
-import {
-  State,
-  PlayerListType,
-  ContextMenuButtonType,
-  PlayerCardType,
-  AvailableCellListType,
-} from "../../../types";
+import { State, PlayerCardType, AvailableCellListType } from "../../../types";
 import { getNeighboringCellList } from "../../common";
 import { getStateGiveCard } from "./getStateGiveCard";
 import { getStateHealCurrPlayer } from "./getStateHealCurrPlayer";
@@ -40,6 +34,10 @@ export const getStateClickedPlayer = (
               const clickedPlayerCardNumber = clickedPlayerCard.orderNumber;
               return openContextMenu(state, clickedPlayerCardNumber);
             }
+
+            default: {
+              return state;
+            }
           }
         }
 
@@ -55,6 +53,10 @@ export const getStateClickedPlayer = (
 
             case false: {
               return getStateGiveCard(state, clickedPlayerCard.orderNumber);
+            }
+
+            default: {
+              return state;
             }
           }
         }
@@ -115,7 +117,7 @@ const getCellsForInteract = (state: State) => {
   );
 
   const availableCellsCoords = availableCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
+    const { coord } = cellItem;
     return coord;
   });
 
