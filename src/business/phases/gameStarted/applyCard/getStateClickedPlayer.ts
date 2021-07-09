@@ -1,4 +1,4 @@
-import { canInteractWithCell } from "../../../../components/PlayerList/canInteractWithCell";
+import { canInteractWithCell } from "../../../../components/Player/canInteractWithCell";
 import {
   State,
   PlayerListType,
