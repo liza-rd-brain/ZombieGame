@@ -119,7 +119,6 @@ export type TypeEffect =
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
-  | { type: "!cleanAvailableCells" }
   | { type: "!getPlayerMoveResult" }
   | { type: "!removeEnemyCard" }
   | { type: "!checkAvailableNeighboringCards" }

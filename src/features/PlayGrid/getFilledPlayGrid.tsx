@@ -122,10 +122,12 @@ export const getFilledPlayGrid = (state: State) => {
     switch (isNeedSepareteCards) {
       case true: {
         const fieildElem = document.getElementById("field");
+
         switch (fieildElem) {
           case null: {
             return null;
           }
+
           default: {
             return (
               <React.Fragment key={`${hor}.${vert}`}>
@@ -153,8 +155,8 @@ export const getFilledPlayGrid = (state: State) => {
             );
           }
         }
-        return null;
       }
+
       case false: {
         return (
           <Wrap key={`${hor}.${vert}`}>

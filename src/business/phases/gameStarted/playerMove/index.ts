@@ -26,10 +26,6 @@ export const playerMove = (state: State, action: ActionType): State => {
       return getStatePlayerMoved(state, direction);
     }
 
-    case "req-cleanAvailableCells": {
-      return getStateClearedAvailableCells(state);
-    }
-
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
     }
@@ -65,8 +61,9 @@ const getStatePlayerMoved = (state: State, direction: MoveDirection): State => {
       const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
       const newState: State = {
         ...state,
+        gameState: { ...state.gameState, coordOfAvailableCells: null },
         playerList: newPlayerList,
-        doEffect: { type: "!cleanAvailableCells" },
+        doEffect: { type: "!getPlayerMoveResult" },
       };
       return newState;
     }

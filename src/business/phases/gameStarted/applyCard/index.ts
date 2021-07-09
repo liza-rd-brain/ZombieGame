@@ -57,7 +57,7 @@ export const applyCard = (state: State, action: ActionType): State => {
 };
 
 const getAvailableCards = (state: State) => {
-  const { gameState, playerList, activePlayerNumber, gameField } = state;
+  const { playerList, activePlayerNumber, gameField } = state;
 
   const activePlayerCoord = playerList[activePlayerNumber].coord;
 
@@ -82,12 +82,4 @@ const getAvailableCards = (state: State) => {
     .concat(activePlayerCoord);
 
   return availableCellsCoords;
-
-  /*   switch (gameState.type) {
-    case "gameStarted.applyCard":
-      return availableCellsCoords;
-
-    default:
-      return [];
-  } */
 };

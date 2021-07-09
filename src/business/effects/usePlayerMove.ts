@@ -17,19 +17,6 @@ export function usePlayerMove() {
           break;
         }
 
-        case "!cleanAvailableCells": {
-          const timerMarkCell = setTimeout(
-            () =>
-              dispatch({
-                type: "req-cleanAvailableCells",
-              }),
-            0
-          );
-          return () => {
-            clearTimeout(timerMarkCell);
-          };
-        }
-
         case "!getPlayerMoveResult": {
           dispatch({
             type: "req-getPlayerMoveResult",
