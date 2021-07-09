@@ -1,4 +1,4 @@
-import { State, PlayerListType, CardItem, EnemyCardType } from "../../types";
+import { State } from "../../types";
 import { ActionType } from "../../reducer";
 import { changeSelectedCard } from "./changeSelectedCard";
 
@@ -18,7 +18,10 @@ export const selectCard = (state: State, action: ActionType) => {
       const stateWithSelectedCard: State = {
         ...state,
         playerList: newPlayerList,
-        gameState: { ...state.gameState, type: "interactWithEnemy.applyCard" },
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.applyCard",
+        },
       };
 
       const stateWithoutSelectedCard: State = {
@@ -36,7 +39,9 @@ export const selectCard = (state: State, action: ActionType) => {
         case false:
           return stateWithoutSelectedCard;
       }
+      break;
     }
+
     default: {
       return state;
     }

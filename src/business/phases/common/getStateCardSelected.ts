@@ -1,10 +1,4 @@
-import {
-  State,
-  PlayerListType,
-  CardItem,
-  TypeOfCard,
-  InventoryType,
-} from "../../types";
+import { State, PlayerListType, TypeOfCard, InventoryType } from "../../types";
 
 /**
  * We need to give highlighting to healthCard
@@ -102,6 +96,7 @@ const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
             return newPlayerList;
           }
         }
+        break;
       }
 
       case false: {

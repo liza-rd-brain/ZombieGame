@@ -1,4 +1,4 @@
-import { EnemyCardType, EnemyListType, State } from "../../types";
+import { EnemyCardType, State } from "../../types";
 
 /**
  * Need separate method for open EnemyCard

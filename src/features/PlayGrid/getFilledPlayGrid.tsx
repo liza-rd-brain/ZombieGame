@@ -174,6 +174,10 @@ export const getFilledPlayGrid = (state: State) => {
           </Wrap>
         );
       }
+
+      default: {
+        return null;
+      }
     }
   });
 

@@ -1,4 +1,4 @@
-import { State, PlayerListType, ContextMenuButtonType } from "../../../types";
+import { State, ContextMenuButtonType } from "../../../types";
 import { getStateGiveCard } from "./getStateGiveCard";
 import { getStateHealAnotherPlayer } from "./getStateHealAnotherPlayer";
 

@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import { css } from "styled-components";
 import img from "./brain_4.png";
 
 export const StyledCommonCard = css`

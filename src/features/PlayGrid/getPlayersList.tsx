@@ -1,10 +1,6 @@
 import { PlayerList } from "../../components";
 
-import {
-  PlayerListType,
-  PlayerCardType,
-  GameState,
-} from "../../business/types";
+import { PlayerListType, GameState } from "../../business/types";
 
 export const getPlayersList = (
   index: string,

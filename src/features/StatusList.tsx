@@ -3,15 +3,9 @@ import { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
-import {
-  State,
-  GameState,
-  TypeEffect,
-  PlayerListType,
-} from "../business/types";
+import { State, GameState, TypeEffect } from "../business/types";
 
 import { PlayerStatus } from "./PlayerStatus";
-import { PlayersStatusList } from "./PlayersStatusList";
 
 const Status = styled.div`
   width: 200px;
@@ -32,7 +26,7 @@ export const StatusList = () => {
   const initialStatus: statusType = "";
   const [status, updateStatus] = useState(initialStatus);
 
-  const { dice, playerList, gameState, doEffect, gameResult } = useSelector(
+  const { dice, gameState, doEffect, gameResult } = useSelector(
     (state: State) => ({
       ...state,
     })
@@ -52,7 +46,7 @@ export const StatusList = () => {
         return newStatus;
       }
     });
-  }, [gameState.type, doEffect?.type]);
+  }, [gameState.type, doEffect?.type, newStatus]);
   return (
     <>
       <Status>{status}</Status>

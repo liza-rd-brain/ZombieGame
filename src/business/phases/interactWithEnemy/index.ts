@@ -1,4 +1,4 @@
-import { State, PlayerListType, CardItem, EnemyCardType } from "../../types";
+import { State } from "../../types";
 
 import { ActionType } from "../../reducer";
 import { openEnemyCard } from "./openEnemyCard";

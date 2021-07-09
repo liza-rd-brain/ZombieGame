@@ -21,6 +21,7 @@ export function useApplyCard() {
           break;
       }
     },
+    //eslint-disable-next-line
     [doEffect]
   );
 }

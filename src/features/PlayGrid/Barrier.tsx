@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+
+import styled from "styled-components";
 
 import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
 
@@ -23,7 +23,6 @@ import {
 } from "../../business/types";
 
 import { PLAY_GRID_MODE } from "../../shared/config";
-import { switchCase } from "@babel/types";
 
 type WallType = {
   barrierItem?: BarrierItem;
@@ -151,6 +150,7 @@ const WallImage = styled(CommonWall)<WallType>`
       }
     }};
   }
+
   &:after {
     content: "";
     z-index: 5;
@@ -242,6 +242,7 @@ const Wall = styled(CommonWall)<WallType>`
         return "0px";
       }
     }};
+
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
         if (props.barrierItem?.isOpen === false) {
@@ -265,6 +266,7 @@ const Wall = styled(CommonWall)<WallType>`
         return "none";
       }
     }};
+
     background-color: ${(props) => {
       if (props.barrierItem?.isOpen) {
         const needHighlightning = props.highlightningList?.find((item) => {
@@ -298,6 +300,7 @@ const Wall = styled(CommonWall)<WallType>`
       }
     }};
   }
+
   &:after {
     content: "";
     z-index: 5;
@@ -369,8 +372,7 @@ export const Barrier = (props: BarrierCoord) => {
   );
 
   const neighboringCellListCoord = neighboringCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
-    return coord;
+    return cellItem.coord;
   });
 
   const checkCellListCoord = neighboringCellListCoord.concat(currPlayerCoord);
@@ -476,6 +478,9 @@ export const Barrier = (props: BarrierCoord) => {
               </WallImage>
             );
           }
+          default: {
+            return null;
+          }
         }
       });
       return <>{barrierList}</>;
@@ -497,7 +502,7 @@ const getHigtlightningDirection = (
 
   const structuredList = currList.map((cellItem) => {
     if (cellItem) {
-      const { direction, coord } = cellItem;
+      const { direction } = cellItem;
       return direction;
     } else {
       return null;

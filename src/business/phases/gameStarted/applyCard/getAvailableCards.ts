@@ -22,7 +22,7 @@ export const getAvailableCards = (state: State) => {
 
   const availableCellsCoords = availableCellList
     .map((cellItem) => {
-      const { direction, coord } = cellItem;
+      const { coord } = cellItem;
       return coord;
     })
     .concat(activePlayerCoord);

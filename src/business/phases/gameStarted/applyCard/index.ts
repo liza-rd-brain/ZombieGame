@@ -1,4 +1,4 @@
-import { AvailableCellListType, State } from "../../../types";
+import { State } from "../../../types";
 import { ActionType } from "../../../reducer";
 
 import { getStateCardSelected } from "../../common/getStateCardSelected";

@@ -1,6 +1,5 @@
 import { Health, BoardsCard, WeaponCard } from "../../components";
 import { CellType } from "../../business/types";
-import styled from "styled-components";
 
 export const getCards = (cell: CellType, hor: string, vert: string) => {
   const healthCardItem = cell.cardItem.find(

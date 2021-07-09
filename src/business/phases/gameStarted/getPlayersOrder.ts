@@ -1,4 +1,3 @@
-import { AMOUNT_PLAYERS } from "../../../shared/config";
 import { State } from "../../types";
 import { ActionType } from "../../reducer";
 

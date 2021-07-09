@@ -25,7 +25,7 @@ export const getAvailableCells = (state: State): State => {
   );
 
   const coordOfAvailableCells = availableCellList.map((cellItem) => {
-    const { direction, coord } = cellItem;
+    const { coord } = cellItem;
     return coord;
   });
 

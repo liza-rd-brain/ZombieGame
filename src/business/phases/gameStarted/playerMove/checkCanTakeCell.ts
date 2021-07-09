@@ -1,4 +1,4 @@
-import { State, PlayerListType, MoveDirection, CellType } from "../../../types";
+import { State, PlayerListType, MoveDirection } from "../../../types";
 
 import { checkCellHasWall } from "../../common/checkCellHasWall";
 /** Cheking the cases when can't take the cell. In default we think that can. */

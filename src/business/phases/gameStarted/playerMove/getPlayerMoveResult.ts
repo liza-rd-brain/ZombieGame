@@ -1,8 +1,7 @@
-import { State, PlayerListType, MoveDirection, CellType } from "../../../types";
+import { State } from "../../../types";
 
-import { switchToNextPlayer } from "../../../../shared/State";
 /**
- * @returns A new state depending on the result of the player's movement.
+ * @returns  new state depending on the result of the player's movement.
  */
 
 export const getPlayerMoveResult = (state: State) => {

@@ -1,9 +1,4 @@
-import {
-  State,
-  MoveDirection,
-  AvailableCellListType,
-  TypeOfCard,
-} from "../../../types";
+import { State, TypeOfCard } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";

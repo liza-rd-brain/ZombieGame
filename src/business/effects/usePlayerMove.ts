@@ -28,6 +28,7 @@ export function usePlayerMove() {
           break;
       }
     },
+    //eslint-disable-next-line
     [doEffect]
   );
 }

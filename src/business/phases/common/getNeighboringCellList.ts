@@ -1,4 +1,4 @@
-import { State, AvailableCellListType, GameField } from "../../types";
+import { AvailableCellListType, GameField } from "../../types";
 import { MOVE_DIRECTION_LIST } from "../../../shared/config";
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
 
@@ -23,7 +23,7 @@ export const getNeighboringCellList = (
    */
   const existanceInGameFieldCells: AvailableCellListType =
     coordNeighboringCells.filter((cellItem) => {
-      const { direction, coord } = cellItem;
+      const { coord } = cellItem;
       return gameField.values[coord];
     });
 
