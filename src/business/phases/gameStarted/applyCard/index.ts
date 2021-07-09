@@ -2,14 +2,10 @@ import { AvailableCellListType, State } from "../../../types";
 import { ActionType } from "../../../reducer";
 
 import { getStateCardSelected } from "../../common/getStateCardSelected";
-import { getStateGiveCard } from "./getStateGiveCard";
-import { getStateHealCurrPlayer } from "./getStateHealCurrPlayer";
-import { getStateHealAnotherPlayer } from "./getStateHealAnotherPlayer";
 import { getStateHoleFilled } from "./getStateHoleFilled";
-import { getNeighboringCellList } from "../../common";
-import { canInteractWithCell } from "../../../../components/PlayerList/canInteractWithCell";
 import { getStateClickedContextMenu } from "./getStateClickedContextMenu";
 import { getStateClickedPlayer } from "./getStateClickedPlayer";
+import { getAvailableCards } from "./getAvailableCards";
 /**
  *  In payload get order number of chosen for interact player.
  * If this number = indexCurrPlayer we heal player.
@@ -54,32 +50,4 @@ export const applyCard = (state: State, action: ActionType): State => {
       return state;
     }
   }
-};
-
-const getAvailableCards = (state: State) => {
-  const { playerList, activePlayerNumber, gameField } = state;
-
-  const activePlayerCoord = playerList[activePlayerNumber].coord;
-
-  const neighboringCellList = getNeighboringCellList(
-    activePlayerCoord,
-    gameField
-  );
-
-  const availableCellList: AvailableCellListType = neighboringCellList.filter(
-    (cellItem) => {
-      const { direction, coord } = cellItem;
-
-      return canInteractWithCell(state, coord, direction);
-    }
-  );
-
-  const availableCellsCoords = availableCellList
-    .map((cellItem) => {
-      const { direction, coord } = cellItem;
-      return coord;
-    })
-    .concat(activePlayerCoord);
-
-  return availableCellsCoords;
 };

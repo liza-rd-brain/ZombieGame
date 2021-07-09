@@ -12,7 +12,7 @@ import {
 } from "./phases/gameStarted";
 
 import { getNeighboringCellList } from "./phases/common";
-import { getAvailableCells } from "./phases/gameStarted/playerMove";
+import { getAvailableCells } from "./phases/gameStarted/playerMove/getAvailableCells";
 import { State, CellType, BarrierList, BarrierItem, CommonCell } from "./types";
 
 test("test initial state", () => {
