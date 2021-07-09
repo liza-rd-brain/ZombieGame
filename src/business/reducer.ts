@@ -1,7 +1,7 @@
 import { initialState } from "./initialState";
 import { waitingStart } from "./phases/waitingStart";
 import {
-  trownDice,
+  rollDice,
   playerMove,
   takeCard,
   interactWithEnemy,
@@ -63,8 +63,8 @@ export const reducer = (
 
     case "gameStarted": {
       switch (phaseInner) {
-        case "trownDice": {
-          return trownDice(state, action);
+        case "rollDice": {
+          return rollDice(state, action);
         }
 
         case "playerMove": {

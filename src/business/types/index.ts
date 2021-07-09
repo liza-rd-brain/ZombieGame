@@ -142,7 +142,7 @@ export type GameState = GameStateTypes & {
 
 export type GameStateTypes =
   | { type: "waitingStart" }
-  | { type: "gameStarted.trownDice" }
+  | { type: "gameStarted.rollDice" }
   | {
       type: "gameStarted.playerMove";
     }
