@@ -1,9 +1,11 @@
 import { State, EnemyCardType } from "../../types";
 import { deleteSelectedCard } from "../common/deleteSelectedCard";
 
-export const defeatEnemy = (state: State): State => {
+export const getStateClickedEnemy = (state: State): State => {
   const { activePlayerNumber, playerList, enemyList } = state;
   const currEnemyCoord = playerList[activePlayerNumber].coord;
+  const playerCanFight =
+    playerList[activePlayerNumber].coord === currEnemyCoord;
   const currEnemy = enemyList[currEnemyCoord];
   const defeatedEnemy: EnemyCardType = { ...currEnemy, apperance: "defeated" };
   const newEnemyList = {
@@ -21,10 +23,17 @@ export const defeatEnemy = (state: State): State => {
     },
   };
 
-  return {
-    ...state,
-    enemyList: newEnemyList,
-    playerList: newPlayerList,
-    doEffect: { type: "!removeEnemyCard" },
-  };
+  switch (playerCanFight) {
+    case true: {
+      return {
+        ...state,
+        enemyList: newEnemyList,
+        playerList: newPlayerList,
+        doEffect: { type: "!removeEnemyCard" },
+      };
+    }
+    case false: {
+      return state;
+    }
+  }
 };

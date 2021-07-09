@@ -4,7 +4,7 @@ import { ActionType } from "../../reducer";
 import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
 import { removeEnemyCard } from "./removeEnemyCard";
-import { defeatEnemy } from "./defeatEnemy";
+import { getStateClickedEnemy } from "./getStateClickedEnemy";
 import { checkCardApperance } from "./checkCardApperance";
 import { trownBattleDice } from "./trownBattleDice";
 import { selectCard } from "./selectCard";
@@ -35,8 +35,8 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
           return selectCard(state, action);
         }
 
-        case "req-defeatEnemy": {
-          return defeatEnemy(state);
+        case "clickedEnemy": {
+          return getStateClickedEnemy(state);
         }
         case "req-removeEnemyCard": {
           return removeEnemyCard(state);

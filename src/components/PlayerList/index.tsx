@@ -1,17 +1,13 @@
 import ReactDOM from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
   PlayerCardType,
-  AvailableCellListType,
-  State,
   TypeOfCard,
   PlayerListType,
   GameState,
 } from "../../business/types";
-import { getNeighboringCellList } from "../../business/phases/common/getNeighboringCellList";
-import { canInteractWithCell } from "./canInteractWithCell";
 
 import img from "./player.png";
 import React from "react";
@@ -146,7 +142,6 @@ const PlayerCardList = styled.div<PlayerCardListType>`
 `;
 
 type ContextMenuType = {
-  /*   isVisible: boolean; */
   coord?: { x?: number; y?: number };
 };
 

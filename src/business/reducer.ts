@@ -42,7 +42,7 @@ export type ActionType =
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "req-defeatEnemy" }
+  | { type: "clickedEnemy" }
   | { type: "req-removeEnemyCard" }
   | { type: "clickedPlayer"; payload: PlayerCardType }
   | {
