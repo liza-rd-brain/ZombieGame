@@ -1,11 +1,14 @@
-import { EnemyListType, GameField, CommonCell } from "../types";
+import { EnemyListType, GameField, CommonCell, ConfigType } from "../types";
 
-import { AMOUNT_ENEMIES, CARD_APPERANCE } from "../../shared/config";
+/* import { AMOUNT_ENEMIES, CARD_APPERANCE } from "../../shared/config/devConfig";
 
-export const getEnemies = (gameField: GameField): EnemyListType => {
+ */ export const getEnemies = (
+  gameField: GameField,
+  config: ConfigType
+): EnemyListType => {
   const emptyCellsList = getEmptyList(gameField);
-  const enemiesCoords = getListOfIndexes(emptyCellsList);
-  const enemiesObj = getListOfEnemy(enemiesCoords);
+  const enemiesCoords = getListOfIndexes(emptyCellsList, config);
+  const enemiesObj = getListOfEnemy(enemiesCoords, config);
   return enemiesObj;
 };
 
@@ -27,11 +30,14 @@ const getEmptyList = (gameField: GameField): [string, CommonCell][] => {
 /**
  * Returns the list of random picked indexes of emptyCellsList
  */
-const getListOfIndexes = (emptyCellsList: [string, CommonCell][]) => {
+const getListOfIndexes = (
+  emptyCellsList: [string, CommonCell][],
+  config: ConfigType
+) => {
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
 
   // TODO: it may be taking out as separate module with getRandomNumber?
-  const keyList: Array<number> = new Array(AMOUNT_ENEMIES)
+  const keyList: Array<number> = new Array(config.AMOUNT_ENEMIES)
     .fill(0)
     .reduce((prevkeyList) => {
       const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);
@@ -54,13 +60,13 @@ const getListOfIndexes = (emptyCellsList: [string, CommonCell][]) => {
 /**
  * Returns the object of all enemies
  */
-const getListOfEnemy = (enemiesCoords: string[]) => {
+const getListOfEnemy = (enemiesCoords: string[], config: ConfigType) => {
   const enemyList = enemiesCoords.map((coord) => {
     const enemyCard = {
       name: "enemy",
       power: 1,
       coord: coord,
-      apperance: CARD_APPERANCE,
+      apperance: config.CARD_APPERANCE,
     };
     return [enemyCard.coord, enemyCard];
   });

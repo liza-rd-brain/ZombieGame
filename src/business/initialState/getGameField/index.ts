@@ -1,13 +1,12 @@
-import { FINISH_COORD } from "../../../shared/config";
-import { getFieldCells} from "./getFieldCells";
-/* import { spreadHealthCards } from "./spreadHealthCards"; */
+import { ConfigType } from "../../types";
+import { getFieldCells } from "./getFieldCells";
 import { spreadCards } from "./spreadCards";
 
 //TODO: Need add some config object for all cards and spreading them simultaneously.
-export const getGameField = () => {
-  const order = getCellOrder();
-  const gameFieldCells = getFieldCells(order);
-  const filledWithCardsCells = spreadCards(gameFieldCells);
+export const getGameField = (config: ConfigType) => {
+  const order = getCellOrder(config);
+  const gameFieldCells = getFieldCells(order, config);
+  const filledWithCardsCells = spreadCards(gameFieldCells, config);
   const gameField = { order, values: filledWithCardsCells };
   return gameField;
 };
@@ -15,9 +14,9 @@ export const getGameField = () => {
 /**
  * Creates an array with cell index order.
  */
-const getCellOrder = (): Array<string> => {
-  const width = FINISH_COORD.hor;
-  const height = FINISH_COORD.vert;
+const getCellOrder = (config: any): Array<string> => {
+  const width = config.FINISH_COORD.hor;
+  const height = config.FINISH_COORD.vert;
 
   let orderList: Array<string> = [];
 

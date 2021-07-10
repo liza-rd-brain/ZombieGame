@@ -160,3 +160,19 @@ export type GameStateTypes =
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
+
+export type ConfigType = {
+  START_COORD: CoordItem;
+  FINISH_COORD: CoordItem;
+  AMOUNT_PLAYERS: number;
+  INITIAL_PLAYER_HEALTH: number;
+  AMOUNT_HEALTH_ITEMS: number;
+  AMOUNT_BOARDS_ITEMS: number;
+  AMOUNT_WEAPONS_ITEMS: number;
+  AMOUNT_ENEMIES: number;
+  MAX_HEALTH_AMOUNT: number;
+  CARD_APPERANCE: CardApperance;
+  PLAY_GRID_MODE: PlayGridMode;
+  CELLS_BARRIERS_LIST: CellsBarrierListType;
+  MOVE_DIRECTION_LIST: MoveDirectionList;
+};
