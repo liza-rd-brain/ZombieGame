@@ -1,6 +1,6 @@
-import { initialState } from "../../initialState";
-import { reducer } from "../../reducer";
-import { State } from "../../types";
+import { initialState } from "../../../initialState";
+import { reducer } from "../../../reducer";
+import { State } from "../../../types";
 
 test("should change playersOrder", () => {
   const stateZeroPlayer: State = {

@@ -1,5 +1,5 @@
-import { State } from "../../types";
-import { ActionType } from "../../reducer";
+import { State } from "../../../types";
+import { ActionType } from "../../../reducer";
 
 export const getPlayersOrder = (state: State, action: ActionType): State => {
   const numberCurrPlayer = state.activePlayerNumber;

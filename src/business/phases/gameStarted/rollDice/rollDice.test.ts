@@ -1,6 +1,6 @@
-import { initialState } from "../../initialState";
-import { reducer } from "../../reducer";
-import { State } from "../../types";
+import { initialState } from "../../../initialState";
+import { reducer } from "../../../reducer";
+import { State } from "../../../types";
 
 test("should shange dice to payload,gameState.type to gameStarted.playerMove and doEffect.type to'!checkAvailableNeighboringCell '", () => {
   const stateBeforeThrownDice: State = {
