@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/ZombieGame/static/css/main.888980b0.chunk.css",
-    "main.js": "/ZombieGame/static/js/main.f47677ed.chunk.js",
-    "main.js.map": "/ZombieGame/static/js/main.f47677ed.chunk.js.map",
-    "runtime-main.js": "/ZombieGame/static/js/runtime-main.2bea161e.js",
-    "runtime-main.js.map": "/ZombieGame/static/js/runtime-main.2bea161e.js.map",
-    "static/js/2.82b88cd9.chunk.js": "/ZombieGame/static/js/2.82b88cd9.chunk.js",
-    "static/js/2.82b88cd9.chunk.js.map": "/ZombieGame/static/js/2.82b88cd9.chunk.js.map",
-    "static/js/3.c0c727fe.chunk.js": "/ZombieGame/static/js/3.c0c727fe.chunk.js",
-    "static/js/3.c0c727fe.chunk.js.map": "/ZombieGame/static/js/3.c0c727fe.chunk.js.map",
+    "main.css": "/ZombieGame/static/css/main.562c90c0.chunk.css",
+    "main.js": "/ZombieGame/static/js/main.1484f6dc.chunk.js",
+    "main.js.map": "/ZombieGame/static/js/main.1484f6dc.chunk.js.map",
+    "runtime-main.js": "/ZombieGame/static/js/runtime-main.641b0ffa.js",
+    "runtime-main.js.map": "/ZombieGame/static/js/runtime-main.641b0ffa.js.map",
+    "static/js/2.6ccdba35.chunk.js": "/ZombieGame/static/js/2.6ccdba35.chunk.js",
+    "static/js/2.6ccdba35.chunk.js.map": "/ZombieGame/static/js/2.6ccdba35.chunk.js.map",
+    "static/js/3.d6389169.chunk.js": "/ZombieGame/static/js/3.d6389169.chunk.js",
+    "static/js/3.d6389169.chunk.js.map": "/ZombieGame/static/js/3.d6389169.chunk.js.map",
     "index.html": "/ZombieGame/index.html",
-    "static/css/main.888980b0.chunk.css.map": "/ZombieGame/static/css/main.888980b0.chunk.css.map",
-    "static/js/2.82b88cd9.chunk.js.LICENSE.txt": "/ZombieGame/static/js/2.82b88cd9.chunk.js.LICENSE.txt",
+    "static/css/main.562c90c0.chunk.css.map": "/ZombieGame/static/css/main.562c90c0.chunk.css.map",
+    "static/js/2.6ccdba35.chunk.js.LICENSE.txt": "/ZombieGame/static/js/2.6ccdba35.chunk.js.LICENSE.txt",
     "static/media/index.css": "/ZombieGame/static/media/47074.ae26ca47.jpg",
     "static/media/boards.3824da3f.png": "/ZombieGame/static/media/boards.3824da3f.png",
     "static/media/brain_4.c48babfd.png": "/ZombieGame/static/media/brain_4.c48babfd.png",
@@ -24,9 +24,9 @@
     "static/media/zombie_defeated.6e922b33.png": "/ZombieGame/static/media/zombie_defeated.6e922b33.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.2bea161e.js",
-    "static/js/2.82b88cd9.chunk.js",
-    "static/css/main.888980b0.chunk.css",
-    "static/js/main.f47677ed.chunk.js"
+    "static/js/runtime-main.641b0ffa.js",
+    "static/js/2.6ccdba35.chunk.js",
+    "static/css/main.562c90c0.chunk.css",
+    "static/js/main.1484f6dc.chunk.js"
   ]
 }
