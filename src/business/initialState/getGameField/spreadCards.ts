@@ -1,50 +1,56 @@
-import { CommonCell, GameFieldCells, CardItem } from "../../types";
-
+import { CommonCell, GameFieldCells, CardItem, ConfigType } from "../../types";
+/* 
 import {
   AMOUNT_HEALTH_ITEMS,
   AMOUNT_BOARDS_ITEMS,
   CARD_APPERANCE,
   AMOUNT_WEAPONS_ITEMS,
-} from "../../../shared/config";
-
+} from "../../../shared/config/devConfig";
+ */
 type CardSet = {
   card: CardItem;
   amount: number;
 };
 
-const cardsList: CardSet[] = [
-  {
-    card: {
-      name: "health",
-      apperance: CARD_APPERANCE,
+const getCardList = (config: ConfigType): CardSet[] => {
+  return [
+    {
+      card: {
+        name: "health",
+        apperance: config.CARD_APPERANCE,
+      },
+      amount: config.AMOUNT_HEALTH_ITEMS,
     },
-    amount: AMOUNT_HEALTH_ITEMS,
-  },
-  {
-    card: {
-      name: "boards",
-      apperance: CARD_APPERANCE,
+    {
+      card: {
+        name: "boards",
+        apperance: config.CARD_APPERANCE,
+      },
+      amount: config.AMOUNT_BOARDS_ITEMS,
     },
-    amount: AMOUNT_BOARDS_ITEMS,
-  },
-  {
-    card: {
-      name: "weapon",
-      apperance: CARD_APPERANCE,
+    {
+      card: {
+        name: "weapon",
+        apperance: config.CARD_APPERANCE,
+      },
+      amount: config.AMOUNT_WEAPONS_ITEMS,
     },
-    amount: AMOUNT_WEAPONS_ITEMS,
-  },
-];
-
+  ];
+};
 /**
  * Returns an object in structure of FieldCells with spreaded cards in random picked cells.
  */
-export const spreadCards = (gameFieldCells: GameFieldCells): GameFieldCells => {
+export const spreadCards = (
+  gameFieldCells: GameFieldCells,
+  config: ConfigType
+): GameFieldCells => {
   /**
    * filledСells - its object with filling cells
    * currCardSet -curr set of cards
    * from cardset making object with cards
    */
+
+  const cardsList = getCardList(config);
   const cellsWithAllCards = cardsList.reduce((filledСells, currCardSet) => {
     const gameFieldCellsWithPrevios = { ...gameFieldCells, ...filledСells };
 

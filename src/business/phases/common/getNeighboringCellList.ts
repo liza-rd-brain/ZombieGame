@@ -1,6 +1,6 @@
 import { AvailableCellListType, GameField } from "../../types";
-import { MOVE_DIRECTION_LIST } from "../../../shared/config";
 import { getNextPlayerCoord } from "./getNextPlayerCoord";
+import { config } from "../../../business/initialState";
 
 /**
  * Returns the coordinates of neighboribgCells that lying in the GameField.
@@ -9,14 +9,13 @@ export const getNeighboringCellList = (
   prevPlayerCoord: string,
   gameField: GameField
 ): AvailableCellListType => {
-  const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.map(
-    (directionItem) => {
+  const coordNeighboringCells: AvailableCellListType =
+    config.MOVE_DIRECTION_LIST.map((directionItem) => {
       return {
         direction: directionItem,
         coord: getNextPlayerCoord(prevPlayerCoord, directionItem),
       };
-    }
-  );
+    });
 
   /**
    * Returns the coordinates that lying in the GameField.

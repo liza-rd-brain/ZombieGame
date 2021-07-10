@@ -1,12 +1,14 @@
-import { State } from "../types";
+import { ConfigType, State } from "../types";
 
 import { getGameField } from "./getGameField";
 import { getPlayers } from "./getPlayers";
 import { getEnemies } from "./getEnemies";
 
-const getInitialState = (): State => {
+import { PROD_CONFIG, DEV_CONFIG } from "../../shared/config";
+
+const getInitialState = (config: ConfigType): State => {
   //отдаем gameFieldWithoutEnemy для рандомного выбора координат врагов из пустых ячеек
-  const gameFieldWithoutEnemy = getGameField();
+  const gameFieldWithoutEnemy = getGameField(config);
 
   return {
     gameState: {
@@ -16,12 +18,27 @@ const getInitialState = (): State => {
     },
     dice: 0,
     gameResult: "",
-    playerList: getPlayers(),
-    enemyList: getEnemies(gameFieldWithoutEnemy),
+    playerList: getPlayers(config),
+    enemyList: getEnemies(gameFieldWithoutEnemy, config),
     gameField: gameFieldWithoutEnemy,
     doEffect: null,
     activePlayerNumber: 0,
   };
 };
 
-export const initialState = getInitialState();
+const getConfig = (
+  PROD_CONFIG: ConfigType,
+  DEV_CONFIG: ConfigType
+): ConfigType => {
+  if (process.env.NODE_ENV === "production") {
+    return PROD_CONFIG;
+  } else if (process.env.NODE_ENV === "development") {
+    return DEV_CONFIG;
+  } else {
+    return PROD_CONFIG;
+  }
+};
+
+export const config = getConfig(PROD_CONFIG, DEV_CONFIG);
+
+export const initialState = getInitialState(config);

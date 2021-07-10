@@ -4,7 +4,8 @@ import styled from "styled-components";
 
 import { State, PlayerListType } from "../business/types";
 
-import { MAX_HEALTH_AMOUNT } from "../shared/config";
+/* import { MAX_HEALTH_AMOUNT } from "../shared/config/devConfig"; */
+import { config } from "../business/initialState";
 
 type HealthSlotType = {
   isFilled: boolean;
@@ -47,7 +48,7 @@ export const HealthSlots = (props: { index: number }) => {
 
 const getHealthSlot = (playerList: PlayerListType, index: number) => {
   const playerHealth = getPlayerHealth(playerList, index);
-  const maxHealthSlotList = new Array(MAX_HEALTH_AMOUNT).fill(0);
+  const maxHealthSlotList = new Array(config.MAX_HEALTH_AMOUNT).fill(0);
 
   const filledHealthSlotList = maxHealthSlotList.reduce(
     (prev, currSlot, index) => {

@@ -4,21 +4,22 @@ import {
   FinishCell,
   GameFieldCells,
   CellType,
+  ConfigType,
 } from "../../types";
-
-import {
-  FINISH_COORD,
-  START_COORD,
-  CELLS_BARRIERS_LIST,
-} from "../../../shared/config";
 
 /**
  *  Returns an object with start and finish  in structure of GameValues.
  */
-export const getFieldCells = (cellList: string[]): GameFieldCells => {
+export const getFieldCells = (
+  cellList: string[],
+  config: ConfigType
+): GameFieldCells => {
   const emptyFieldCells = createEmptyFieldCells(cellList);
-  const fieldCellsWithWalls = getCellsWalls(emptyFieldCells);
-  const organizedFieldCells = getOrganizedFieldCells(fieldCellsWithWalls);
+  const fieldCellsWithWalls = getCellsWalls(emptyFieldCells, config);
+  const organizedFieldCells = getOrganizedFieldCells(
+    fieldCellsWithWalls,
+    config
+  );
   return organizedFieldCells;
 };
 
@@ -43,9 +44,12 @@ const createEmptyFieldCells = (cellList: Array<string>): GameFieldCells => {
 /**
  *  Creates an object with start, finish and walls in structure of GameValues.
  */
-const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
-  const startIndex = `${START_COORD.hor}.${START_COORD.vert}`;
-  const finishIndex = `${FINISH_COORD.hor}.${FINISH_COORD.vert}`;
+const getOrganizedFieldCells = (
+  emptyField: GameFieldCells,
+  config: ConfigType
+): GameFieldCells => {
+  const startIndex = `${config.START_COORD.hor}.${config.START_COORD.vert}`;
+  const finishIndex = `${config.FINISH_COORD.hor}.${config.FINISH_COORD.vert}`;
 
   const startCell: StartCell = {
     name: "start",
@@ -69,32 +73,34 @@ const getOrganizedFieldCells = (emptyField: GameFieldCells): GameFieldCells => {
 /**
  * @returns The object in structure GameFieldCells. With walls(barriers) in cells.
  */
-const getCellsWalls = (emptyField: GameFieldCells): GameFieldCells => {
+const getCellsWalls = (
+  emptyField: GameFieldCells,
+  config: ConfigType
+): GameFieldCells => {
   // TODO: Need add checking for CommonCell?
 
   /**
    * Returns list of Cells with walls(barriers)
    */
-  const cellsWithBarrierList = CELLS_BARRIERS_LIST.map((cellBarrier): [
-    string,
-    CellType
-  ] => {
-    const { coord, barrierList } = cellBarrier;
-    const cellIndex = `${coord.hor}.${coord.vert}`;
+  const cellsWithBarrierList = config.CELLS_BARRIERS_LIST.map(
+    (cellBarrier): [string, CellType] => {
+      const { coord, barrierList } = cellBarrier;
+      const cellIndex = `${coord.hor}.${coord.vert}`;
 
-    const cellWithoutBarrier = emptyField[cellIndex];
+      const cellWithoutBarrier = emptyField[cellIndex];
 
-    if (cellWithoutBarrier.name === "commonCell") {
-      const cellWithBarrier = {
-        ...cellWithoutBarrier,
-        barrierList: barrierList,
-      };
+      if (cellWithoutBarrier.name === "commonCell") {
+        const cellWithBarrier = {
+          ...cellWithoutBarrier,
+          barrierList: barrierList,
+        };
 
-      return [cellIndex, cellWithBarrier];
-    } else {
-      return [cellIndex, cellWithoutBarrier];
+        return [cellIndex, cellWithBarrier];
+      } else {
+        return [cellIndex, cellWithoutBarrier];
+      }
     }
-  });
+  );
 
   const cellsWithBarriers: GameFieldCells =
     Object.fromEntries(cellsWithBarrierList);
