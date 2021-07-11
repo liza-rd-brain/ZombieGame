@@ -1,6 +1,6 @@
-import { initialState } from "../../../initialState";
-import { reducer } from "../../../reducer";
-import { State } from "../../../types";
+import { initialState } from "../../../../initialState";
+import { reducer } from "../../../../reducer";
+import { State } from "../../../../types";
 
 describe("test getting coordOfAvailableCells ", () => {
   const stateWithoutAvailableCells: State = {
