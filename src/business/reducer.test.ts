@@ -1,19 +1,6 @@
 import { initialState } from "./initialState";
-import { ActionType, reducer } from "./reducer";
-import { waitingStart } from "./phases/waitingStart/index";
-
-import {
-  playerMove,
-  takeCard,
-  rollDice,
-  interactWithEnemy,
-  applyCard,
-  getPlayersOrder,
-} from "./phases/gameStarted";
-
-import { getNeighboringCellList } from "./phases/common";
-import { getAvailableCells } from "./phases/gameStarted/playerMove/getAvailableCells";
-import { State, CellType, BarrierList, BarrierItem, CommonCell } from "./types";
+import { reducer } from "./reducer";
+import { State, BarrierList, BarrierItem, SwitchedBarrierItem } from "./types";
 
 test("test initial state", () => {
   const newState = reducer(initialState, {} as any);
@@ -55,7 +42,7 @@ describe("test player can move on next cell", () => {
   const oldPlayerCoord = "4.6";
 
   it("should check that player can move through open door and window", () => {
-    const openBarrierList: BarrierList = [
+    const openBarrierList: SwitchedBarrierItem[] = [
       {
         name: "door",
         direction: "bottom",
@@ -84,13 +71,10 @@ describe("test player can move on next cell", () => {
         newState.playerList[newState.activePlayerNumber].coord;
       const currentCell = newState.gameField.values[playerCoord];
 
-      const noteExpectedBarrier: BarrierList = [
-        {
-          ...barrier,
-          isOpen: false,
-        },
-      ];
-
+      const noteExpectedBarrier: SwitchedBarrierItem = {
+        ...barrier,
+        isOpen: false,
+      };
       expect(
         currentCell.name === "commonCell" && currentCell.barrierList
       ).toBeTruthy();
@@ -102,7 +86,7 @@ describe("test player can move on next cell", () => {
       if (currentCell.name === "commonCell" && currentCell.barrierList) {
         const barrierList = currentCell.barrierList;
         expect(barrierList).toEqual(
-          expect.not.arrayContaining(noteExpectedBarrier)
+          expect.not.arrayContaining([noteExpectedBarrier])
         );
       }
     });
@@ -124,12 +108,10 @@ describe("test player can move on next cell", () => {
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
       {
         name: "wall",
         direction: "bottom",
-        isOpen: false,
       },
     ];
 

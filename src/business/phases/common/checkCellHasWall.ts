@@ -34,7 +34,9 @@ const checkCellOnBarrier = (cell: CellType, direction: MoveDirection) => {
         ? true
         : false;
       const cellHasClosedHole = cell.barrierList?.find(
-        (barrier) => barrier.isOpen === false && barrier.direction === direction
+        (barrier) =>
+          (barrier.name !== "wall" && barrier.isOpen) === false &&
+          barrier.direction === direction
       )
         ? true
         : false;

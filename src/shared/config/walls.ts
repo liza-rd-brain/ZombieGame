@@ -8,12 +8,10 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -24,7 +22,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -35,7 +32,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -57,23 +53,20 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
-  
+
   {
     coord: { hor: 2, vert: 7 },
     barrierList: [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -95,7 +88,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -106,7 +98,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -117,7 +108,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -127,7 +117,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -147,7 +136,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -157,7 +145,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -168,7 +155,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -179,7 +165,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -189,7 +174,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -199,7 +183,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -210,7 +193,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -242,7 +224,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -252,12 +233,10 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -278,7 +257,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -289,7 +267,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -300,7 +277,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -311,7 +287,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -321,7 +296,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -332,7 +306,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -358,7 +331,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -368,7 +340,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -378,12 +349,10 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -404,7 +373,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "bottom",
-        isOpen: true,
       },
     ],
   },
@@ -424,7 +392,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -444,7 +411,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -454,7 +420,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -465,7 +430,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -486,7 +450,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -496,7 +459,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -516,7 +478,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -526,7 +487,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
@@ -536,13 +496,12 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
-        isOpen: true,
       },
     ],
   },
 
   //it is needed for now for pretty  wall painting
-  {
+  /*   {
     coord: { hor: 11, vert: 10 },
     barrierList: [
       {
@@ -551,5 +510,5 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
         isOpen: true,
       },
     ],
-  },
+  }, */
 ];

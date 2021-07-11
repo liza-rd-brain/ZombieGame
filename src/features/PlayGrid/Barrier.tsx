@@ -39,7 +39,11 @@ type BarrierCoord = {
 
 const CommonWall = styled.div<WallType>`
   pointer-events: ${(props) => {
-    if (props.barrierItem?.isOpen) {
+    if (
+      props.barrierItem &&
+      props.barrierItem.name !== "wall" &&
+      props.barrierItem.isOpen
+    ) {
       const needHighlightning = props.highlightningList?.find((item) => {
         return item === "bottom" || "left";
       });
@@ -121,7 +125,11 @@ const WallImage = styled(CommonWall)<WallType>`
 
     background-size: 44px;
     background-image: ${(props) => {
-      switch (props.barrierItem?.isOpen) {
+      switch (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         case true: {
           switch (props.barrierItem?.name) {
             case "door": {
@@ -194,7 +202,11 @@ const WallImage = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -213,7 +225,11 @@ const Wall = styled(CommonWall)<WallType>`
     pointer-events: none;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
-        if (props.barrierItem?.isOpen === false) {
+        if (
+          props.barrierItem &&
+          props.barrierItem.name !== "wall" &&
+          props.barrierItem.isOpen === false
+        ) {
           return "10px";
         } else {
           switch (props.barrierItem.name) {
@@ -246,7 +262,11 @@ const Wall = styled(CommonWall)<WallType>`
 
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
-        if (props.barrierItem?.isOpen === false) {
+        if (
+          props.barrierItem &&
+          props.barrierItem.name !== "wall" &&
+          props.barrierItem.isOpen === false
+        ) {
           return "10px";
         } else {
           switch (props.barrierItem.name) {
@@ -269,7 +289,10 @@ const Wall = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        (props.barrierItem && props.barrierItem.name === "wall") ||
+        (props.barrierItem && props.barrierItem.isOpen)
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -341,7 +364,11 @@ const Wall = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -415,6 +442,7 @@ export const Barrier = (props: BarrierCoord) => {
                     return (
                       cellType?.coord === orderIndex &&
                       cellType?.direction === barrier.direction &&
+                      barrier.name !== "wall" &&
                       barrier.isOpen === true
                     );
                   })
@@ -457,6 +485,7 @@ export const Barrier = (props: BarrierCoord) => {
                     return (
                       cellType?.coord === orderIndex &&
                       cellType?.direction === barrier.direction &&
+                      barrier.name !== "wall" &&
                       barrier.isOpen === true
                     );
                   })

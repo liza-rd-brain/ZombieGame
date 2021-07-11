@@ -6,17 +6,24 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 
-export type BarrierName = "wall" | "window" | "door" | null;
+/* export type BarrierName = "wall" | SwitchedBarrierName; */ /* | null; */
+export type SwitchedBarrierName = "window" | "door";
 /* export type BarrierDirection = "bottom" | "left"; */
 
 export type ContextMenuButtonType = "share" | "heal";
 
-export type BarrierItem = {
-  name: BarrierName;
+export type WallItem = {
+  name: "wall";
   direction: MoveDirection;
-  //TODO: Need to correct isOpen. Wall can`t be open!
+};
+
+export type SwitchedBarrierItem = {
+  name: SwitchedBarrierName;
+  direction: MoveDirection;
   isOpen: boolean;
 };
+
+export type BarrierItem = SwitchedBarrierItem | WallItem;
 
 export type BarrierList = BarrierItem[];
 
