@@ -1,8 +1,8 @@
 import { ConfigType } from "../../business/types";
-import { CELLS_BARRIERS_LIST } from "./walls";
-import { MOVE_DIRECTION_LIST } from "./common";
+import { COMMON_CONFIG } from "./common";
 
 export const PROD_CONFIG: ConfigType = {
+  ...COMMON_CONFIG,
   START_COORD: { hor: 0, vert: 0 },
   FINISH_COORD: { hor: 11, vert: 11 },
   AMOUNT_PLAYERS: 1,
@@ -14,6 +14,4 @@ export const PROD_CONFIG: ConfigType = {
   CARD_APPERANCE: "closed",
   PLAY_GRID_MODE: "image",
   MAX_HEALTH_AMOUNT: 7,
-  CELLS_BARRIERS_LIST,
-  MOVE_DIRECTION_LIST,
 };

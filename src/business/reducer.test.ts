@@ -44,7 +44,7 @@ describe("test player can move on next cell", () => {
       "1": {
         name: "player",
         health: 3,
-        orderNumber: 0,
+        orderNumber: 1,
         coord: "4.7",
         inventory: { boards: 0, weapon: 0, health: 0, cardSelected: null },
       },

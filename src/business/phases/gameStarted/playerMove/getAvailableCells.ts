@@ -31,6 +31,7 @@ export const getAvailableCells = (state: State): State => {
 
   return {
     ...state,
+    doEffect: null,
     gameState: { ...state.gameState, coordOfAvailableCells },
   };
 };
