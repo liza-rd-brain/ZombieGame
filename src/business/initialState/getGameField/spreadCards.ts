@@ -1,10 +1,10 @@
 import { CommonCell, GameFieldCells, CardItem, ConfigType } from "../../types";
 /* 
 import {
-  AMOUNT_HEALTH_ITEMS,
-  AMOUNT_BOARDS_ITEMS,
-  CARD_APPERANCE,
-  AMOUNT_WEAPONS_ITEMS,
+ amountHealthItems,
+  amountBoardsItems,
+  cardApperance,
+  amountWeaponsIte,
 } from "../../../shared/config/devConfig";
  */
 type CardSet = {
@@ -17,23 +17,23 @@ const getCardList = (config: ConfigType): CardSet[] => {
     {
       card: {
         name: "health",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_HEALTH_ITEMS,
+      amount: config.amountHealthItems,
     },
     {
       card: {
         name: "boards",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_BOARDS_ITEMS,
+      amount: config.amountBoardsItems,
     },
     {
       card: {
         name: "weapon",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_WEAPONS_ITEMS,
+      amount: config.amountWeaponsIte,
     },
   ];
 };

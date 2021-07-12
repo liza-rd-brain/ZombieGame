@@ -23,7 +23,7 @@ import {
 } from "../../business/types";
 
 import { config } from "../../business/initialState";
-/* import { PLAY_GRID_MODE } from "../../shared/config/devConfig"; */
+/* import { playGridMode } from "../../shared/config/devConfig"; */
 
 type WallType = {
   barrierItem?: BarrierItem;
@@ -421,7 +421,7 @@ export const Barrier = (props: BarrierCoord) => {
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        switch (config.PLAY_GRID_MODE) {
+        switch (config.playGridMode) {
           case "cssStyle": {
             return (
               <Wall
@@ -436,7 +436,7 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.PLAY_GRID_MODE}
+                mode={config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (
@@ -479,7 +479,7 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.PLAY_GRID_MODE}
+                mode={config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (

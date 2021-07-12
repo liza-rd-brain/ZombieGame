@@ -15,8 +15,8 @@ export const getGameField = (config: ConfigType) => {
  * Creates an array with cell index order.
  */
 const getCellOrder = (config: any): Array<string> => {
-  const width = config.FINISH_COORD.hor;
-  const height = config.FINISH_COORD.vert;
+  const width = config.finishCoord.hor;
+  const height = config.finishCoord.vert;
 
   let orderList: Array<string> = [];
 

@@ -8,6 +8,6 @@ export const MOVE_DIRECTION_LIST: MoveDirectionList = [
 ];
 
 export const COMMON_CONFIG = {
-  CELLS_BARRIERS_LIST,
-  MOVE_DIRECTION_LIST,
+  cellsBarrierList: CELLS_BARRIERS_LIST,
+  moveDirectionList: MOVE_DIRECTION_LIST,
 };

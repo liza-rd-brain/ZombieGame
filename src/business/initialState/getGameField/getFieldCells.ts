@@ -48,8 +48,8 @@ const getOrganizedFieldCells = (
   emptyField: GameFieldCells,
   config: ConfigType
 ): GameFieldCells => {
-  const startIndex = `${config.START_COORD.hor}.${config.START_COORD.vert}`;
-  const finishIndex = `${config.FINISH_COORD.hor}.${config.FINISH_COORD.vert}`;
+  const startIndex = `${config.startCoord.hor}.${config.startCoord.vert}`;
+  const finishIndex = `${config.finishCoord.hor}.${config.finishCoord.vert}`;
 
   const startCell: StartCell = {
     name: "start",
@@ -82,7 +82,7 @@ const getCellsWalls = (
   /**
    * Returns list of Cells with walls(barriers)
    */
-  const cellsWithBarrierList = config.CELLS_BARRIERS_LIST.map(
+  const cellsWithBarrierList = config.cellsBarrierList.map(
     (cellBarrier): [string, CellType] => {
       const { coord, barrierList } = cellBarrier;
       const cellIndex = `${coord.hor}.${coord.vert}`;

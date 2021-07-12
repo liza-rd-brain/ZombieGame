@@ -10,7 +10,7 @@ export const getNeighboringCellList = (
   gameField: GameField
 ): AvailableCellListType => {
   const coordNeighboringCells: AvailableCellListType =
-    config.MOVE_DIRECTION_LIST.map((directionItem) => {
+    config.moveDirectionList.map((directionItem) => {
       return {
         direction: directionItem,
         coord: getNextPlayerCoord(prevPlayerCoord, directionItem),

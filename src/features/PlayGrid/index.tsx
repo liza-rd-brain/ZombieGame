@@ -2,8 +2,8 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { config } from "../../business/initialState";
 
-/* import { FINISH_COORD } from "../../shared/config/devConfig";
-import { PLAY_GRID_MODE } from "../../shared/config/devConfig"; */
+/* import { finishCoord } from "../../shared/config/devConfig";
+import { playGridMode } from "../../shared/config/devConfig"; */
 import { State, PlayGridMode } from "../../business/types";
 import { getFilledPlayGrid } from "./getFilledPlayGrid";
 
@@ -52,11 +52,11 @@ export const PlayGrid = () => {
     ...state,
   }));
 
-  const { vert: maxVert } = config.FINISH_COORD;
+  const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 
   return (
-    <GridItem key={"grid"} vert={height} mode={config.PLAY_GRID_MODE}>
+    <GridItem key={"grid"} vert={height} mode={config.playGridMode}>
       {getFilledPlayGrid(state)}
     </GridItem>
   );

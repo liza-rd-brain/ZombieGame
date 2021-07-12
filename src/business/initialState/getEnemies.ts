@@ -1,6 +1,6 @@
 import { EnemyListType, GameField, CommonCell, ConfigType } from "../types";
 
-/* import { AMOUNT_ENEMIES, CARD_APPERANCE } from "../../shared/config/devConfig";
+/* import { AMOUNT_ENEMIES, cardApperance } from "../../shared/config/devConfig";
 
  */ export const getEnemies = (
   gameField: GameField,
@@ -37,7 +37,7 @@ const getListOfIndexes = (
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
 
   // TODO: it may be taking out as separate module with getRandomNumber?
-  const keyList: Array<number> = new Array(config.AMOUNT_ENEMIES)
+  const keyList: Array<number> = new Array(config.amountEnemies)
     .fill(0)
     .reduce((prevkeyList) => {
       const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);
@@ -66,7 +66,7 @@ const getListOfEnemy = (enemiesCoords: string[], config: ConfigType) => {
       name: "enemy",
       power: 1,
       coord: coord,
-      apperance: config.CARD_APPERANCE,
+      apperance: config.cardApperance,
     };
     return [enemyCard.coord, enemyCard];
   });

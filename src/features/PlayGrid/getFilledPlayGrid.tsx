@@ -9,7 +9,7 @@ import { getEnemyList } from "./getEnemyList";
 import { Barrier } from "./Barrier";
 
 import { config } from "../../business/initialState";
-/* import { PLAY_GRID_MODE } from "../../shared/config/devConfig"; */
+/* import { playGridMode } from "../../shared/config/devConfig"; */
 
 type CellApperance = {
   needHighlightning?: boolean;
@@ -135,9 +135,9 @@ export const getFilledPlayGrid = (state: State) => {
                 <Wrap key={`${hor}.${vert}`}>
                   <CellItem
                     needHighlightning={needHighlightning}
-                    mode={config.PLAY_GRID_MODE}
+                    mode={config.playGridMode}
                   >
-                    {config.PLAY_GRID_MODE === "cssStyle"
+                    {config.playGridMode === "cssStyle"
                       ? `${hor}.${vert}`
                       : null}
                   </CellItem>
@@ -165,11 +165,11 @@ export const getFilledPlayGrid = (state: State) => {
           <Wrap key={`${hor}.${vert}`}>
             <CellItem
               needHighlightning={needHighlightning}
-              mode={config.PLAY_GRID_MODE}
+              mode={config.playGridMode}
             >
               {cardList}
 
-              {config.PLAY_GRID_MODE === "cssStyle" ? `${hor}.${vert}` : null}
+              {config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
             </CellItem>
             {cellValues.name === "commonCell" ? (
               <Barrier orderIndex={orderIndex}></Barrier>
