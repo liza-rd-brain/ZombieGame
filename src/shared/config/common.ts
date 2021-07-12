@@ -9,5 +9,4 @@ export const MOVE_DIRECTION_LIST: MoveDirectionList = [
 
 export const COMMON_CONFIG = {
   cellsBarrierList: CELLS_BARRIERS_LIST,
-  moveDirectionList: MOVE_DIRECTION_LIST,
 };

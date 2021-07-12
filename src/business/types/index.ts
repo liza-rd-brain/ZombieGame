@@ -181,5 +181,4 @@ export type ConfigType = {
   cardApperance: CardApperance;
   playGridMode: PlayGridMode;
   cellsBarrierList: CellsBarrierListType;
-  moveDirectionList: MoveDirectionList;
 };
