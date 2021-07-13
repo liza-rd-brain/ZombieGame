@@ -177,7 +177,6 @@ export type ConfigType = {
   amountBoardsItems: number;
   amountWeaponsIte: number;
   amountEnemies: number;
-  maxHealthAmount: number;
   cardApperance: CardApperance;
   playGridMode: PlayGridMode;
   cellsBarrierList: CellsBarrierListType;

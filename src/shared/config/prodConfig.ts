@@ -13,5 +13,4 @@ export const PROD_CONFIG: ConfigType = {
   amountEnemies: 30,
   cardApperance: "closed",
   playGridMode: "image",
-  maxHealthAmount: 7,
 };

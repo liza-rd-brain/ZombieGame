@@ -13,5 +13,8 @@ export const DEV_CONFIG: ConfigType = {
   amountEnemies: 0,
   cardApperance: "open",
   playGridMode: "cssStyle",
-  maxHealthAmount: 7,
 };
+
+type A = Partial<ConfigType>;
+
+type B = Required<A>;
