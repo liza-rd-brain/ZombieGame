@@ -140,6 +140,7 @@ export type State = {
   gameField: GameField;
   doEffect: TypeEffect;
   activePlayerNumber: number;
+  _config: ConfigType;
 };
 
 export type GameState = GameStateTypes & {

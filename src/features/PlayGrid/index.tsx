@@ -1,9 +1,6 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { config } from "../../business/initialState";
 
-/* import { finishCoord } from "../../shared/config/devConfig";
-import { playGridMode } from "../../shared/config/devConfig"; */
 import { State, PlayGridMode } from "../../business/types";
 import { getFilledPlayGrid } from "./getFilledPlayGrid";
 
@@ -51,7 +48,7 @@ export const PlayGrid = () => {
   const state = useSelector((state: State) => ({
     ...state,
   }));
-
+  const config = state._config;
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 

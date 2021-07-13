@@ -22,9 +22,6 @@ import {
   PlayGridMode,
 } from "../../business/types";
 
-import { config } from "../../business/initialState";
-/* import { playGridMode } from "../../shared/config/devConfig"; */
-
 type WallType = {
   barrierItem?: BarrierItem;
   //TODO: поправить тип?
@@ -384,11 +381,10 @@ const Wall = styled(CommonWall)<WallType>`
 
 export const Barrier = (props: BarrierCoord) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-
-  const { gameField, playerList, activePlayerNumber, gameState } = state;
+  const { gameField, playerList, activePlayerNumber, gameState, _config } =
+    useSelector((state: State) => ({
+      ...state,
+    }));
 
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
@@ -421,7 +417,7 @@ export const Barrier = (props: BarrierCoord) => {
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        switch (config.playGridMode) {
+        switch (_config.playGridMode) {
           case "cssStyle": {
             return (
               <Wall
@@ -436,7 +432,7 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.playGridMode}
+                mode={_config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (
@@ -479,7 +475,7 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.playGridMode}
+                mode={_config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (

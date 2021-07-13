@@ -1,8 +1,8 @@
 import { ConfigType } from "../../business/types";
-import { COMMON_CONFIG } from "./common";
+import { CELLS_BARRIERS_LIST } from "./walls";
 
 export const DEV_CONFIG: ConfigType = {
-  ...COMMON_CONFIG,
+  cellsBarrierList: CELLS_BARRIERS_LIST,
   startCoord: { hor: 0, vert: 0 },
   finishCoord: { hor: 11, vert: 11 },
   amountPlayers: 2,
