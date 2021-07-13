@@ -9,7 +9,6 @@ import { PROD_CONFIG, DEV_CONFIG } from "../../shared/config";
 export const getInitialState = (config: ConfigType): State => {
   //отдаем gameFieldWithoutEnemy для рандомного выбора координат врагов из пустых ячеек
   const gameFieldWithoutEnemy = getGameField(config);
-
   return {
     gameState: {
       type: "waitingStart",

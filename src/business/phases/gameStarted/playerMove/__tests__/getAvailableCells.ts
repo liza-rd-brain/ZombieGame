@@ -1,32 +1,27 @@
-import { initialState } from "../../../../initialState";
+import { createConfig } from "../../../../../shared/helpers/createConfig";
+import { getInitialState } from "../../../../initialState";
 import { reducer } from "../../../../reducer";
-import { State } from "../../../../types";
+import { CellsBarrierListType, State } from "../../../../types";
 
-describe("test getting coordOfAvailableCells ", () => {
-  const stateWithoutAvailableCells: State = {
+const getStateWithoutAvailableCells = (initialState: State): State => {
+  return {
     ...initialState,
     gameState: {
       ...initialState.gameState,
       type: "gameStarted.playerMove",
     },
-    playerList: {
-      "0": {
-        name: "player",
-        health: 3,
-        orderNumber: 0,
-        coord: "1.1",
-        inventory: {
-          boards: 0,
-          weapon: 1,
-          health: 0,
-          cardSelected: null,
-        },
-      },
-    },
     dice: 2,
     doEffect: { type: "!checkAvailableNeighboringCell" },
-    activePlayerNumber: 0,
   };
+};
+
+describe("test getting coordOfAvailableCells,field without Barriers", () => {
+  const configEmptyField = createConfig({ startCoord: { hor: 1, vert: 1 } });
+
+  const initialState = getInitialState(configEmptyField);
+
+  const stateWithoutAvailableCells =
+    getStateWithoutAvailableCells(initialState);
 
   const stateWithAvailableCell = reducer(stateWithoutAvailableCells, {
     type: "req-checkAvailableNeighboringCell",
@@ -44,28 +39,11 @@ describe("test getting coordOfAvailableCells ", () => {
     expect(stateWithAvailableCell.doEffect).toBeNull();
   });
 
-  it("should check that the available cells don`t contain cells behind the wall", () => {
-    const stateHasWallsAround = {
-      ...stateWithoutAvailableCells,
-      playerList: {
-        ...stateWithoutAvailableCells.playerList,
-        "0": { ...stateWithoutAvailableCells.playerList[0], coord: "2.2" },
-      },
-    };
-
-    const coordOfAvailableCells = ["2.3", "3.2"];
-
-    const stateWithAvailableCell = reducer(stateHasWallsAround, {
-      type: "req-checkAvailableNeighboringCell",
-    });
-
-    expect(stateWithAvailableCell.gameState.coordOfAvailableCells).toEqual(
-      coordOfAvailableCells
-    );
-  });
-
   it("should check that the available cells don`t contain cell with player if it last step  ", () => {
     const notExpectedCoord = "0.1";
+
+    const configWithTwoPlayers = createConfig({ amountPlayers: 2 });
+    const initialState = getInitialState(configWithTwoPlayers);
 
     const stateBeforeLastStep: State = {
       ...stateWithoutAvailableCells,
@@ -73,16 +51,8 @@ describe("test getting coordOfAvailableCells ", () => {
       playerList: {
         ...stateWithoutAvailableCells.playerList,
         "1": {
-          name: "player",
-          health: 3,
-          orderNumber: 1,
+          ...initialState.playerList[1],
           coord: notExpectedCoord,
-          inventory: {
-            boards: 0,
-            weapon: 1,
-            health: 0,
-            cardSelected: null,
-          },
         },
       },
     };
@@ -96,3 +66,108 @@ describe("test getting coordOfAvailableCells ", () => {
     );
   });
 });
+
+describe("test getting coordOfAvailableCells,field with Barriers", () => {
+  it("should check that the available cells don`t contain cells behind the wall, but contain behind open door and window", () => {
+    const configWithBarriers = createConfig({
+      cellsBarrierList: getBarrieredCell(true),
+    });
+
+    const initialState = getInitialState(configWithBarriers);
+
+    const stateWithPlayerOnField = {
+      ...initialState,
+      playerList: {
+        ...initialState.playerList,
+        0: {
+          ...initialState.playerList[0],
+          coord: "1.1",
+        },
+      },
+    };
+
+    const stateWithoutAvailableCells = getStateWithoutAvailableCells(
+      stateWithPlayerOnField
+    );
+
+    const coordOfAvailableCells = ["1.2", "2.1"];
+
+    const stateWithAvailableCell = reducer(stateWithoutAvailableCells, {
+      type: "req-checkAvailableNeighboringCell",
+    });
+
+    expect(stateWithAvailableCell.gameState.coordOfAvailableCells).toEqual(
+      coordOfAvailableCells
+    );
+  });
+
+  it("should check that the available cells don`t contain cells behind the wall, closed door and window", () => {
+    const configWithBarriers = createConfig({
+      cellsBarrierList: getBarrieredCell(false),
+    });
+
+    const initialState = getInitialState(configWithBarriers);
+
+    const stateWithPlayerStuck = {
+      ...initialState,
+      playerList: {
+        ...initialState.playerList,
+        0: {
+          ...initialState.playerList[0],
+          coord: "1.1",
+        },
+      },
+    };
+
+    const stateWithoutAvailableCells =
+      getStateWithoutAvailableCells(stateWithPlayerStuck);
+
+    const coordOfAvailableCells: string[] = [];
+
+    const stateWithAvailableCell = reducer(stateWithoutAvailableCells, {
+      type: "req-checkAvailableNeighboringCell",
+    });
+
+    expect(stateWithAvailableCell.gameState.coordOfAvailableCells).toEqual(
+      coordOfAvailableCells
+    );
+  });
+});
+
+const getBarrieredCell = (isOpen: boolean): CellsBarrierListType => {
+  return [
+    {
+      coord: { hor: 1, vert: 1 },
+      barrierList: [
+        {
+          name: "wall",
+          direction: "bottom",
+        },
+        {
+          name: "wall",
+          direction: "left",
+        },
+      ],
+    },
+    {
+      coord: { hor: 1, vert: 2 },
+      barrierList: [
+        {
+          name: "door",
+          direction: "bottom",
+          isOpen,
+        },
+      ],
+    },
+    {
+      coord: { hor: 2, vert: 1 },
+      barrierList: [
+        {
+          name: "window",
+          direction: "left",
+          isOpen,
+        },
+      ],
+    },
+  ];
+};

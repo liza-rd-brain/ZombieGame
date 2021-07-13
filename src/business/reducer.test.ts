@@ -104,7 +104,6 @@ describe("test player can move on next cell", () => {
         direction: "bottom",
         isOpen: false,
       },
-      //TODO: Need to correct isOpen. Wall can`t be open!
       {
         name: "wall",
         direction: "bottom",

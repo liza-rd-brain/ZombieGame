@@ -170,6 +170,7 @@ export type GameStateTypes =
   | { type: "getEndScreen" };
 
 export type ConfigType = {
+  //TODO: startCoord hasn`t contain barriers. It`s dont shange, maybe don`t need in config, but need initialCoord for player?
   startCoord: CoordItem;
   finishCoord: CoordItem;
   amountPlayers: number;
