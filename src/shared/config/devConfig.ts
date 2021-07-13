@@ -14,7 +14,3 @@ export const DEV_CONFIG: ConfigType = {
   cardApperance: "open",
   playGridMode: "cssStyle",
 };
-
-type A = Partial<ConfigType>;
-
-type B = Required<A>;
