@@ -6,7 +6,7 @@ import { getEnemies } from "./getEnemies";
 
 import { PROD_CONFIG, DEV_CONFIG } from "../../shared/config";
 
-const getInitialState = (config: ConfigType): State => {
+export const getInitialState = (config: ConfigType): State => {
   //отдаем gameFieldWithoutEnemy для рандомного выбора координат врагов из пустых ячеек
   const gameFieldWithoutEnemy = getGameField(config);
 
