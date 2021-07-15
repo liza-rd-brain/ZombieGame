@@ -39,7 +39,7 @@ describe("test getting coordOfAvailableCells,field without Barriers", () => {
     expect(stateWithAvailableCell.doEffect).toBeNull();
   });
 
-  it("should check that the available cells don`t contain cell with player if it last step  ", () => {
+  it("should check that the available cells don`t contain cell with player if it last step ", () => {
     const notExpectedCoord = "0.1";
 
     const configWithTwoPlayers = createConfig({ amountPlayers: 2 });
