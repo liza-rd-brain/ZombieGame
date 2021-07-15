@@ -10,6 +10,13 @@ export function useOpenCard() {
   useEffect(
     function openCard() {
       switch (doEffect?.type) {
+        case "!checkApperanceInventoryCard": {
+          dispatch({
+            type: "req-checkInventoryCard",
+          });
+          break;
+        }
+
         case "!openCard": {
           const timerOpen = setTimeout(
             () =>

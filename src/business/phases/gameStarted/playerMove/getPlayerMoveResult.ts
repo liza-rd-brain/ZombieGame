@@ -39,7 +39,7 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: state.dice - 1,
         gameState: { ...state.gameState, type: "gameStarted.takeCard" },
-        doEffect: { type: "!openCard" },
+        doEffect: { type: "!checkApperanceInventoryCard" },
       };
       return newState;
     }

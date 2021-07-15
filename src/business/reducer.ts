@@ -22,6 +22,7 @@ export type ActionType =
   | { type: "diceThrown"; payload: number }
   | { type: "playerMoved"; payload: MoveDirection }
   | { type: "req-openCard" }
+  | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteCard" }
   | { type: "req-getNextPlayer" }

@@ -115,22 +115,6 @@ export type GameField = {
 
 export type GameFieldCells = Record<string, CellType>;
 
-export type TypeEffect =
-  | { type: "!openCard" }
-  | { type: "!takeCard" }
-  | { type: "!changePlayerHealth" }
-  | { type: "!deleteCard" }
-  | { type: "!getNextPlayer" }
-  | { type: "!checkApperanceEnemyCard" }
-  | { type: "!openEnemyCard" }
-  | { type: "!throwBattleDice" }
-  | { type: "!getBattleResult" }
-  | { type: "!checkAvailableNeighboringCell" }
-  | { type: "!getPlayerMoveResult" }
-  | { type: "!removeEnemyCard" }
-  | { type: "!checkAvailableNeighboringCards" }
-  | null;
-
 export type State = {
   gameState: GameState;
   dice: number;
@@ -147,6 +131,38 @@ export type GameState = GameStateTypes & {
   coordOfAvailableCards: string[] | null;
   coordOfAvailableCells: string[] | null;
 };
+
+export type ConfigType = {
+  //TODO: startCoord hasn`t contain barriers. It`s dont shange, maybe don`t need in config, but need initialCoord for player?
+  startCoord: CoordItem;
+  finishCoord: CoordItem;
+  amountPlayers: number;
+  initialPlayerHealth: number;
+  amountHealthItems: number;
+  amountBoardsItems: number;
+  amountWeaponsIte: number;
+  amountEnemies: number;
+  cardApperance: CardApperance;
+  playGridMode: PlayGridMode;
+  cellsBarrierList: CellsBarrierListType;
+};
+
+export type TypeEffect =
+  | { type: "!openCard" }
+  | { type: "!takeCard" }
+  | { type: "!checkApperanceInventoryCard" }
+  | { type: "!changePlayerHealth" }
+  | { type: "!deleteCard" }
+  | { type: "!getNextPlayer" }
+  | { type: "!checkApperanceEnemyCard" }
+  | { type: "!openEnemyCard" }
+  | { type: "!throwBattleDice" }
+  | { type: "!getBattleResult" }
+  | { type: "!checkAvailableNeighboringCell" }
+  | { type: "!getPlayerMoveResult" }
+  | { type: "!removeEnemyCard" }
+  | { type: "!checkAvailableNeighboringCards" }
+  | null;
 
 export type GameStateTypes =
   | { type: "waitingStart" }
@@ -168,18 +184,3 @@ export type GameStateTypes =
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
-
-export type ConfigType = {
-  //TODO: startCoord hasn`t contain barriers. It`s dont shange, maybe don`t need in config, but need initialCoord for player?
-  startCoord: CoordItem;
-  finishCoord: CoordItem;
-  amountPlayers: number;
-  initialPlayerHealth: number;
-  amountHealthItems: number;
-  amountBoardsItems: number;
-  amountWeaponsIte: number;
-  amountEnemies: number;
-  cardApperance: CardApperance;
-  playGridMode: PlayGridMode;
-  cellsBarrierList: CellsBarrierListType;
-};
