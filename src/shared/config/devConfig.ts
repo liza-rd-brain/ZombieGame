@@ -8,9 +8,9 @@ export const DEV_CONFIG: ConfigType = {
   amountPlayers: 1,
   initialPlayerHealth: 3,
   amountHealthItems: 0,
-  amountBoardsItems: 90,
+  amountBoardsItems: 0,
   amountWeaponsIte: 0,
-  amountEnemies: 0,
-  cardApperance: "closed",
+  amountEnemies: 60,
+  cardApperance: "open",
   playGridMode: "cssStyle",
 };

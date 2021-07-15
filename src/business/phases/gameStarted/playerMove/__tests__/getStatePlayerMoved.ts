@@ -50,22 +50,26 @@ describe("player move on the field without Barriers", () => {
     expect(stateMovedRight.playerList[0].coord).toBe(newPlayerCoordRight);
   });
 
-  it("should test that doEffect switch to getPlayerMoveResult", () => {
+  it("should test that doEffect switch to getPlayerMoveResult,coordOfAvailableCells to null", () => {
     expect(stateMovedTop.doEffect).toEqual({
       type: "!getPlayerMoveResult",
     });
+    expect(stateMovedTop.gameState.coordOfAvailableCards).toEqual(null);
 
     expect(stateMovedBottom.doEffect).toEqual({
       type: "!getPlayerMoveResult",
     });
+    expect(stateMovedBottom.gameState.coordOfAvailableCards).toEqual(null);
 
     expect(stateMovedLeft.doEffect).toEqual({
       type: "!getPlayerMoveResult",
     });
+    expect(stateMovedLeft.gameState.coordOfAvailableCards).toEqual(null);
 
     expect(stateMovedRight.doEffect).toEqual({
       type: "!getPlayerMoveResult",
     });
+    expect(stateMovedRight.gameState.coordOfAvailableCards).toEqual(null);
   });
 });
 
