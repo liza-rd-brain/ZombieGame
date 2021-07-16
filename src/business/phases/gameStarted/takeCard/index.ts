@@ -14,6 +14,7 @@ export const takeCard = (state: State, action: ActionType): State => {
     case "req-checkInventoryCard": {
       return checkInventoryCardApperance(state);
     }
+
     case "req-openCard": {
       return getStateOpenCard(state);
     }
