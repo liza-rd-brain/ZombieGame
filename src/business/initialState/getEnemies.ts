@@ -1,8 +1,6 @@
 import { EnemyListType, GameField, CommonCell, ConfigType } from "../types";
 
-/* import { AMOUNT_ENEMIES, cardApperance } from "../../shared/config/devConfig";
-
- */ export const getEnemies = (
+export const getEnemies = (
   gameField: GameField,
   config: ConfigType
 ): EnemyListType => {
@@ -35,9 +33,21 @@ const getListOfIndexes = (
   config: ConfigType
 ) => {
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
+  const amountEnemies = config.amountEnemies;
+
+  const canSetAllCards = amountEnemies < AMOUNT_EMPTY_CELLS;
+  const remainingAmountCards = AMOUNT_EMPTY_CELLS;
+
+  const afforableAmountCards = canSetAllCards
+    ? amountEnemies
+    : remainingAmountCards;
+
+  if (!canSetAllCards) {
+    console.error(`Cards "enemy" more than empty cell.`);
+  }
 
   // TODO: it may be taking out as separate module with getRandomNumber?
-  const keyList: Array<number> = new Array(config.amountEnemies)
+  const keyList: Array<number> = new Array(afforableAmountCards)
     .fill(0)
     .reduce((prevkeyList) => {
       const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);

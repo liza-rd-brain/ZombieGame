@@ -123,10 +123,22 @@ const getListForCards = (
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
   const amoutCurrentCards = currCardSet.amount;
 
+  const canSetAllCards = amoutCurrentCards < AMOUNT_EMPTY_CELLS;
+  const remainingAmountCards = AMOUNT_EMPTY_CELLS;
+
+  const afforableAmountCards = canSetAllCards
+    ? amoutCurrentCards
+    : remainingAmountCards;
+
+  if (!canSetAllCards) {
+    const cardName = currCardSet.card?.name;
+    console.error(`Cards "${cardName}" more than empty cell.`);
+  }
+
   /**
    * Is a list with number of indexes of empty cells.
    */
-  const keyList: Array<number> = new Array(amoutCurrentCards)
+  const keyList: Array<number> = new Array(afforableAmountCards)
     .fill(0)
     .reduce((prevkeyList) => {
       const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);
