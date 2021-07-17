@@ -1,3 +1,4 @@
+import { PROD_CONFIG } from ".";
 import { ConfigType } from "../../business/types";
 import { CELLS_BARRIERS_LIST } from "./walls";
 
@@ -9,7 +10,7 @@ export const DEV_CONFIG: ConfigType = {
   initialPlayerHealth: 3,
   amountHealthItems: 30,
   amountBoardsItems: 30,
-  amountWeaponsIte: 30,
+  amountWeaponsItems: 300,
   amountEnemies: 0,
   cardApperance: "open",
   playGridMode: "cssStyle",

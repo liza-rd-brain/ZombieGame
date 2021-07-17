@@ -140,7 +140,7 @@ export type ConfigType = {
   initialPlayerHealth: number;
   amountHealthItems: number;
   amountBoardsItems: number;
-  amountWeaponsIte: number;
+  amountWeaponsItems: number;
   amountEnemies: number;
   cardApperance: CardApperance;
   playGridMode: PlayGridMode;

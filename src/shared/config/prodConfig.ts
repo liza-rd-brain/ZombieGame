@@ -10,7 +10,7 @@ export const PROD_CONFIG: ConfigType = {
   initialPlayerHealth: 3,
   amountHealthItems: 30,
   amountBoardsItems: 30,
-  amountWeaponsIte: 30,
+  amountWeaponsItems: 30,
   amountEnemies: 30,
   cardApperance: "closed",
   playGridMode: "image",

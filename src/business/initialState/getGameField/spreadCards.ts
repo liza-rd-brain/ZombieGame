@@ -4,7 +4,7 @@ import {
  amountHealthItems,
   amountBoardsItems,
   cardApperance,
-  amountWeaponsIte,
+  amountWeaponsItems,
 } from "../../../shared/config/devConfig";
  */
 type CardSet = {
@@ -33,7 +33,7 @@ const getCardList = (config: ConfigType): CardSet[] => {
         name: "weapon",
         apperance: config.cardApperance,
       },
-      amount: config.amountWeaponsIte,
+      amount: config.amountWeaponsItems,
     },
   ];
 };
