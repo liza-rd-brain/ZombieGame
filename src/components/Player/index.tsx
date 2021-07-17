@@ -222,7 +222,7 @@ export const PlayerList = (props: PlayerListItem) => {
           <PlayerCard
             id={`player${playerCardItem.orderNumber}`}
             key={index}
-            isCurrent={numberOfPlayer == playerCardItem.orderNumber}
+            isCurrent={numberOfPlayer === playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
               coordOfAvailableCards,
               typeOfChosedCard,
@@ -342,8 +342,12 @@ const calculateHighlightning = (
                 case false: {
                   return false;
                 }
+                default: {
+                  return false;
+                }
               }
             }
+
             default: {
               return false;
             }

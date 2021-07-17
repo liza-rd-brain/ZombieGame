@@ -24,12 +24,12 @@ export const getPlayerMoveResult = (state: State) => {
 
   // TODO: Is flat switch okey? Or i need it nested?!
   switch (true) {
-    // TODO: переиспользуемая часть state
     case takeFinish: {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
         gameResult: "Вы выиграли",
+        doEffect: null,
       };
       return newState;
     }
@@ -39,7 +39,7 @@ export const getPlayerMoveResult = (state: State) => {
         ...state,
         dice: state.dice - 1,
         gameState: { ...state.gameState, type: "gameStarted.takeCard" },
-        doEffect: { type: "!openCard" },
+        doEffect: { type: "!checkApperanceInventoryCard" },
       };
       return newState;
     }

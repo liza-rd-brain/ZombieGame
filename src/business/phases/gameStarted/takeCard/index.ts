@@ -11,6 +11,10 @@ import { deleteCard } from "./deleteCard";
 
 export const takeCard = (state: State, action: ActionType): State => {
   switch (action.type) {
+    case "req-checkInventoryCard": {
+      return checkInventoryCardApperance(state);
+    }
+
     case "req-openCard": {
       return getStateOpenCard(state);
     }
@@ -128,4 +132,41 @@ const getStateDeletedCard = (state: State): State => {
     },
     dice: 0,
   };
+};
+
+const checkInventoryCardApperance = (state: State): State => {
+  const { gameField, activePlayerNumber, playerList } = state;
+  const playerCoordIndex = playerList[activePlayerNumber].coord;
+  const currCell = gameField.values[playerCoordIndex];
+  const cardItemList = currCell.cardItem;
+  const isOneCardOnCell = cardItemList.length === 1;
+
+  switch (isOneCardOnCell) {
+    case true: {
+      const needOpenCard = cardItemList[0]?.apperance === "closed";
+      console.log(needOpenCard);
+      switch (needOpenCard) {
+        case true: {
+          return {
+            ...state,
+            doEffect: { type: "!openCard" },
+          };
+        }
+        case false: {
+          return { ...state, doEffect: { type: "!takeCard" } };
+        }
+
+        default: {
+          return state;
+        }
+      }
+    }
+    case false: {
+      return { ...state, doEffect: { type: "!takeCard" } };
+    }
+
+    default: {
+      return state;
+    }
+  }
 };

@@ -1,7 +1,7 @@
 import { initialState } from "./initialState";
 import { waitingStart } from "./phases/waitingStart";
 import {
-  trownDice,
+  rollDice,
   playerMove,
   takeCard,
   interactWithEnemy,
@@ -22,6 +22,7 @@ export type ActionType =
   | { type: "diceThrown"; payload: number }
   | { type: "playerMoved"; payload: MoveDirection }
   | { type: "req-openCard" }
+  | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteCard" }
   | { type: "req-getNextPlayer" }
@@ -63,8 +64,8 @@ export const reducer = (
 
     case "gameStarted": {
       switch (phaseInner) {
-        case "trownDice": {
-          return trownDice(state, action);
+        case "rollDice": {
+          return rollDice(state, action);
         }
 
         case "playerMove": {

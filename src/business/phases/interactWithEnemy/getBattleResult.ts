@@ -39,7 +39,7 @@ const getStatePlayerRunsAway = (state: State): State => {
     dice: 0,
     gameState: {
       ...state.gameState,
-      type: "gameStarted.trownDice",
+      type: "gameStarted.rollDice",
     },
   };
 };

@@ -1,10 +1,10 @@
 import { CommonCell, GameFieldCells, CardItem, ConfigType } from "../../types";
 /* 
 import {
-  AMOUNT_HEALTH_ITEMS,
-  AMOUNT_BOARDS_ITEMS,
-  CARD_APPERANCE,
-  AMOUNT_WEAPONS_ITEMS,
+ amountHealthItems,
+  amountBoardsItems,
+  cardApperance,
+  amountWeaponsItems,
 } from "../../../shared/config/devConfig";
  */
 type CardSet = {
@@ -17,23 +17,23 @@ const getCardList = (config: ConfigType): CardSet[] => {
     {
       card: {
         name: "health",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_HEALTH_ITEMS,
+      amount: config.amountHealthItems,
     },
     {
       card: {
         name: "boards",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_BOARDS_ITEMS,
+      amount: config.amountBoardsItems,
     },
     {
       card: {
         name: "weapon",
-        apperance: config.CARD_APPERANCE,
+        apperance: config.cardApperance,
       },
-      amount: config.AMOUNT_WEAPONS_ITEMS,
+      amount: config.amountWeaponsItems,
     },
   ];
 };
@@ -123,10 +123,22 @@ const getListForCards = (
   const AMOUNT_EMPTY_CELLS = emptyCellsList.length;
   const amoutCurrentCards = currCardSet.amount;
 
+  const canSetAllCards = amoutCurrentCards < AMOUNT_EMPTY_CELLS;
+  const remainingAmountCards = AMOUNT_EMPTY_CELLS;
+
+  const afforableAmountCards = canSetAllCards
+    ? amoutCurrentCards
+    : remainingAmountCards;
+
+  if (!canSetAllCards) {
+    const cardName = currCardSet.card?.name;
+    console.error(`Cards "${cardName}" more than empty cell.`);
+  }
+
   /**
    * Is a list with number of indexes of empty cells.
    */
-  const keyList: Array<number> = new Array(amoutCurrentCards)
+  const keyList: Array<number> = new Array(afforableAmountCards)
     .fill(0)
     .reduce((prevkeyList) => {
       const randomNumber = getRandomNumber(prevkeyList, AMOUNT_EMPTY_CELLS);

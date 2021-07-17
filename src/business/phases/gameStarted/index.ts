@@ -1,6 +1,6 @@
 export { playerMove } from "./playerMove";
 export { takeCard } from "./takeCard";
-export { trownDice } from "./trownDice";
+export { rollDice } from "./rollDice";
 export { interactWithEnemy } from "../interactWithEnemy";
 export { applyCard } from "./applyCard";
 export { getPlayersOrder } from "./getPlayersOrder";

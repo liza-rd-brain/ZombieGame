@@ -6,7 +6,7 @@ export const waitingStart = (state: State, action: ActionType): State => {
     case "clickedStartButton": {
       return {
         ...state,
-        gameState: { ...state.gameState, type: "gameStarted.trownDice" },
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
       };
     }
     default:

@@ -1,5 +1,5 @@
-import { State } from "../../types";
-import { ActionType } from "../../reducer";
+import { State } from "../../../types";
+import { ActionType } from "../../../reducer";
 
 export const getPlayersOrder = (state: State, action: ActionType): State => {
   const numberCurrPlayer = state.activePlayerNumber;
@@ -16,7 +16,7 @@ export const getPlayersOrder = (state: State, action: ActionType): State => {
       return {
         ...state,
         activePlayerNumber: nextPlayersNumber,
-        gameState: { ...state.gameState, type: "gameStarted.trownDice" },
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
       };
     }
 

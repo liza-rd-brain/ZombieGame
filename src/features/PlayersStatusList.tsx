@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-/* import { AMOUNT_PLAYERS } from "../shared/config/devConfig"; */
+/* import {amountPlayers } from "../shared/config/devConfig"; */
 import { HealthSlots } from "../components/HealthSlots";
 import { Inventory } from "../components/Inventory";
 import { ConfigType } from "../business/types";
@@ -62,8 +62,8 @@ const InventorysWrap = styled.div`
 
 export const PlayersStatusList = (config: ConfigType) => {
   return (
-    <PlayersListWrap amount={config.AMOUNT_PLAYERS}>
-      {new Array(config.AMOUNT_PLAYERS).fill(0).map((player, index) => {
+    <PlayersListWrap amount={config.amountPlayers}>
+      {new Array(config.amountPlayers).fill(0).map((player, index) => {
         return (
           <React.Fragment key={index}>
             <CharacterAvatar>{`${index + 1}`}</CharacterAvatar>

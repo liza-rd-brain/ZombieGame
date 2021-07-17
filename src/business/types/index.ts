@@ -6,17 +6,24 @@ export type CoordItem = { hor: number; vert: number };
 export type MoveDirection = "top" | "bottom" | "left" | "right";
 export type MoveDirectionList = MoveDirection[];
 
-export type BarrierName = "wall" | "window" | "door" | null;
+/* export type BarrierName = "wall" | SwitchedBarrierName; */ /* | null; */
+export type SwitchedBarrierName = "window" | "door";
 /* export type BarrierDirection = "bottom" | "left"; */
 
 export type ContextMenuButtonType = "share" | "heal";
 
-export type BarrierItem = {
-  name: BarrierName;
+export type WallItem = {
+  name: "wall";
   direction: MoveDirection;
-  //TODO: Need to correct isOpen. Wall can`t be open!
+};
+
+export type SwitchedBarrierItem = {
+  name: SwitchedBarrierName;
+  direction: MoveDirection;
   isOpen: boolean;
 };
+
+export type BarrierItem = SwitchedBarrierItem | WallItem;
 
 export type BarrierList = BarrierItem[];
 
@@ -108,9 +115,42 @@ export type GameField = {
 
 export type GameFieldCells = Record<string, CellType>;
 
+export type State = {
+  gameState: GameState;
+  dice: number;
+  gameResult: "" | "Вы выиграли" | "Вы проиграли";
+  playerList: PlayerListType;
+  enemyList: EnemyListType;
+  gameField: GameField;
+  doEffect: TypeEffect;
+  activePlayerNumber: number;
+  _config: ConfigType;
+};
+
+export type GameState = GameStateTypes & {
+  coordOfAvailableCards: string[] | null;
+  coordOfAvailableCells: string[] | null;
+};
+
+export type ConfigType = {
+  //TODO: startCoord hasn`t contain barriers. It`s dont shange, maybe don`t need in config, but need initialCoord for player?
+  startCoord: CoordItem;
+  finishCoord: CoordItem;
+  amountPlayers: number;
+  initialPlayerHealth: number;
+  amountHealthItems: number;
+  amountBoardsItems: number;
+  amountWeaponsItems: number;
+  amountEnemies: number;
+  cardApperance: CardApperance;
+  playGridMode: PlayGridMode;
+  cellsBarrierList: CellsBarrierListType;
+};
+
 export type TypeEffect =
   | { type: "!openCard" }
   | { type: "!takeCard" }
+  | { type: "!checkApperanceInventoryCard" }
   | { type: "!changePlayerHealth" }
   | { type: "!deleteCard" }
   | { type: "!getNextPlayer" }
@@ -124,25 +164,9 @@ export type TypeEffect =
   | { type: "!checkAvailableNeighboringCards" }
   | null;
 
-export type State = {
-  gameState: GameState;
-  dice: number;
-  gameResult: "" | "Вы выиграли" | "Вы проиграли";
-  playerList: PlayerListType;
-  enemyList: EnemyListType;
-  gameField: GameField;
-  doEffect: TypeEffect;
-  activePlayerNumber: number;
-};
-
-export type GameState = GameStateTypes & {
-  coordOfAvailableCards: string[] | null;
-  coordOfAvailableCells: string[] | null;
-};
-
 export type GameStateTypes =
   | { type: "waitingStart" }
-  | { type: "gameStarted.trownDice" }
+  | { type: "gameStarted.rollDice" }
   | {
       type: "gameStarted.playerMove";
     }
@@ -160,19 +184,3 @@ export type GameStateTypes =
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
   | { type: "getEndScreen" };
-
-export type ConfigType = {
-  START_COORD: CoordItem;
-  FINISH_COORD: CoordItem;
-  AMOUNT_PLAYERS: number;
-  INITIAL_PLAYER_HEALTH: number;
-  AMOUNT_HEALTH_ITEMS: number;
-  AMOUNT_BOARDS_ITEMS: number;
-  AMOUNT_WEAPONS_ITEMS: number;
-  AMOUNT_ENEMIES: number;
-  MAX_HEALTH_AMOUNT: number;
-  CARD_APPERANCE: CardApperance;
-  PLAY_GRID_MODE: PlayGridMode;
-  CELLS_BARRIERS_LIST: CellsBarrierListType;
-  MOVE_DIRECTION_LIST: MoveDirectionList;
-};

@@ -1,17 +1,13 @@
-import {
-  State,
-  PlayerListType,
-  MoveDirection,
-  CellType,
-} from "../../business/types";
+import { State, MoveDirection } from "../../business/types";
 import { checkCellHasWall } from "../../business/phases/common";
+
 /** Cheking the cases when can't take the cell. In default we think that can. */
 export const canInteractWithCell = (
   state: State,
   nextPlayerCoord: string,
   direction: MoveDirection
 ) => {
-  const { gameField, playerList, dice } = state;
+  const { gameField } = state;
   const nextCellForPlayer = gameField.values[nextPlayerCoord];
   const nextCellOutOfGameField = nextCellForPlayer ? false : true;
 

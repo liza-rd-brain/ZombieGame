@@ -8,9 +8,6 @@ import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
 import { Barrier } from "./Barrier";
 
-import { config } from "../../business/initialState";
-/* import { PLAY_GRID_MODE } from "../../shared/config/devConfig"; */
-
 type CellApperance = {
   needHighlightning?: boolean;
   mode: PlayGridMode;
@@ -83,8 +80,14 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 `;
 
 export const getFilledPlayGrid = (state: State) => {
-  const { gameField, playerList, activePlayerNumber, gameState, enemyList } =
-    state;
+  const {
+    gameField,
+    playerList,
+    activePlayerNumber,
+    gameState,
+    enemyList,
+    _config,
+  } = state;
   const orderGameCells = gameField.order;
 
   const currPlayerCoord = playerList[activePlayerNumber].coord;
@@ -135,9 +138,9 @@ export const getFilledPlayGrid = (state: State) => {
                 <Wrap key={`${hor}.${vert}`}>
                   <CellItem
                     needHighlightning={needHighlightning}
-                    mode={config.PLAY_GRID_MODE}
+                    mode={_config.playGridMode}
                   >
-                    {config.PLAY_GRID_MODE === "cssStyle"
+                    {_config.playGridMode === "cssStyle"
                       ? `${hor}.${vert}`
                       : null}
                   </CellItem>
@@ -165,11 +168,11 @@ export const getFilledPlayGrid = (state: State) => {
           <Wrap key={`${hor}.${vert}`}>
             <CellItem
               needHighlightning={needHighlightning}
-              mode={config.PLAY_GRID_MODE}
+              mode={_config.playGridMode}
             >
               {cardList}
 
-              {config.PLAY_GRID_MODE === "cssStyle" ? `${hor}.${vert}` : null}
+              {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
             </CellItem>
             {cellValues.name === "commonCell" ? (
               <Barrier orderIndex={orderIndex}></Barrier>

@@ -29,6 +29,7 @@ const maxNumber = 4;
 export const Dice = () => {
   const dispatch = useDispatch();
   const [diceNumber] = useSelector((state: State) => [state.dice]);
+
   const getNumber = () => {
     return Math.floor(Math.random() * maxNumber + 1);
   };

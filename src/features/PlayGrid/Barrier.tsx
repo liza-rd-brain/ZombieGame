@@ -22,9 +22,6 @@ import {
   PlayGridMode,
 } from "../../business/types";
 
-import { config } from "../../business/initialState";
-/* import { PLAY_GRID_MODE } from "../../shared/config/devConfig"; */
-
 type WallType = {
   barrierItem?: BarrierItem;
   //TODO: поправить тип?
@@ -39,7 +36,11 @@ type BarrierCoord = {
 
 const CommonWall = styled.div<WallType>`
   pointer-events: ${(props) => {
-    if (props.barrierItem?.isOpen) {
+    if (
+      props.barrierItem &&
+      props.barrierItem.name !== "wall" &&
+      props.barrierItem.isOpen
+    ) {
       const needHighlightning = props.highlightningList?.find((item) => {
         return item === "bottom" || "left";
       });
@@ -121,7 +122,11 @@ const WallImage = styled(CommonWall)<WallType>`
 
     background-size: 44px;
     background-image: ${(props) => {
-      switch (props.barrierItem?.isOpen) {
+      switch (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         case true: {
           switch (props.barrierItem?.name) {
             case "door": {
@@ -194,7 +199,11 @@ const WallImage = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -213,7 +222,11 @@ const Wall = styled(CommonWall)<WallType>`
     pointer-events: none;
     height: ${(props) => {
       if (props.barrierItem?.direction === "bottom") {
-        if (props.barrierItem?.isOpen === false) {
+        if (
+          props.barrierItem &&
+          props.barrierItem.name !== "wall" &&
+          props.barrierItem.isOpen === false
+        ) {
           return "10px";
         } else {
           switch (props.barrierItem.name) {
@@ -246,7 +259,11 @@ const Wall = styled(CommonWall)<WallType>`
 
     width: ${(props) => {
       if (props.barrierItem?.direction === "left") {
-        if (props.barrierItem?.isOpen === false) {
+        if (
+          props.barrierItem &&
+          props.barrierItem.name !== "wall" &&
+          props.barrierItem.isOpen === false
+        ) {
           return "10px";
         } else {
           switch (props.barrierItem.name) {
@@ -269,7 +286,10 @@ const Wall = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        (props.barrierItem && props.barrierItem.name === "wall") ||
+        (props.barrierItem && props.barrierItem.isOpen)
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -341,7 +361,11 @@ const Wall = styled(CommonWall)<WallType>`
     }};
 
     background-color: ${(props) => {
-      if (props.barrierItem?.isOpen) {
+      if (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
         const needHighlightning = props.highlightningList?.find((item) => {
           return item === "bottom" || "left";
         });
@@ -357,11 +381,10 @@ const Wall = styled(CommonWall)<WallType>`
 
 export const Barrier = (props: BarrierCoord) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-
-  const { gameField, playerList, activePlayerNumber, gameState } = state;
+  const { gameField, playerList, activePlayerNumber, gameState, _config } =
+    useSelector((state: State) => ({
+      ...state,
+    }));
 
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
@@ -394,7 +417,7 @@ export const Barrier = (props: BarrierCoord) => {
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        switch (config.PLAY_GRID_MODE) {
+        switch (_config.playGridMode) {
           case "cssStyle": {
             return (
               <Wall
@@ -409,12 +432,13 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.PLAY_GRID_MODE}
+                mode={_config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (
                       cellType?.coord === orderIndex &&
                       cellType?.direction === barrier.direction &&
+                      barrier.name !== "wall" &&
                       barrier.isOpen === true
                     );
                   })
@@ -451,12 +475,13 @@ export const Barrier = (props: BarrierCoord) => {
                       )
                     : null
                 }
-                mode={config.PLAY_GRID_MODE}
+                mode={_config.playGridMode}
                 onClick={() => {
                   const canCloseHole = highlightningList.find((cellType) => {
                     return (
                       cellType?.coord === orderIndex &&
                       cellType?.direction === barrier.direction &&
+                      barrier.name !== "wall" &&
                       barrier.isOpen === true
                     );
                   })

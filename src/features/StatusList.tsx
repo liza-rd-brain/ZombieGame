@@ -62,7 +62,7 @@ const getTextStatus = (
   gameResult: string
 ) => {
   switch (gameState.type) {
-    case "gameStarted.trownDice":
+    case "gameStarted.rollDice":
       return "бросить кубик";
     case "gameStarted.playerMove":
       return "сделать ход";

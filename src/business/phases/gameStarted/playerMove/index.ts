@@ -21,6 +21,7 @@ export const playerMove = (state: State, action: ActionType): State => {
       return getPlayerMoveResult(state);
     }
 
+    //TODO: Rename to inventoryCardClicked-?!
     case "cardChoosed": {
       const typeofCard: TypeOfCard = action.payload.type;
       return getStateCardSelected(state, typeofCard);
