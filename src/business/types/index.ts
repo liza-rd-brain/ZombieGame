@@ -41,8 +41,10 @@ export type AvailableCellType = {
 
 export type AvailableCellListType = AvailableCellType[];
 
+export type PlayerName = "player" | "dead";
+
 export type PlayerCardType = {
-  name: "player";
+  name: PlayerName;
   health: number;
   orderNumber: number;
   coord: string;

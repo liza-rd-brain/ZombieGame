@@ -49,34 +49,57 @@ const getStatePlayetLoseHealth = (state: State): State => {
   const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
-  const newPlayerList = {
-    ...playerList,
-    [activePlayerNumber]: {
-      ...playerList[activePlayerNumber],
-      health: playerList[activePlayerNumber].health - 1,
-    },
-  };
+  switch (isPlayerAlive) {
+    case true: {
+      const newPlayerList = {
+        ...playerList,
+        [activePlayerNumber]: {
+          ...playerList[activePlayerNumber],
+          health: playerList[activePlayerNumber].health - 1,
+        },
+      };
 
-  if (isPlayerAlive) {
-    const newState: State = {
-      ...state,
-      dice: 0,
-      gameState: {
-        ...state.gameState,
-        type: "interactWithEnemy.throwBattleDice",
-      },
-      playerList: newPlayerList,
-    };
+      const newState: State = {
+        ...state,
+        dice: 0,
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.throwBattleDice",
+        },
+        playerList: newPlayerList,
+      };
 
-    return newState;
-  } else {
-    console.log(`игрок №${activePlayerNumber} погиб`);
+      return newState;
+    }
 
-    return {
-      ...state,
-      gameState: { ...state.gameState, type: "endGame" },
-      gameResult: "Вы проиграли",
-      doEffect: null,
-    };
+    case false: {
+      console.log(`игрок №${activePlayerNumber} погиб`);
+
+      const newPlayerList = {
+        ...playerList,
+        [activePlayerNumber]: {
+          ...playerList[activePlayerNumber],
+          health: playerList[activePlayerNumber].health - 1,
+          name: "dead",
+        },
+      };
+
+      const newState: State = {
+        ...state,
+        dice: 0,
+        gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
+        playerList: newPlayerList,
+        doEffect: { type: "!getNextPlayer" },
+      };
+
+      return newState;
+      /*     return {
+        ...state,
+        gameState: { ...state.gameState, type: "endGame" },
+        gameResult: "Вы проиграли",
+        doEffect: null,
+      };
+    } */
+    }
   }
 };
