@@ -1,4 +1,5 @@
 import { State } from "../../../types";
+import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
 
 /**
  * @returns  new state depending on the result of the player's movement.
@@ -55,14 +56,12 @@ export const getPlayerMoveResult = (state: State) => {
     }
 
     case isLastStepOfMove: {
-      /*  const changedPartState = switchToNextPlayer(); */
+      const newPlayerNumber = getNextPlayerNumber(state);
       const newState: State = {
         ...state,
         dice: 0,
-        gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
-        doEffect: {
-          type: "!getNextPlayer",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+        activePlayerNumber: newPlayerNumber,
       };
       return newState;
     }

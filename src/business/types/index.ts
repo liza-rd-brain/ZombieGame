@@ -43,13 +43,18 @@ export type AvailableCellListType = AvailableCellType[];
 
 export type PlayerName = "player" | "dead";
 
-export type PlayerCardType = {
-  name: PlayerName;
+export type PLayerType = {
+  name: "player";
   health: number;
   orderNumber: number;
   coord: string;
   inventory: InventoryType;
   showContextMenu?: boolean;
+};
+
+export type DeadPlayer = {
+  name: "dead";
+  orderNumber: number;
 };
 
 export type InventoryType = {
@@ -63,7 +68,8 @@ export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 
 export type CardItemList = CardItem[];
 
-export type PlayerListType = Record<string, PlayerCardType>;
+export type PlayerListType = Record<string, PLayerType>;
+export type DeadPlayerListType = Record<string, DeadPlayer>;
 
 export type EnemyCardType = {
   name: "enemy";
@@ -122,6 +128,7 @@ export type State = {
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   playerList: PlayerListType;
+  deadPlayerList?: DeadPlayerListType;
   enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
@@ -155,7 +162,6 @@ export type TypeEffect =
   | { type: "!checkApperanceInventoryCard" }
   | { type: "!changePlayerHealth" }
   | { type: "!deleteCard" }
-  | { type: "!getNextPlayer" }
   | { type: "!checkApperanceEnemyCard" }
   | { type: "!openEnemyCard" }
   | { type: "!throwBattleDice" }

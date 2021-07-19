@@ -89,8 +89,11 @@ export const PlayerStatus = () => {
     </InventoryStatus>
   );
 
-  switch (playerList[activePlayerNumber].name) {
-    case "player": {
+  const isAlivePlayer =
+    playerList[activePlayerNumber].name === "player" ? true : false;
+
+  switch (isAlivePlayer) {
+    case true: {
       return (
         <PlayerStatusCard>
           <Row>
@@ -101,7 +104,7 @@ export const PlayerStatus = () => {
         </PlayerStatusCard>
       );
     }
-    case "dead": {
+    case false: {
       return (
         <PlayerStatusCard>
           <Row>

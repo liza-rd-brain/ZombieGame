@@ -184,10 +184,7 @@ test("player make last step", () => {
     dice: 0,
     gameState: {
       ...commonStateBeforGetResult.gameState,
-      type: "gameStarted.getPlayersOrder",
-    },
-    doEffect: {
-      type: "!getNextPlayer",
+      type: "gameStarted.rollDice",
     },
   };
 

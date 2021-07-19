@@ -7,12 +7,11 @@ import {
   interactWithEnemy,
   applyCard,
 } from "./phases/gameStarted";
-import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import {
   ContextMenuButtonType,
   MoveDirection,
-  PlayerCardType,
+  PLayerType,
   State,
   TypeOfCard,
 } from "./types";
@@ -25,7 +24,6 @@ export type ActionType =
   | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteCard" }
-  | { type: "req-getNextPlayer" }
   | { type: "req-checkEnemyCard" }
   | { type: "req-openEnemyCard" }
   | { type: "req-getBattleResult" }
@@ -45,10 +43,10 @@ export type ActionType =
     }
   | { type: "clickedEnemy" }
   | { type: "req-removeEnemyCard" }
-  | { type: "clickedPlayer"; payload: PlayerCardType }
+  | { type: "clickedPlayer"; payload: PLayerType }
   | {
       type: "clickedContextMenu";
-      payload: { card: PlayerCardType; buttonType: ContextMenuButtonType };
+      payload: { card: PLayerType; buttonType: ContextMenuButtonType };
     };
 
 export const reducer = (
@@ -77,10 +75,6 @@ export const reducer = (
         }
         case "applyCard": {
           return applyCard(state, action);
-        }
-
-        case "getPlayersOrder": {
-          return getPlayersOrder(state, action);
         }
 
         default:

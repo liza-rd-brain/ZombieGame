@@ -1,4 +1,5 @@
-import { State } from "../../types";
+import { DeadPlayerListType, State } from "../../types";
+import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const getBattleResult = (state: State): State => {
   const { dice } = state;
@@ -45,7 +46,7 @@ const getStatePlayerRunsAway = (state: State): State => {
 };
 
 const getStatePlayetLoseHealth = (state: State): State => {
-  const { playerList, activePlayerNumber } = state;
+  const { playerList, activePlayerNumber, deadPlayerList } = state;
   const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
@@ -73,23 +74,33 @@ const getStatePlayetLoseHealth = (state: State): State => {
     }
 
     case false: {
+      const newPlayerListObj = Object.entries(playerList).filter(
+        (playerList) => {
+          const [index, player] = playerList;
+          return Number(index) !== activePlayerNumber;
+        }
+      );
+      const newPlayerList = Object.fromEntries(newPlayerListObj);
+
       console.log(`игрок №${activePlayerNumber} погиб`);
 
-      const newPlayerList = {
-        ...playerList,
+      const newDeadPlayerList: DeadPlayerListType = {
+        ...deadPlayerList,
         [activePlayerNumber]: {
-          ...playerList[activePlayerNumber],
-          health: playerList[activePlayerNumber].health - 1,
+          orderNumber: playerList[activePlayerNumber].orderNumber,
           name: "dead",
         },
       };
 
+      const newPlayerNumber = getNextPlayerNumber(state);
       const newState: State = {
         ...state,
         dice: 0,
-        gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+        deadPlayerList: newDeadPlayerList,
         playerList: newPlayerList,
-        doEffect: { type: "!getNextPlayer" },
+        activePlayerNumber: newPlayerNumber,
+        /*      doEffect: { type: "!getNextPlayer" }, */
       };
 
       return newState;

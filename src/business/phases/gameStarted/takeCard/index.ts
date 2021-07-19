@@ -8,6 +8,7 @@ import {
 import { ActionType } from "../../../reducer";
 import { openCard } from "./openCard";
 import { deleteCard } from "./deleteCard";
+import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
 
 export const takeCard = (state: State, action: ActionType): State => {
   switch (action.type) {
@@ -123,13 +124,13 @@ const getStateDeletedCard = (state: State): State => {
     },
   };
 
+  const newPlayerNumber = getNextPlayerNumber(state);
+
   return {
     ...state,
     gameField: newGameField,
-    gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
-    doEffect: {
-      type: "!getNextPlayer",
-    },
+    gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+    activePlayerNumber: newPlayerNumber,
     dice: 0,
   };
 };
