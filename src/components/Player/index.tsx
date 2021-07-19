@@ -3,18 +3,20 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
-  PlayerCardType,
   TypeOfCard,
   PlayerListType,
   GameState,
+  PlayerCardType,
 } from "../../business/types";
 
-import img from "./player.png";
+import player from "./player.png";
+import player2 from "./player2.png";
 import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
   needHighlightning?: boolean;
+  image: string;
 };
 
 type PlayerCardListType = {
@@ -67,9 +69,12 @@ const PlayerCard = styled.div<PlayerItem>`
   cursor: default;
   background-repeat: no-repeat;
   background-position: 0px;
-  background-image: url(${img});
   background-size: 44px;
   background-position: 3px;
+
+  background-image: ${(props) => {
+    return `url(${props.image})`;
+  }};
 
   z-index: ${(props) => {
     if (props.isCurrent) {
@@ -176,6 +181,8 @@ const Button = styled.button`
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
 
+  const playerImageList = [player, player2];
+
   const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
   const coordOfAvailableCards = gameState.coordOfAvailableCards;
@@ -222,6 +229,7 @@ export const PlayerList = (props: PlayerListItem) => {
           <PlayerCard
             id={`player${playerCardItem.orderNumber}`}
             key={index}
+            image={playerImageList[playerCardItem.orderNumber]}
             isCurrent={numberOfPlayer === playerCardItem.orderNumber}
             needHighlightning={calculateHighlightning(
               coordOfAvailableCards,
