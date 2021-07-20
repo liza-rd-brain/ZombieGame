@@ -89,8 +89,7 @@ export const PlayerStatus = () => {
     </InventoryStatus>
   );
 
-  const isAlivePlayer =
-    playerList[activePlayerNumber].name === "player" ? true : false;
+  const isAlivePlayer = playerList[activePlayerNumber] ? true : false;
 
   switch (isAlivePlayer) {
     case true: {

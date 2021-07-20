@@ -90,26 +90,11 @@ export const getFilledPlayGrid = (state: State) => {
   } = state;
   const orderGameCells = gameField.order;
 
-  const currPlayerCoord = playerList[activePlayerNumber].coord;
-
-  const availableCells =
-    state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
+  const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
-
-    const needHighlightning = availableCells?.includes(orderIndex);
-
-    const [playerX, playerY] = currPlayerCoord.split(".");
-
-    const isPhaseCardsSeparate =
-      gameState.type.includes("interactWithEnemy") ||
-      gameState.type === "gameStarted.takeCard";
-
-    //For creating portal
-    const isNeedSepareteCards =
-      isPhaseCardsSeparate && playerX === hor && playerY === vert;
 
     const cardList = (
       <>
@@ -122,54 +107,11 @@ export const getFilledPlayGrid = (state: State) => {
           : null}
       </>
     );
-
-    switch (isNeedSepareteCards) {
-      case true: {
-        const fieildElem = document.getElementById("field");
-
-        switch (fieildElem) {
-          case null: {
-            return null;
-          }
-
-          default: {
-            return (
-              <React.Fragment key={`${hor}.${vert}`}>
-                <Wrap key={`${hor}.${vert}`}>
-                  <CellItem
-                    needHighlightning={needHighlightning}
-                    mode={_config.playGridMode}
-                  >
-                    {_config.playGridMode === "cssStyle"
-                      ? `${hor}.${vert}`
-                      : null}
-                  </CellItem>
-                  {cellValues.name === "commonCell" ? (
-                    <Barrier orderIndex={orderIndex}></Barrier>
-                  ) : null}
-                </Wrap>
-
-                {ReactDOM.createPortal(
-                  <>
-                    <UnderlayerItem coordX={hor} coordY={vert}>
-                      {cardList}
-                    </UnderlayerItem>
-                  </>,
-                  fieildElem
-                )}
-              </React.Fragment>
-            );
-          }
-        }
-      }
-
+    switch (isCurrPlayerAlive) {
       case false: {
         return (
           <Wrap key={`${hor}.${vert}`}>
-            <CellItem
-              needHighlightning={needHighlightning}
-              mode={_config.playGridMode}
-            >
+            <CellItem needHighlightning={false} mode={_config.playGridMode}>
               {cardList}
 
               {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
@@ -180,9 +122,87 @@ export const getFilledPlayGrid = (state: State) => {
           </Wrap>
         );
       }
+      case true: {
+        const currPlayerCoord = playerList[activePlayerNumber].coord;
 
-      default: {
-        return null;
+        const availableCells =
+          state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
+        const needHighlightning = availableCells?.includes(orderIndex);
+
+        const [playerX, playerY] = currPlayerCoord.split(".");
+
+        const isPhaseCardsSeparate =
+          gameState.type.includes("interactWithEnemy") ||
+          gameState.type === "gameStarted.takeCard";
+
+        //For creating portal
+        const isNeedSepareteCards =
+          isPhaseCardsSeparate && playerX === hor && playerY === vert;
+
+        switch (isNeedSepareteCards) {
+          case true: {
+            const fieildElem = document.getElementById("field");
+
+            switch (fieildElem) {
+              case null: {
+                return null;
+              }
+
+              default: {
+                return (
+                  <React.Fragment key={`${hor}.${vert}`}>
+                    <Wrap key={`${hor}.${vert}`}>
+                      <CellItem
+                        needHighlightning={needHighlightning}
+                        mode={_config.playGridMode}
+                      >
+                        {_config.playGridMode === "cssStyle"
+                          ? `${hor}.${vert}`
+                          : null}
+                      </CellItem>
+                      {cellValues.name === "commonCell" ? (
+                        <Barrier orderIndex={orderIndex}></Barrier>
+                      ) : null}
+                    </Wrap>
+
+                    {ReactDOM.createPortal(
+                      <>
+                        <UnderlayerItem coordX={hor} coordY={vert}>
+                          {cardList}
+                        </UnderlayerItem>
+                      </>,
+                      fieildElem
+                    )}
+                  </React.Fragment>
+                );
+              }
+            }
+          }
+
+          case false: {
+            return (
+              <Wrap key={`${hor}.${vert}`}>
+                <CellItem
+                  needHighlightning={needHighlightning}
+                  mode={_config.playGridMode}
+                >
+                  {cardList}
+
+                  {_config.playGridMode === "cssStyle"
+                    ? `${hor}.${vert}`
+                    : null}
+                </CellItem>
+                {cellValues.name === "commonCell" ? (
+                  <Barrier orderIndex={orderIndex}></Barrier>
+                ) : null}
+              </Wrap>
+            );
+          }
+
+          default: {
+            return null;
+          }
+        }
       }
     }
   });
