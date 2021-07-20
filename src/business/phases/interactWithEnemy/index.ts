@@ -36,7 +36,7 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
         }
 
         case "clickedEnemy": {
-          return getStateClickedEnemy(state);
+          return getStateClickedEnemy(state, action);
         }
         case "req-removeEnemyCard": {
           return removeEnemyCard(state);

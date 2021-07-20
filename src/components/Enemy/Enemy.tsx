@@ -67,6 +67,7 @@ export const EnemyList = (props: EnemyArray) => {
             onClick={() => {
               dispatch({
                 type: "clickedEnemy",
+                payload: { enemyCard: enemyCard },
               });
             }}
           ></EnemyCard>

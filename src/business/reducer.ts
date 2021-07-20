@@ -10,11 +10,13 @@ import {
 import { endGame } from "./phases/endGame";
 import {
   ContextMenuButtonType,
+  EnemyCardType,
   MoveDirection,
   PLayerType,
   State,
   TypeOfCard,
 } from "./types";
+import { getPlayersOrder } from "./phases/gameStarted/getPlayersOrder";
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -41,13 +43,14 @@ export type ActionType =
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "clickedEnemy" }
+  | { type: "clickedEnemy"; payload: { enemyCard: EnemyCardType } }
   | { type: "req-removeEnemyCard" }
   | { type: "clickedPlayer"; payload: PLayerType }
   | {
       type: "clickedContextMenu";
       payload: { card: PLayerType; buttonType: ContextMenuButtonType };
-    };
+    }
+  | { type: "req-getNextPlayer" };
 
 export const reducer = (
   state: State = initialState,
@@ -75,6 +78,9 @@ export const reducer = (
         }
         case "applyCard": {
           return applyCard(state, action);
+        }
+        case "getPlayersOrder": {
+          return getPlayersOrder(state, action);
         }
 
         default:
