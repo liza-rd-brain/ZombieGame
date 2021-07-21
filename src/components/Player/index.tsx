@@ -28,6 +28,7 @@ type PlayerListItem = {
   playerList: PlayerListType;
   numberOfPlayer: number;
   gameState: GameState;
+  index: string;
 };
 
 type PortalType = {
@@ -184,20 +185,34 @@ export const PlayerList = (props: PlayerListItem) => {
   const playerImageList = [player, player2];
 
   const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
-  const isCurrPlayerAlive = playerList[numberOfPlayer] ? true : false;
 
   const needSplitCard = playerListOnCell.length > 1;
 
   const playerCardList = (
     <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
-        switch (isCurrPlayerAlive) {
+        const coordOfAvailableCards = gameState.coordOfAvailableCards;
+
+        const isActivePlayerAlive = playerList[numberOfPlayer] ? true : false;
+        switch (isActivePlayerAlive) {
           case false: {
-            return null;
+            return (
+              <PlayerCard
+                id={`player${playerCardItem.orderNumber}`}
+                key={index}
+                image={playerImageList[playerCardItem.orderNumber]}
+                isCurrent={numberOfPlayer === playerCardItem.orderNumber}
+                needHighlightning={false}
+                onClick={() =>
+                  dispatch({
+                    type: "clickedPlayer",
+                    payload: playerCardItem,
+                  })
+                }
+              ></PlayerCard>
+            );
           }
           case true: {
-            const coordOfAvailableCards = gameState.coordOfAvailableCards;
-
             const activePlayerCoord = playerList[numberOfPlayer].coord;
             const currPlayer = playerList[numberOfPlayer];
             const typeOfChosedCard = currPlayer.inventory.cardSelected;
@@ -215,7 +230,10 @@ export const PlayerList = (props: PlayerListItem) => {
                   activePlayerCoord
                 )}
                 onClick={() =>
-                  dispatch({ type: "clickedPlayer", payload: playerCardItem })
+                  dispatch({
+                    type: "clickedPlayer",
+                    payload: playerCardItem,
+                  })
                 }
               ></PlayerCard>
             );
@@ -230,7 +248,10 @@ export const PlayerList = (props: PlayerListItem) => {
                   onClick={() => {
                     dispatch({
                       type: "clickedContextMenu",
-                      payload: { card: playerCardItem, buttonType: "share" },
+                      payload: {
+                        card: playerCardItem,
+                        buttonType: "share",
+                      },
                     });
                   }}
                 >
