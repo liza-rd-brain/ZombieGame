@@ -17,15 +17,6 @@ export const playerMove = (state: State, action: ActionType): State => {
       return getStatePlayerMoved(state, direction);
     }
 
-    case "clickedEnemy": {
-      const { enemyList, deadPlayerList, activePlayerNumber } = state;
-      const currEnemyCard = action.payload.enemyCard;
-      const currEnemyCoord = currEnemyCard.coord;
-
-      return state;
-      //Need to pull this card to player?
-    }
-
     case "req-getPlayerMoveResult": {
       return getPlayerMoveResult(state);
     }

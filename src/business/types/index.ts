@@ -70,7 +70,7 @@ export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PLayerType>;
-export type DeadPlayerListType = Record<string, DeadPlayer>;
+export type DeadPlayerListType = Record<string, DeadPlayer> | null;
 
 export type EnemyCardType = {
   name: "enemy";

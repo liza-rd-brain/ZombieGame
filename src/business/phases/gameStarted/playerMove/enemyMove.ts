@@ -12,19 +12,41 @@ export const enemyMove = (state: State, action: ActionType): State => {
       return getAvailableCells(state);
     }
 
-    case "playerMoved": {
-      const direction = action.payload;
-      return getStatePlayerMoved(state, direction);
-    }
-
     case "clickedEnemy": {
       const { enemyList, deadPlayerList, activePlayerNumber } = state;
       const currEnemyCard = action.payload.enemyCard;
       const currEnemyCoord = currEnemyCard.coord;
-      console.log(currEnemyCoord);
 
-      return state;
+      if (deadPlayerList) {
+        const canPickEnemyCard = deadPlayerList[activePlayerNumber].card
+          ? false
+          : true;
+
+        switch (canPickEnemyCard) {
+          case false: {
+            return state;
+          }
+          case true: {
+            console.log(currEnemyCoord);
+            const newDeadPLayerList = {
+              ...deadPlayerList,
+              [activePlayerNumber]: {
+                ...deadPlayerList[activePlayerNumber],
+                card: currEnemyCard,
+              },
+            };
+            return { ...state, deadPlayerList: newDeadPLayerList };
+          }
+        }
+      } else {
+        return state;
+      }
+
       //Need to pull this card to player?
+    }
+    case "playerMoved": {
+      console.log("двигаем врага");
+      return state;
     }
 
     default: {

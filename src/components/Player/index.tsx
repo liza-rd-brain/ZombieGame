@@ -28,7 +28,6 @@ type PlayerListItem = {
   playerList: PlayerListType;
   numberOfPlayer: number;
   gameState: GameState;
-  index: string;
 };
 
 type PortalType = {
