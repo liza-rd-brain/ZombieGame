@@ -17,6 +17,7 @@ import {
   TypeOfCard,
 } from "./types";
 import { getPlayersOrder } from "./phases/gameStarted/getPlayersOrder";
+import { enemyMove } from "./phases/gameStarted/playerMove/enemyMove";
 
 export type ActionType =
   | { type: "clickedStartButton" }
@@ -78,6 +79,9 @@ export const reducer = (
         }
         case "applyCard": {
           return applyCard(state, action);
+        }
+        case "enemyMove": {
+          return enemyMove(state, action);
         }
         case "getPlayersOrder": {
           return getPlayersOrder(state, action);

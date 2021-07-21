@@ -55,6 +55,7 @@ export type PLayerType = {
 export type DeadPlayer = {
   name: "dead";
   orderNumber: number;
+  card: EnemyCardType | null;
 };
 
 export type InventoryType = {
@@ -128,7 +129,7 @@ export type State = {
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   playerList: PlayerListType;
-  deadPlayerList?: DeadPlayerListType;
+  deadPlayerList: DeadPlayerListType | null;
   enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
@@ -191,4 +192,7 @@ export type GameStateTypes =
   | { type: "interactWithEnemy.applyCard" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
-  | { type: "getEndScreen" };
+  | { type: "getEndScreen" }
+  | {
+      type: "gameStarted.enemyMove";
+    };

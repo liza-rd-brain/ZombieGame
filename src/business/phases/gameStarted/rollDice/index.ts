@@ -1,15 +1,33 @@
-import { State } from "../../../types";
+import { PlayerName, State } from "../../../types";
 import { ActionType } from "../../../reducer";
 
 export const rollDice = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "diceThrown": {
-      return {
-        ...state,
-        dice: action.payload,
-        gameState: { ...state.gameState, type: "gameStarted.playerMove" },
-        doEffect: { type: "!checkAvailableNeighboringCell" },
-      };
+      const typeOfPlayer: PlayerName = state.playerList[
+        state.activePlayerNumber
+      ]
+        ? "player"
+        : "dead";
+
+      switch (typeOfPlayer) {
+        case "dead": {
+          console.log("фаза выбрать врага");
+          return {
+            ...state,
+            dice: action.payload,
+            gameState: { ...state.gameState, type: "gameStarted.enemyMove" },
+          };
+        }
+        case "player": {
+          return {
+            ...state,
+            dice: action.payload,
+            gameState: { ...state.gameState, type: "gameStarted.playerMove" },
+            doEffect: { type: "!checkAvailableNeighboringCell" },
+          };
+        }
+      }
     }
 
     default:
