@@ -55,7 +55,7 @@ export type PLayerType = {
 export type DeadPlayer = {
   name: "dead";
   orderNumber: number;
-  card: EnemyCardType | null;
+  coord: string;
 };
 
 export type InventoryType = {

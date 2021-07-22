@@ -20,6 +20,7 @@ export const getStatePlayerMoved = (
   switch (canTakeNextCell) {
     case true: {
       const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
+
       const newState: State = {
         ...state,
         gameState: { ...state.gameState, coordOfAvailableCells: null },

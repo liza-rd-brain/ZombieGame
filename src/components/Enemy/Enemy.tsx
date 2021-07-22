@@ -100,14 +100,14 @@ export const EnemyList = (props: EnemyArray) => {
                 ></EnemyCard>
               );
             }
+
             case true: {
               return (
                 <EnemyCard
                   key={index}
                   {...enemyCard}
                   isCurrent={
-                    deadPlayerList[activePlayerNumber].card?.coord ===
-                    enemyCard.coord
+                    deadPlayerList[activePlayerNumber].coord === enemyCard.coord
                   }
                   onClick={() => {
                     dispatch({

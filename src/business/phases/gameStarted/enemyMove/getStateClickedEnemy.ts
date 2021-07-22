@@ -12,7 +12,7 @@ export const getStateClickedEnemy = (
       const currEnemyCoord = currEnemyCard.coord;
 
       if (deadPlayerList) {
-        const canPickEnemyCard = deadPlayerList[activePlayerNumber].card
+        const canPickEnemyCard = deadPlayerList[activePlayerNumber].coord
           ? false
           : true;
 
@@ -26,7 +26,7 @@ export const getStateClickedEnemy = (
               ...deadPlayerList,
               [activePlayerNumber]: {
                 ...deadPlayerList[activePlayerNumber],
-                card: currEnemyCard,
+                coord: currEnemyCoord,
               },
             };
             return { ...state, deadPlayerList: newDeadPLayerList };

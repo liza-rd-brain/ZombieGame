@@ -6,6 +6,7 @@ import { getStateCardSelected } from "../../common/getStateCardSelected";
 import { getAvailableCells } from "../playerMove/getAvailableCells";
 import { getStatePlayerMoved } from "../playerMove/getStatePlayerMoved";
 import { getStateClickedEnemy } from "./getStateClickedEnemy";
+import { getStateEnemyMoved } from "./getStateEnemyMoved";
 
 export const enemyMove = (state: State, action: ActionType): State => {
   switch (action.type) {
@@ -20,6 +21,8 @@ export const enemyMove = (state: State, action: ActionType): State => {
     }
 
     case "moveControlsClicked": {
+      /*       const direction = action.payload; */
+      return getStateEnemyMoved(state, action);
       console.log("двигаем врага");
       return state;
     }
