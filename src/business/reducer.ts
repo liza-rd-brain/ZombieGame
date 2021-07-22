@@ -22,7 +22,7 @@ import { enemyMove } from "./phases/gameStarted/enemyMove";
 export type ActionType =
   | { type: "clickedStartButton" }
   | { type: "diceThrown"; payload: number }
-  | { type: "playerMoved"; payload: MoveDirection }
+  | { type: "moveControlsClicked"; payload: MoveDirection }
   | { type: "req-openCard" }
   | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }

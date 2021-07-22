@@ -12,7 +12,7 @@ export const playerMove = (state: State, action: ActionType): State => {
       return getAvailableCells(state);
     }
 
-    case "playerMoved": {
+    case "moveControlsClicked": {
       const direction = action.payload;
       return getStatePlayerMoved(state, direction);
     }

@@ -19,7 +19,7 @@ export const enemyMove = (state: State, action: ActionType): State => {
       //Need to pull this card to player?
     }
 
-    case "playerMoved": {
+    case "moveControlsClicked": {
       console.log("двигаем врага");
       return state;
     }

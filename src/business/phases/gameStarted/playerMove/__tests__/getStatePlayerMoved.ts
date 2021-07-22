@@ -24,22 +24,22 @@ describe("player move on the field without Barriers", () => {
   const newPlayerCoordRight = "2.1";
 
   const stateMovedTop = reducer(stateBeforeMove, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "top",
   });
 
   const stateMovedBottom = reducer(stateBeforeMove, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "bottom",
   });
 
   const stateMovedLeft = reducer(stateBeforeMove, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "left",
   });
 
   const stateMovedRight = reducer(stateBeforeMove, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "right",
   });
 
@@ -119,12 +119,12 @@ describe("player can move through open windows and walls", () => {
   };
 
   const stateMovedLeft = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "right",
   });
 
   const stateMovedTop = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "top",
   });
 
@@ -183,12 +183,12 @@ describe("player can`t move through closed windows and doors", () => {
   };
 
   const stateMovedLeft = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "right",
   });
 
   const stateMovedTop = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "top",
   });
 
@@ -255,22 +255,22 @@ test("player can`t move through walls", () => {
   };
 
   const stateMovedTop = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "top",
   });
 
   const stateMovedBottom = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "bottom",
   });
 
   const stateMovedLeft = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "left",
   });
 
   const stateMovedRight = reducer(stateWithPlayerOnField, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "right",
   });
 
@@ -309,7 +309,7 @@ test("should check that player can`t move on cell if it last step and cell is oc
   };
 
   const stateAfterMove = reducer(stateBeforeLastStep, {
-    type: "playerMoved",
+    type: "moveControlsClicked",
     payload: "left",
   });
 

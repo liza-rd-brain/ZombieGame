@@ -70,7 +70,7 @@ export const MoveControls = () => {
       <Arrow
         direction={direction}
         onClick={() => {
-          dispatch({ type: "playerMoved", payload: direction });
+          dispatch({ type: "moveControlsClicked", payload: direction });
         }}
       >
         &gt;
