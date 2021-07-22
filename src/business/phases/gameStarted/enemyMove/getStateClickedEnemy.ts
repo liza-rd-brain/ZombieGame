@@ -1,17 +1,11 @@
-import { State, TypeOfCard } from "../../../types";
-
 import { ActionType } from "../../../reducer";
-import { getPlayerMoveResult } from "./getPlayerMoveResult";
-import { getStateCardSelected } from "../../common/getStateCardSelected";
-import { getAvailableCells } from "./getAvailableCells";
-import { getStatePlayerMoved } from "./getStatePlayerMoved";
+import { State } from "../../../types";
 
-export const enemyMove = (state: State, action: ActionType): State => {
+export const getStateClickedEnemy = (
+  state: State,
+  action: ActionType
+): State => {
   switch (action.type) {
-    case "req-checkAvailableNeighboringCell": {
-      return getAvailableCells(state);
-    }
-
     case "clickedEnemy": {
       const { enemyList, deadPlayerList, activePlayerNumber } = state;
       const currEnemyCard = action.payload.enemyCard;
@@ -41,14 +35,7 @@ export const enemyMove = (state: State, action: ActionType): State => {
       } else {
         return state;
       }
-
-      //Need to pull this card to player?
     }
-    case "playerMoved": {
-      console.log("двигаем врага");
-      return state;
-    }
-
     default: {
       return state;
     }
