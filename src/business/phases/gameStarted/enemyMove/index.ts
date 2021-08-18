@@ -5,7 +5,7 @@ import { getPlayerMoveResult } from "../playerMove/getPlayerMoveResult";
 import { getStateCardSelected } from "../../common/getStateCardSelected";
 import { getAvailableCells } from "../playerMove/getAvailableCells";
 import { getStatePlayerMoved } from "../playerMove/getStatePlayerMoved";
-import { getStateClickedEnemy } from "./getStateClickedEnemy";
+import { getStateEnemySelected } from "./getStateEnemySelected";
 import { getStateEnemyMoved } from "./getStateEnemyMoved";
 
 export const enemyMove = (state: State, action: ActionType): State => {
@@ -15,7 +15,7 @@ export const enemyMove = (state: State, action: ActionType): State => {
     }
 
     case "clickedEnemy": {
-      return getStateClickedEnemy(state, action);
+      return getStateEnemySelected(state, action);
 
       //Need to pull this card to player?
     }

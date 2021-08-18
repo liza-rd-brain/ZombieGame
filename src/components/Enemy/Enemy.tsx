@@ -11,9 +11,13 @@ type EnemyArray = {
   list: EnemyCardType[];
   activePlayerNumber: number;
   deadPlayerList: DeadPlayerListType;
+  coord: string;
 };
 
-type EnemyCardApperanceType = EnemyCardType & { isCurrent: boolean };
+type EnemyCardApperanceType = EnemyCardType & {
+  isCurrent: boolean;
+};
+
 const EnemyCard = styled.div<EnemyCardApperanceType>`
   ${StyledCommonCard}
 
@@ -49,6 +53,7 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
       }
     }
   }};
+
   &:before {
     content: "";
     position: absolute;
@@ -74,7 +79,7 @@ const EnemiesCardList = styled.div`
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
-  const { list: enemyArray, deadPlayerList, activePlayerNumber } = props;
+  const { list: enemyArray, deadPlayerList, activePlayerNumber, coord } = props;
   /*   const enemyArray = props.list; */
   return (
     <EnemiesCardList>
@@ -107,7 +112,7 @@ export const EnemyList = (props: EnemyArray) => {
                   key={index}
                   {...enemyCard}
                   isCurrent={
-                    deadPlayerList[activePlayerNumber].coord === enemyCard.coord
+                    deadPlayerList[activePlayerNumber].index === enemyCard.index
                   }
                   onClick={() => {
                     dispatch({

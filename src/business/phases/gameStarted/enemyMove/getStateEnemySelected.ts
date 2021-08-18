@@ -1,7 +1,7 @@
 import { ActionType } from "../../../reducer";
 import { State } from "../../../types";
 
-export const getStateClickedEnemy = (
+export const getStateEnemySelected = (
   state: State,
   action: ActionType
 ): State => {
@@ -9,10 +9,13 @@ export const getStateClickedEnemy = (
     case "clickedEnemy": {
       const { enemyList, deadPlayerList, activePlayerNumber } = state;
       const currEnemyCard = action.payload.enemyCard;
-      const currEnemyCoord = currEnemyCard.coord;
+
+      const currEnemyCoord = Object.keys(enemyList).find((key) => {
+        return enemyList[key].index === currEnemyCard.index;
+      });
 
       if (deadPlayerList) {
-        const canPickEnemyCard = deadPlayerList[activePlayerNumber].coord
+        const canPickEnemyCard = deadPlayerList[activePlayerNumber].index
           ? false
           : true;
 
@@ -21,12 +24,12 @@ export const getStateClickedEnemy = (
             return state;
           }
           case true: {
-            console.log(currEnemyCoord);
+            /*     console.log(currEnemyCoord); */
             const newDeadPLayerList = {
               ...deadPlayerList,
               [activePlayerNumber]: {
                 ...deadPlayerList[activePlayerNumber],
-                coord: currEnemyCoord,
+                index: currEnemyCard.index,
               },
             };
             return { ...state, deadPlayerList: newDeadPLayerList };
