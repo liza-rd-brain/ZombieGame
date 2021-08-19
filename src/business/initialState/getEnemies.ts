@@ -81,10 +81,10 @@ const getListOfEnemy = (enemiesCoords: string[], config: ConfigType) => {
     const enemyCard: EnemyCardType = {
       name: "enemy",
       power: 1,
-      index: index,
+      coord,
       apperance: config.cardApperance,
     };
-    return [coord, enemyCard];
+    return [index, enemyCard];
   });
 
   const enemiesObj: EnemyListType = Object.fromEntries(enemyList);

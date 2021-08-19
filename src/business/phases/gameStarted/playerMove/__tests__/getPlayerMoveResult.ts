@@ -243,6 +243,10 @@ const getStateWithCard = (
   }
 };
 
+/**   
+ * index: 1 took for quick test fixing
+
+*/
 const getStateWithEnemy = (
   initialState: State,
   apperance: CardApperance
@@ -256,10 +260,10 @@ const getStateWithEnemy = (
       },
     },
     enemyList: {
-      [1.1]: {
+      [1]: {
         name: "enemy",
         power: 1,
-        index: 1,
+        coord: "1.1",
         apperance: apperance,
       },
     },

@@ -11,11 +11,12 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
       if (deadPlayerList) {
         const currCardIndex = deadPlayerList[activePlayerNumber].index;
 
-        const prevEnemyCoord = Object.keys(enemyList).find((key) => {
-          return (
-            enemyList[key].index === deadPlayerList[activePlayerNumber].index
-          );
-        });
+        const prevEnemyCoord = enemyList[currCardIndex].coord;
+
+        /*      const prevEnemyCoord = Object.keys(enemyList).find((key) => {
+          const seekNumber = deadPlayerList[activePlayerNumber].index;
+          return Number(key) === deadPlayerList[activePlayerNumber].index;
+        }); */
         /* const prevEnemyCoord = deadPlayerList[activePlayerNumber].coord; */
 
         if (prevEnemyCoord) {
@@ -23,9 +24,9 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
           //TODO: Add check canTakeNextCell
           const enemyListArray = Object.entries(enemyList).map((enemyItem) => {
             const [key, enemy] = enemyItem;
-            if (currCardIndex === enemyList[key].index) {
+            if (Number(currCardIndex) === Number(key)) {
               const newEnemy = { ...enemy, coord: nextEnemyCoord };
-              return [nextEnemyCoord, newEnemy];
+              return [key, newEnemy];
             } else return enemyItem;
           });
 

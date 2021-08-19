@@ -12,18 +12,29 @@ export const getEnemyList = (
   deadPlayerList: DeadPlayerListType,
   activePlayerNumber: number
 ) => {
-  let enemiesArr: EnemyCardType[] = [];
+  /*   let enemiesArr: EnemyCardType[] = []; */
 
-  for (let enemiesKey in enemiesList) {
-    if (enemiesKey === index) {
-      enemiesArr.push(enemiesList[enemiesKey]);
+  /**
+   * Need to draw enemy if current coord of cell has the same coord
+   */
+
+  const enemiesArr = Object.entries(enemiesList).map(([string, enemyCard]) => {
+    if (enemyCard.coord === index) {
+      return enemyCard;
     }
-  }
+  });
+
+  /*   console.log(enemiesArr); */
+
+  const filteredEnemiesArr = Object.entries(enemiesList).filter(
+    ([string, enemyCard]) => enemyCard.coord === index
+  );
+  console.log(filteredEnemiesArr);
 
   if (enemiesArr.length > 0) {
     return (
       <EnemyList
-        list={enemiesArr}
+        list={filteredEnemiesArr}
         activePlayerNumber={activePlayerNumber}
         deadPlayerList={deadPlayerList}
         coord={index}

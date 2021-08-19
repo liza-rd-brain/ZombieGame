@@ -75,11 +75,11 @@ export type DeadPlayerListType = Record<string, DeadPlayer> | null;
 export type EnemyCardType = {
   name: "enemy";
   power: number;
-  index: number;
+  coord: string;
   apperance: CardApperance | "defeated";
 };
 
-export type EnemyListType = Record<string, EnemyCardType>;
+export type EnemyListType = Record<number, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";

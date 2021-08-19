@@ -10,11 +10,17 @@ export const getStateEnemySelected = (
       const { enemyList, deadPlayerList, activePlayerNumber } = state;
       const currEnemyCard = action.payload.enemyCard;
 
-      const currEnemyCoord = Object.keys(enemyList).find((key) => {
-        return enemyList[key].index === currEnemyCard.index;
+      /**
+       * we should compare indexes. They doesnt change!!!
+       */
+      const currEnemyIndex = Object.keys(enemyList).find((key) => {
+        return enemyList[Number(key)].coord === currEnemyCard.coord;
       });
 
       if (deadPlayerList) {
+        /**
+         * Choose enemy once!
+         */
         const canPickEnemyCard = deadPlayerList[activePlayerNumber].index
           ? false
           : true;
@@ -29,7 +35,7 @@ export const getStateEnemySelected = (
               ...deadPlayerList,
               [activePlayerNumber]: {
                 ...deadPlayerList[activePlayerNumber],
-                index: currEnemyCard.index,
+                index: currEnemyIndex,
               },
             };
             return { ...state, deadPlayerList: newDeadPLayerList };

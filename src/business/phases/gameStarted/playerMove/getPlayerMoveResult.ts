@@ -6,7 +6,7 @@ import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
  */
 
 export const getPlayerMoveResult = (state: State) => {
-  const { gameField, playerList, activePlayerNumber, dice } = state;
+  const { gameField, playerList, activePlayerNumber, dice, enemyList } = state;
 
   const newPlayerCoord = playerList[activePlayerNumber].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];
@@ -18,8 +18,14 @@ export const getPlayerMoveResult = (state: State) => {
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
 
+  const hasCurrCoordEnemy = Object.entries(enemyList).find(
+    ([index, enemyCard]) => {
+      return enemyCard.coord === newPlayerCoord;
+    }
+  );
+
   const metEnemyCard =
-    newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]
+    newCellWithPlayer?.name === "commonCell" && hasCurrCoordEnemy
       ? true
       : false;
 

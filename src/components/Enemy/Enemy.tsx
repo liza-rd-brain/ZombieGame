@@ -8,7 +8,7 @@ import zombie from "./zombie.png";
 import zombie_defeated from "./zombie_defeated.png";
 
 type EnemyArray = {
-  list: EnemyCardType[];
+  list: [string, EnemyCardType][];
   activePlayerNumber: number;
   deadPlayerList: DeadPlayerListType;
   coord: string;
@@ -83,7 +83,7 @@ export const EnemyList = (props: EnemyArray) => {
   /*   const enemyArray = props.list; */
   return (
     <EnemiesCardList>
-      {enemyArray.map((enemyCard, index) => {
+      {enemyArray.map(([index, enemyCard]) => {
         if (deadPlayerList) {
           const isActivePlayerDead = deadPlayerList[activePlayerNumber]
             ? true
@@ -111,8 +111,10 @@ export const EnemyList = (props: EnemyArray) => {
                 <EnemyCard
                   key={index}
                   {...enemyCard}
+                  /*  isCurrent={false} */
                   isCurrent={
-                    deadPlayerList[activePlayerNumber].index === enemyCard.index
+                    Number(deadPlayerList[activePlayerNumber].index) ===
+                    Number(index)
                   }
                   onClick={() => {
                     dispatch({
