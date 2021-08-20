@@ -40,6 +40,7 @@ export const getEnemyMoveResult = (state: State) => {
             gameState: { ...state.gameState, type: "interactWithEnemy" },
             doEffect: { type: "!checkApperanceEnemyCard" },
             activePlayerNumber: indexMetPlayerCard,
+            deadPlayerList: { ...deadPlayerList, [activePlayerNumber]: null },
           };
           return newState;
         } else {
