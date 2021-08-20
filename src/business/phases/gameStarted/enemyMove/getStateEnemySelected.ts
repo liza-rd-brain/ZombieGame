@@ -21,7 +21,7 @@ export const getStateEnemySelected = (
         /**
          * Choose enemy once!
          */
-        const canPickEnemyCard = deadPlayerList[activePlayerNumber].index
+        const canPickEnemyCard = deadPlayerList[activePlayerNumber]?.index
           ? false
           : true;
 

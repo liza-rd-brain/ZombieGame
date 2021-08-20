@@ -30,9 +30,9 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
 
           return {
             ...state,
-            dice: state.dice - 1,
+            gameState: { ...state.gameState, coordOfAvailableCells: null },
             enemyList: newEnemyList,
-            doEffect: { type: "!checkAvailableNeighboringCell" },
+            doEffect: { type: "!getPlayerMoveResult" },
           };
         }
       } else {
