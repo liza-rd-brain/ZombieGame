@@ -194,5 +194,8 @@ export type GameStateTypes =
   | { type: "endGame" }
   | { type: "getEndScreen" }
   | {
-      type: "gameStarted.enemyMove";
+      type: "enemyMove";
+    }
+  | {
+      type: "enemyMove.chooseEnemy";
     };

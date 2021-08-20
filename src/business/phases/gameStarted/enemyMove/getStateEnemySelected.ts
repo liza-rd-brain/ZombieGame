@@ -38,7 +38,14 @@ export const getStateEnemySelected = (
                 index: currEnemyIndex,
               },
             };
-            return { ...state, deadPlayerList: newDeadPLayerList };
+            return {
+              ...state,
+              gameState: {
+                ...state.gameState,
+                type: "enemyMove",
+              },
+              deadPlayerList: newDeadPLayerList,
+            };
           }
         }
       } else {

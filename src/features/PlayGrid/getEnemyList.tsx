@@ -24,12 +24,9 @@ export const getEnemyList = (
     }
   });
 
-  /*   console.log(enemiesArr); */
-
   const filteredEnemiesArr = Object.entries(enemiesList).filter(
     ([string, enemyCard]) => enemyCard.coord === index
   );
-  console.log(filteredEnemiesArr);
 
   if (enemiesArr.length > 0) {
     return (

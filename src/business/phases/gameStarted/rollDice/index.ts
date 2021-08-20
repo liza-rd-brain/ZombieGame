@@ -16,7 +16,10 @@ export const rollDice = (state: State, action: ActionType): State => {
           return {
             ...state,
             dice: action.payload,
-            gameState: { ...state.gameState, type: "gameStarted.enemyMove" },
+            gameState: {
+              ...state.gameState,
+              type: "enemyMove.chooseEnemy",
+            },
           };
         }
         case "player": {

@@ -109,7 +109,12 @@ const getTextStatus = (
 
     /*   case "gameStarted.interactWithEnemy.fightOrKeepBattle":
       return "применить  оружие или бросить кубик"; */
-
+    case "enemyMove.chooseEnemy": {
+      return "выбрать карточку врага";
+    }
+    case "enemyMove": {
+      return "передвинуть карточку врага";
+    }
     case "endGame":
       return gameResult;
     default:

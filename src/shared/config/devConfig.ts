@@ -10,7 +10,7 @@ export const DEV_CONFIG: ConfigType = {
   initialPlayerHealth: 1,
   amountHealthItems: 0,
   amountBoardsItems: 0,
-  amountWeaponsItems: 30,
+  amountWeaponsItems: 0,
   amountEnemies: 60,
   cardApperance: "open",
   playGridMode: "cssStyle",

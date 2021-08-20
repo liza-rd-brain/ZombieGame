@@ -13,12 +13,6 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
 
         const prevEnemyCoord = enemyList[currCardIndex].coord;
 
-        /*      const prevEnemyCoord = Object.keys(enemyList).find((key) => {
-          const seekNumber = deadPlayerList[activePlayerNumber].index;
-          return Number(key) === deadPlayerList[activePlayerNumber].index;
-        }); */
-        /* const prevEnemyCoord = deadPlayerList[activePlayerNumber].coord; */
-
         if (prevEnemyCoord) {
           const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
           //TODO: Add check canTakeNextCell
@@ -33,8 +27,10 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
           const newEnemyList = Object.fromEntries(enemyListArray);
 
           console.log(newEnemyList);
+
           return {
             ...state,
+            dice: state.dice - 1,
             enemyList: newEnemyList,
           };
         }

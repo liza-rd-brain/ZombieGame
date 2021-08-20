@@ -80,9 +80,7 @@ export const reducer = (
         case "applyCard": {
           return applyCard(state, action);
         }
-        case "enemyMove": {
-          return enemyMove(state, action);
-        }
+
         case "getPlayersOrder": {
           return getPlayersOrder(state, action);
         }
@@ -91,6 +89,11 @@ export const reducer = (
           return state;
       }
     }
+
+    case "enemyMove": {
+      return enemyMove(state, action);
+    }
+
     case "interactWithEnemy": {
       return interactWithEnemy(state, action);
     }
