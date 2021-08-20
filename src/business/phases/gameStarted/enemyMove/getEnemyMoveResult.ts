@@ -23,24 +23,27 @@ export const getEnemyMoveResult = (state: State) => {
     const newCellWithEnemy = gameField.values[deadPLayerCoord];
     const isLastStepOfMove = dice === 1;
 
-    const metPlayerCard = Object.entries(playerList).find(
-      ([index, playerCard]) => {
-        return playerCard.coord === deadPLayerCoord;
-      }
-    )
-      ? true
-      : false;
+    const indexMetPlayerCard = Object.values(playerList).find((playerItem) => {
+      return playerItem.coord === deadPLayerCoord;
+    })?.orderNumber;
+
+    const metPlayerCard = !indexMetPlayerCard ? false : true;
 
     // TODO: Is flat switch okey? Or i need it nested?!
     switch (true) {
       case metPlayerCard: {
-        const newState: State = {
-          ...state,
-          dice: state.dice - 1,
-          gameState: { ...state.gameState, type: "interactWithEnemy" },
-          doEffect: { type: "!checkApperanceEnemyCard" },
-        };
-        return newState;
+        if (indexMetPlayerCard) {
+          const newState: State = {
+            ...state,
+            dice: state.dice - 1,
+            gameState: { ...state.gameState, type: "interactWithEnemy" },
+            doEffect: { type: "!checkApperanceEnemyCard" },
+            activePlayerNumber: indexMetPlayerCard,
+          };
+          return newState;
+        } else {
+          return state;
+        }
       }
 
       case isLastStepOfMove: {

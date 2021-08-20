@@ -1,5 +1,5 @@
 import { ActionType } from "../../../reducer";
-import { State } from "../../../types";
+import { EnemyListType, State } from "../../../types";
 import { getNextPlayerCoord } from "../../common";
 
 export const getStateEnemyMoved = (state: State, action: ActionType): State => {
@@ -24,7 +24,8 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
             } else return enemyItem;
           });
 
-          const newEnemyList = Object.fromEntries(enemyListArray);
+          const newEnemyList: EnemyListType =
+            Object.fromEntries(enemyListArray);
 
           console.log(newEnemyList);
 
