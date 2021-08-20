@@ -3,7 +3,7 @@ import { State, TypeOfCard } from "../../../types";
 import { ActionType } from "../../../reducer";
 import { getPlayerMoveResult } from "../playerMove/getPlayerMoveResult";
 import { getStateCardSelected } from "../../common/getStateCardSelected";
-import { getAvailableCells } from "../playerMove/getAvailableCells";
+import { getAvailableCells } from "./getAvailableCells";
 import { getStatePlayerMoved } from "../playerMove/getStatePlayerMoved";
 import { getStateEnemySelected } from "./getStateEnemySelected";
 import { getStateEnemyMoved } from "./getStateEnemyMoved";

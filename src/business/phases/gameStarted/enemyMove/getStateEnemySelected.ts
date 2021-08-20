@@ -38,12 +38,14 @@ export const getStateEnemySelected = (
                 index: currEnemyIndex,
               },
             };
+
             return {
               ...state,
               gameState: {
                 ...state.gameState,
                 type: "enemyMove",
               },
+              doEffect: { type: "!checkAvailableNeighboringCell" },
               deadPlayerList: newDeadPLayerList,
             };
           }

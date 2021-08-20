@@ -113,11 +113,18 @@ export const getFilledPlayGrid = (state: State) => {
           : null}
       </>
     );
+
+    const availableCells = state.gameState.coordOfAvailableCells;
+    const needHighlightning = availableCells?.includes(orderIndex);
+
     switch (isCurrPlayerAlive) {
       case false: {
         return (
           <Wrap key={`${hor}.${vert}`}>
-            <CellItem needHighlightning={false} mode={_config.playGridMode}>
+            <CellItem
+              needHighlightning={needHighlightning}
+              mode={_config.playGridMode}
+            >
               {cardList}
 
               {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
@@ -129,12 +136,13 @@ export const getFilledPlayGrid = (state: State) => {
         );
       }
       case true: {
-        const currPlayerCoord = playerList[activePlayerNumber].coord;
+        /*   
 
         const availableCells =
           state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
-        const needHighlightning = availableCells?.includes(orderIndex);
 
+        const needHighlightning = availableCells?.includes(orderIndex); */
+        const currPlayerCoord = playerList[activePlayerNumber].coord;
         const [playerX, playerY] = currPlayerCoord.split(".");
 
         const isPhaseCardsSeparate =

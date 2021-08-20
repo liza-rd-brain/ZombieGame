@@ -32,6 +32,7 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
             ...state,
             dice: state.dice - 1,
             enemyList: newEnemyList,
+            doEffect: { type: "!checkAvailableNeighboringCell" },
           };
         }
       } else {
