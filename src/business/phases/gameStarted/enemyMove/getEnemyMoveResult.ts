@@ -27,12 +27,13 @@ export const getEnemyMoveResult = (state: State) => {
       return playerItem.coord === deadPLayerCoord;
     })?.orderNumber;
 
-    const metPlayerCard = !indexMetPlayerCard ? false : true;
+    const metPlayerCard =
+      indexMetPlayerCard || indexMetPlayerCard === 0 ? true : false;
 
     // TODO: Is flat switch okey? Or i need it nested?!
     switch (true) {
       case metPlayerCard: {
-        if (indexMetPlayerCard) {
+        if (indexMetPlayerCard || indexMetPlayerCard === 0) {
           const newState: State = {
             ...state,
             dice: state.dice - 1,
