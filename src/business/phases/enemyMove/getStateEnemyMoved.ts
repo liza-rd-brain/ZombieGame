@@ -13,30 +13,43 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
 
         const prevEnemyCoord = enemyList[currCardIndex].coord;
 
-        if (prevEnemyCoord) {
-          const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
+        const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
 
-          //TODO: Add check canTakeNextCell
+        //TODO: Add check canTakeNextCell
 
-          const enemyListArray = Object.entries(enemyList).map((enemyItem) => {
-            const [key, enemy] = enemyItem;
-            if (Number(currCardIndex) === Number(key)) {
-              const newEnemy = { ...enemy, coord: nextEnemyCoord };
-              return [key, newEnemy];
-            } else return enemyItem;
-          });
+        const canTakeNextCell =
+          state.gameState.coordOfAvailableCells?.includes(nextEnemyCoord);
+        switch (canTakeNextCell) {
+          case true: {
+            const enemyListArray = Object.entries(enemyList).map(
+              (enemyItem) => {
+                const [key, enemy] = enemyItem;
+                if (Number(currCardIndex) === Number(key)) {
+                  const newEnemy = { ...enemy, coord: nextEnemyCoord };
+                  return [key, newEnemy];
+                } else return enemyItem;
+              }
+            );
 
-          const newEnemyList: EnemyListType =
-            Object.fromEntries(enemyListArray);
+            const newEnemyList: EnemyListType =
+              Object.fromEntries(enemyListArray);
 
-          console.log(newEnemyList);
+            console.log(newEnemyList);
 
-          return {
-            ...state,
-            gameState: { ...state.gameState, coordOfAvailableCells: null },
-            enemyList: newEnemyList,
-            doEffect: { type: "!getPlayerMoveResult" },
-          };
+            return {
+              ...state,
+              gameState: { ...state.gameState, coordOfAvailableCells: null },
+              enemyList: newEnemyList,
+              doEffect: { type: "!getPlayerMoveResult" },
+            };
+          }
+          case false: {
+            return state;
+          }
+
+          default: {
+            return state;
+          }
         }
       } else {
         return state;

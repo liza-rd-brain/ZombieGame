@@ -29,9 +29,11 @@ export const getStatePlayerMoved = (
       };
       return newState;
     }
+
     case false: {
       return state;
     }
+
     default: {
       return state;
     }
