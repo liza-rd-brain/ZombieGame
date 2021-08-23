@@ -1,6 +1,6 @@
-import { State, TypeOfCard } from "../../../types";
+import { State, TypeOfCard } from "../../types";
 
-import { ActionType } from "../../../reducer";
+import { ActionType } from "../../reducer";
 
 import { getAvailableCells } from "./getAvailableCells";
 import { getStateEnemySelected } from "./getStateEnemySelected";

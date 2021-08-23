@@ -1,5 +1,5 @@
-import { ActionType } from "../../../reducer";
-import { State } from "../../../types";
+import { ActionType } from "../../reducer";
+import { State } from "../../types";
 
 export const getStateEnemySelected = (
   state: State,

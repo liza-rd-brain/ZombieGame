@@ -1,6 +1,6 @@
-import { ActionType } from "../../../reducer";
-import { EnemyListType, State } from "../../../types";
-import { getNextPlayerCoord } from "../../common";
+import { ActionType } from "../../reducer";
+import { EnemyListType, State } from "../../types";
+import { getNextPlayerCoord } from "../common";
 
 export const getStateEnemyMoved = (state: State, action: ActionType): State => {
   switch (action.type) {
@@ -15,7 +15,9 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
 
         if (prevEnemyCoord) {
           const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
+
           //TODO: Add check canTakeNextCell
+
           const enemyListArray = Object.entries(enemyList).map((enemyItem) => {
             const [key, enemy] = enemyItem;
             if (Number(currCardIndex) === Number(key)) {

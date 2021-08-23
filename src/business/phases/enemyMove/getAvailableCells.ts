@@ -1,5 +1,5 @@
-import { AvailableCellListType, State } from "../../../types";
-import { getNeighboringCellList } from "../../common";
+import { AvailableCellListType, State } from "../../types";
+import { getNeighboringCellList } from "../common";
 import { checkCanTakeCell } from "./checkCanTakeCell";
 
 /**

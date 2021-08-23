@@ -17,7 +17,7 @@ import {
   TypeOfCard,
 } from "./types";
 import { getPlayersOrder } from "./phases/gameStarted/getPlayersOrder";
-import { enemyMove } from "./phases/gameStarted/enemyMove";
+import { enemyMove } from "./phases/enemyMove";
 
 export type ActionType =
   | { type: "clickedStartButton" }

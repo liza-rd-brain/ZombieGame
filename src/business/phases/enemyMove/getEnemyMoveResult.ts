@@ -1,5 +1,5 @@
-import { State } from "../../../types";
-import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
+import { State } from "../../types";
+import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 /**
  * @returns  new state depending on the result of the enemys's movement.
@@ -37,8 +37,10 @@ export const getEnemyMoveResult = (state: State) => {
           const newState: State = {
             ...state,
             dice: state.dice - 1,
-            gameState: { ...state.gameState, type: "interactWithEnemy" },
-            doEffect: { type: "!checkApperanceEnemyCard" },
+            gameState: {
+              ...state.gameState,
+              type: "interactWithEnemy.throwBattleDice",
+            },
             activePlayerNumber: indexMetPlayerCard,
             deadPlayerList: { ...deadPlayerList, [activePlayerNumber]: null },
           };

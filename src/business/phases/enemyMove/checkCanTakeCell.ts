@@ -3,9 +3,9 @@ import {
   PlayerListType,
   MoveDirection,
   EnemyListType,
-} from "../../../types";
+} from "../../types";
 
-import { checkCellHasWall } from "../../common/checkCellHasWall";
+import { checkCellHasWall } from "../common/checkCellHasWall";
 /*
  * Cheking the cases when can't take the cell. In default we think that can.
  */
