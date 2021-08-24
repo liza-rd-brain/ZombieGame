@@ -8,8 +8,22 @@ export const checkCellHasWall = (
   newPlayerCoord: string,
   direction: MoveDirection
 ) => {
-  const { playerList, activePlayerNumber, gameField } = state;
-  const currCellCoord = playerList[activePlayerNumber].coord;
+  const {
+    playerList,
+    activePlayerNumber,
+    gameField,
+    deadPlayerList,
+    enemyList,
+  } = state;
+
+  /**
+   * Choose alive or dead player
+   */
+  const currCellCoord =
+    deadPlayerList && deadPlayerList[activePlayerNumber]
+      ? enemyList[deadPlayerList[activePlayerNumber].index].coord
+      : playerList[activePlayerNumber].coord;
+
   const currCell = gameField.values[currCellCoord];
   const nextCell = gameField.values[newPlayerCoord];
   const oppositeDirection = getOppositeDirection(direction);

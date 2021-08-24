@@ -27,7 +27,6 @@ type WallType = {
   //TODO: поправить тип?
   highlightningList: (MoveDirection | null)[] | null;
   onClick: Function;
-  mode: PlayGridMode;
 };
 
 type BarrierCoord = {
@@ -388,124 +387,119 @@ export const Barrier = (props: BarrierCoord) => {
 
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
-  const currPlayerCoord = playerList[activePlayerNumber].coord;
-
-  const neighboringCellList = getNeighboringCellList(
-    currPlayerCoord,
-    gameField
-  );
-
-  const neighboringCellListCoord = neighboringCellList.map((cellItem) => {
-    return cellItem.coord;
-  });
-
-  const checkCellListCoord = neighboringCellListCoord.concat(currPlayerCoord);
-
-  const needCheckHighlightning = checkCellListCoord.find(
-    (coord) => orderIndex === coord
-  );
-
-  const highlightningList = getHighlightningList(
-    neighboringCellList,
-    gameField,
-    currPlayerCoord,
-    gameState,
-    playerList,
-    activePlayerNumber
-  );
+  const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
 
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        switch (_config.playGridMode) {
-          case "cssStyle": {
-            return (
-              <Wall
-                key={barrier.direction}
-                barrierItem={barrier}
-                highlightningList={
-                  needCheckHighlightning
-                    ? getHigtlightningDirection(
-                        highlightningList,
-                        orderIndex,
-                        barrier.direction
-                      )
-                    : null
-                }
-                mode={_config.playGridMode}
-                onClick={() => {
-                  const canCloseHole = highlightningList.find((cellType) => {
-                    return (
-                      cellType?.coord === orderIndex &&
-                      cellType?.direction === barrier.direction &&
-                      barrier.name !== "wall" &&
-                      barrier.isOpen === true
-                    );
-                  })
-                    ? true
-                    : false;
-                  if (canCloseHole) {
-                    dispatch({
-                      type: "req-fillHole",
-                      payload: {
-                        coord: orderIndex,
-                        direction: barrier.direction,
-                      },
-                    });
-                  } else {
-                    return null;
+        const getWallItem = (
+          barrier: BarrierItem,
+          mode: PlayGridMode,
+          highlightningList: any,
+          onClickHandler: any
+        ) => {
+          switch (mode) {
+            case "cssStyle": {
+              return (
+                <Wall
+                  key={barrier.direction}
+                  barrierItem={barrier}
+                  highlightningList={
+                    highlightningList ? highlightningList() : null
                   }
-                }}
-              >
-                {" "}
-              </Wall>
-            );
-          }
-          case "image": {
-            return (
-              <WallImage
-                key={barrier.direction}
-                barrierItem={barrier}
-                highlightningList={
-                  needCheckHighlightning
-                    ? getHigtlightningDirection(
-                        highlightningList,
-                        orderIndex,
-                        barrier.direction
-                      )
-                    : null
-                }
-                mode={_config.playGridMode}
-                onClick={() => {
-                  const canCloseHole = highlightningList.find((cellType) => {
-                    return (
-                      cellType?.coord === orderIndex &&
-                      cellType?.direction === barrier.direction &&
-                      barrier.name !== "wall" &&
-                      barrier.isOpen === true
-                    );
-                  })
-                    ? true
-                    : false;
-                  if (canCloseHole) {
-                    dispatch({
-                      type: "req-fillHole",
-                      payload: {
-                        coord: orderIndex,
-                        direction: barrier.direction,
-                      },
-                    });
-                  } else {
-                    return null;
+                  onClick={() => onClickHandler}
+                ></Wall>
+              );
+            }
+            case "image": {
+              return (
+                <WallImage
+                  key={barrier.direction}
+                  barrierItem={barrier}
+                  highlightningList={
+                    highlightningList ? highlightningList() : null
                   }
-                }}
-              >
-                {" "}
-              </WallImage>
-            );
+                  onClick={() => onClickHandler}
+                ></WallImage>
+              );
+            }
           }
-          default: {
-            return null;
+        };
+        switch (isCurrPlayerAlive) {
+          case false: {
+            return getWallItem(barrier, _config.playGridMode, null, null);
+          }
+
+          case true: {
+            const currPlayerCoord = playerList[activePlayerNumber].coord;
+
+            const neighboringCellList = getNeighboringCellList(
+              currPlayerCoord,
+              gameField
+            );
+
+            const neighboringCellListCoord = neighboringCellList.map(
+              (cellItem) => {
+                return cellItem.coord;
+              }
+            );
+
+            const checkCellListCoord =
+              neighboringCellListCoord.concat(currPlayerCoord);
+
+            const needCheckHighlightning = checkCellListCoord.find(
+              (coord) => orderIndex === coord
+            );
+
+            const highlightningList = getHighlightningList(
+              neighboringCellList,
+              gameField,
+              currPlayerCoord,
+              gameState,
+              playerList,
+              activePlayerNumber
+            );
+
+            const getHighlightningListItem = () => {
+              return needCheckHighlightning
+                ? getHigtlightningDirection(
+                    highlightningList,
+                    orderIndex,
+                    barrier.direction
+                  )
+                : null;
+            };
+
+            const onClickHandler = () => {
+              const canCloseHole = highlightningList.find((cellType) => {
+                return (
+                  cellType?.coord === orderIndex &&
+                  cellType?.direction === barrier.direction &&
+                  barrier.name !== "wall" &&
+                  barrier.isOpen === true
+                );
+              })
+                ? true
+                : false;
+              if (canCloseHole) {
+                dispatch({
+                  type: "req-fillHole",
+                  payload: {
+                    coord: orderIndex,
+                    direction: barrier.direction,
+                  },
+                });
+              } else {
+                return null;
+              }
+            };
+
+            return getWallItem(
+              barrier,
+              _config.playGridMode,
+              getHighlightningListItem,
+              onClickHandler
+            );
           }
         }
       });

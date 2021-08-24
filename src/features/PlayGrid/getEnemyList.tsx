@@ -1,22 +1,32 @@
 import { EnemyList } from "../../components";
 
-import { EnemyListType, EnemyCardType } from "../../business/types";
+import {
+  EnemyListType,
+  EnemyCardType,
+  DeadPlayerListType,
+} from "../../business/types";
 
 export const getEnemyList = (
   index: string,
   enemiesList: EnemyListType,
-  hor: string,
-  vert: string
+  deadPlayerList: DeadPlayerListType,
+  activePlayerNumber: number
 ) => {
-  let enemiesArr: EnemyCardType[] = [];
-  for (let enemiesKey in enemiesList) {
-    const enemiesCard = enemiesList[enemiesKey];
-    const enemiesCoord = enemiesCard.coord;
-    if (enemiesCoord === index) {
-      enemiesArr.push(enemiesList[enemiesKey]);
-    }
-  }
-  if (enemiesArr.length > 0) {
-    return <EnemyList list={enemiesArr} key={`${hor}.${vert}.enemy`} />;
+  /**
+   * Need to draw enemy if current coord of cell has the same coord
+   */
+  const filteredEnemiesArr = Object.entries(enemiesList).filter(
+    ([string, enemyCard]) => enemyCard.coord === index
+  );
+
+  if (filteredEnemiesArr.length > 0) {
+    return (
+      <EnemyList
+        list={filteredEnemiesArr}
+        activePlayerNumber={activePlayerNumber}
+        deadPlayerList={deadPlayerList}
+        coord={index}
+      />
+    );
   } else return null;
 };

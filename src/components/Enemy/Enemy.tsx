@@ -1,17 +1,24 @@
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { EnemyCardType } from "../../business/types";
+import { DeadPlayerListType, EnemyCardType } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
 
 import zombie from "./zombie.png";
 import zombie_defeated from "./zombie_defeated.png";
 
 type EnemyArray = {
-  list: EnemyCardType[];
+  list: [string, EnemyCardType][];
+  activePlayerNumber: number;
+  deadPlayerList: DeadPlayerListType;
+  coord: string;
 };
 
-const EnemyCard = styled.div<EnemyCardType>`
+type EnemyCardApperanceType = EnemyCardType & {
+  isCurrent: boolean;
+};
+
+const EnemyCard = styled.div<EnemyCardApperanceType>`
   ${StyledCommonCard}
 
   font-size: 47px;
@@ -46,6 +53,44 @@ const EnemyCard = styled.div<EnemyCardType>`
       }
     }
   }};
+
+  z-index: ${(props) => {
+    switch (props.isCurrent) {
+      case true: {
+        return "4";
+      }
+      case false: {
+        switch (props.apperance) {
+          case "open": {
+            return "3";
+          }
+          default: {
+            return "2";
+          }
+        }
+      }
+      default: {
+        return "2";
+      }
+    }
+  }};
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 1px;
+    padding: 4px;
+    left: 4px;
+    top: 4px;
+    opacity: 0.5;
+    border: ${(props) => {
+      if (props.isCurrent) {
+        return "5px solid #8834b8";
+      }
+    }};
+  }
 `;
 
 const EnemiesCardList = styled.div`
@@ -55,22 +100,67 @@ const EnemiesCardList = styled.div`
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
-
-  const enemyArray = props.list;
+  const { list: enemyArray, deadPlayerList, activePlayerNumber, coord } = props;
+  /*   const enemyArray = props.list; */
   return (
     <EnemiesCardList>
-      {enemyArray.map((enemyCard, index) => {
-        return (
-          <EnemyCard
-            key={index}
-            {...enemyCard}
-            onClick={() => {
-              dispatch({
-                type: "clickedEnemy",
-              });
-            }}
-          ></EnemyCard>
-        );
+      {enemyArray.map(([index, enemyCard]) => {
+        if (deadPlayerList) {
+          const isActivePlayerDead = deadPlayerList[activePlayerNumber]
+            ? true
+            : false;
+
+          switch (isActivePlayerDead) {
+            case false: {
+              return (
+                <EnemyCard
+                  key={index}
+                  {...enemyCard}
+                  isCurrent={false}
+                  onClick={() => {
+                    dispatch({
+                      type: "clickedEnemy",
+                      payload: { enemyCard: enemyCard },
+                    });
+                  }}
+                ></EnemyCard>
+              );
+            }
+
+            case true: {
+              return (
+                <EnemyCard
+                  key={index}
+                  {...enemyCard}
+                  isCurrent={
+                    Number(deadPlayerList[activePlayerNumber].index) ===
+                    Number(index)
+                  }
+                  onClick={() => {
+                    dispatch({
+                      type: "clickedEnemy",
+                      payload: { enemyCard: enemyCard },
+                    });
+                  }}
+                ></EnemyCard>
+              );
+            }
+          }
+        } else {
+          return (
+            <EnemyCard
+              key={index}
+              {...enemyCard}
+              isCurrent={false}
+              onClick={() => {
+                dispatch({
+                  type: "clickedEnemy",
+                  payload: { enemyCard: enemyCard },
+                });
+              }}
+            ></EnemyCard>
+          );
+        }
       })}
     </EnemiesCardList>
   );

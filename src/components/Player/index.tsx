@@ -3,18 +3,20 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
-  PlayerCardType,
   TypeOfCard,
   PlayerListType,
   GameState,
+  PLayerType,
 } from "../../business/types";
 
-import img from "./player.png";
+import player from "./player.png";
+import player2 from "./player2.png";
 import React from "react";
 
 type PlayerItem = {
   isCurrent: boolean;
   needHighlightning?: boolean;
+  image: string;
 };
 
 type PlayerCardListType = {
@@ -22,7 +24,7 @@ type PlayerCardListType = {
 };
 
 type PlayerListItem = {
-  playerListOnCell: PlayerCardType[];
+  playerListOnCell: PLayerType[];
   playerList: PlayerListType;
   numberOfPlayer: number;
   gameState: GameState;
@@ -67,9 +69,12 @@ const PlayerCard = styled.div<PlayerItem>`
   cursor: default;
   background-repeat: no-repeat;
   background-position: 0px;
-  background-image: url(${img});
   background-size: 44px;
   background-position: 3px;
+
+  background-image: ${(props) => {
+    return `url(${props.image})`;
+  }};
 
   z-index: ${(props) => {
     if (props.isCurrent) {
@@ -176,108 +181,139 @@ const Button = styled.button`
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
 
+  const playerImageList = [player, player2];
+
   const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
-  const coordOfAvailableCards = gameState.coordOfAvailableCards;
-
-  const activePlayerCoord = playerList[numberOfPlayer].coord;
-
-  const currPlayer = playerList[numberOfPlayer];
-  const typeOfChosedCard = currPlayer.inventory.cardSelected;
   const needSplitCard = playerListOnCell.length > 1;
 
   const playerCardList = (
     <PlayerCardList needSplitCard={needSplitCard}>
       {playerListOnCell.map((playerCardItem, index) => {
-        const contextMenu = (
-          <ContextMenu
-            key="contextMenu"
-            id={"contextMenu"}
-            className={"contextMenu"}
-          >
-            <Button
-              onClick={() => {
-                dispatch({
-                  type: "clickedContextMenu",
-                  payload: { card: playerCardItem, buttonType: "share" },
-                });
-              }}
-            >
-              передать
-            </Button>
-            <Button
-              onClick={() => {
-                dispatch({
-                  type: "clickedContextMenu",
-                  payload: { card: playerCardItem, buttonType: "heal" },
-                });
-              }}
-            >
-              лечить
-            </Button>
-          </ContextMenu>
-        );
+        const coordOfAvailableCards = gameState.coordOfAvailableCards;
 
-        const playerCard = (
-          <PlayerCard
-            id={`player${playerCardItem.orderNumber}`}
-            key={index}
-            isCurrent={numberOfPlayer === playerCardItem.orderNumber}
-            needHighlightning={calculateHighlightning(
-              coordOfAvailableCards,
-              typeOfChosedCard,
-              playerCardItem,
-              activePlayerCoord
-            )}
-            onClick={() =>
-              dispatch({ type: "clickedPlayer", payload: playerCardItem })
-            }
-          ></PlayerCard>
-        );
-
-        switch (playerCardItem.showContextMenu) {
-          case true: {
-            console.log(numberOfPlayer);
-            const activePLayerCoord = playerList[numberOfPlayer].coord;
-            const currplayerCoord = playerCardItem.coord;
-
-            const contextMenuCoord = getContextMenuCoord(
-              activePLayerCoord,
-              currplayerCoord
+        const isActivePlayerAlive = playerList[numberOfPlayer] ? true : false;
+        switch (isActivePlayerAlive) {
+          case false: {
+            return (
+              <PlayerCard
+                id={`player${playerCardItem.orderNumber}`}
+                key={index}
+                image={playerImageList[playerCardItem.orderNumber]}
+                isCurrent={numberOfPlayer === playerCardItem.orderNumber}
+                needHighlightning={false}
+                onClick={() =>
+                  dispatch({
+                    type: "clickedPlayer",
+                    payload: playerCardItem,
+                  })
+                }
+              ></PlayerCard>
             );
-            console.log(contextMenuCoord);
+          }
+          case true: {
+            const activePlayerCoord = playerList[numberOfPlayer].coord;
+            const currPlayer = playerList[numberOfPlayer];
+            const typeOfChosedCard = currPlayer.inventory.cardSelected;
 
-            const [hor, vert] = contextMenuCoord.split(".");
+            const playerCard = (
+              <PlayerCard
+                id={`player${playerCardItem.orderNumber}`}
+                key={index}
+                image={playerImageList[playerCardItem.orderNumber]}
+                isCurrent={numberOfPlayer === playerCardItem.orderNumber}
+                needHighlightning={calculateHighlightning(
+                  coordOfAvailableCards,
+                  typeOfChosedCard,
+                  playerCardItem,
+                  activePlayerCoord
+                )}
+                onClick={() =>
+                  dispatch({
+                    type: "clickedPlayer",
+                    payload: playerCardItem,
+                  })
+                }
+              ></PlayerCard>
+            );
 
-            const fieildElem = document.getElementById("field");
-            switch (fieildElem) {
-              case null: {
-                return playerCard;
+            const contextMenu = (
+              <ContextMenu
+                key="contextMenu"
+                id={"contextMenu"}
+                className={"contextMenu"}
+              >
+                <Button
+                  onClick={() => {
+                    dispatch({
+                      type: "clickedContextMenu",
+                      payload: {
+                        card: playerCardItem,
+                        buttonType: "share",
+                      },
+                    });
+                  }}
+                >
+                  передать
+                </Button>
+                <Button
+                  onClick={() => {
+                    dispatch({
+                      type: "clickedContextMenu",
+                      payload: { card: playerCardItem, buttonType: "heal" },
+                    });
+                  }}
+                >
+                  лечить
+                </Button>
+              </ContextMenu>
+            );
+
+            switch (playerCardItem.showContextMenu) {
+              case true: {
+                console.log(numberOfPlayer);
+                const activePLayerCoord = playerList[numberOfPlayer].coord;
+                const currplayerCoord = playerCardItem.coord;
+
+                const contextMenuCoord = getContextMenuCoord(
+                  activePLayerCoord,
+                  currplayerCoord
+                );
+                console.log(contextMenuCoord);
+
+                const [hor, vert] = contextMenuCoord.split(".");
+
+                const fieildElem = document.getElementById("field");
+                switch (fieildElem) {
+                  case null: {
+                    return playerCard;
+                  }
+
+                  default: {
+                    const portal = ReactDOM.createPortal(
+                      <ContextMenuPortal
+                        coordX={String(hor)}
+                        coordY={String(vert)}
+                        key="portal"
+                      >
+                        {contextMenu}
+                      </ContextMenuPortal>,
+                      fieildElem
+                    );
+                    return (
+                      <React.Fragment key="fragment">
+                        {playerCard}
+                        {portal}
+                      </React.Fragment>
+                    );
+                  }
+                }
               }
 
               default: {
-                const portal = ReactDOM.createPortal(
-                  <ContextMenuPortal
-                    coordX={String(hor)}
-                    coordY={String(vert)}
-                    key="portal"
-                  >
-                    {contextMenu}
-                  </ContextMenuPortal>,
-                  fieildElem
-                );
-                return (
-                  <React.Fragment key="fragment">
-                    {playerCard}
-                    {portal}
-                  </React.Fragment>
-                );
+                return playerCard;
               }
             }
-          }
-
-          default: {
-            return playerCard;
           }
         }
       })}
@@ -313,7 +349,7 @@ export const PlayerList = (props: PlayerListItem) => {
 const calculateHighlightning = (
   coordOfAvailableCards: string[] | null,
   typeOfChosedCard: TypeOfCard,
-  playerCardItem: PlayerCardType,
+  playerCardItem: PLayerType,
   activePlayerCoord: string
 ) => {
   const isActivePlayer = activePlayerCoord === playerCardItem.coord;

@@ -154,7 +154,7 @@ describe("player met enemy", () => {
       commonStateBeforGetResult,
       "closed"
     );
-    const expectedState = getStateInteracyWithEnemy(stateMetEnemy);
+    const expectedState = getStateInteractWithEnemy(stateMetEnemy);
     const newState = reducer(stateMetEnemy, {
       type: "req-getPlayerMoveResult",
     });
@@ -164,7 +164,7 @@ describe("player met enemy", () => {
 
   it("enemyCard open", () => {
     const stateMetEnemy = getStateWithEnemy(commonStateBeforGetResult, "open");
-    const expectedState = getStateInteracyWithEnemy(stateMetEnemy);
+    const expectedState = getStateInteractWithEnemy(stateMetEnemy);
     const newState = reducer(stateMetEnemy, {
       type: "req-getPlayerMoveResult",
     });
@@ -184,10 +184,7 @@ test("player make last step", () => {
     dice: 0,
     gameState: {
       ...commonStateBeforGetResult.gameState,
-      type: "gameStarted.getPlayersOrder",
-    },
-    doEffect: {
-      type: "!getNextPlayer",
+      type: "gameStarted.rollDice",
     },
   };
 
@@ -246,6 +243,10 @@ const getStateWithCard = (
   }
 };
 
+/**   
+ * index: 1 took for quick test fixing
+
+*/
 const getStateWithEnemy = (
   initialState: State,
   apperance: CardApperance
@@ -259,7 +260,7 @@ const getStateWithEnemy = (
       },
     },
     enemyList: {
-      [1.1]: {
+      [1]: {
         name: "enemy",
         power: 1,
         coord: "1.1",
@@ -269,7 +270,7 @@ const getStateWithEnemy = (
   };
 };
 
-const getStateInteracyWithEnemy = (state: State): State => {
+const getStateInteractWithEnemy = (state: State): State => {
   return {
     ...state,
     dice: state.dice - 1,

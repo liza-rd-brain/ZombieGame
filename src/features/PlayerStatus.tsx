@@ -7,24 +7,37 @@ import { State } from "../business/types";
 import { HealthSlots } from "../components/HealthSlots";
 import { Inventory } from "../components/Inventory";
 
+import player from "../components/Player/player.png";
+import player2 from "../components/Player/player2.png";
+
+type AvatarType = { image: string };
+
 const PlayerStatusCard = styled.div`
   width: 250px;
-  height: 220px;
+  height: 240px;
   border: 1px solid lightgray;
   padding: 10px;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  /*  justify-content: center; */
   background-color: white;
+  flex-wrap: wrap;
 `;
 
 //eslint-disable-next-line
-const CharacterAvatar = styled.div`
+const CharacterAvatar = styled.div<AvatarType>`
   width: 50px;
-  height: 70px;
+  height: 50px;
   border: 1px solid lightgray;
   font-size: 14px;
   text-align: center;
+  background-repeat: no-repeat;
+  background-position: 0px;
+  background-size: 44px;
+  background-position: 3px;
+  background-image: ${(props) => {
+    return `url(${props.image})`;
+  }};
 `;
 
 const Status = styled.div`
@@ -39,38 +52,66 @@ const Status = styled.div`
 
 const HealthStatus = styled(Status)`
   height: 20px;
+  margin: 15px 5px;
 `;
 
 const InventoryStatus = styled(Status)`
   /*   height: 100px; */
 `;
 
-const Column = styled.div`
+const Row = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 export const PlayerStatus = () => {
-  const { activePlayerNumber } = useSelector((state: State) => ({
+  const { activePlayerNumber, playerList } = useSelector((state: State) => ({
     ...state,
   }));
+  const playerImageList = [player, player2];
 
   // TODO: why pass the index?
-  return (
-    <PlayerStatusCard>
-      {/* <Column>
-        <CharacterAvatar>игрок {`${numberOfPlayer + 1}`}</CharacterAvatar>
-      </Column> */}
-      <Column>
-        <HealthStatus>
-          {`здоровье:  `}
-          <HealthSlots index={activePlayerNumber}></HealthSlots>
-        </HealthStatus>
-        <InventoryStatus>
-          {/*    {`предметы:  `} */}
-          <Inventory index={activePlayerNumber} />
-        </InventoryStatus>
-      </Column>
-    </PlayerStatusCard>
+
+  const avatar = (
+    <CharacterAvatar image={playerImageList[activePlayerNumber]}>
+      {`${activePlayerNumber + 1}`}
+    </CharacterAvatar>
   );
+  const health = (
+    <HealthStatus>
+      {`здоровье:  `}
+      <HealthSlots index={activePlayerNumber}></HealthSlots>
+    </HealthStatus>
+  );
+  const inventory = (
+    <InventoryStatus>
+      <Inventory index={activePlayerNumber} />
+    </InventoryStatus>
+  );
+
+  const isAlivePlayer = playerList[activePlayerNumber] ? true : false;
+
+  switch (isAlivePlayer) {
+    case true: {
+      return (
+        <PlayerStatusCard>
+          <Row>
+            {avatar}
+            {health}
+          </Row>
+          <Row>{inventory}</Row>
+        </PlayerStatusCard>
+      );
+    }
+    case false: {
+      return (
+        <PlayerStatusCard>
+          <Row>
+            {avatar}
+            <HealthStatus>{<div>Dead</div>}</HealthStatus>
+          </Row>
+        </PlayerStatusCard>
+      );
+    }
+  }
 };

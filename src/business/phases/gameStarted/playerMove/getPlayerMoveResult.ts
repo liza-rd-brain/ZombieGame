@@ -1,11 +1,12 @@
 import { State } from "../../../types";
+import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
 
 /**
  * @returns  new state depending on the result of the player's movement.
  */
 
 export const getPlayerMoveResult = (state: State) => {
-  const { gameField, playerList, activePlayerNumber, dice } = state;
+  const { gameField, playerList, activePlayerNumber, dice, enemyList } = state;
 
   const newPlayerCoord = playerList[activePlayerNumber].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];
@@ -17,8 +18,15 @@ export const getPlayerMoveResult = (state: State) => {
     newCellWithPlayer?.name === "commonCell" &&
     newCellWithPlayer.cardItem.length > 0;
 
+  const hasCurrCoordEnemy = Object.entries(enemyList).find(
+    ([index, enemyCard]) => {
+      return enemyCard.coord === newPlayerCoord;
+    }
+  );
+
+  //TODO: Why should i check this-?!
   const metEnemyCard =
-    newCellWithPlayer?.name === "commonCell" && state.enemyList[newPlayerCoord]
+    newCellWithPlayer?.name === "commonCell" && hasCurrCoordEnemy
       ? true
       : false;
 
@@ -55,14 +63,12 @@ export const getPlayerMoveResult = (state: State) => {
     }
 
     case isLastStepOfMove: {
-      /*  const changedPartState = switchToNextPlayer(); */
+      const newPlayerNumber = getNextPlayerNumber(state);
       const newState: State = {
         ...state,
         dice: 0,
-        gameState: { ...state.gameState, type: "gameStarted.getPlayersOrder" },
-        doEffect: {
-          type: "!getNextPlayer",
-        },
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+        activePlayerNumber: newPlayerNumber,
       };
       return newState;
     }

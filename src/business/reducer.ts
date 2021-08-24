@@ -7,25 +7,26 @@ import {
   interactWithEnemy,
   applyCard,
 } from "./phases/gameStarted";
-import { getPlayersOrder } from "./phases/gameStarted";
 import { endGame } from "./phases/endGame";
 import {
   ContextMenuButtonType,
+  EnemyCardType,
   MoveDirection,
-  PlayerCardType,
+  PLayerType,
   State,
   TypeOfCard,
 } from "./types";
+import { getPlayersOrder } from "./phases/gameStarted/getPlayersOrder";
+import { enemyMove } from "./phases/enemyMove";
 
 export type ActionType =
   | { type: "clickedStartButton" }
   | { type: "diceThrown"; payload: number }
-  | { type: "playerMoved"; payload: MoveDirection }
+  | { type: "moveControlsClicked"; payload: MoveDirection }
   | { type: "req-openCard" }
   | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }
   | { type: "req-deleteCard" }
-  | { type: "req-getNextPlayer" }
   | { type: "req-checkEnemyCard" }
   | { type: "req-openEnemyCard" }
   | { type: "req-getBattleResult" }
@@ -43,13 +44,14 @@ export type ActionType =
       type: "req-fillHole";
       payload: { coord: number; direction: MoveDirection };
     }
-  | { type: "clickedEnemy" }
+  | { type: "clickedEnemy"; payload: { enemyCard: EnemyCardType } }
   | { type: "req-removeEnemyCard" }
-  | { type: "clickedPlayer"; payload: PlayerCardType }
+  | { type: "clickedPlayer"; payload: PLayerType }
   | {
       type: "clickedContextMenu";
-      payload: { card: PlayerCardType; buttonType: ContextMenuButtonType };
-    };
+      payload: { card: PLayerType; buttonType: ContextMenuButtonType };
+    }
+  | { type: "req-getNextPlayer" };
 
 export const reducer = (
   state: State = initialState,
@@ -87,6 +89,11 @@ export const reducer = (
           return state;
       }
     }
+
+    case "enemyMove": {
+      return enemyMove(state, action);
+    }
+
     case "interactWithEnemy": {
       return interactWithEnemy(state, action);
     }

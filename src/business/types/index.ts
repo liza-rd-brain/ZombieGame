@@ -41,13 +41,21 @@ export type AvailableCellType = {
 
 export type AvailableCellListType = AvailableCellType[];
 
-export type PlayerCardType = {
+export type PlayerName = "player" | "dead";
+
+export type PLayerType = {
   name: "player";
   health: number;
   orderNumber: number;
   coord: string;
   inventory: InventoryType;
   showContextMenu?: boolean;
+};
+
+export type DeadPlayer = {
+  name: "dead";
+  orderNumber: number;
+  index: number;
 };
 
 export type InventoryType = {
@@ -61,7 +69,8 @@ export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 
 export type CardItemList = CardItem[];
 
-export type PlayerListType = Record<string, PlayerCardType>;
+export type PlayerListType = Record<string, PLayerType>;
+export type DeadPlayerListType = Record<string, DeadPlayer> | null;
 
 export type EnemyCardType = {
   name: "enemy";
@@ -70,7 +79,7 @@ export type EnemyCardType = {
   apperance: CardApperance | "defeated";
 };
 
-export type EnemyListType = Record<string, EnemyCardType>;
+export type EnemyListType = Record<number, EnemyCardType>;
 
 export type FinishCell = {
   name: "finish";
@@ -120,6 +129,7 @@ export type State = {
   dice: number;
   gameResult: "" | "Вы выиграли" | "Вы проиграли";
   playerList: PlayerListType;
+  deadPlayerList: DeadPlayerListType | null;
   enemyList: EnemyListType;
   gameField: GameField;
   doEffect: TypeEffect;
@@ -153,7 +163,6 @@ export type TypeEffect =
   | { type: "!checkApperanceInventoryCard" }
   | { type: "!changePlayerHealth" }
   | { type: "!deleteCard" }
-  | { type: "!getNextPlayer" }
   | { type: "!checkApperanceEnemyCard" }
   | { type: "!openEnemyCard" }
   | { type: "!throwBattleDice" }
@@ -183,4 +192,10 @@ export type GameStateTypes =
   | { type: "interactWithEnemy.applyCard" }
   | { type: "gameStarted.getPlayersOrder" }
   | { type: "endGame" }
-  | { type: "getEndScreen" };
+  | { type: "getEndScreen" }
+  | {
+      type: "enemyMove";
+    }
+  | {
+      type: "enemyMove.chooseEnemy";
+    };

@@ -13,7 +13,7 @@ export const getPlayersList = (
   const playerListOnCell = playerItemList
     .filter((playerItem) => {
       const [, playerCard] = playerItem;
-      return playerCard.coord === index;
+      return playerCard.coord === index && playerCard.name === "player";
     })
     .map((playerItem) => {
       const [, playerCard] = playerItem;

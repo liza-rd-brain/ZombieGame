@@ -4,8 +4,16 @@ export const checkCardApperance = (state: State): State => {
   const { enemyList, playerList, activePlayerNumber } = state;
   const currentCoord = playerList[activePlayerNumber].coord;
 
-  const isNeedOpenEnemyCard =
-    enemyList[currentCoord].apperance === "open" ? false : true;
+  const currEnemy = Object.entries(enemyList)
+    .map((enemyItem) => {
+      const [index, enemyCard] = enemyItem;
+      return enemyCard;
+    })
+    .find((enemyCard) => {
+      return enemyCard.coord === currentCoord;
+    });
+
+  const isNeedOpenEnemyCard = currEnemy?.apperance === "open" ? false : true;
 
   switch (true) {
     case isNeedOpenEnemyCard: {

@@ -1,4 +1,10 @@
-import { EnemyListType, GameField, CommonCell, ConfigType } from "../types";
+import {
+  EnemyListType,
+  GameField,
+  CommonCell,
+  ConfigType,
+  EnemyCardType,
+} from "../types";
 
 export const getEnemies = (
   gameField: GameField,
@@ -71,14 +77,14 @@ const getListOfIndexes = (
  * Returns the object of all enemies
  */
 const getListOfEnemy = (enemiesCoords: string[], config: ConfigType) => {
-  const enemyList = enemiesCoords.map((coord) => {
-    const enemyCard = {
+  const enemyList = enemiesCoords.map((coord, index) => {
+    const enemyCard: EnemyCardType = {
       name: "enemy",
       power: 1,
-      coord: coord,
+      coord,
       apperance: config.cardApperance,
     };
-    return [enemyCard.coord, enemyCard];
+    return [index, enemyCard];
   });
 
   const enemiesObj: EnemyListType = Object.fromEntries(enemyList);

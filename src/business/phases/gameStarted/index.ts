@@ -3,4 +3,3 @@ export { takeCard } from "./takeCard";
 export { rollDice } from "./rollDice";
 export { interactWithEnemy } from "../interactWithEnemy";
 export { applyCard } from "./applyCard";
-export { getPlayersOrder } from "./getPlayersOrder";

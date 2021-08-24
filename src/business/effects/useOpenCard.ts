@@ -69,11 +69,6 @@ export function useOpenCard() {
           };
         }
 
-        case "!getNextPlayer": {
-          dispatch({ type: "req-getNextPlayer" });
-          break;
-        }
-
         default: {
           break;
         }

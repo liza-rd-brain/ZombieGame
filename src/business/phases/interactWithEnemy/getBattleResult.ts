@@ -1,4 +1,5 @@
-import { State } from "../../types";
+import { DeadPlayerListType, State } from "../../types";
+import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const getBattleResult = (state: State): State => {
   const { dice } = state;
@@ -45,38 +46,61 @@ const getStatePlayerRunsAway = (state: State): State => {
 };
 
 const getStatePlayetLoseHealth = (state: State): State => {
-  const { playerList, activePlayerNumber } = state;
+  const { playerList, activePlayerNumber, deadPlayerList } = state;
   const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;
 
-  const newPlayerList = {
-    ...playerList,
-    [activePlayerNumber]: {
-      ...playerList[activePlayerNumber],
-      health: playerList[activePlayerNumber].health - 1,
-    },
-  };
+  switch (isPlayerAlive) {
+    case true: {
+      const newPlayerList = {
+        ...playerList,
+        [activePlayerNumber]: {
+          ...playerList[activePlayerNumber],
+          health: playerList[activePlayerNumber].health - 1,
+        },
+      };
 
-  if (isPlayerAlive) {
-    const newState: State = {
-      ...state,
-      dice: 0,
-      gameState: {
-        ...state.gameState,
-        type: "interactWithEnemy.throwBattleDice",
-      },
-      playerList: newPlayerList,
-    };
+      const newState: State = {
+        ...state,
+        dice: 0,
+        gameState: {
+          ...state.gameState,
+          type: "interactWithEnemy.throwBattleDice",
+        },
+        playerList: newPlayerList,
+      };
 
-    return newState;
-  } else {
-    console.log(`игрок №${activePlayerNumber} погиб`);
+      return newState;
+    }
 
-    return {
-      ...state,
-      gameState: { ...state.gameState, type: "endGame" },
-      gameResult: "Вы проиграли",
-      doEffect: null,
-    };
+    case false: {
+      const newPlayerListObj = Object.entries(playerList).filter(
+        (playerList) => {
+          const [index, player] = playerList;
+          return Number(index) !== activePlayerNumber;
+        }
+      );
+      const newPlayerList = Object.fromEntries(newPlayerListObj);
+
+      const newDeadPlayerList: DeadPlayerListType = {
+        ...deadPlayerList,
+        [activePlayerNumber]: {
+          orderNumber: playerList[activePlayerNumber].orderNumber,
+          name: "dead",
+        },
+      };
+
+      const newPlayerNumber = getNextPlayerNumber(state);
+      const newState: State = {
+        ...state,
+        dice: 0,
+        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+        deadPlayerList: newDeadPlayerList,
+        playerList: newPlayerList,
+        activePlayerNumber: newPlayerNumber,
+      };
+
+      return newState;
+    }
   }
 };

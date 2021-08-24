@@ -22,6 +22,7 @@ export const getInitialState = (config: ConfigType): State => {
     gameField: gameFieldWithoutEnemy,
     doEffect: null,
     activePlayerNumber: 0,
+    deadPlayerList: null,
     _config: config,
   };
 };

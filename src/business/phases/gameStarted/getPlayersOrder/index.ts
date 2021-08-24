@@ -3,7 +3,8 @@ import { ActionType } from "../../../reducer";
 
 export const getPlayersOrder = (state: State, action: ActionType): State => {
   const numberCurrPlayer = state.activePlayerNumber;
-  const playerList = Object.entries(state.playerList);
+  const commonPlayerList = { ...state.playerList, ...state.deadPlayerList };
+  const playerList = Object.entries(commonPlayerList);
   const maxPlayersNumber = playerList.length - 1;
   const minPlayersNumber = 0;
   const nextPlayersNumber =

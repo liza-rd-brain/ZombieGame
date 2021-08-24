@@ -1,12 +1,12 @@
 import { canInteractWithCell } from "../../../../components/Player/canInteractWithCell";
-import { State, PlayerCardType, AvailableCellListType } from "../../../types";
+import { State, PLayerType, AvailableCellListType } from "../../../types";
 import { getNeighboringCellList } from "../../common";
 import { getStateGiveCard } from "./getStateGiveCard";
 import { getStateHealCurrPlayer } from "./getStateHealCurrPlayer";
 
 export const getStateClickedPlayer = (
   state: State,
-  clickedPlayerCard: PlayerCardType
+  clickedPlayerCard: PLayerType
 ) => {
   const { activePlayerNumber, playerList } = state;
 
