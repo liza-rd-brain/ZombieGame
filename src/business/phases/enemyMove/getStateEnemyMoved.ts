@@ -34,8 +34,6 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
             const newEnemyList: EnemyListType =
               Object.fromEntries(enemyListArray);
 
-            console.log(newEnemyList);
-
             return {
               ...state,
               gameState: { ...state.gameState, coordOfAvailableCells: null },

@@ -12,7 +12,6 @@ export const rollDice = (state: State, action: ActionType): State => {
 
       switch (typeOfPlayer) {
         case "dead": {
-          console.log("фаза выбрать врага");
           return {
             ...state,
             dice: action.payload,

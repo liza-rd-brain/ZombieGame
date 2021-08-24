@@ -136,12 +136,6 @@ export const getFilledPlayGrid = (state: State) => {
         );
       }
       case true: {
-        /*   
-
-        const availableCells =
-          state.gameState.coordOfAvailableCells?.concat(currPlayerCoord);
-
-        const needHighlightning = availableCells?.includes(orderIndex); */
         const currPlayerCoord = playerList[activePlayerNumber].coord;
         const [playerX, playerY] = currPlayerCoord.split(".");
 

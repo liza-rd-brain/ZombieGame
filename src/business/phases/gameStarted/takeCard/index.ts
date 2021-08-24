@@ -145,7 +145,7 @@ const checkInventoryCardApperance = (state: State): State => {
   switch (isOneCardOnCell) {
     case true: {
       const needOpenCard = cardItemList[0]?.apperance === "closed";
-      console.log(needOpenCard);
+
       switch (needOpenCard) {
         case true: {
           return {

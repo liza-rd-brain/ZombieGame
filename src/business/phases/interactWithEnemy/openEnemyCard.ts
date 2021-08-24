@@ -27,8 +27,6 @@ export const openEnemyCard = (state: State): State => {
     })
     .join();
 
-  console.log(currEnemyIndex);
-
   const newEnemyList = {
     ...enemyList,
     [currEnemyIndex]: {

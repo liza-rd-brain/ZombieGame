@@ -21,16 +21,20 @@ export const getStateEnemySelected = (
         /**
          * Choose enemy once!
          */
-        const canPickEnemyCard = deadPlayerList[activePlayerNumber]?.index
+        const hasEnemyCard = deadPlayerList[activePlayerNumber]?.index
           ? false
           : true;
+
+        const isOpenEnemyCard =
+          enemyList[Number(currEnemyIndex)].apperance === "open";
+
+        const canPickEnemyCard = hasEnemyCard && isOpenEnemyCard;
 
         switch (canPickEnemyCard) {
           case false: {
             return state;
           }
           case true: {
-            /*     console.log(currEnemyCoord); */
             const newDeadPLayerList = {
               ...deadPlayerList,
               [activePlayerNumber]: {

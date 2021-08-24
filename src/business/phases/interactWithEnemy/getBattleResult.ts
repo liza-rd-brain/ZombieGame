@@ -82,8 +82,6 @@ const getStatePlayetLoseHealth = (state: State): State => {
       );
       const newPlayerList = Object.fromEntries(newPlayerListObj);
 
-      console.log(`игрок №${activePlayerNumber} погиб`);
-
       const newDeadPlayerList: DeadPlayerListType = {
         ...deadPlayerList,
         [activePlayerNumber]: {
@@ -100,17 +98,9 @@ const getStatePlayetLoseHealth = (state: State): State => {
         deadPlayerList: newDeadPlayerList,
         playerList: newPlayerList,
         activePlayerNumber: newPlayerNumber,
-        /*      doEffect: { type: "!getNextPlayer" }, */
       };
 
       return newState;
-      /*     return {
-        ...state,
-        gameState: { ...state.gameState, type: "endGame" },
-        gameResult: "Вы проиграли",
-        doEffect: null,
-      };
-    } */
     }
   }
 };
