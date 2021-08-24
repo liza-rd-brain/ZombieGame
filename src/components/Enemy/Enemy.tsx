@@ -54,6 +54,14 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
     }
   }};
 
+  z-index: ${(props) => {
+    if (props.isCurrent) {
+      return "3";
+    } else {
+      return "2";
+    }
+  }};
+
   &:before {
     content: "";
     position: absolute;
@@ -111,7 +119,6 @@ export const EnemyList = (props: EnemyArray) => {
                 <EnemyCard
                   key={index}
                   {...enemyCard}
-                  /*  isCurrent={false} */
                   isCurrent={
                     Number(deadPlayerList[activePlayerNumber].index) ===
                     Number(index)
