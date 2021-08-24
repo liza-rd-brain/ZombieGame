@@ -55,10 +55,23 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   }};
 
   z-index: ${(props) => {
-    if (props.isCurrent) {
-      return "3";
-    } else {
-      return "2";
+    switch (props.isCurrent) {
+      case true: {
+        return "4";
+      }
+      case false: {
+        switch (props.apperance) {
+          case "open": {
+            return "3";
+          }
+          default: {
+            return "2";
+          }
+        }
+      }
+      default: {
+        return "2";
+      }
     }
   }};
 

@@ -15,8 +15,6 @@ export const enemyMove = (state: State, action: ActionType): State => {
       switch (action.type) {
         case "clickedEnemy": {
           return getStateEnemySelected(state, action);
-
-          //Need to pull this card to player?
         }
 
         default: {

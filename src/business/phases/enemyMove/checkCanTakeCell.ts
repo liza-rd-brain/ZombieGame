@@ -41,7 +41,7 @@ const checkNextCellOccupied = (
 ): boolean => {
   const iterableEnemyList = Object.entries(enemyList);
   const isCellOccupied = iterableEnemyList.some(([, enemyCard]) => {
-    return enemyCard.coord === newCoord;
+    return enemyCard.coord === newCoord && enemyCard.apperance !== "closed";
   });
   return isCellOccupied;
 };
