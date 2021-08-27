@@ -34,7 +34,7 @@ export type ActionType =
   | { type: "req-checkAvailableNeighboringCell" }
   | { type: "req-checkAvailableNeighboringCards" }
   | { type: "req-getPlayerMoveResult" }
-  | { type: "req-getDeadPlayerMoveResult" }
+  | { type: "req-switchToNextPlayer" }
   | { type: "req-takeCard" }
   | {
       type: "cardChoosed";

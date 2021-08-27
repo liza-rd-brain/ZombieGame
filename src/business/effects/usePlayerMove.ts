@@ -23,11 +23,12 @@ export function usePlayerMove() {
           });
           break;
         }
-        case "!getDeadPlayerMoveResult": {
+
+        case "!switchToNextPlayer": {
           const timerMoveResult = setTimeout(
             () =>
               dispatch({
-                type: "req-getDeadPlayerMoveResult",
+                type: "req-switchToNextPlayer",
               }),
             500
           );

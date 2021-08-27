@@ -51,14 +51,11 @@ export const getEnemyMoveResult = (state: State) => {
       }
 
       case isLastStepOfMove: {
-        const newPlayerNumber = getNextPlayerNumber(state);
         const newState: State = {
           ...state,
-          dice: 0,
-          gameState: { ...state.gameState, type: "gameStarted.rollDice" },
-          activePlayerNumber: newPlayerNumber,
-          deadPlayerList: { ...deadPlayerList, [activePlayerNumber]: null },
+          doEffect: { type: "!switchToNextPlayer" },
         };
+
         return newState;
       }
 
