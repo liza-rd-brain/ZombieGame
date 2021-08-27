@@ -128,7 +128,6 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
   flex-wrap: nowrap;
   position: absolute;
-  z-index: 3;
   font-size: 12px;
   font-weight: bold;
 

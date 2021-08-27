@@ -19,10 +19,17 @@ export const checkCellHasWall = (
   /**
    * Choose alive or dead player
    */
-  const currCellCoord =
-    deadPlayerList && deadPlayerList[activePlayerNumber]
-      ? enemyList[deadPlayerList[activePlayerNumber].index].coord
-      : playerList[activePlayerNumber].coord;
+
+  const enemyIndex =
+    deadPlayerList &&
+    deadPlayerList[activePlayerNumber] &&
+    deadPlayerList[activePlayerNumber].index
+      ? deadPlayerList[activePlayerNumber].index
+      : null;
+
+  const currCellCoord = enemyIndex
+    ? enemyList[enemyIndex].coord
+    : playerList[activePlayerNumber].coord;
 
   const currCell = gameField.values[currCellCoord];
   const nextCell = gameField.values[newPlayerCoord];

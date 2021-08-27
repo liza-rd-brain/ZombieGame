@@ -18,6 +18,11 @@ type EnemyCardApperanceType = EnemyCardType & {
   isCurrent: boolean;
 };
 
+type EnemyCardListType = {
+  needSplitCards?: boolean;
+  /*   needReverse */
+};
+
 const EnemyCard = styled.div<EnemyCardApperanceType>`
   ${StyledCommonCard}
   position: static;
@@ -93,21 +98,43 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   }
 `;
 
-const EnemiesCardList = styled.div`
+const EnemyCardList = styled.div<EnemyCardListType>`
   display: flex;
   flex-wrap: nowrap;
   position: absolute;
-  z-index: 3;
   font-size: 12px;
   font-weight: bold;
+
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCards) {
+        return "relative !important";
+      }
+    }};
+
+    margin: ${(props) => {
+      if (props.needSplitCards) {
+        return "0 -12px";
+      }
+    }};
+  }
 `;
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
   const { list: enemyArray, deadPlayerList, activePlayerNumber, coord } = props;
-  /*   const enemyArray = props.list; */
+
+  const enemyListOnCell = enemyArray.map((enemyItem) => {
+    const [, enemyCard] = enemyItem;
+    return enemyCard;
+  });
+
+  const needSplitCards = enemyListOnCell.length > 1;
+  /*  const needReverse= deadPlayerList&&Number(deadPlayerList[activePlayerNumber].index) ===
+  0
+} */
   return (
-    <EnemiesCardList>
+    <EnemyCardList needSplitCards={needSplitCards}>
       {enemyArray.map(([index, enemyCard]) => {
         if (deadPlayerList) {
           const isActivePlayerDead = deadPlayerList[activePlayerNumber]
@@ -166,6 +193,6 @@ export const EnemyList = (props: EnemyArray) => {
           );
         }
       })}
-    </EnemiesCardList>
+    </EnemyCardList>
   );
 };

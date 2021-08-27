@@ -1,5 +1,5 @@
-import { State, MoveDirection } from "../../business/types";
-import { checkCellHasWall } from "../../business/phases/common";
+import { State, MoveDirection } from "../../types";
+import { checkCellHasWall } from ".";
 
 /** Cheking the cases when can't take the cell. In default we think that can. */
 export const canInteractWithCell = (

@@ -55,7 +55,7 @@ export type PLayerType = {
 export type DeadPlayer = {
   name: "dead";
   orderNumber: number;
-  index: number;
+  index?: number;
 };
 
 export type InventoryType = {
