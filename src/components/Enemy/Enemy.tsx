@@ -20,7 +20,7 @@ type EnemyCardApperanceType = EnemyCardType & {
 
 const EnemyCard = styled.div<EnemyCardApperanceType>`
   ${StyledCommonCard}
-
+  position: static;
   font-size: 47px;
   text-align: start;
   vertical-align: bottom;
@@ -95,7 +95,11 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
 
 const EnemiesCardList = styled.div`
   display: flex;
+  flex-wrap: nowrap;
   position: absolute;
+  z-index: 3;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 export const EnemyList = (props: EnemyArray) => {

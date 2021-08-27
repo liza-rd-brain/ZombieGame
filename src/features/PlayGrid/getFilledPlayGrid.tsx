@@ -111,9 +111,13 @@ const CardsWrap = styled.div`
   z-index: 3;
   font-size: 12px;
   font-weight: bold;
+  /*   flex-direction: row-reverse; */
   > * {
     position: relative !important;
     margin: 0 -12px;
+
+    /*     margin: 0px -41px;
+    left: -54px; */
   }
 `;
 
