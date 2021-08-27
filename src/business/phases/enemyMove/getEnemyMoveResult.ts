@@ -66,7 +66,6 @@ export const getEnemyMoveResult = (state: State) => {
         const newState: State = {
           ...state,
           dice: state.dice - 1,
-          /*  gameState: { ...state.gameState, type: "gameStarted.playerMove" }, */
           doEffect: { type: "!checkAvailableNeighboringCell" },
         };
         return newState;

@@ -38,7 +38,7 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
               ...state,
               gameState: { ...state.gameState, coordOfAvailableCells: null },
               enemyList: newEnemyList,
-              doEffect: { type: "!getPlayerMoveResult" },
+              doEffect: { type: "!getDeadPlayerMoveResult" },
             };
           }
           case false: {

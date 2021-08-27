@@ -33,7 +33,7 @@ export const enemyMove = (state: State, action: ActionType): State => {
           return getStateEnemyMoved(state, action);
         }
 
-        case "req-getPlayerMoveResult": {
+        case "req-getDeadPlayerMoveResult": {
           return getEnemyMoveResult(state);
         }
 

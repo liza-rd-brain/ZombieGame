@@ -23,6 +23,19 @@ export function usePlayerMove() {
           });
           break;
         }
+        case "!getDeadPlayerMoveResult": {
+          const timerMoveResult = setTimeout(
+            () =>
+              dispatch({
+                type: "req-getDeadPlayerMoveResult",
+              }),
+            500
+          );
+
+          return () => {
+            clearTimeout(timerMoveResult);
+          };
+        }
 
         default:
           break;

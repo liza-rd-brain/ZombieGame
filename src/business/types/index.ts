@@ -169,6 +169,7 @@ export type TypeEffect =
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!getPlayerMoveResult" }
+  | { type: "!getDeadPlayerMoveResult" }
   | { type: "!removeEnemyCard" }
   | { type: "!checkAvailableNeighboringCards" }
   | null;
