@@ -141,10 +141,17 @@ export const EnemyList = (props: EnemyArray) => {
     const [, enemyCard] = enemyItem;
     return enemyCard;
   });
+  console.log(enemyListOnCell);
 
   const needSplitCards = enemyListOnCell.length > 1;
 
-  const indexOfFirstCard = enemyArray.findIndex(([index, enemyCard]) => {
+  const indexesOfEnemyCards = enemyArray.map(([index, enemyCard]) => {
+    return index;
+  });
+  console.log(enemyArray);
+
+  const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
+  const indexOfActiveCard = enemyArray.findIndex(([index, enemyCard]) => {
     if (deadPlayerList && deadPlayerList[activePlayerNumber]) {
       return Number(index) === Number(deadPlayerList[activePlayerNumber].index);
     } else {
@@ -155,8 +162,8 @@ export const EnemyList = (props: EnemyArray) => {
   const isFirsCardClosed = enemyListOnCell[0].apperance !== "open";
 
   const needReverseRow =
-    (indexOfFirstCard !== 0 && needSplitCards) ||
-    (isFirsCardClosed && needSplitCards);
+    (indexOfActiveCard !== 0 && needSplitCards) ||
+    (firstItemIsClosed && needSplitCards);
 
   return (
     <EnemyCardList
