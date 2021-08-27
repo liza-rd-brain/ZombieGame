@@ -6,6 +6,8 @@ export const selectCard = (state: State, action: ActionType) => {
   const { activePlayerNumber } = state;
   switch (action.type) {
     case "cardChoosed": {
+      //TODO: now in battle we can chose any card from inventory
+      //TODO: double click should be unclick!
       const newPlayerList = changeSelectedCard(state, action.payload.type);
 
       const hasAnyCardSelected = newPlayerList[activePlayerNumber].inventory

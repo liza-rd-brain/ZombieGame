@@ -14,13 +14,18 @@ export const getStateClickedEnemy = (
       const playerCanFight =
         playerList[activePlayerNumber].coord === currEnemyCoord;
 
+      const currEnemyIndex = Object.keys(enemyList).find((key) => {
+        return enemyList[Number(key)].coord === currEnemyCoord;
+      });
+
       const defeatedEnemy: EnemyCardType = {
         ...currEnemy,
         apperance: "defeated",
       };
+
       const newEnemyList = {
         ...state.enemyList,
-        [currEnemyCoord]: defeatedEnemy,
+        [Number(currEnemyIndex)]: defeatedEnemy,
       };
 
       const newInventory = deleteSelectedCard(playerList, activePlayerNumber);
@@ -39,6 +44,7 @@ export const getStateClickedEnemy = (
             ...state,
             enemyList: newEnemyList,
             playerList: newPlayerList,
+            /*  doEffect: { type: "!showDefeatEnemy" }, */
             doEffect: { type: "!removeEnemyCard" },
           };
         }
