@@ -147,7 +147,7 @@ const checkNeedSplitCards = (
   const amountEnemyOnCell = enemyOnCell.length;
 
   const phaseInteractWithEnemy = gameState.type.includes("interactWithEnemy");
-  /*   const hasTwoEnemy = amountEnemyOnCell === 2; */
+  const hasTwoEnemy = amountEnemyOnCell === 2;
   /*   const hasPlayerAndCards = hasPlayerOncell && hasCardOnCell; */
   const hasPlayerAndEnemy =
     hasEnemyOnCell && hasPlayerOncell && !phaseInteractWithEnemy;
@@ -156,6 +156,7 @@ const checkNeedSplitCards = (
   switch (true) {
     /*    case hasTwoEnemy:
     case hasPlayerAndCards: */
+    case hasTwoEnemy:
     case hasPlayerAndEnemy:
     case hasEnemyAndCard: {
       return true;
@@ -213,10 +214,7 @@ export const getFilledPlayGrid = (state: State) => {
     const getCardsOnCell = (
       needSplitCards: Boolean,
       cardList: JSX.Element,
-      playerList: PlayerListType,
-      enemyList: EnemyListType,
-      deadPlayerList: DeadPlayerListType,
-      activePlayerNumber: number
+      orderIndex: string
     ) => {
       switch (needSplitCards) {
         case false: {
@@ -229,24 +227,7 @@ export const getFilledPlayGrid = (state: State) => {
               return cardList;
             }
             default: {
-              const deadPlayerIndex =
-                deadPlayerList && deadPlayerList[activePlayerNumber]
-                  ? deadPlayerList[activePlayerNumber].index
-                  : null;
-
-              const deadPlayerCoord = deadPlayerIndex
-                ? enemyList[Number(deadPlayerIndex)].coord
-                : null;
-
-              const alivePlayerCoord = playerList[activePlayerNumber]
-                ? playerList[activePlayerNumber].coord
-                : "";
-
-              const currentCoord = deadPlayerCoord
-                ? deadPlayerCoord
-                : alivePlayerCoord;
-
-              const [hor, vert] = currentCoord.split(".");
+              const [hor, vert] = orderIndex.split(".");
               console.log(hor, vert);
               const portal = ReactDOM.createPortal(
                 <CardsPortal coordX={hor} coordY={vert}>
@@ -264,15 +245,7 @@ export const getFilledPlayGrid = (state: State) => {
       }
     };
 
-    const cardsOnCell = getCardsOnCell(
-      needSplitCards,
-      cardList,
-      playerList,
-      enemyList,
-      deadPlayerList,
-      activePlayerNumber
-    );
-    /*  const needSplitCards = amountCardsOnCell.lenght > 0; */
+    const cardsOnCell = getCardsOnCell(needSplitCards, cardList, orderIndex);
 
     const availableCells = state.gameState.coordOfAvailableCells;
     const needHighlightning = availableCells?.includes(orderIndex);

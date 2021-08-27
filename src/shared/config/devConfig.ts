@@ -8,10 +8,10 @@ export const DEV_CONFIG: ConfigType = {
   finishCoord: { hor: 11, vert: 11 },
   amountPlayers: 2,
   initialPlayerHealth: 1,
-  amountHealthItems: 30,
-  amountBoardsItems: 30,
+  amountHealthItems: 0,
+  amountBoardsItems: 0,
   amountWeaponsItems: 30,
   amountEnemies: 30,
-  cardApperance: "open",
+  cardApperance: "closed",
   playGridMode: "cssStyle",
 };
