@@ -232,7 +232,7 @@ export const getFilledPlayGrid = (state: State) => {
             }
             default: {
               const [hor, vert] = orderIndex.split(".");
-              console.log(hor, vert);
+
               const portal = ReactDOM.createPortal(
                 <CardsPortal coordX={hor} coordY={vert}>
                   <CardsWrap>{cardList}</CardsWrap>

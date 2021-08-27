@@ -14,7 +14,10 @@ export const getStateEnemySelected = (
        * we should compare indexes. They doesnt change!!!
        */
       const currEnemyIndex = Object.keys(enemyList).find((key) => {
-        return enemyList[Number(key)].coord === currEnemyCard.coord;
+        return (
+          enemyList[Number(key)].coord === currEnemyCard.coord &&
+          enemyList[Number(key)].apperance === "open"
+        );
       });
 
       if (deadPlayerList) {

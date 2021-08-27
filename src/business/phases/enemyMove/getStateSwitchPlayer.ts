@@ -14,19 +14,12 @@ export const getStateSwitchPlayer = (state: State) => {
       })
     );
 
-    console.log(newDeadPlayerList);
-
     const newState: State = {
       ...state,
       dice: 0,
       gameState: { ...state.gameState, type: "gameStarted.rollDice" },
       activePlayerNumber: newPlayerNumber,
       deadPlayerList: newDeadPlayerList,
-      /*    deadPlayerList: {
-        ...deadPlayerList,
-        [activePlayerNumber]: null,
-
-      }, */
     };
     return newState;
   } else {

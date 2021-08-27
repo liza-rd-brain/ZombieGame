@@ -20,6 +20,7 @@ type EnemyCardApperanceType = EnemyCardType & {
 
 type EnemyCardListType = {
   needSplitCards?: boolean;
+  needReverseRow?: boolean;
   /*   needReverse */
 };
 
@@ -104,6 +105,18 @@ const EnemyCardList = styled.div<EnemyCardListType>`
   position: absolute;
   font-size: 12px;
   font-weight: bold;
+  flex-direction: ${(props) => {
+    if (props.needReverseRow) {
+      return "row-reverse";
+    } else {
+      return "row";
+    }
+  }};
+  margin: ${(props) => {
+    if (props.needSplitCards) {
+      return " 0 0 !important;";
+    }
+  }};
 
   > * {
     position: ${(props) => {
@@ -130,11 +143,26 @@ export const EnemyList = (props: EnemyArray) => {
   });
 
   const needSplitCards = enemyListOnCell.length > 1;
-  /*  const needReverse= deadPlayerList&&Number(deadPlayerList[activePlayerNumber].index) ===
-  0
-} */
+
+  const indexOfFirstCard = enemyArray.findIndex(([index, enemyCard]) => {
+    if (deadPlayerList && deadPlayerList[activePlayerNumber]) {
+      return Number(index) === Number(deadPlayerList[activePlayerNumber].index);
+    } else {
+      return -1;
+    }
+  });
+
+  const isFirsCardClosed = enemyListOnCell[0].apperance !== "open";
+
+  const needReverseRow =
+    (indexOfFirstCard !== 0 && needSplitCards) ||
+    (isFirsCardClosed && needSplitCards);
+
   return (
-    <EnemyCardList needSplitCards={needSplitCards}>
+    <EnemyCardList
+      needSplitCards={needSplitCards}
+      needReverseRow={needReverseRow}
+    >
       {enemyArray.map(([index, enemyCard]) => {
         if (deadPlayerList) {
           const isActivePlayerDead = deadPlayerList[activePlayerNumber]
