@@ -13,6 +13,8 @@ import {
 
 import player from "./player.png";
 import player2 from "./player2.png";
+import player3 from "./player3.png";
+import player4 from "./player4.png";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -189,17 +191,22 @@ const Button = styled.button`
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
 
-  const playerImageList = [player, player2];
+  const playerImageList = [player, player2, player3, player4];
 
   const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
   const needSplitCards = playerListOnCell.length > 1;
 
-  const indexOfActiveCard = playerListOnCell.findIndex((playerCard, indexs) => {
+  /**
+   * If first the index of active card - then it be rendered first.
+   */
+  const indexOfActiveCard = playerListOnCell.findIndex((playerCard) => {
     return playerCard.orderNumber === numberOfPlayer;
   });
 
+  console.log(playerListOnCell);
   console.log(indexOfActiveCard);
+
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
   const playerCardList = (
