@@ -20,8 +20,7 @@ type EnemyCardApperanceType = EnemyCardType & {
 
 type EnemyCardListType = {
   needSplitCards?: boolean;
-  needReverseRow?: boolean;
-  /*   needReverse */
+  needReverseCards?: boolean;
 };
 
 const EnemyCard = styled.div<EnemyCardApperanceType>`
@@ -106,12 +105,13 @@ const EnemyCardList = styled.div<EnemyCardListType>`
   font-size: 12px;
   font-weight: bold;
   flex-direction: ${(props) => {
-    if (props.needReverseRow) {
+    if (props.needReverseCards) {
       return "row-reverse";
     } else {
       return "row";
     }
   }};
+
   margin: ${(props) => {
     if (props.needSplitCards) {
       return " 0 0 !important;";
@@ -141,16 +141,11 @@ export const EnemyList = (props: EnemyArray) => {
     const [, enemyCard] = enemyItem;
     return enemyCard;
   });
-  console.log(enemyListOnCell);
 
   const needSplitCards = enemyListOnCell.length > 1;
 
-  const indexesOfEnemyCards = enemyArray.map(([index, enemyCard]) => {
-    return index;
-  });
-  console.log(enemyArray);
-
   const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
+
   const indexOfActiveCard = enemyArray.findIndex(([index, enemyCard]) => {
     if (deadPlayerList && deadPlayerList[activePlayerNumber]) {
       return Number(index) === Number(deadPlayerList[activePlayerNumber].index);
@@ -159,16 +154,14 @@ export const EnemyList = (props: EnemyArray) => {
     }
   });
 
-  const isFirsCardClosed = enemyListOnCell[0].apperance !== "open";
-
-  const needReverseRow =
+  const needReverseCards =
     (indexOfActiveCard !== 0 && needSplitCards) ||
     (firstItemIsClosed && needSplitCards);
 
   return (
     <EnemyCardList
       needSplitCards={needSplitCards}
-      needReverseRow={needReverseRow}
+      needReverseCards={needReverseCards}
     >
       {enemyArray.map(([index, enemyCard]) => {
         if (deadPlayerList) {

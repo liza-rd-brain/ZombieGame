@@ -22,6 +22,7 @@ type PlayerItem = {
 
 type PlayerCardListType = {
   needSplitCards?: boolean;
+  needReverseCards?: boolean;
 };
 
 type PlayerListItem = {
@@ -130,6 +131,13 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   position: absolute;
   font-size: 12px;
   font-weight: bold;
+  flex-direction: ${(props) => {
+    if (props.needReverseCards) {
+      return "row-reverse";
+    } else {
+      return "row";
+    }
+  }};
 
   > * {
     position: ${(props) => {
@@ -187,8 +195,18 @@ export const PlayerList = (props: PlayerListItem) => {
 
   const needSplitCards = playerListOnCell.length > 1;
 
+  const indexOfActiveCard = playerListOnCell.findIndex((playerCard, indexs) => {
+    return playerCard.orderNumber === numberOfPlayer;
+  });
+
+  console.log(indexOfActiveCard);
+  const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
+
   const playerCardList = (
-    <PlayerCardList needSplitCards={needSplitCards}>
+    <PlayerCardList
+      needSplitCards={needSplitCards}
+      needReverseCards={needReverseCards}
+    >
       {playerListOnCell.map((playerCardItem, index) => {
         const coordOfAvailableCards = gameState.coordOfAvailableCards;
         const isActivePlayerAlive = playerList[numberOfPlayer] ? true : false;
