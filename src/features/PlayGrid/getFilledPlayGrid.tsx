@@ -85,6 +85,7 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 
   flex-direction: row;
   align-items: center;
+  z-index: 6;
 `;
 
 type PortalType = {
