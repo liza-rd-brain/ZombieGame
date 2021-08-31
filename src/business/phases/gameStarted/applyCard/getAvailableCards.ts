@@ -1,4 +1,4 @@
-import { canInteractWithCell } from "../../../../components/Player/canInteractWithCell";
+import { canInteractWithCell } from "../../common/canInteractWithCell";
 import { AvailableCellListType, State } from "../../../types";
 import { getNeighboringCellList } from "../../common";
 

@@ -80,8 +80,6 @@ const CommonWall = styled.div<WallType>`
 `;
 
 const WallImage = styled(CommonWall)<WallType>`
-  /*   cursor: default; */
-
   transform: ${(props) => {
     switch (props.barrierItem?.direction) {
       case "left": {
@@ -94,6 +92,7 @@ const WallImage = styled(CommonWall)<WallType>`
   }};
 
   &:before {
+    pointer-events: none;
     bottom: ${(props) => {
       switch (props.barrierItem?.direction) {
         case "bottom": {
@@ -407,7 +406,7 @@ export const Barrier = (props: BarrierCoord) => {
                   highlightningList={
                     highlightningList ? highlightningList() : null
                   }
-                  onClick={() => onClickHandler}
+                  onClick={() => onClickHandler()}
                 ></Wall>
               );
             }
@@ -419,7 +418,7 @@ export const Barrier = (props: BarrierCoord) => {
                   highlightningList={
                     highlightningList ? highlightningList() : null
                   }
-                  onClick={() => onClickHandler}
+                  onClick={() => onClickHandler()}
                 ></WallImage>
               );
             }

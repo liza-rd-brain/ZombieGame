@@ -15,9 +15,12 @@ export const getEnemyMoveResult = (state: State) => {
     deadPlayerList,
   } = state;
 
-  const deadPLayerCoord = deadPlayerList
-    ? enemyList[deadPlayerList[activePlayerNumber].index].coord
-    : null;
+  const enemyIndex =
+    deadPlayerList && deadPlayerList[activePlayerNumber].index
+      ? deadPlayerList[activePlayerNumber].index
+      : null;
+
+  const deadPLayerCoord = enemyIndex ? enemyList[enemyIndex].coord : null;
 
   if (deadPLayerCoord) {
     const newCellWithEnemy = gameField.values[deadPLayerCoord];
@@ -51,14 +54,11 @@ export const getEnemyMoveResult = (state: State) => {
       }
 
       case isLastStepOfMove: {
-        const newPlayerNumber = getNextPlayerNumber(state);
         const newState: State = {
           ...state,
-          dice: 0,
-          gameState: { ...state.gameState, type: "gameStarted.rollDice" },
-          activePlayerNumber: newPlayerNumber,
-          deadPlayerList: { ...deadPlayerList, [activePlayerNumber]: null },
+          doEffect: { type: "!switchToNextPlayer" },
         };
+
         return newState;
       }
 
@@ -66,7 +66,6 @@ export const getEnemyMoveResult = (state: State) => {
         const newState: State = {
           ...state,
           dice: state.dice - 1,
-          /*  gameState: { ...state.gameState, type: "gameStarted.playerMove" }, */
           doEffect: { type: "!checkAvailableNeighboringCell" },
         };
         return newState;

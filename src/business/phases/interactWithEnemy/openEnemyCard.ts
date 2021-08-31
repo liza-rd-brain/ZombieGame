@@ -7,15 +7,6 @@ import { EnemyCardType, EnemyListType, State } from "../../types";
 export const openEnemyCard = (state: State): State => {
   const { enemyList, playerList, activePlayerNumber } = state;
   const currentCoord = playerList[activePlayerNumber].coord;
-  /* 
-  const currEnemyCard = Object.entries(enemyList)
-    .map((enemyItem) => {
-      const [index, enemyCard] = enemyItem;
-      return enemyCard;
-    })
-    .find((enemyCard) => {
-      return enemyCard.coord === currentCoord;
-    }); */
 
   //TODO: we have one enemy in the same coordinate, but if not?
   const currEnemyIndex = Object.entries(enemyList)

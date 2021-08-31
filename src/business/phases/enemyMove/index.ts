@@ -6,6 +6,7 @@ import { getAvailableCells } from "./getAvailableCells";
 import { getStateEnemySelected } from "./getStateEnemySelected";
 import { getStateEnemyMoved } from "./getStateEnemyMoved";
 import { getEnemyMoveResult } from "./getEnemyMoveResult";
+import { getStateSwitchPlayer } from "./getStateSwitchPlayer";
 
 export const enemyMove = (state: State, action: ActionType): State => {
   const [, phaseInner] = state.gameState.type.split(".");
@@ -35,6 +36,10 @@ export const enemyMove = (state: State, action: ActionType): State => {
 
         case "req-getPlayerMoveResult": {
           return getEnemyMoveResult(state);
+        }
+
+        case "req-switchToNextPlayer": {
+          return getStateSwitchPlayer(state);
         }
 
         default: {

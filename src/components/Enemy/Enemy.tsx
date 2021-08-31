@@ -18,9 +18,14 @@ type EnemyCardApperanceType = EnemyCardType & {
   isCurrent: boolean;
 };
 
+type EnemyCardListType = {
+  needSplitCards?: boolean;
+  needReverseCards?: boolean;
+};
+
 const EnemyCard = styled.div<EnemyCardApperanceType>`
   ${StyledCommonCard}
-
+  position: static;
   font-size: 47px;
   text-align: start;
   vertical-align: bottom;
@@ -93,17 +98,71 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   }
 `;
 
-const EnemiesCardList = styled.div`
+const EnemyCardList = styled.div<EnemyCardListType>`
   display: flex;
+  flex-wrap: nowrap;
   position: absolute;
+  font-size: 12px;
+  font-weight: bold;
+  flex-direction: ${(props) => {
+    if (props.needReverseCards) {
+      return "row-reverse";
+    } else {
+      return "row";
+    }
+  }};
+
+  margin: ${(props) => {
+    if (props.needSplitCards) {
+      return " 0 0 !important;";
+    }
+  }};
+
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCards) {
+        return "relative !important";
+      }
+    }};
+
+    margin: ${(props) => {
+      if (props.needSplitCards) {
+        return "0 -12px";
+      }
+    }};
+  }
 `;
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
   const { list: enemyArray, deadPlayerList, activePlayerNumber, coord } = props;
-  /*   const enemyArray = props.list; */
+
+  const enemyListOnCell = enemyArray.map((enemyItem) => {
+    const [, enemyCard] = enemyItem;
+    return enemyCard;
+  });
+
+  const needSplitCards = enemyListOnCell.length > 1;
+
+  const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
+
+  const indexOfActiveCard = enemyArray.findIndex(([index, enemyCard]) => {
+    if (deadPlayerList && deadPlayerList[activePlayerNumber]) {
+      return Number(index) === Number(deadPlayerList[activePlayerNumber].index);
+    } else {
+      return -1;
+    }
+  });
+
+  const needReverseCards =
+    (indexOfActiveCard !== 0 && needSplitCards) ||
+    (firstItemIsClosed && needSplitCards);
+
   return (
-    <EnemiesCardList>
+    <EnemyCardList
+      needSplitCards={needSplitCards}
+      needReverseCards={needReverseCards}
+    >
       {enemyArray.map(([index, enemyCard]) => {
         if (deadPlayerList) {
           const isActivePlayerDead = deadPlayerList[activePlayerNumber]
@@ -162,6 +221,6 @@ export const EnemyList = (props: EnemyArray) => {
           );
         }
       })}
-    </EnemiesCardList>
+    </EnemyCardList>
   );
 };

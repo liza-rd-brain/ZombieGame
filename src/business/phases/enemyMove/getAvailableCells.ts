@@ -9,9 +9,12 @@ import { checkCanTakeCell } from "./checkCanTakeCell";
 export const getAvailableCells = (state: State): State => {
   const { activePlayerNumber, gameField, deadPlayerList, enemyList } = state;
 
-  const deadPLayerCoord = deadPlayerList
-    ? enemyList[deadPlayerList[activePlayerNumber].index].coord
-    : null;
+  const enemyIndex =
+    deadPlayerList && deadPlayerList[activePlayerNumber].index
+      ? deadPlayerList[activePlayerNumber].index
+      : null;
+
+  const deadPLayerCoord = enemyIndex ? enemyList[enemyIndex].coord : null;
 
   if (deadPLayerCoord) {
     const neighboringCellList = getNeighboringCellList(

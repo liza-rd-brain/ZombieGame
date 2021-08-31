@@ -1,4 +1,6 @@
 import ReactDOM from "react-dom";
+import React from "react";
+
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
@@ -11,7 +13,8 @@ import {
 
 import player from "./player.png";
 import player2 from "./player2.png";
-import React from "react";
+import player3 from "./player3.png";
+import player4 from "./player4.png";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -20,7 +23,8 @@ type PlayerItem = {
 };
 
 type PlayerCardListType = {
-  needSplitCard?: boolean;
+  needSplitCards?: boolean;
+  needReverseCards?: boolean;
 };
 
 type PlayerListItem = {
@@ -127,19 +131,25 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
   flex-wrap: nowrap;
   position: absolute;
-  z-index: 3;
   font-size: 12px;
   font-weight: bold;
+  flex-direction: ${(props) => {
+    if (props.needReverseCards) {
+      return "row-reverse";
+    } else {
+      return "row";
+    }
+  }};
 
   > * {
     position: ${(props) => {
-      if (props.needSplitCard) {
+      if (props.needSplitCards) {
         return "relative !important";
       }
     }};
 
     margin: ${(props) => {
-      if (props.needSplitCard) {
+      if (props.needSplitCards) {
         return "0 -12px";
       }
     }};
@@ -181,18 +191,33 @@ const Button = styled.button`
 export const PlayerList = (props: PlayerListItem) => {
   const dispatch = useDispatch();
 
-  const playerImageList = [player, player2];
+  const playerImageList = [player, player2, player3, player4];
 
   const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
 
-  const needSplitCard = playerListOnCell.length > 1;
+  const needSplitCards = playerListOnCell.length > 1;
+
+  /**
+   * If first the index of active card - then it be rendered first.
+   */
+  const indexOfActiveCard = playerListOnCell.findIndex((playerCard) => {
+    return playerCard.orderNumber === numberOfPlayer;
+  });
+
+  console.log(playerListOnCell);
+  console.log(indexOfActiveCard);
+
+  const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
   const playerCardList = (
-    <PlayerCardList needSplitCard={needSplitCard}>
+    <PlayerCardList
+      needSplitCards={needSplitCards}
+      needReverseCards={needReverseCards}
+    >
       {playerListOnCell.map((playerCardItem, index) => {
         const coordOfAvailableCards = gameState.coordOfAvailableCards;
-
         const isActivePlayerAlive = playerList[numberOfPlayer] ? true : false;
+
         switch (isActivePlayerAlive) {
           case false: {
             return (
@@ -279,11 +304,12 @@ export const PlayerList = (props: PlayerListItem) => {
                   activePLayerCoord,
                   currplayerCoord
                 );
+
                 console.log(contextMenuCoord);
 
                 const [hor, vert] = contextMenuCoord.split(".");
-
                 const fieildElem = document.getElementById("field");
+
                 switch (fieildElem) {
                   case null: {
                     return playerCard;
@@ -320,7 +346,7 @@ export const PlayerList = (props: PlayerListItem) => {
     </PlayerCardList>
   );
 
-  switch (needSplitCard) {
+  switch (needSplitCards) {
     case false: {
       return playerCardList;
     }

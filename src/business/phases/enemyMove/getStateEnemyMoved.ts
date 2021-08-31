@@ -8,10 +8,13 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
       const { deadPlayerList, activePlayerNumber, enemyList } = state;
       const direction = action.payload;
 
-      if (deadPlayerList) {
-        const currCardIndex = deadPlayerList[activePlayerNumber].index;
+      const enemyIndex =
+        deadPlayerList && deadPlayerList[activePlayerNumber].index
+          ? deadPlayerList[activePlayerNumber].index
+          : null;
 
-        const prevEnemyCoord = enemyList[currCardIndex].coord;
+      if (enemyIndex) {
+        const prevEnemyCoord = enemyList[enemyIndex].coord;
 
         const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
 
@@ -24,7 +27,7 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
             const enemyListArray = Object.entries(enemyList).map(
               (enemyItem) => {
                 const [key, enemy] = enemyItem;
-                if (Number(currCardIndex) === Number(key)) {
+                if (Number(enemyIndex) === Number(key)) {
                   const newEnemy = { ...enemy, coord: nextEnemyCoord };
                   return [key, newEnemy];
                 } else return enemyItem;

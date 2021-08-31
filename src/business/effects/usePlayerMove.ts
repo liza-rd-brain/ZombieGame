@@ -24,6 +24,20 @@ export function usePlayerMove() {
           break;
         }
 
+        case "!switchToNextPlayer": {
+          const timerMoveResult = setTimeout(
+            () =>
+              dispatch({
+                type: "req-switchToNextPlayer",
+              }),
+            500
+          );
+
+          return () => {
+            clearTimeout(timerMoveResult);
+          };
+        }
+
         default:
           break;
       }

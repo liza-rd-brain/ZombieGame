@@ -55,7 +55,7 @@ export type PLayerType = {
 export type DeadPlayer = {
   name: "dead";
   orderNumber: number;
-  index: number;
+  index?: number;
 };
 
 export type InventoryType = {
@@ -169,6 +169,7 @@ export type TypeEffect =
   | { type: "!getBattleResult" }
   | { type: "!checkAvailableNeighboringCell" }
   | { type: "!getPlayerMoveResult" }
+  | { type: "!switchToNextPlayer" }
   | { type: "!removeEnemyCard" }
   | { type: "!checkAvailableNeighboringCards" }
   | null;

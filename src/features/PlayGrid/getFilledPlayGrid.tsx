@@ -2,7 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 
-import { State, PlayGridMode } from "../../business/types";
+import {
+  State,
+  PlayGridMode,
+  PlayerListType,
+  CellType,
+  EnemyListType,
+  DeadPlayerListType,
+  GameState,
+} from "../../business/types";
 import { getCards } from "./getCards";
 import { getPlayersList } from "./getPlayersList";
 import { getEnemyList } from "./getEnemyList";
@@ -77,7 +85,92 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 
   flex-direction: row;
   align-items: center;
+  z-index: 6;
 `;
+
+type PortalType = {
+  coordX: string;
+  coordY: string;
+};
+
+const CardsPortal = styled.div<PortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
+
+const CardsWrap = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  position: absolute;
+  z-index: 3;
+  font-size: 12px;
+  font-weight: bold;
+  /*   flex-direction: row-reverse; */
+  > * {
+    position: relative !important;
+    margin: 0 -12px;
+
+    /*     margin: 0px -41px;
+    left: -54px; */
+  }
+`;
+
+const checkNeedSplitCards = (
+  playerList: PlayerListType,
+  orderIndex: string,
+  cell: CellType,
+  enemiyList: EnemyListType,
+  gameState: GameState
+) => {
+  const playerItemList = Object.entries(playerList);
+
+  const playerListOnCell = playerItemList
+    .filter((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard.coord === orderIndex && playerCard.name === "player";
+    })
+    .map((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard;
+    });
+
+  const hasPlayerOncell = playerListOnCell.length === 1;
+
+  const hasCardOnCell = cell.cardItem.length === 1;
+
+  const enemyOnCell = Object.entries(enemiyList).filter(
+    ([string, enemyCard]) => enemyCard.coord === orderIndex
+  );
+  const hasEnemyOnCell = enemyOnCell.length === 1;
+  const amountEnemyOnCell = enemyOnCell.length;
+
+  const phaseInteractWithEnemy = gameState.type.includes("interactWithEnemy");
+  const hasTwoEnemy = amountEnemyOnCell === 2;
+  /*   const hasPlayerAndCards = hasPlayerOncell && hasCardOnCell; */
+  const hasPlayerAndEnemy =
+    hasEnemyOnCell && hasPlayerOncell && !phaseInteractWithEnemy;
+  const hasEnemyAndCard = hasEnemyOnCell && hasCardOnCell;
+
+  switch (true) {
+    /*    case hasTwoEnemy:
+    case hasPlayerAndCards: */
+    case hasTwoEnemy:
+    case hasPlayerAndEnemy:
+    case hasEnemyAndCard: {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+};
 
 export const getFilledPlayGrid = (state: State) => {
   const {
@@ -97,11 +190,10 @@ export const getFilledPlayGrid = (state: State) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
+    //TODO: Need to find out is more than one card in the cell!
     const cardList = (
       <>
         {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
-
-        {getCards(cellValues, hor, vert)}
 
         {cellValues.name === "commonCell"
           ? getEnemyList(
@@ -111,8 +203,54 @@ export const getFilledPlayGrid = (state: State) => {
               activePlayerNumber
             )
           : null}
+
+        {getCards(cellValues, hor, vert)}
       </>
     );
+
+    const needSplitCards = checkNeedSplitCards(
+      playerList,
+      orderIndex,
+      cellValues,
+      enemyList,
+      gameState
+    );
+
+    const getCardsOnCell = (
+      needSplitCards: Boolean,
+      cardList: JSX.Element,
+      orderIndex: string
+    ) => {
+      switch (needSplitCards) {
+        case false: {
+          return cardList;
+        }
+        case true: {
+          const fieildElem = document.getElementById("field");
+          switch (fieildElem) {
+            case null: {
+              return cardList;
+            }
+            default: {
+              const [hor, vert] = orderIndex.split(".");
+
+              const portal = ReactDOM.createPortal(
+                <CardsPortal coordX={hor} coordY={vert}>
+                  <CardsWrap>{cardList}</CardsWrap>
+                </CardsPortal>,
+                fieildElem
+              );
+              return portal;
+            }
+          }
+        }
+        default: {
+          return null;
+        }
+      }
+    };
+
+    const cardsOnCell = getCardsOnCell(needSplitCards, cardList, orderIndex);
 
     const availableCells = state.gameState.coordOfAvailableCells;
     const needHighlightning = availableCells?.includes(orderIndex);
@@ -125,7 +263,7 @@ export const getFilledPlayGrid = (state: State) => {
               needHighlightning={needHighlightning}
               mode={_config.playGridMode}
             >
-              {cardList}
+              {cardsOnCell}
 
               {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
             </CellItem>
@@ -139,15 +277,15 @@ export const getFilledPlayGrid = (state: State) => {
         const currPlayerCoord = playerList[activePlayerNumber].coord;
         const [playerX, playerY] = currPlayerCoord.split(".");
 
-        const isPhaseCardsSeparate =
+        const isPhaseCreateSeparateWindow =
           gameState.type.includes("interactWithEnemy") ||
           gameState.type === "gameStarted.takeCard";
 
         //For creating portal
-        const isNeedSepareteCards =
-          isPhaseCardsSeparate && playerX === hor && playerY === vert;
+        const isNeedCreateSeparateWindow =
+          isPhaseCreateSeparateWindow && playerX === hor && playerY === vert;
 
-        switch (isNeedSepareteCards) {
+        switch (isNeedCreateSeparateWindow) {
           case true: {
             const fieildElem = document.getElementById("field");
 
@@ -176,7 +314,7 @@ export const getFilledPlayGrid = (state: State) => {
                     {ReactDOM.createPortal(
                       <>
                         <UnderlayerItem coordX={hor} coordY={vert}>
-                          {cardList}
+                          {cardsOnCell}
                         </UnderlayerItem>
                       </>,
                       fieildElem
@@ -194,7 +332,7 @@ export const getFilledPlayGrid = (state: State) => {
                   needHighlightning={needHighlightning}
                   mode={_config.playGridMode}
                 >
-                  {cardList}
+                  {cardsOnCell}
 
                   {_config.playGridMode === "cssStyle"
                     ? `${hor}.${vert}`
