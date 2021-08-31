@@ -138,6 +138,7 @@ export type State = {
 };
 
 export type GameState = GameStateTypes & {
+  attackInitiator?: number;
   coordOfAvailableCards: string[] | null;
   coordOfAvailableCells: string[] | null;
 };

@@ -2,7 +2,7 @@ import { DeadPlayerListType, State } from "../../types";
 import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const getStateSwitchPlayer = (state: State) => {
-  const { activePlayerNumber, deadPlayerList } = state;
+  const { deadPlayerList } = state;
 
   if (deadPlayerList) {
     const newPlayerNumber = getNextPlayerNumber(state);

@@ -1,8 +1,8 @@
-import { EnemyListType, State } from "../../types";
+import { EnemyListType, GameState, State } from "../../types";
 import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const removeEnemyCard = (state: State): State => {
-  const { enemyList, activePlayerNumber, playerList } = state;
+  const { enemyList, activePlayerNumber, playerList, gameState } = state;
   const currentCoord = playerList[activePlayerNumber].coord;
 
   const newEnemyArray = Object.entries(enemyList).filter((enemyItem) => {
@@ -13,11 +13,16 @@ export const removeEnemyCard = (state: State): State => {
 
   const newPlayerNumber = getNextPlayerNumber(state);
 
+  const { attackInitiator, ...newGameState } = gameState;
+
   return {
     ...state,
     enemyList: newEnemyList,
     dice: 0,
-    gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+    gameState: {
+      ...newGameState,
+      type: "gameStarted.rollDice",
+    },
     activePlayerNumber: newPlayerNumber,
   };
 };
