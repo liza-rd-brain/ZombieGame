@@ -9,6 +9,8 @@ import { Inventory } from "../components/Inventory";
 
 import player from "../components/Player/player.png";
 import player2 from "../components/Player/player2.png";
+import player3 from "../components/Player/player3.png";
+import player4 from "../components/Player/player4.png";
 
 type AvatarType = { image: string };
 
@@ -68,7 +70,7 @@ export const PlayerStatus = () => {
   const { activePlayerNumber, playerList } = useSelector((state: State) => ({
     ...state,
   }));
-  const playerImageList = [player, player2];
+  const playerImageList = [player, player2, player3, player4];
 
   // TODO: why pass the index?
 
