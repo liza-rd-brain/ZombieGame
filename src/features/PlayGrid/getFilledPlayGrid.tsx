@@ -194,16 +194,12 @@ export const getFilledPlayGrid = (state: State) => {
     const cardList = (
       <>
         {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
-
-        {cellValues.name === "commonCell"
-          ? getEnemyList(
-              orderIndex,
-              enemyList,
-              deadPlayerList,
-              activePlayerNumber
-            )
-          : null}
-
+        {getEnemyList(
+          orderIndex,
+          enemyList,
+          deadPlayerList,
+          activePlayerNumber
+        )}
         {getCards(cellValues, hor, vert)}
       </>
     );
