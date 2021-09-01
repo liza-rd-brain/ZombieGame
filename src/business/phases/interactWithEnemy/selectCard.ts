@@ -10,12 +10,14 @@ export const selectCard = (state: State, action: ActionType) => {
 
       const currPlayerInventory = playerList[activePlayerNumber].inventory;
 
-      const hasChosenCard =
-        action.payload.type && currPlayerInventory[action.payload.type] !== 0
-          ? true
-          : false;
+      const isChosenCardWeapon =
+        action.payload.type === "weapon" ? true : false;
 
-      switch (hasChosenCard) {
+      const hasWeapon = currPlayerInventory.weapon !== 0 ? true : false;
+
+      const chosenWeapon = isChosenCardWeapon && hasWeapon;
+
+      switch (chosenWeapon) {
         case true: {
           const newPlayerList = changeSelectedCard(state, action.payload.type);
 
