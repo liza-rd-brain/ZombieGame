@@ -40,6 +40,7 @@ export const getPlayerMoveResult = (state: State) => {
   const { attackInitiator, ...newGameState } = gameState;
 
   // TODO: Is flat switch okey? Or i need it nested?!
+  //TODO: add situation, when meet enemy and card on cell!
   switch (true) {
     case takeFinish: {
       const newState: State = {
@@ -47,19 +48,6 @@ export const getPlayerMoveResult = (state: State) => {
         dice: state.dice - 1,
         gameResult: "Вы выиграли",
         doEffect: null,
-      };
-      return newState;
-    }
-
-    case takeCard: {
-      const newState: State = {
-        ...state,
-        dice: state.dice - 1,
-        gameState: {
-          ...newGameState,
-          type: "gameStarted.takeCard",
-        },
-        doEffect: { type: "!checkApperanceInventoryCard" },
       };
       return newState;
     }
@@ -73,6 +61,19 @@ export const getPlayerMoveResult = (state: State) => {
           type: "interactWithEnemy",
         },
         doEffect: { type: "!checkApperanceEnemyCard" },
+      };
+      return newState;
+    }
+
+    case takeCard: {
+      const newState: State = {
+        ...state,
+        dice: state.dice - 1,
+        gameState: {
+          ...newGameState,
+          type: "gameStarted.takeCard",
+        },
+        doEffect: { type: "!checkApperanceInventoryCard" },
       };
       return newState;
     }

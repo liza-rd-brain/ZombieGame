@@ -153,14 +153,22 @@ const checkNeedSplitCards = (
 
   const phaseInteractWithEnemy = gameState.type.includes("interactWithEnemy");
   const hasTwoEnemy = amountEnemyOnCell === 2;
-  /*   const hasPlayerAndCards = hasPlayerOncell && hasCardOnCell; */
+
   const hasPlayerAndEnemy =
     hasEnemyOnCell && hasPlayerOncell && !phaseInteractWithEnemy;
   const hasEnemyAndCard = hasEnemyOnCell && hasCardOnCell;
 
+  const hasEnemyAndPlayerAndCard =
+    hasEnemyOnCell &&
+    hasPlayerOncell &&
+    hasCardOnCell &&
+    phaseInteractWithEnemy;
+
   switch (true) {
-    /*    case hasTwoEnemy:
-    case hasPlayerAndCards: */
+    case hasEnemyAndPlayerAndCard: {
+      return false;
+    }
+
     case hasTwoEnemy:
     case hasPlayerAndEnemy:
     case hasEnemyAndCard: {
@@ -168,6 +176,40 @@ const checkNeedSplitCards = (
     }
     default: {
       return false;
+    }
+  }
+};
+
+const getCardsOnCell = (
+  needSplitCards: Boolean,
+  cardList: JSX.Element,
+  orderIndex: string
+) => {
+  switch (needSplitCards) {
+    case false: {
+      return cardList;
+    }
+    case true: {
+      const fieildElem = document.getElementById("field");
+      switch (fieildElem) {
+        case null: {
+          return cardList;
+        }
+        default: {
+          const [hor, vert] = orderIndex.split(".");
+
+          const portal = ReactDOM.createPortal(
+            <CardsPortal coordX={hor} coordY={vert}>
+              <CardsWrap>{cardList}</CardsWrap>
+            </CardsPortal>,
+            fieildElem
+          );
+          return portal;
+        }
+      }
+    }
+    default: {
+      return null;
     }
   }
 };
@@ -191,6 +233,7 @@ export const getFilledPlayGrid = (state: State) => {
     const [hor, vert] = orderIndex.split(".");
 
     //TODO: Need to find out is more than one card in the cell!
+
     const cardList = (
       <>
         {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
@@ -204,6 +247,20 @@ export const getFilledPlayGrid = (state: State) => {
       </>
     );
 
+    const cardListWithoutInventoryCards = (
+      <>
+        {getPlayersList(orderIndex, playerList, activePlayerNumber, gameState)}
+        {getEnemyList(
+          orderIndex,
+          enemyList,
+          deadPlayerList,
+          activePlayerNumber
+        )}
+      </>
+    );
+
+    const inventoryElement = <>{getCards(cellValues, hor, vert)}</>;
+
     const needSplitCards = checkNeedSplitCards(
       playerList,
       orderIndex,
@@ -212,43 +269,10 @@ export const getFilledPlayGrid = (state: State) => {
       gameState
     );
 
-    const getCardsOnCell = (
-      needSplitCards: Boolean,
-      cardList: JSX.Element,
-      orderIndex: string
-    ) => {
-      switch (needSplitCards) {
-        case false: {
-          return cardList;
-        }
-        case true: {
-          const fieildElem = document.getElementById("field");
-          switch (fieildElem) {
-            case null: {
-              return cardList;
-            }
-            default: {
-              const [hor, vert] = orderIndex.split(".");
-
-              const portal = ReactDOM.createPortal(
-                <CardsPortal coordX={hor} coordY={vert}>
-                  <CardsWrap>{cardList}</CardsWrap>
-                </CardsPortal>,
-                fieildElem
-              );
-              return portal;
-            }
-          }
-        }
-        default: {
-          return null;
-        }
-      }
-    };
-
     const cardsOnCell = getCardsOnCell(needSplitCards, cardList, orderIndex);
 
     const availableCells = state.gameState.coordOfAvailableCells;
+
     const needHighlightning = availableCells?.includes(orderIndex);
 
     switch (isCurrPlayerAlive) {
@@ -291,32 +315,99 @@ export const getFilledPlayGrid = (state: State) => {
               }
 
               default: {
-                return (
-                  <React.Fragment key={`${hor}.${vert}`}>
-                    <Wrap key={`${hor}.${vert}`}>
-                      <CellItem
-                        needHighlightning={needHighlightning}
-                        mode={_config.playGridMode}
-                      >
-                        {_config.playGridMode === "cssStyle"
-                          ? `${hor}.${vert}`
-                          : null}
-                      </CellItem>
-                      {cellValues.name === "commonCell" ? (
-                        <Barrier orderIndex={orderIndex}></Barrier>
-                      ) : null}
-                    </Wrap>
-
-                    {ReactDOM.createPortal(
-                      <>
-                        <UnderlayerItem coordX={hor} coordY={vert}>
-                          {cardsOnCell}
-                        </UnderlayerItem>
-                      </>,
-                      fieildElem
-                    )}
-                  </React.Fragment>
+                const enemyOnCell = Object.entries(enemyList).filter(
+                  ([string, enemyCard]) => enemyCard.coord === orderIndex
                 );
+                const hasEnemyOnCell = enemyOnCell.length === 1;
+
+                const playerItemList = Object.entries(playerList);
+
+                const playerListOnCell = playerItemList
+                  .filter((playerItem) => {
+                    const [, playerCard] = playerItem;
+                    return (
+                      playerCard.coord === orderIndex &&
+                      playerCard.name === "player"
+                    );
+                  })
+                  .map((playerItem) => {
+                    const [, playerCard] = playerItem;
+                    return playerCard;
+                  });
+
+                const hasPlayerOncell = playerListOnCell.length === 1;
+
+                const cellValues = gameField.values[orderIndex];
+                const hasCardOnCell = cellValues.cardItem.length === 1;
+
+                const phaseInteractWithEnemy =
+                  gameState.type.includes("interactWithEnemy");
+
+                const hasEnemyAndPlayerAndCard =
+                  hasEnemyOnCell &&
+                  hasPlayerOncell &&
+                  hasCardOnCell &&
+                  phaseInteractWithEnemy;
+
+                switch (hasEnemyAndPlayerAndCard) {
+                  case false: {
+                    return (
+                      <React.Fragment key={`${hor}.${vert}`}>
+                        <Wrap key={`${hor}.${vert}`}>
+                          <CellItem
+                            needHighlightning={needHighlightning}
+                            mode={_config.playGridMode}
+                          >
+                            {_config.playGridMode === "cssStyle"
+                              ? `${hor}.${vert}`
+                              : null}
+                          </CellItem>
+                          {cellValues.name === "commonCell" ? (
+                            <Barrier orderIndex={orderIndex}></Barrier>
+                          ) : null}
+                        </Wrap>
+
+                        {ReactDOM.createPortal(
+                          <>
+                            <UnderlayerItem coordX={hor} coordY={vert}>
+                              {cardsOnCell}
+                            </UnderlayerItem>
+                          </>,
+                          fieildElem
+                        )}
+                      </React.Fragment>
+                    );
+                  }
+                  case true: {
+                    return (
+                      <React.Fragment key={`${hor}.${vert}`}>
+                        <Wrap key={`${hor}.${vert}`}>
+                          <CellItem
+                            needHighlightning={needHighlightning}
+                            mode={_config.playGridMode}
+                          >
+                            {_config.playGridMode === "cssStyle"
+                              ? `${hor}.${vert}`
+                              : null}
+                            {inventoryElement}
+                          </CellItem>
+                          {cellValues.name === "commonCell" ? (
+                            <Barrier orderIndex={orderIndex}></Barrier>
+                          ) : null}
+                        </Wrap>
+
+                        {ReactDOM.createPortal(
+                          <>
+                            <UnderlayerItem coordX={hor} coordY={vert}>
+                              {cardListWithoutInventoryCards}
+                            </UnderlayerItem>
+                          </>,
+                          fieildElem
+                        )}
+                      </React.Fragment>
+                    );
+                  }
+                }
               }
             }
           }
