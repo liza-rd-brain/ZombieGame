@@ -31,7 +31,7 @@ export const getPlayerMoveResult = (state: State) => {
     }
   );
 
-  //TODO: Why should i check this-?!
+  //TODO: Why should i check commonCell-?!
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" && hasCurrCoordEnemy
       ? true
