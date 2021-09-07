@@ -204,9 +204,6 @@ export const PlayerList = (props: PlayerListItem) => {
     return playerCard.orderNumber === numberOfPlayer;
   });
 
-  console.log(playerListOnCell);
-  console.log(indexOfActiveCard);
-
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
   const playerCardList = (
@@ -340,6 +337,10 @@ export const PlayerList = (props: PlayerListItem) => {
                 return playerCard;
               }
             }
+          }
+
+          default: {
+            return null;
           }
         }
       })}

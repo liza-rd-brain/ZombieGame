@@ -1,4 +1,4 @@
-import { State, TypeOfCard } from "../../types";
+import { State } from "../../types";
 
 import { ActionType } from "../../reducer";
 

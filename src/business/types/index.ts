@@ -138,12 +138,13 @@ export type State = {
 };
 
 export type GameState = GameStateTypes & {
+  attackInitiator?: number;
   coordOfAvailableCards: string[] | null;
   coordOfAvailableCells: string[] | null;
 };
 
 export type ConfigType = {
-  //TODO: startCoord hasn`t contain barriers. It`s dont shange, maybe don`t need in config, but need initialCoord for player?
+  //TODO: startCoord hasn`t contain barriers. It`s dont сhange, maybe don`t need in config, but need initialCoord for player?
   startCoord: CoordItem;
   finishCoord: CoordItem;
   amountPlayers: number;

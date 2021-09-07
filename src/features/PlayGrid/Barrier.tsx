@@ -422,8 +422,12 @@ export const Barrier = (props: BarrierCoord) => {
                 ></WallImage>
               );
             }
+            default: {
+              return null;
+            }
           }
         };
+
         switch (isCurrPlayerAlive) {
           case false: {
             return getWallItem(barrier, _config.playGridMode, null, null);
@@ -499,6 +503,10 @@ export const Barrier = (props: BarrierCoord) => {
               getHighlightningListItem,
               onClickHandler
             );
+          }
+
+          default: {
+            return null;
           }
         }
       });

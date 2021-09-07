@@ -6,7 +6,7 @@ export const checkCardApperance = (state: State): State => {
 
   const currEnemy = Object.entries(enemyList)
     .map((enemyItem) => {
-      const [index, enemyCard] = enemyItem;
+      const [, enemyCard] = enemyItem;
       return enemyCard;
     })
     .find((enemyCard) => {

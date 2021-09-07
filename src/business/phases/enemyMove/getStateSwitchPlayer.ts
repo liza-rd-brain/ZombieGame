@@ -2,14 +2,14 @@ import { DeadPlayerListType, State } from "../../types";
 import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const getStateSwitchPlayer = (state: State) => {
-  const { activePlayerNumber, deadPlayerList } = state;
+  const { deadPlayerList } = state;
 
   if (deadPlayerList) {
     const newPlayerNumber = getNextPlayerNumber(state);
 
     const newDeadPlayerList: DeadPlayerListType = Object.fromEntries(
       Object.entries(deadPlayerList).map(([orderIndex, deadPlayerItem]) => {
-        const { name, orderNumber, index } = deadPlayerItem;
+        const { name, orderNumber } = deadPlayerItem;
         return [orderIndex, { name, orderNumber }];
       })
     );

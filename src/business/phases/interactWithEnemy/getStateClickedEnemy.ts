@@ -11,6 +11,7 @@ export const getStateClickedEnemy = (
       const { activePlayerNumber, playerList, enemyList } = state;
       const currEnemy = action.payload.enemyCard;
       const currEnemyCoord = playerList[activePlayerNumber].coord;
+
       const playerCanFight =
         playerList[activePlayerNumber].coord === currEnemyCoord;
 
@@ -44,7 +45,6 @@ export const getStateClickedEnemy = (
             ...state,
             enemyList: newEnemyList,
             playerList: newPlayerList,
-            /*  doEffect: { type: "!showDefeatEnemy" }, */
             doEffect: { type: "!removeEnemyCard" },
           };
         }
@@ -52,6 +52,7 @@ export const getStateClickedEnemy = (
           return state;
         }
       }
+      break;
     }
     default: {
       return state;

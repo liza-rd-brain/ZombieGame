@@ -1,19 +1,12 @@
-import { State } from "../../types";
-import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
+import { DeadPlayerListType, State } from "../../types";
 
 /**
  * @returns  new state depending on the result of the enemys's movement.
  */
 
 export const getEnemyMoveResult = (state: State) => {
-  const {
-    gameField,
-    playerList,
-    activePlayerNumber,
-    dice,
-    enemyList,
-    deadPlayerList,
-  } = state;
+  const { playerList, activePlayerNumber, dice, enemyList, deadPlayerList } =
+    state;
 
   const enemyIndex =
     deadPlayerList && deadPlayerList[activePlayerNumber].index
@@ -23,9 +16,11 @@ export const getEnemyMoveResult = (state: State) => {
   const deadPLayerCoord = enemyIndex ? enemyList[enemyIndex].coord : null;
 
   if (deadPLayerCoord) {
-    const newCellWithEnemy = gameField.values[deadPLayerCoord];
     const isLastStepOfMove = dice === 1;
 
+    /**
+     * indexMetPlayerCard  can be 0
+     */
     const indexMetPlayerCard = Object.values(playerList).find((playerItem) => {
       return playerItem.coord === deadPLayerCoord;
     })?.orderNumber;
@@ -36,17 +31,34 @@ export const getEnemyMoveResult = (state: State) => {
     // TODO: Is flat switch okey? Or i need it nested?!
     switch (true) {
       case metPlayerCard: {
-        if (indexMetPlayerCard || indexMetPlayerCard === 0) {
+        if (
+          (deadPlayerList && indexMetPlayerCard) ||
+          (deadPlayerList && indexMetPlayerCard === 0)
+        ) {
+          /**
+           * DeadPlayerList without index of active card
+           */
+          const newDeadPlayerList: DeadPlayerListType = Object.fromEntries(
+            Object.entries(deadPlayerList).map(
+              ([orderIndex, deadPlayerItem]) => {
+                const { name, orderNumber } = deadPlayerItem;
+                return [orderIndex, { name, orderNumber }];
+              }
+            )
+          );
+
           const newState: State = {
             ...state,
             dice: state.dice - 1,
             gameState: {
               ...state.gameState,
+              attackInitiator: activePlayerNumber,
               type: "interactWithEnemy.throwBattleDice",
             },
             activePlayerNumber: indexMetPlayerCard,
-            deadPlayerList: { ...deadPlayerList, [activePlayerNumber]: null },
+            deadPlayerList: newDeadPlayerList,
           };
+
           return newState;
         } else {
           return state;

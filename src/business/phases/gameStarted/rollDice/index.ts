@@ -21,6 +21,7 @@ export const rollDice = (state: State, action: ActionType): State => {
             },
           };
         }
+
         case "player": {
           return {
             ...state,
@@ -30,6 +31,7 @@ export const rollDice = (state: State, action: ActionType): State => {
           };
         }
       }
+      break;
     }
 
     default:

@@ -6,7 +6,7 @@ import { getBattleResult } from "./getBattleResult";
 import { removeEnemyCard } from "./removeEnemyCard";
 import { getStateClickedEnemy } from "./getStateClickedEnemy";
 import { checkCardApperance } from "./checkCardApperance";
-import { trownBattleDice } from "./trownBattleDice";
+import { thrownBattleDice } from "./thrownBattleDice";
 import { selectCard } from "./selectCard";
 
 export const interactWithEnemy = (state: State, action: ActionType): State => {
@@ -16,7 +16,7 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
     case "makeBattleAction": {
       switch (action.type) {
         case "diceThrown": {
-          return trownBattleDice(state, action);
+          return thrownBattleDice(state, action);
         }
 
         case "cardChoosed": {
@@ -49,7 +49,7 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
     }
 
     case "throwBattleDice": {
-      return trownBattleDice(state, action);
+      return thrownBattleDice(state, action);
     }
 
     default: {

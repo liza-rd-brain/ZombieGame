@@ -6,7 +6,14 @@ import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
  */
 
 export const getPlayerMoveResult = (state: State) => {
-  const { gameField, playerList, activePlayerNumber, dice, enemyList } = state;
+  const {
+    gameField,
+    playerList,
+    activePlayerNumber,
+    dice,
+    enemyList,
+    gameState,
+  } = state;
 
   const newPlayerCoord = playerList[activePlayerNumber].coord;
   const newCellWithPlayer = gameField.values[newPlayerCoord];
@@ -24,13 +31,16 @@ export const getPlayerMoveResult = (state: State) => {
     }
   );
 
-  //TODO: Why should i check this-?!
+  //TODO: Why should i check commonCell-?!
   const metEnemyCard =
     newCellWithPlayer?.name === "commonCell" && hasCurrCoordEnemy
       ? true
       : false;
 
+  const { attackInitiator, ...newGameState } = gameState;
+
   // TODO: Is flat switch okey? Or i need it nested?!
+  //TODO: add situation, when meet enemy and card on cell!
   switch (true) {
     case takeFinish: {
       const newState: State = {
@@ -42,22 +52,28 @@ export const getPlayerMoveResult = (state: State) => {
       return newState;
     }
 
-    case takeCard: {
-      const newState: State = {
-        ...state,
-        dice: state.dice - 1,
-        gameState: { ...state.gameState, type: "gameStarted.takeCard" },
-        doEffect: { type: "!checkApperanceInventoryCard" },
-      };
-      return newState;
-    }
-
     case metEnemyCard: {
       const newState: State = {
         ...state,
         dice: state.dice - 1,
-        gameState: { ...state.gameState, type: "interactWithEnemy" },
+        gameState: {
+          ...newGameState,
+          type: "interactWithEnemy",
+        },
         doEffect: { type: "!checkApperanceEnemyCard" },
+      };
+      return newState;
+    }
+
+    case takeCard: {
+      const newState: State = {
+        ...state,
+        dice: state.dice - 1,
+        gameState: {
+          ...newGameState,
+          type: "gameStarted.takeCard",
+        },
+        doEffect: { type: "!checkApperanceInventoryCard" },
       };
       return newState;
     }
@@ -67,7 +83,10 @@ export const getPlayerMoveResult = (state: State) => {
       const newState: State = {
         ...state,
         dice: 0,
-        gameState: { ...state.gameState, type: "gameStarted.rollDice" },
+        gameState: {
+          ...newGameState,
+          type: "gameStarted.rollDice",
+        },
         activePlayerNumber: newPlayerNumber,
       };
       return newState;
