@@ -52,6 +52,7 @@ export const getStateClickedEnemy = (
           return state;
         }
       }
+      break;
     }
     default: {
       return state;

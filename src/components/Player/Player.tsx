@@ -338,6 +338,10 @@ export const PlayerList = (props: PlayerListItem) => {
               }
             }
           }
+
+          default: {
+            return null;
+          }
         }
       })}
     </PlayerCardList>

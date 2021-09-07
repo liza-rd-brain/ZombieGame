@@ -1,10 +1,6 @@
 import { EnemyList } from "../../components";
 
-import {
-  EnemyListType,
-  EnemyCardType,
-  DeadPlayerListType,
-} from "../../business/types";
+import { EnemyListType, DeadPlayerListType } from "../../business/types";
 
 export const getEnemyList = (
   index: string,

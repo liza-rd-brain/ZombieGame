@@ -1,4 +1,4 @@
-import { EnemyCardType, EnemyListType, State } from "../../types";
+import { State } from "../../types";
 
 /**
  * Need separate method for open EnemyCard
@@ -10,10 +10,10 @@ export const openEnemyCard = (state: State): State => {
 
   //TODO: we have one enemy in the same coordinate, but if not?
   const currEnemyIndex = Object.entries(enemyList)
-    .filter(([index, enemyCard]) => {
+    .filter(([, enemyCard]) => {
       return enemyCard.coord === currentCoord;
     })
-    .map(([index, enemyCard]) => {
+    .map(([index]) => {
       return index;
     })
     .join();
@@ -39,21 +39,4 @@ export const openEnemyCard = (state: State): State => {
   } else {
     return state;
   }
-  /*   if (currEnemyCard) {
-    const openedEnemyCard: EnemyCardType = {
-      ...currEnemyCard,
-      apperance: "open",
-    };
-
-    const newEnemyList = { ...enemyList, [currentCoord]: openedEnemyCard };
-    return {
-      ...state,
-      enemyList: newEnemyList,
-      gameState: {
-        ...state.gameState,
-        type: "interactWithEnemy.throwBattleDice",
-      },
-      dice: 0,
-    };
-  } else return state; */
 };

@@ -9,7 +9,7 @@ export const getStateSwitchPlayer = (state: State) => {
 
     const newDeadPlayerList: DeadPlayerListType = Object.fromEntries(
       Object.entries(deadPlayerList).map(([orderIndex, deadPlayerItem]) => {
-        const { name, orderNumber, index } = deadPlayerItem;
+        const { name, orderNumber } = deadPlayerItem;
         return [orderIndex, { name, orderNumber }];
       })
     );

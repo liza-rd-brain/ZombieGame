@@ -8,7 +8,6 @@ import {
   PlayerListType,
   CellType,
   EnemyListType,
-  DeadPlayerListType,
   GameState,
 } from "../../business/types";
 import { getCards } from "./getCards";
@@ -410,6 +409,7 @@ export const getFilledPlayGrid = (state: State) => {
                 }
               }
             }
+            break;
           }
 
           case false: {
@@ -438,6 +438,7 @@ export const getFilledPlayGrid = (state: State) => {
         }
       }
     }
+    return null;
   });
 
   return fullPlayerGrid;

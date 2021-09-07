@@ -1,19 +1,12 @@
 import { DeadPlayerListType, State } from "../../types";
-import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 /**
  * @returns  new state depending on the result of the enemys's movement.
  */
 
 export const getEnemyMoveResult = (state: State) => {
-  const {
-    gameField,
-    playerList,
-    activePlayerNumber,
-    dice,
-    enemyList,
-    deadPlayerList,
-  } = state;
+  const { playerList, activePlayerNumber, dice, enemyList, deadPlayerList } =
+    state;
 
   const enemyIndex =
     deadPlayerList && deadPlayerList[activePlayerNumber].index
@@ -23,7 +16,6 @@ export const getEnemyMoveResult = (state: State) => {
   const deadPLayerCoord = enemyIndex ? enemyList[enemyIndex].coord : null;
 
   if (deadPLayerCoord) {
-    const newCellWithEnemy = gameField.values[deadPLayerCoord];
     const isLastStepOfMove = dice === 1;
 
     /**

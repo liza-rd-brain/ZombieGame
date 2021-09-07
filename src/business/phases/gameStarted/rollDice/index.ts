@@ -31,6 +31,7 @@ export const rollDice = (state: State, action: ActionType): State => {
           };
         }
       }
+      break;
     }
 
     default:

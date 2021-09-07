@@ -135,7 +135,7 @@ const EnemyCardList = styled.div<EnemyCardListType>`
 
 export const EnemyList = (props: EnemyArray) => {
   const dispatch = useDispatch();
-  const { list: enemyArray, deadPlayerList, activePlayerNumber, coord } = props;
+  const { list: enemyArray, deadPlayerList, activePlayerNumber } = props;
 
   const enemyListOnCell = enemyArray.map((enemyItem) => {
     const [, enemyCard] = enemyItem;
@@ -203,6 +203,9 @@ export const EnemyList = (props: EnemyArray) => {
                   }}
                 ></EnemyCard>
               );
+            }
+            default: {
+              return null;
             }
           }
         } else {

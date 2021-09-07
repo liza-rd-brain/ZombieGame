@@ -60,7 +60,9 @@ export const getStateEnemySelected = (
       } else {
         return state;
       }
+      break;
     }
+
     default: {
       return state;
     }

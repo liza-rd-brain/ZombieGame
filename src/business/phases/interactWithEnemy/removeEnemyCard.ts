@@ -1,4 +1,4 @@
-import { EnemyListType, GameState, State } from "../../types";
+import { EnemyListType, State } from "../../types";
 import { getNextPlayerNumber } from "../common/getNextPlayerNumber";
 
 export const removeEnemyCard = (state: State): State => {

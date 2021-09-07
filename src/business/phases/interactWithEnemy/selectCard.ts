@@ -58,6 +58,7 @@ export const selectCard = (state: State, action: ActionType) => {
           return state;
         }
       }
+      break;
     }
 
     default: {

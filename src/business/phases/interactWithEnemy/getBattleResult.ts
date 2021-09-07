@@ -40,7 +40,6 @@ const getStatePlayerRunsAway = (state: State): State => {
     dice: 0,
     gameState: {
       ...state.gameState,
-      /*   attackInitiator: null, */
       type: "gameStarted.rollDice",
     },
   };
@@ -66,7 +65,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
         dice: 0,
         gameState: {
           ...state.gameState,
-          /*   attackInitiator: null, */
+
           type: "interactWithEnemy.throwBattleDice",
         },
         playerList: newPlayerList,
@@ -78,7 +77,7 @@ const getStatePlayetLoseHealth = (state: State): State => {
     case false: {
       const newPlayerListObj = Object.entries(playerList).filter(
         (playerList) => {
-          const [index, player] = playerList;
+          const [index] = playerList;
           return Number(index) !== activePlayerNumber;
         }
       );
