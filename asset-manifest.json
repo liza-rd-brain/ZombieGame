@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/ZombieGame/static/css/main.562c90c0.chunk.css",
-    "main.js": "/ZombieGame/static/js/main.ce5f3ae5.chunk.js",
-    "main.js.map": "/ZombieGame/static/js/main.ce5f3ae5.chunk.js.map",
+    "main.js": "/ZombieGame/static/js/main.0d1e08f6.chunk.js",
+    "main.js.map": "/ZombieGame/static/js/main.0d1e08f6.chunk.js.map",
     "runtime-main.js": "/ZombieGame/static/js/runtime-main.080a7f3f.js",
     "runtime-main.js.map": "/ZombieGame/static/js/runtime-main.080a7f3f.js.map",
     "static/js/2.ac3a64fc.chunk.js": "/ZombieGame/static/js/2.ac3a64fc.chunk.js",
@@ -30,6 +30,6 @@
     "static/js/runtime-main.080a7f3f.js",
     "static/js/2.ac3a64fc.chunk.js",
     "static/css/main.562c90c0.chunk.css",
-    "static/js/main.ce5f3ae5.chunk.js"
+    "static/js/main.0d1e08f6.chunk.js"
   ]
 }
