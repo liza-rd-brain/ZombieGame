@@ -25,7 +25,6 @@ export const getAvailableCells = (state: State): State => {
     /**
      * Returns the coordinates of cell that can be taken by deadPlayer.
      */
-
     const availableCellList: AvailableCellListType = neighboringCellList.filter(
       (cellItem) => {
         const { direction, coord } = cellItem;

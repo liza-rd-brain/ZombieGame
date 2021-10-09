@@ -1,9 +1,4 @@
-import {
-  State,
-  PlayerListType,
-  MoveDirection,
-  EnemyListType,
-} from "../../types";
+import { State, MoveDirection, EnemyListType } from "../../types";
 
 import { checkCellHasWall } from "../common/checkCellHasWall";
 /*
