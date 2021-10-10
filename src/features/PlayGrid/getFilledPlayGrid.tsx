@@ -242,7 +242,15 @@ export const getFilledPlayGrid = (state: State) => {
           deadPlayerList,
           activePlayerNumber
         )}
-        {getCards(cellValues, hor, vert)}
+        {getCards(
+          cellValues,
+          hor,
+          vert,
+          orderIndex,
+          enemyList,
+          deadPlayerList,
+          activePlayerNumber
+        )}
       </>
     );
 
@@ -258,7 +266,22 @@ export const getFilledPlayGrid = (state: State) => {
       </>
     );
 
-    const inventoryElement = <>{getCards(cellValues, hor, vert)}</>;
+    /**
+     * inventory and closed cards
+     */
+    const inventoryElement = (
+      <>
+        {getCards(
+          cellValues,
+          hor,
+          vert,
+          orderIndex,
+          enemyList,
+          deadPlayerList,
+          activePlayerNumber
+        )}
+      </>
+    );
 
     const needSplitCards = checkNeedSplitCards(
       playerList,
@@ -292,6 +315,7 @@ export const getFilledPlayGrid = (state: State) => {
           </Wrap>
         );
       }
+
       case true: {
         const currPlayerCoord = playerList[activePlayerNumber].coord;
         const [playerX, playerY] = currPlayerCoord.split(".");
@@ -314,13 +338,20 @@ export const getFilledPlayGrid = (state: State) => {
               }
 
               default: {
+                /**
+                 * Only open enemyCArd
+                 */
                 const enemyOnCell = Object.entries(enemyList).filter(
-                  ([string, enemyCard]) => enemyCard.coord === orderIndex
+                  ([string, enemyCard]) =>
+                    enemyCard.coord === orderIndex &&
+                    enemyCard.apperance === "open"
                 );
+
                 const hasEnemyOnCell = enemyOnCell.length === 1;
 
                 const playerItemList = Object.entries(playerList);
 
+                //TODO: add player.apperance === "open"
                 const playerListOnCell = playerItemList
                   .filter((playerItem) => {
                     const [, playerCard] = playerItem;
@@ -337,7 +368,18 @@ export const getFilledPlayGrid = (state: State) => {
                 const hasPlayerOncell = playerListOnCell.length === 1;
 
                 const cellValues = gameField.values[orderIndex];
-                const hasCardOnCell = cellValues.cardItem.length === 1;
+
+                const closedEnemyOnCell = Object.entries(enemyList).filter(
+                  ([string, enemyCard]) =>
+                    enemyCard.coord === orderIndex &&
+                    enemyCard.apperance === "closed"
+                );
+
+                /**
+                 * Inventory or jtge closed cards, like enemy
+                 */
+                const hasCardOnCell =
+                  cellValues.cardItem.length === 1 || closedEnemyOnCell;
 
                 const phaseInteractWithEnemy =
                   gameState.type.includes("interactWithEnemy");

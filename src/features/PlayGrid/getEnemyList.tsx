@@ -12,7 +12,8 @@ export const getEnemyList = (
    * Need to draw enemy if current coord of cell has the same coord
    */
   const filteredEnemiesArr = Object.entries(enemiesList).filter(
-    ([string, enemyCard]) => enemyCard.coord === index
+    ([string, enemyCard]) =>
+      enemyCard.coord === index && enemyCard.apperance === "open"
   );
 
   if (filteredEnemiesArr.length > 0) {
