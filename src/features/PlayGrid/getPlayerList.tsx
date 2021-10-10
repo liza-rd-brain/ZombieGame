@@ -2,11 +2,12 @@ import { PlayerList } from "../../components";
 
 import { PlayerListType, GameState } from "../../business/types";
 
-export const getPlayersList = (
+export const getPlayerList = (
   index: string,
   playersList: PlayerListType,
   numberOfPlayer: number,
-  gameState: GameState
+  gameState: GameState,
+  isPlayerAlone: boolean
 ) => {
   const playerItemList = Object.entries(playersList);
 
@@ -30,6 +31,7 @@ export const getPlayersList = (
           playerList={playersList}
           numberOfPlayer={numberOfPlayer}
           gameState={gameState}
+          isPlayerAlone={isPlayerAlone}
         />
       );
     }

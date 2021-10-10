@@ -13,7 +13,7 @@ export const getCards = (
   hor: string,
   vert: string,
   index: string,
-  enemiesList: EnemyListType,
+  enemyList: EnemyListType,
   deadPlayerList: DeadPlayerListType,
   activePlayerNumber: number
 ) => {
@@ -29,7 +29,7 @@ export const getCards = (
     (cardItem) => cardItem?.name === "weapon"
   );
 
-  const closedEnemyItem = Object.entries(enemiesList).filter(
+  const closedEnemyItem = Object.entries(enemyList).filter(
     ([string, enemyCard]) =>
       enemyCard.coord === index && enemyCard.apperance === "closed"
   );
