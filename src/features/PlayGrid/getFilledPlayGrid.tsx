@@ -436,7 +436,6 @@ export const getFilledPlayGrid = (state: State) => {
                 );
               }
             }
-            break;
           }
 
           case false: {

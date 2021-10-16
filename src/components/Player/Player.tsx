@@ -374,13 +374,23 @@ export const PlayerList = (props: PlayerListItem) => {
             case true: {
               return portal;
             }
+
             case false: {
+              return playerCardList;
+            }
+
+            default: {
               return playerCardList;
             }
           }
         }
+
         case true: {
           return portal;
+        }
+
+        default: {
+          return playerCardList;
         }
       }
     }
