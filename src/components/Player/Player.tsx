@@ -213,6 +213,12 @@ export const PlayerList = (props: PlayerListItem) => {
 
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
+  const activePLayerCoord = playerList[numberOfPlayer].coord;
+
+  const currPlayerCoord = playerListOnCell[0].coord;
+
+  const isCurrPLayerActive = activePLayerCoord === currPlayerCoord;
+
   const playerCardList = (
     <PlayerCardList
       needSplitCards={needSplitCards}
@@ -359,6 +365,7 @@ export const PlayerList = (props: PlayerListItem) => {
     case null: {
       return playerCardList;
     }
+
     default: {
       const [hor, vert] = playerListOnCell[0].coord.split(".");
       const portal = ReactDOM.createPortal(
@@ -370,9 +377,18 @@ export const PlayerList = (props: PlayerListItem) => {
 
       switch (needSplitCards) {
         case false: {
+          //TODO:проверить на активного игрока!!
           switch (isPlayerAlone) {
             case true: {
-              return portal;
+              switch (isCurrPLayerActive) {
+                case true: {
+                  return portal;
+                }
+
+                default: {
+                  return playerCardList;
+                }
+              }
             }
 
             case false: {
