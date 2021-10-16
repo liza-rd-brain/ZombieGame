@@ -11,7 +11,7 @@ export const getBattleResult = (state: State): State => {
     }
 
     case 3: {
-      return getStatePlayetLoseHealth(state);
+      return getStatePlayerLoseHealth(state);
     }
 
     case 4: {
@@ -45,7 +45,7 @@ const getStatePlayerRunsAway = (state: State): State => {
   };
 };
 
-const getStatePlayetLoseHealth = (state: State): State => {
+const getStatePlayerLoseHealth = (state: State): State => {
   const { playerList, activePlayerNumber, deadPlayerList, gameState } = state;
   const newPlayerHealth = playerList[activePlayerNumber].health - 1;
   const isPlayerAlive = newPlayerHealth > 0 ? true : false;

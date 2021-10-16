@@ -1,9 +1,8 @@
 import { DeadPlayerListType, State } from "../../types";
 
 /**
- * @returns  new state depending on the result of the enemys's movement.
+ * new state depending on the result of the enemys's movement.
  */
-
 export const getEnemyMoveResult = (state: State) => {
   const { playerList, activePlayerNumber, dice, enemyList, deadPlayerList } =
     state;

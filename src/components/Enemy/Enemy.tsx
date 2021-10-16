@@ -146,6 +146,9 @@ export const EnemyList = (props: EnemyArray) => {
 
   const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
 
+  const isActiveEnemyCard =
+    deadPlayerList && deadPlayerList?.[activePlayerNumber]?.index ? true : null;
+
   const indexOfActiveCard = enemyArray.findIndex(([index, enemyCard]) => {
     if (deadPlayerList && deadPlayerList[activePlayerNumber]) {
       return Number(index) === Number(deadPlayerList[activePlayerNumber].index);
@@ -155,7 +158,7 @@ export const EnemyList = (props: EnemyArray) => {
   });
 
   const needReverseCards =
-    (indexOfActiveCard !== 0 && needSplitCards) ||
+    (indexOfActiveCard !== 0 && needSplitCards && isActiveEnemyCard) ||
     (firstItemIsClosed && needSplitCards);
 
   return (

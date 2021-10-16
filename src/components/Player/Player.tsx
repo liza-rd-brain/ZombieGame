@@ -32,6 +32,7 @@ type PlayerListItem = {
   playerList: PlayerListType;
   numberOfPlayer: number;
   gameState: GameState;
+  isPlayerAlone: boolean;
 };
 
 type PortalType = {
@@ -82,7 +83,7 @@ const PlayerCard = styled.div<PlayerItem>`
 
   z-index: ${(props) => {
     if (props.isCurrent) {
-      return "4";
+      return "10";
     } else {
       return "3";
     }
@@ -193,7 +194,13 @@ export const PlayerList = (props: PlayerListItem) => {
 
   const playerImageList = [player, player2, player3, player4];
 
-  const { playerListOnCell, playerList, numberOfPlayer, gameState } = props;
+  const {
+    playerListOnCell,
+    playerList,
+    numberOfPlayer,
+    gameState,
+    isPlayerAlone,
+  } = props;
 
   const needSplitCards = playerListOnCell.length > 1;
 
@@ -293,7 +300,6 @@ export const PlayerList = (props: PlayerListItem) => {
 
             switch (playerCardItem.showContextMenu) {
               case true: {
-                console.log(numberOfPlayer);
                 const activePLayerCoord = playerList[numberOfPlayer].coord;
                 const currplayerCoord = playerCardItem.coord;
 
@@ -347,26 +353,44 @@ export const PlayerList = (props: PlayerListItem) => {
     </PlayerCardList>
   );
 
-  switch (needSplitCards) {
-    case false: {
+  const fieildElem = document.getElementById("field");
+
+  switch (fieildElem) {
+    case null: {
       return playerCardList;
     }
-    case true: {
-      const fieildElem = document.getElementById("field");
-      switch (fieildElem) {
-        case null: {
-          return playerCardList;
+    default: {
+      const [hor, vert] = playerListOnCell[0].coord.split(".");
+      const portal = ReactDOM.createPortal(
+        <PLayersPortal coordX={hor} coordY={vert}>
+          {playerCardList}
+        </PLayersPortal>,
+        fieildElem
+      );
+
+      switch (needSplitCards) {
+        case false: {
+          switch (isPlayerAlone) {
+            case true: {
+              return portal;
+            }
+
+            case false: {
+              return playerCardList;
+            }
+
+            default: {
+              return playerCardList;
+            }
+          }
+        }
+
+        case true: {
+          return portal;
         }
 
         default: {
-          const [hor, vert] = playerListOnCell[0].coord.split(".");
-          const portal = ReactDOM.createPortal(
-            <PLayersPortal coordX={hor} coordY={vert}>
-              {playerCardList}
-            </PLayersPortal>,
-            fieildElem
-          );
-          return portal;
+          return playerCardList;
         }
       }
     }

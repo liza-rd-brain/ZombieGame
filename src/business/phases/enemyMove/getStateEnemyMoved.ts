@@ -19,9 +19,9 @@ export const getStateEnemyMoved = (state: State, action: ActionType): State => {
         const nextEnemyCoord = getNextPlayerCoord(prevEnemyCoord, direction);
 
         //TODO: Add check canTakeNextCell
-
         const canTakeNextCell =
           state.gameState.coordOfAvailableCells?.includes(nextEnemyCoord);
+
         switch (canTakeNextCell) {
           case true: {
             const enemyListArray = Object.entries(enemyList).map(
