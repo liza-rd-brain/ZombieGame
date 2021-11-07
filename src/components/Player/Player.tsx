@@ -64,6 +64,10 @@ const ContextMenuPortal = styled.div<PortalType>`
   }};
 `;
 
+/**
+ * before - for highlightning active card
+ * after - for interacting highlightning
+ */
 const PlayerCard = styled.div<PlayerItem>`
   width: 50px;
   height: 50px;
@@ -88,6 +92,8 @@ const PlayerCard = styled.div<PlayerItem>`
       return "3";
     }
   }};
+
+  cursor: pointer;
 
   &:before {
     content: "";
@@ -118,13 +124,21 @@ const PlayerCard = styled.div<PlayerItem>`
 
     border: ${(props) => {
       if (props.needHighlightning) {
-        return "3px solid rgb(55 163 0 / 52%);";
+        return "3px solid #c1fe2f6b;";
       }
     }};
 
     padding: 4px;
     left: 0px;
     top: 0px;
+  }
+
+  &:hover:after {
+    border: ${(props) => {
+      if (props.needHighlightning) {
+        return "3px solid #6cfe2fde;";
+      }
+    }};
   }
 `;
 
@@ -134,6 +148,7 @@ const PlayerCardList = styled.div<PlayerCardListType>`
   position: absolute;
   font-size: 12px;
   font-weight: bold;
+
   flex-direction: ${(props) => {
     if (props.needReverseCards) {
       return "row-reverse";
@@ -213,7 +228,7 @@ export const PlayerList = (props: PlayerListItem) => {
 
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
-  const activePLayerCoord = playerList[numberOfPlayer].coord;
+  const activePLayerCoord = playerList[numberOfPlayer]?.coord;
 
   const currPlayerCoord = playerListOnCell[0].coord;
 
