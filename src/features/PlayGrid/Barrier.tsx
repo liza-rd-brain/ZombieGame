@@ -206,7 +206,26 @@ const WallImage = styled(CommonWall)<WallType>`
           return item === "bottom" || "left";
         });
         if (needHighlightning) {
-          return "#79fe2f42";
+          return "#c1fe2f6b";
+        } else {
+          return "none";
+        }
+      }
+    }};
+  }
+
+  &:hover:after {
+    background-color: ${(props) => {
+      if (
+        props.barrierItem &&
+        props.barrierItem.name !== "wall" &&
+        props.barrierItem.isOpen
+      ) {
+        const needHighlightning = props.highlightningList?.find((item) => {
+          return item === "bottom" || "left";
+        });
+        if (needHighlightning) {
+          return "#6cfe2fde";
         } else {
           return "none";
         }

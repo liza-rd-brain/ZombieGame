@@ -14,6 +14,7 @@ import {
   useInteractWithEnemy,
   useApplyCard,
 } from "./business/effects";
+import { SkipButton } from "./features/SkipButton";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -22,7 +23,7 @@ const Field = styled.div`
 `;
 
 const Game = styled.div`
-  width: 900px;
+  width: 1050px;
   height: 600px;
   margin: 40px auto;
   display: flex;
@@ -63,8 +64,8 @@ const GameControls = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: 0 15px;
   box-sizing: border-box;
+  align-items: center;
 `;
 
 export function GetApp() {
@@ -96,6 +97,7 @@ export function GetApp() {
               <GameControls>
                 <Dice />
                 <MoveControls />
+                <SkipButton />
               </GameControls>
               {/*  <PlayerStatus /> */}
             </RightPanel>

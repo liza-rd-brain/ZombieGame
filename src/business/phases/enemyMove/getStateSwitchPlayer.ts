@@ -5,6 +5,7 @@ export const getStateSwitchPlayer = (state: State) => {
   const { deadPlayerList } = state;
 
   if (deadPlayerList) {
+    console.log(deadPlayerList);
     const newPlayerNumber = getNextPlayerNumber(state);
 
     const newDeadPlayerList: DeadPlayerListType = Object.fromEntries(

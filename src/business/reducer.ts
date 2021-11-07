@@ -46,6 +46,7 @@ export type ActionType =
       payload: { coord: number; direction: MoveDirection };
     }
   | { type: "clickedEnemy"; payload: { enemyCard: EnemyCardType } }
+  | { type: "clickedSkip" }
   | { type: "req-removeEnemyCard" }
   | { type: "clickedPlayer"; payload: PLayerType }
   | {

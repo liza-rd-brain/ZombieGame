@@ -18,6 +18,10 @@ export const enemyMove = (state: State, action: ActionType): State => {
           return getStateEnemySelected(state, action);
         }
 
+        case "clickedSkip": {
+          return getStateSwitchPlayer(state);
+        }
+
         default: {
           return state;
         }
