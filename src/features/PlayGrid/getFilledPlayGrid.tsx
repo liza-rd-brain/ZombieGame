@@ -231,9 +231,13 @@ export const getFilledPlayGrid = (state: State) => {
     const cellValues = gameField.values[orderIndex];
     const [hor, vert] = orderIndex.split(".");
 
+    /**
+     * need to paint defeated Enemy
+     */
     const enemyListOnCell = Object.entries(enemyList).filter(
       ([string, enemyCard]) =>
-        enemyCard.coord === orderIndex && enemyCard.apperance === "open"
+        enemyCard.coord === orderIndex &&
+        (enemyCard.apperance === "open" || "defeated")
     );
 
     const hasEnemy = enemyListOnCell.length > 0;
@@ -266,7 +270,15 @@ export const getFilledPlayGrid = (state: State) => {
         enemyCard.coord === orderIndex && enemyCard.apperance === "closed"
     );
 
-    const isPlayerAlone = !hasEnemy && !hasCard && !hasClosedEnemyItem;
+    /**
+     * player alone and not with special window
+     * like in phase interactWithEnemy
+     */
+    const isPlayerAlone =
+      !hasEnemy &&
+      !hasCard &&
+      !hasClosedEnemyItem &&
+      !gameState.type.includes("interactWithEnemy");
 
     const playerListEl = getPlayerList(
       orderIndex,
