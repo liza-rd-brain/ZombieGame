@@ -359,13 +359,11 @@ export const PlayerList = (props: PlayerListItem) => {
                   }
                 }
               }
-
               default: {
                 return playerCard;
               }
             }
           }
-
           default: {
             return null;
           }
