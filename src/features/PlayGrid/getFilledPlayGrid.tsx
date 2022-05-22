@@ -10,6 +10,7 @@ import {
   EnemyListType,
   GameState,
 } from "../../business/types";
+
 import { getCards } from "./getCards";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
@@ -258,7 +259,6 @@ export const getFilledPlayGrid = (state: State) => {
     );
 
     //TODO: Need to find out is more than one card in the cell!
-
     const hasCard = cellValues.cardItem.length > 0;
 
     const hasClosedEnemyItem = Object.entries(enemyList).find(

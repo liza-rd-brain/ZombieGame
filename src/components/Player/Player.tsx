@@ -10,17 +10,12 @@ import {
   GameState,
   PLayerType,
 } from "../../business/types";
+import { PlayerCard } from "./PlayerCard";
 
 import player from "./player.png";
 import player2 from "./player2.png";
 import player3 from "./player3.png";
 import player4 from "./player4.png";
-
-type PlayerItem = {
-  isCurrent: boolean;
-  needHighlightning?: boolean;
-  image: string;
-};
 
 type PlayerCardListType = {
   needSplitCards?: boolean;
@@ -62,70 +57,6 @@ const ContextMenuPortal = styled.div<PortalType>`
   bottom: ${(props) => {
     return `${Number(props.coordY) * 50}px`;
   }};
-`;
-
-const PlayerCard = styled.div<PlayerItem>`
-  width: 50px;
-  height: 50px;
-  margin: 0px;
-  text-align: center;
-  padding: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  background-repeat: no-repeat;
-  background-position: 0px;
-  background-size: 44px;
-  background-position: 3px;
-
-  background-image: ${(props) => {
-    return `url(${props.image})`;
-  }};
-
-  z-index: ${(props) => {
-    if (props.isCurrent) {
-      return "10";
-    } else {
-      return "3";
-    }
-  }};
-
-  &:before {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 1px;
-
-    border: ${(props) => {
-      if (props.isCurrent) {
-        return "5px solid #8834b8";
-      }
-    }};
-
-    pointer-events: none;
-    opacity: 0.5;
-    padding: 4px;
-    left: 4px;
-    top: 4px;
-  }
-
-  &:after {
-    content: "";
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    border-radius: 1px;
-
-    border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid rgb(55 163 0 / 52%);";
-      }
-    }};
-
-    padding: 4px;
-    left: 0px;
-    top: 0px;
-  }
 `;
 
 const PlayerCardList = styled.div<PlayerCardListType>`

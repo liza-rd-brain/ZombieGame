@@ -48,6 +48,7 @@ export const PlayGrid = () => {
   const state = useSelector((state: State) => ({
     ...state,
   }));
+
   const config = state._config;
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
