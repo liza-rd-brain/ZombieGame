@@ -2,6 +2,8 @@ import { FC } from "react";
 import { useDrag } from "react-dnd";
 import styled from "styled-components";
 
+import { ItemDragTypes } from "../../shared/ItemTypes";
+
 const StyledPlayerCard = styled.div<PlayerItemProps>`
   width: 50px;
   height: 50px;
@@ -76,10 +78,6 @@ type PlayerItemProps = {
   id: string;
   onClick: any;
 } & PlayerStyleProps;
-
-export const ItemDragTypes = {
-  PLAYER: "player",
-};
 
 export const PlayerCard: FC<PlayerItemProps> = ({
   id,

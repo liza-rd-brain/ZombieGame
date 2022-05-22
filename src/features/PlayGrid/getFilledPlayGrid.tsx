@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import {
   State,
-  PlayGridMode,
   PlayerListType,
   CellType,
   EnemyListType,
@@ -15,11 +14,7 @@ import { getCards } from "./getCards";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
 import { EnemyList } from "../../components";
-
-type CellApperance = {
-  needHighlightning?: boolean;
-  mode: PlayGridMode;
-};
+import { CellItem } from "../../components/CellItem";
 
 type UnderlayerType = {
   coordX: string;
@@ -28,30 +23,6 @@ type UnderlayerType = {
 
 const Wrap = styled.div`
   position: relative;
-`;
-
-const CellItem = styled.div<CellApperance>`
-  display: flex;
-  position: relative;
-  box-sizing: border-box;
-
-  font-size: 14px;
-  text-align: right;
-  width: 50px;
-  height: 50px;
-  color: lightgrey;
-
-  border: ${(props) => {
-    if (props.mode === "cssStyle") {
-      return "1px solid lightgray";
-    }
-  }};
-
-  background-color: ${(props) => {
-    if (props.needHighlightning) {
-      return "rgb(55 163 0 / 52%);";
-    }
-  }};
 `;
 
 const UnderlayerItem = styled.div<UnderlayerType>`
@@ -320,7 +291,6 @@ export const getFilledPlayGrid = (state: State) => {
               mode={_config.playGridMode}
             >
               {cardsOnCell}
-
               {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
             </CellItem>
             {cellValues.name === "commonCell" ? (
