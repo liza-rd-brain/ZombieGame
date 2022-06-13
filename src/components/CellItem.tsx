@@ -48,7 +48,8 @@ export const CellItem: FC<CellItemType> = ({
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemDragTypes.PLAYER,
-    drop: () => console.log("drop"),
+    drop: () => dispatch({ type: "moveControlsClicked", payload: "top" }),
+    /*  console.log("drop"), */
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
