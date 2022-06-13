@@ -231,7 +231,7 @@ const getStateWithCard = (
             cardItem: [
               {
                 name: type,
-                apperance: apperance,
+                appearance: apperance,
               },
             ],
           },
@@ -264,7 +264,7 @@ const getStateWithEnemy = (
         name: "enemy",
         power: 1,
         coord: "1.1",
-        apperance: apperance,
+        appearance: apperance,
       },
     },
   };

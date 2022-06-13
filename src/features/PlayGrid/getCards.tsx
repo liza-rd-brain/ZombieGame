@@ -25,13 +25,13 @@ export const getCards = (
     (cardItem) => cardItem?.name === "boards"
   );
 
-  const weaponCardItem = cell.cardItem.find(
+  const WeaponCardItem = cell.cardItem.find(
     (cardItem) => cardItem?.name === "weapon"
   );
 
   const closedEnemyItem = Object.entries(enemyList).filter(
     ([string, enemyCard]) =>
-      enemyCard.coord === index && enemyCard.apperance === "closed"
+      enemyCard.coord === index && enemyCard.appearance === "closed"
   );
 
   const hasClosedEnemy = closedEnemyItem.length > 0;
@@ -40,20 +40,20 @@ export const getCards = (
     <>
       {healthCardItem ? (
         <Health
-          apperance={healthCardItem.apperance}
+          appearance={healthCardItem.appearance}
           className={""}
           key={`${hor}.${vert}.health`}
         />
       ) : null}
       {boardsCardItem ? (
         <BoardsCard
-          apperance={boardsCardItem.apperance}
+          appearance={boardsCardItem.appearance}
           key={`${hor}.${vert}.boards`}
         />
       ) : null}
-      {weaponCardItem ? (
+      {WeaponCardItem ? (
         <WeaponCard
-          apperance={weaponCardItem.apperance}
+          appearance={WeaponCardItem.appearance}
           key={`${hor}.${vert}.weapon`}
         />
       ) : null}

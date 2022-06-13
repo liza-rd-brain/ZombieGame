@@ -1,20 +1,21 @@
 import { FC } from "react";
 import { useDrop } from "react-dnd";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { PlayGridMode } from "../business/types";
 import { ItemDragTypes } from "../shared/ItemTypes";
 
-type CellApperance = {
+type CellAppearance = {
   needHighlightning?: boolean;
   mode: PlayGridMode;
 };
 
 type CellItemType = {
   children: React.ReactNode;
-} & CellApperance;
+} & CellAppearance;
 
-const StyledCellItem = styled.div<CellApperance>`
+const StyledCellItem = styled.div<CellAppearance>`
   display: flex;
   position: relative;
   box-sizing: border-box;
@@ -43,6 +44,8 @@ export const CellItem: FC<CellItemType> = ({
   mode,
   children,
 }) => {
+  const dispatch = useDispatch();
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemDragTypes.PLAYER,
     drop: () => console.log("drop"),
@@ -59,7 +62,7 @@ export const CellItem: FC<CellItemType> = ({
       >
         {children}
       </StyledCellItem>
-      {isOver && (
+      {/* {isOver && (
         <div
           style={{
             position: "absolute",
@@ -72,7 +75,7 @@ export const CellItem: FC<CellItemType> = ({
             backgroundColor: "yellow",
           }}
         />
-      )}
+      )} */}
     </>
   );
 };

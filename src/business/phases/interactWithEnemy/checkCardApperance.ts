@@ -13,7 +13,7 @@ export const checkCardApperance = (state: State): State => {
       return enemyCard.coord === currentCoord;
     });
 
-  const isNeedOpenEnemyCard = currEnemy?.apperance === "open" ? false : true;
+  const isNeedOpenEnemyCard = currEnemy?.appearance === "open" ? false : true;
 
   switch (true) {
     case isNeedOpenEnemyCard: {

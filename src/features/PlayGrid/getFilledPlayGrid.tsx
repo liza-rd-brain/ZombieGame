@@ -205,7 +205,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     const enemyListOnCell = Object.entries(enemyList).filter(
       ([string, enemyCard]) =>
-        enemyCard.coord === orderIndex && enemyCard.apperance === "open"
+        enemyCard.coord === orderIndex && enemyCard.appearance === "open"
     );
 
     const hasEnemy = enemyListOnCell.length > 0;
@@ -234,7 +234,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     const hasClosedEnemyItem = Object.entries(enemyList).find(
       ([string, enemyCard]) =>
-        enemyCard.coord === orderIndex && enemyCard.apperance === "closed"
+        enemyCard.coord === orderIndex && enemyCard.appearance === "closed"
     );
 
     const isPlayerAlone = !hasEnemy && !hasCard && !hasClosedEnemyItem;
@@ -328,7 +328,7 @@ export const getFilledPlayGrid = (state: State) => {
                 const enemyOnCell = Object.entries(enemyList).filter(
                   ([string, enemyCard]) =>
                     enemyCard.coord === orderIndex &&
-                    enemyCard.apperance === "open"
+                    enemyCard.appearance === "open"
                 );
 
                 const hasEnemyOnCell = enemyOnCell.length === 1;
@@ -356,7 +356,7 @@ export const getFilledPlayGrid = (state: State) => {
                 const closedEnemyOnCell = Object.entries(enemyList).filter(
                   ([string, enemyCard]) =>
                     enemyCard.coord === orderIndex &&
-                    enemyCard.apperance === "closed"
+                    enemyCard.appearance === "closed"
                 );
 
                 /**

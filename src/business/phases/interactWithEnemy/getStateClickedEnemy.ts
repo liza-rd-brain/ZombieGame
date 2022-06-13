@@ -21,7 +21,7 @@ export const getStateClickedEnemy = (
 
       const defeatedEnemy: EnemyCardType = {
         ...currEnemy,
-        apperance: "defeated",
+        appearance: "defeated",
       };
 
       const newEnemyList = {

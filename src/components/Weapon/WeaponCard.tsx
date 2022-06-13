@@ -3,24 +3,24 @@ import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./weapon.png";
 
 type WeaponApperanceType = {
-  apperance?: "closed" | "open";
+  appearance?: "closed" | "open";
 };
 
 const StyledWeaponCard = styled.div<WeaponApperanceType>`
   ${StyledCommonCard}
   background-color: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.appearance === "open") {
       return "unset";
     }
   }};
 
   border-color: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.appearance === "open") {
       return "gray";
     }
   }};
   background-image: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.appearance === "open") {
       return `url(${img})`;
     }
   }};
@@ -29,7 +29,7 @@ const StyledWeaponCard = styled.div<WeaponApperanceType>`
 export const WeaponCard = (props: WeaponApperanceType) => {
   return (
     <StyledWeaponCard {...props}>
-      {/*      {props.apperance === "closed" ? null : "O"} */}
+      {/*      {props.appearance === "closed" ? null : "O"} */}
     </StyledWeaponCard>
   );
 };

@@ -76,7 +76,7 @@ export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  apperance: CardApperance | "defeated";
+  appearance: CardApperance | "defeated";
 };
 
 export type EnemyListType = Record<number, EnemyCardType>;
@@ -93,19 +93,19 @@ export type StartCell = {
 
 export type HealthCardType = {
   name: "health";
-  apperance: CardApperance;
+  appearance: CardApperance;
   isSelected?: boolean;
 };
 
 export type BoardsCardType = {
   name: "boards";
-  apperance: CardApperance;
+  appearance: CardApperance;
   isSelected?: boolean;
 };
 
 export type WeaponCardType = {
   name: "weapon";
-  apperance: CardApperance;
+  appearance: CardApperance;
   isSelected?: boolean;
 };
 

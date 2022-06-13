@@ -144,7 +144,7 @@ const checkInventoryCardApperance = (state: State): State => {
 
   switch (isOneCardOnCell) {
     case true: {
-      const needOpenCard = cardItemList[0]?.apperance === "closed";
+      const needOpenCard = cardItemList[0]?.appearance === "closed";
 
       switch (needOpenCard) {
         case true: {

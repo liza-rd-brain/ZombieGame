@@ -3,20 +3,20 @@ import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./health.png";
 
 type HealthApperanceType = {
-  apperance?: "closed" | "open";
+  appearance?: "closed" | "open";
   className?: string;
 };
 
 export const StyledHealthCard = styled.div<HealthApperanceType>`
   ${StyledCommonCard}
   background-color: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.appearance === "open") {
       return "unset";
     }
   }};
 
   background-image: ${(props) => {
-    if (props.apperance === "open") {
+    if (props.appearance === "open") {
       return `url(${img})`;
     }
   }};

@@ -35,13 +35,13 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   text-indent: -4px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.apperance === "open" || props.apperance === "defeated") {
+    if (props.appearance === "open" || props.appearance === "defeated") {
       return "unset";
     }
   }};
 
   cursor: ${(props) => {
-    if (props.apperance === "closed") {
+    if (props.appearance === "closed") {
       return "default";
     } else {
       return "pointer";
@@ -49,7 +49,7 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   }};
 
   background-image: ${(props) => {
-    switch (props.apperance) {
+    switch (props.appearance) {
       case "defeated": {
         return `url(${zombie_defeated})`;
       }
@@ -65,7 +65,7 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
         return "4";
       }
       case false: {
-        switch (props.apperance) {
+        switch (props.appearance) {
           case "open": {
             return "3";
           }
@@ -144,7 +144,7 @@ export const EnemyList = (props: EnemyArray) => {
 
   const needSplitCards = enemyListOnCell.length > 1;
 
-  const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
+  const firstItemIsClosed = enemyListOnCell[0].appearance === "closed";
 
   const isActiveEnemyCard =
     deadPlayerList && deadPlayerList?.[activePlayerNumber]?.index ? true : null;

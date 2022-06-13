@@ -17,21 +17,21 @@ const getCardList = (config: ConfigType): CardSet[] => {
     {
       card: {
         name: "health",
-        apperance: config.cardApperance,
+        appearance: config.cardApperance,
       },
       amount: config.amountHealthItems,
     },
     {
       card: {
         name: "boards",
-        apperance: config.cardApperance,
+        appearance: config.cardApperance,
       },
       amount: config.amountBoardsItems,
     },
     {
       card: {
         name: "weapon",
-        apperance: config.cardApperance,
+        appearance: config.cardApperance,
       },
       amount: config.amountWeaponsItems,
     },
@@ -51,11 +51,11 @@ export const spreadCards = (
    */
 
   const cardsList = getCardList(config);
-  const cellsWithAllCards = cardsList.reduce((filledСells, currCardSet) => {
-    const gameFieldCellsWithPrevios = { ...gameFieldCells, ...filledСells };
+  const cellsWithAllCards = cardsList.reduce((filledCells, currCardSet) => {
+    const gameFieldCellsWithPrevious = { ...gameFieldCells, ...filledCells };
 
     const cellsForCards = getListForCards(
-      gameFieldCellsWithPrevios,
+      gameFieldCellsWithPrevious,
       currCardSet
     );
 
@@ -64,7 +64,7 @@ export const spreadCards = (
      */
     const filledWithCardsFieldCells = setCards(cellsForCards, currCardSet);
     const filledWithAllCardsCells = {
-      ...filledСells,
+      ...filledCells,
       ...filledWithCardsFieldCells,
     };
     return filledWithAllCardsCells;
