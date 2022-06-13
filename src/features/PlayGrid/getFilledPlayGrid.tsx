@@ -287,6 +287,8 @@ export const getFilledPlayGrid = (state: State) => {
         return (
           <Wrap key={`${hor}.${vert}`}>
             <CellItem
+              hor={hor}
+              vert={vert}
               needHighlightning={needHighlightning}
               mode={_config.playGridMode}
             >
@@ -378,6 +380,8 @@ export const getFilledPlayGrid = (state: State) => {
                   <React.Fragment key={`${hor}.${vert}`}>
                     <Wrap key={`${hor}.${vert}`}>
                       <CellItem
+                        hor={hor}
+                        vert={vert}
                         needHighlightning={needHighlightning}
                         mode={_config.playGridMode}
                       >
@@ -412,6 +416,8 @@ export const getFilledPlayGrid = (state: State) => {
             return (
               <Wrap key={`${hor}.${vert}`}>
                 <CellItem
+                  hor={hor}
+                  vert={vert}
                   needHighlightning={needHighlightning}
                   mode={_config.playGridMode}
                 >

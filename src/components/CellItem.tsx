@@ -12,6 +12,8 @@ type CellAppearance = {
 };
 
 type CellItemType = {
+  hor: string;
+  vert: string;
   children: React.ReactNode;
 } & CellAppearance;
 
@@ -43,16 +45,20 @@ export const CellItem: FC<CellItemType> = ({
   needHighlightning,
   mode,
   children,
+  hor,
+  vert,
 }) => {
   const dispatch = useDispatch();
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemDragTypes.PLAYER,
     drop: () => dispatch({ type: "moveControlsClicked", payload: "top" }),
-    /*  console.log("drop"), */
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
+    hover: () => {
+      console.log("hover", hor, vert);
+    },
   }));
   return (
     <>
