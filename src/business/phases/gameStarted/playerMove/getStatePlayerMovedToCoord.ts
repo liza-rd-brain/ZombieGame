@@ -1,26 +1,33 @@
-import { MoveDirection, State } from "../../../types";
+import { CoordItem, State } from "../../../types";
 import { getNextPlayerCoord } from "../../common";
 import { changePlayerCoord } from "./changePlayerCoord";
 
 /**
  * Changing coordinates of player if he can take the cell in certain direction.
  */
-export const getStatePlayerMoved = (
+export const getStatePlayerMovedToCoord = (
   state: State,
-  direction: MoveDirection
+  newCoord: CoordItem
 ): State => {
   const { playerList, activePlayerNumber } = state;
 
   const prevPlayerCoord = playerList[activePlayerNumber].coord;
-  const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
-  console.log("nextPlayerCoord", nextPlayerCoord);
+  //TODO: took out common functional for coordinates
+  const nextPlayerCoordString = Object.values(newCoord).join(".");
 
-  const canTakeNextCell =
-    state.gameState.coordOfAvailableCells?.includes(nextPlayerCoord);
+  const canTakeNextCell = state.gameState.coordOfAvailableCells?.includes(
+    nextPlayerCoordString
+  );
+
+  console.log("nextPlayerCoordString", nextPlayerCoordString);
+
+  console.log("canTakeNextCell", canTakeNextCell);
 
   switch (canTakeNextCell) {
     case true: {
-      const newPlayerList = changePlayerCoord(state, nextPlayerCoord);
+      const newPlayerList = changePlayerCoord(state, nextPlayerCoordString);
+
+      console.log("newPlayerList", newPlayerList);
 
       const newState: State = {
         ...state,
@@ -28,8 +35,6 @@ export const getStatePlayerMoved = (
         playerList: newPlayerList,
         doEffect: { type: "!getPlayerMoveResult" },
       };
-
-      console.log("newState", newState);
       return newState;
     }
 

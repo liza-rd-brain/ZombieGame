@@ -112,7 +112,7 @@ const checkNeedSplitCards = (
       return playerCard;
     });
 
-  const hasPlayerOncell = playerListOnCell.length === 1;
+  const hasPlayerOnCell = playerListOnCell.length === 1;
 
   const hasCardOnCell = cell.cardItem.length === 1;
 
@@ -126,12 +126,12 @@ const checkNeedSplitCards = (
   const hasTwoEnemy = amountEnemyOnCell === 2;
 
   const hasPlayerAndEnemy =
-    hasEnemyOnCell && hasPlayerOncell && !phaseInteractWithEnemy;
+    hasEnemyOnCell && hasPlayerOnCell && !phaseInteractWithEnemy;
   const hasEnemyAndCard = hasEnemyOnCell && hasCardOnCell;
 
   const hasEnemyAndPlayerAndCard =
     hasEnemyOnCell &&
-    hasPlayerOncell &&
+    hasPlayerOnCell &&
     hasCardOnCell &&
     phaseInteractWithEnemy;
 
@@ -351,7 +351,7 @@ export const getFilledPlayGrid = (state: State) => {
                     return playerCard;
                   });
 
-                const hasPlayerOncell = playerListOnCell.length === 1;
+                const hasPlayerOnCell = playerListOnCell.length === 1;
 
                 const cellValues = gameField.values[orderIndex];
 
@@ -372,7 +372,7 @@ export const getFilledPlayGrid = (state: State) => {
 
                 const hasEnemyPlayerCard =
                   hasEnemyOnCell &&
-                  hasPlayerOncell &&
+                  hasPlayerOnCell &&
                   hasCardOnCell &&
                   phaseInteractWithEnemy;
 

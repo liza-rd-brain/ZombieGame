@@ -20,6 +20,7 @@ export const getEnemyMoveResult = (state: State) => {
     /**
      * indexMetPlayerCard  can be 0
      */
+
     const indexMetPlayerCard = Object.values(playerList).find((playerItem) => {
       return playerItem.coord === deadPLayerCoord;
     })?.orderNumber;

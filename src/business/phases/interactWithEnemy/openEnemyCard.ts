@@ -9,6 +9,7 @@ export const openEnemyCard = (state: State): State => {
   const currentCoord = playerList[activePlayerNumber].coord;
 
   //TODO: we have one enemy in the same coordinate, but if not?
+  //TODO:  took out common functional for coordinates
   const currEnemyIndex = Object.entries(enemyList)
     .filter(([, enemyCard]) => {
       return enemyCard.coord === currentCoord;

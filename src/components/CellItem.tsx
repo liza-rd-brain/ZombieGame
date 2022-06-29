@@ -14,10 +14,11 @@ type CellAppearance = {
 type CellItemType = {
   hor: string;
   vert: string;
+
   children: React.ReactNode;
 } & CellAppearance;
 
-const StyledCellItem = styled.div<CellAppearance>`
+const StyledCellItem = styled.div<CellAppearance & { isOver: boolean }>`
   display: flex;
   position: relative;
   box-sizing: border-box;
@@ -28,15 +29,15 @@ const StyledCellItem = styled.div<CellAppearance>`
   height: 50px;
   color: lightgrey;
 
-  border: ${(props) => {
-    if (props.mode === "cssStyle") {
+  border: ${({ mode }) => {
+    if (mode === "cssStyle") {
       return "1px solid lightgray";
     }
   }};
 
-  background-color: ${(props) => {
-    if (props.needHighlightning) {
-      return "rgb(55 163 0 / 52%);";
+  background-color: ${({ needHighlightning, isOver }) => {
+    if (needHighlightning) {
+      return isOver ? "yellow" : "rgb(55 163 0 / 52%);";
     }
   }};
 `;
@@ -52,20 +53,31 @@ export const CellItem: FC<CellItemType> = ({
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemDragTypes.PLAYER,
-    drop: () => dispatch({ type: "moveControlsClicked", payload: "top" }),
+    //rename moveControlsClicked to cellChosen
+    // drop: () => dispatch({ type: "moveControlsClicked", payload: "top" }),
+    drop: () =>
+      dispatch({
+        type: "playerWasMoved",
+        payload: {
+          hor,
+          vert,
+        },
+      }),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
     hover: () => {
-      console.log("hover", hor, vert);
+      // console.log("hover", hor, vert);
     },
   }));
+
   return (
     <>
       <StyledCellItem
         ref={drop}
         needHighlightning={needHighlightning}
         mode={mode}
+        isOver={isOver}
       >
         {children}
       </StyledCellItem>
