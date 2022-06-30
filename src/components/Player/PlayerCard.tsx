@@ -1,8 +1,10 @@
 import { FC } from "react";
+import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import styled from "styled-components";
 
 import { ItemDragTypes } from "../../shared/ItemTypes";
+import { State } from "../../business/types";
 
 const StyledPlayerCard = styled.div<PlayerItemProps>`
   width: 50px;
@@ -86,10 +88,26 @@ export const PlayerCard: FC<PlayerItemProps> = ({
   image,
   onClick,
 }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemDragTypes.PLAYER,
-    collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
-  }));
+  const gameStateType = useSelector((state: State) => state.gameState.type);
+  const playerCardCanBeDragged =
+    gameStateType === "gameStarted.playerMove" && isCurrent;
+  console.log(playerCardCanBeDragged);
+  /**
+   * canDrag - we can drag cards
+   * type=gameStarted.playerMove
+   */
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: ItemDragTypes.PLAYER,
+      collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+      // canDrag: playerCardCanBeDragged,
+      canDrag: (monitor) => {
+        console.log("playerCardCanBeDragged", playerCardCanBeDragged);
+        return playerCardCanBeDragged;
+      },
+    }),
+    [gameStateType]
+  );
 
   return (
     <StyledPlayerCard
