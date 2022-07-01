@@ -53,8 +53,7 @@ export const CellItem: FC<CellItemType> = ({
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemDragTypes.PLAYER,
-    //rename moveControlsClicked to cellChosen
-    // drop: () => dispatch({ type: "moveControlsClicked", payload: "top" }),
+
     drop: () =>
       dispatch({
         type: "playerWasMoved",
@@ -81,20 +80,6 @@ export const CellItem: FC<CellItemType> = ({
       >
         {children}
       </StyledCellItem>
-      {/* {isOver && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            height: "100%",
-            width: "100%",
-            zIndex: 1,
-            opacity: 0.5,
-            backgroundColor: "yellow",
-          }}
-        />
-      )} */}
     </>
   );
 };

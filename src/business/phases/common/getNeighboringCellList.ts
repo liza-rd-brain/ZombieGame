@@ -31,11 +31,11 @@ export const getNeighboringCellList = (
   /**
    * Returns the coordinates that lying in the GameField.
    */
-  const existanceInGameFieldCells: AvailableCellListType =
+  const existingInGameFieldCells: AvailableCellListType =
     coordNeighboringCells.filter((cellItem) => {
       const { coord } = cellItem;
       return gameField.values[coord];
     });
 
-  return existanceInGameFieldCells;
+  return existingInGameFieldCells;
 };

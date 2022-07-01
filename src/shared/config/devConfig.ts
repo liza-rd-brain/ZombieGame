@@ -13,5 +13,5 @@ export const DEV_CONFIG: ConfigType = {
   amountWeaponsItems: 0,
   amountEnemies: 0,
   cardApperance: "closed",
-  playGridMode: "image",
+  playGridMode: "cssStyle",
 };

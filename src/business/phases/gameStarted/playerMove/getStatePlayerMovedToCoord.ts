@@ -12,16 +12,13 @@ export const getStatePlayerMovedToCoord = (
   const { playerList, activePlayerNumber } = state;
 
   const prevPlayerCoord = playerList[activePlayerNumber].coord;
+
   //TODO: took out common functional for coordinates
   const nextPlayerCoordString = Object.values(newCoord).join(".");
 
   const canTakeNextCell = state.gameState.coordOfAvailableCells?.includes(
     nextPlayerCoordString
   );
-
-  console.log("nextPlayerCoordString", nextPlayerCoordString);
-
-  console.log("canTakeNextCell", canTakeNextCell);
 
   switch (canTakeNextCell) {
     case true: {
