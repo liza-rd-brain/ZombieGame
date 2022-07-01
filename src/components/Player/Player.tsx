@@ -33,6 +33,7 @@ type PlayerListItem = {
 type PortalType = {
   coordX: string;
   coordY: string;
+  isCurrPlayer?: boolean;
 };
 
 const PLayersPortal = styled.div<PortalType>`
@@ -44,6 +45,10 @@ const PLayersPortal = styled.div<PortalType>`
 
   bottom: ${(props) => {
     return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+
+  pointer-events: ${({ isCurrPlayer }) => {
+    return isCurrPlayer ? "initial" : "none";
   }};
 `;
 
@@ -232,11 +237,11 @@ export const PlayerList = (props: PlayerListItem) => {
             switch (playerCardItem.showContextMenu) {
               case true: {
                 const activePLayerCoord = playerList[numberOfPlayer].coord;
-                const currplayerCoord = playerCardItem.coord;
+                const currPlayerCoord = playerCardItem.coord;
 
                 const contextMenuCoord = getContextMenuCoord(
                   activePLayerCoord,
-                  currplayerCoord
+                  currPlayerCoord
                 );
 
                 console.log(contextMenuCoord);
@@ -290,10 +295,18 @@ export const PlayerList = (props: PlayerListItem) => {
     case null: {
       return playerCardList;
     }
+
     default: {
-      const [hor, vert] = playerListOnCell[0].coord.split(".");
+      //TODO: coordinate handling!
+
+      const coordString = playerListOnCell[0].coord;
+      const [hor, vert] = coordString.split(".");
+      console.log("coordString", playerListOnCell[0].coord);
+
+      const isCurrPlayer = playerList[numberOfPlayer].coord === coordString;
+
       const portal = ReactDOM.createPortal(
-        <PLayersPortal coordX={hor} coordY={vert}>
+        <PLayersPortal coordX={hor} coordY={vert} isCurrPlayer={isCurrPlayer}>
           {playerCardList}
         </PLayersPortal>,
         fieildElem
@@ -381,10 +394,10 @@ const calculateHighlightning = (
 
 const getContextMenuCoord = (
   activePLayerCoord: string,
-  currplayerCoord: string
+  currPlayerCoord: string
 ) => {
   const [horActive, vertActive] = activePLayerCoord.split(".");
-  const [horCurrent, vertCurrent] = currplayerCoord.split(".");
+  const [horCurrent, vertCurrent] = currPlayerCoord.split(".");
 
   const differenceHor = getNewCoordHor(horCurrent, horActive);
   const differenceVert = getNewCoordVert(vertCurrent, vertActive);
