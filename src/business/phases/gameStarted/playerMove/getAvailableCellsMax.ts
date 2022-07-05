@@ -22,7 +22,7 @@ export const getAvailableCellsMax = (state: State): State => {
   const availableCellList: AvailableCellListType = neighboringCellList.filter(
     (cellItem) => {
       const { direction, coord } = cellItem;
-
+      //TODO: direction calculate from prevPlayerCoord and coord
       return checkCanTakeCell(state, coord, direction);
     }
   );

@@ -46,11 +46,6 @@ export const getNeighboringCellListMax = (
     counter: number;
   };
 
-  const initCoordObj: InitCoordObjType = {
-    list: [],
-    counter: dice,
-  };
-
   const getTakeableCoord = (
     MOVE_DIRECTION_LIST: MoveDirectionList,
     dice: number,
@@ -73,9 +68,6 @@ export const getNeighboringCellListMax = (
           const existingInFieldCoord = listWithoutInitCoord.filter(
             (coord) => gameField.values[coord]
           );
-          console.log("currCoord", coord);
-          console.log("existingInFieldCoord", existingInFieldCoord);
-          console.log("i", i);
 
           if (prev.length > 1) {
             const coordWithoutRepeat = existingInFieldCoord.filter(
