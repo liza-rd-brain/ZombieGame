@@ -10,6 +10,11 @@ Inspired by Eugeny Kolodin' "Zombie in the house" board game.
 </details>
 
 
+## Some visiual fix:
+- [ ] animate card open
+- [ ] roll dice animation
+
+
 
 
 [Live demo (WIP)](https://liza-rd-brain.github.io/ZombieGame/)
