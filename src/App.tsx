@@ -7,6 +7,8 @@ import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
 
+import { FlipCard } from "./example/FlipCard";
+
 import {
   useOpenCard,
   useEndScreen,
@@ -91,6 +93,7 @@ export function GetApp() {
             <Field id="field">
               <PlayGrid />
             </Field>
+            <FlipCard />
             <RightPanel>
               <StatusList />
               <GameControls>
