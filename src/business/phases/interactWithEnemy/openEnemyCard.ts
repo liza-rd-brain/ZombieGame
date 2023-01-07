@@ -1,4 +1,4 @@
-import { State } from "../../types";
+import { EnemyListType, State } from "../../types";
 
 /**
  * Need separate method for open EnemyCard
@@ -19,11 +19,11 @@ export const openEnemyCard = (state: State): State => {
     })
     .join();
 
-  const newEnemyList = {
+  const newEnemyList: EnemyListType = {
     ...enemyList,
     [currEnemyIndex]: {
       ...enemyList[Number(currEnemyIndex)],
-      apperance: "open",
+      appearance: "open",
     },
   };
 

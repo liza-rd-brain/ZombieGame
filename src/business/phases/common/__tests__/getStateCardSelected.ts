@@ -1,7 +1,7 @@
 import { createConfig } from "../../../../shared/helpers/createConfig";
 import { getInitialState } from "../../../initialState";
 import { reducer } from "../../../reducer";
-import { CardApperance, State, TypeOfCard } from "../../../types";
+import { CardAppearance, State, TypeOfCard } from "../../../types";
 
 const configEmptyField = createConfig();
 

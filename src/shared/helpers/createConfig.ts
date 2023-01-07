@@ -21,7 +21,7 @@ export const createConfig = (partOfConfig?: partOfConfig): ConfigType => {
       amountBoardsItems: partOfConfig.amountHealthItems || 0,
       amountWeaponsItems: partOfConfig.amountWeaponsItems || 0,
       amountEnemies: partOfConfig.amountEnemies || 0,
-      cardApperance: partOfConfig.cardApperance || "closed",
+      cardAppearance: partOfConfig.cardAppearance || "closed",
       playGridMode: partOfConfig.playGridMode || "image",
     };
   } else {
@@ -35,7 +35,7 @@ export const createConfig = (partOfConfig?: partOfConfig): ConfigType => {
       amountBoardsItems: 0,
       amountWeaponsItems: 0,
       amountEnemies: 0,
-      cardApperance: "closed",
+      cardAppearance: "closed",
       playGridMode: "image",
     };
   }

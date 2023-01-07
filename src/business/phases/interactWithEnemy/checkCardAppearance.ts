@@ -1,6 +1,6 @@
 import { State } from "../../types";
 
-export const checkCardApperance = (state: State): State => {
+export const checkCardAppearance = (state: State): State => {
   const { enemyList, playerList, activePlayerNumber } = state;
   const currentCoord = playerList[activePlayerNumber].coord;
 

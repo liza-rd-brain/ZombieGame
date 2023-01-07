@@ -337,7 +337,7 @@ export const getFilledPlayGrid = (state: State) => {
 
                 const playerItemList = Object.entries(playerList);
 
-                //TODO: add player.apperance === "open"
+                //TODO: add player.appearance === "open"
                 const playerListOnCell = playerItemList
                   .filter((playerItem) => {
                     const [, playerCard] = playerItem;

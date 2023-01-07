@@ -60,7 +60,7 @@ export const getPlayerMoveResult = (state: State) => {
           ...newGameState,
           type: "interactWithEnemy",
         },
-        doEffect: { type: "!checkApperanceEnemyCard" },
+        doEffect: { type: "!checkAppearanceEnemyCard" },
       };
       return newState;
     }
@@ -73,7 +73,7 @@ export const getPlayerMoveResult = (state: State) => {
           ...newGameState,
           type: "gameStarted.takeCard",
         },
-        doEffect: { type: "!checkApperanceInventoryCard" },
+        doEffect: { type: "!checkAppearanceInventoryCard" },
       };
       return newState;
     }

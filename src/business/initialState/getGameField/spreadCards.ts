@@ -3,7 +3,7 @@ import { CommonCell, GameFieldCells, CardItem, ConfigType } from "../../types";
 import {
  amountHealthItems,
   amountBoardsItems,
-  cardApperance,
+  cardAppearance,
   amountWeaponsItems,
 } from "../../../shared/config/devConfig";
  */
@@ -17,21 +17,21 @@ const getCardList = (config: ConfigType): CardSet[] => {
     {
       card: {
         name: "health",
-        appearance: config.cardApperance,
+        appearance: config.cardAppearance,
       },
       amount: config.amountHealthItems,
     },
     {
       card: {
         name: "boards",
-        appearance: config.cardApperance,
+        appearance: config.cardAppearance,
       },
       amount: config.amountBoardsItems,
     },
     {
       card: {
         name: "weapon",
-        appearance: config.cardApperance,
+        appearance: config.cardAppearance,
       },
       amount: config.amountWeaponsItems,
     },

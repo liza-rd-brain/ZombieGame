@@ -14,7 +14,7 @@ type EnemyArray = {
   coord: string;
 };
 
-type EnemyCardApperanceType = EnemyCardType & {
+type EnemyCardAppearanceType = EnemyCardType & {
   isCurrent: boolean;
 };
 
@@ -23,7 +23,7 @@ type EnemyCardListType = {
   needReverseCards?: boolean;
 };
 
-const EnemyCard = styled.div<EnemyCardApperanceType>`
+const EnemyCard = styled.div<EnemyCardAppearanceType>`
   ${StyledCommonCard}
   position: static;
   font-size: 47px;

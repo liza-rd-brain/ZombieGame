@@ -82,7 +82,7 @@ const getListOfEnemy = (enemiesCoords: string[], config: ConfigType) => {
       name: "enemy",
       power: 1,
       coord,
-      appearance: config.cardApperance,
+      appearance: config.cardAppearance,
     };
     return [index, enemyCard];
   });

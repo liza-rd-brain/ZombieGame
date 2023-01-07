@@ -1,5 +1,5 @@
 export type PlayGridMode = "image" | "cssStyle";
-export type CardApperance = "closed" | "open";
+export type CardAppearance = "closed" | "open";
 export type TypeOfCard = "boards" | "health" | "weapon" | null;
 export type CoordItem = { hor: number; vert: number };
 
@@ -76,7 +76,7 @@ export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  appearance: CardApperance | "defeated";
+  appearance: CardAppearance | "defeated";
 };
 
 export type EnemyListType = Record<number, EnemyCardType>;
@@ -93,19 +93,19 @@ export type StartCell = {
 
 export type HealthCardType = {
   name: "health";
-  appearance: CardApperance;
+  appearance: CardAppearance;
   isSelected?: boolean;
 };
 
 export type BoardsCardType = {
   name: "boards";
-  appearance: CardApperance;
+  appearance: CardAppearance;
   isSelected?: boolean;
 };
 
 export type WeaponCardType = {
   name: "weapon";
-  appearance: CardApperance;
+  appearance: CardAppearance;
   isSelected?: boolean;
 };
 
@@ -153,7 +153,7 @@ export type ConfigType = {
   amountBoardsItems: number;
   amountWeaponsItems: number;
   amountEnemies: number;
-  cardApperance: CardApperance;
+  cardAppearance: CardAppearance;
   playGridMode: PlayGridMode;
   cellsBarrierList: CellsBarrierListType;
 };
@@ -161,10 +161,10 @@ export type ConfigType = {
 export type TypeEffect =
   | { type: "!openCard" }
   | { type: "!takeCard" }
-  | { type: "!checkApperanceInventoryCard" }
+  | { type: "!checkAppearanceInventoryCard" }
   | { type: "!changePlayerHealth" }
   | { type: "!deleteCard" }
-  | { type: "!checkApperanceEnemyCard" }
+  | { type: "!checkAppearanceEnemyCard" }
   | { type: "!openEnemyCard" }
   | { type: "!throwBattleDice" }
   | { type: "!getBattleResult" }

@@ -10,7 +10,7 @@ export function useOpenCard() {
   useEffect(
     function openCard() {
       switch (doEffect?.type) {
-        case "!checkApperanceInventoryCard": {
+        case "!checkAppearanceInventoryCard": {
           dispatch({
             type: "req-checkInventoryCard",
           });
