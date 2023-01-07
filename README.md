@@ -13,6 +13,7 @@ Inspired by Eugeny Kolodin' "Zombie in the house" board game.
 ## Some visiual fix:
 - [ ] animate card open
 - [ ] roll dice animation
+- [ ] custom react dnd preview
 
 
 
