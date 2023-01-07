@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useSelector } from "react-redux";
-import { useDrag } from "react-dnd";
+import { useDrag, DragPreviewImage } from "react-dnd";
 import styled from "styled-components";
 
 import { ItemDragTypes } from "../../shared/ItemTypes";
@@ -96,7 +96,7 @@ export const PlayerCard: FC<PlayerItemProps> = ({
    * canDrag - we can drag cards
    * type=gameStarted.playerMove
    */
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag, dragPreview] = useDrag(
     () => ({
       type: ItemDragTypes.PLAYER,
       collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
@@ -111,6 +111,9 @@ export const PlayerCard: FC<PlayerItemProps> = ({
 
   return (
     <StyledPlayerCard
+      style={{
+        opacity: isDragging ? 0 : 1,
+      }}
       ref={drag}
       id={id}
       isCurrent={isCurrent}
