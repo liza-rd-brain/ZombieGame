@@ -14,6 +14,7 @@ import {
   useInteractWithEnemy,
   useApplyCard,
 } from "./business/effects";
+import { CustomDrag } from "./example/CustomDrag";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -62,7 +63,7 @@ const LeftPanel = styled.div`
 const GameControls = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 15px;
   box-sizing: border-box;
 `;
@@ -91,11 +92,12 @@ export function GetApp() {
             <Field id="field">
               <PlayGrid />
             </Field>
+            <CustomDrag />
             <RightPanel>
               <StatusList />
               <GameControls>
                 <Dice />
-                <MoveControls />
+                {/* <MoveControls /> */}
               </GameControls>
               {/*  <PlayerStatus /> */}
             </RightPanel>

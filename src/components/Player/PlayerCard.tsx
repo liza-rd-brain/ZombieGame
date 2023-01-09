@@ -1,6 +1,9 @@
-import { FC } from "react";
+import { CSSProperties, FC, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useDrag, DragPreviewImage } from "react-dnd";
+
+import type { XYCoord } from "react-dnd";
+import { useDrag, DragPreviewImage, useDragLayer } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
 import styled from "styled-components";
 
 import { ItemDragTypes } from "../../shared/ItemTypes";
@@ -70,6 +73,15 @@ const StyledPlayerCard = styled.div<PlayerItemProps>`
   }
 `;
 
+const StyledPreviewWrap = styled.div`
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+`;
+
 type PlayerStyleProps = {
   isCurrent: boolean;
   needHighlightning?: boolean;
@@ -109,17 +121,84 @@ export const PlayerCard: FC<PlayerItemProps> = ({
     [gameStateType]
   );
 
+  //Hide initial preview on dragging
+  useEffect(() => {
+    dragPreview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
+
+  function snapToGrid(x: number, y: number): [number, number] {
+    const snappedX = Math.round(x / 32) * 32;
+    const snappedY = Math.round(y / 32) * 32;
+    return [snappedX, snappedY];
+  }
+
+  const styles: CSSProperties = {
+    border: "1px solid gray",
+    padding: "0.5rem 1rem",
+    cursor: "move",
+  };
+
+  function getItemStyles(
+    initialOffset: XYCoord | null,
+    currentOffset: XYCoord | null,
+    isSnapToGrid?: boolean
+  ) {
+    if (!initialOffset || !currentOffset) {
+      return {
+        display: "none",
+      };
+    }
+
+    let { x, y } = currentOffset;
+
+    if (isSnapToGrid) {
+      x -= initialOffset.x;
+      y -= initialOffset.y;
+      [x, y] = snapToGrid(x, y);
+      x += initialOffset.x;
+      y += initialOffset.y;
+    }
+
+    const transform = `translate(${x}px, ${y}px)`;
+    return {
+      transform,
+      WebkitTransform: transform,
+    };
+  }
+
+  const PreviewDrag = () => {
+    useDragLayer((monitor) => ({
+      isDragging: monitor.isDragging(),
+      initialOffset: monitor.getInitialSourceClientOffset(),
+      currentOffset: monitor.getSourceClientOffset(),
+    }));
+
+    if (!isDragging) {
+      return null;
+    }
+    return (
+      <StyledPreviewWrap>
+        <>
+          <div style={{ ...styles }}></div>
+        </>
+      </StyledPreviewWrap>
+    );
+  };
+
   return (
-    <StyledPlayerCard
-      style={{
-        opacity: isDragging ? 0 : 1,
-      }}
-      ref={drag}
-      id={id}
-      isCurrent={isCurrent}
-      needHighlightning={needHighlightning}
-      image={image}
-      onClick={onClick}
-    />
+    <>
+      <StyledPlayerCard
+        style={{
+          opacity: isDragging ? 0 : 1,
+        }}
+        ref={drag}
+        id={id}
+        isCurrent={isCurrent}
+        needHighlightning={needHighlightning}
+        image={image}
+        onClick={onClick}
+      />
+      <PreviewDrag />
+    </>
   );
 };
