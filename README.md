@@ -9,11 +9,8 @@ Inspired by Eugeny Kolodin' "Zombie in the house" board game.
 
 </details>
 
+[Developing task](https://github.com/liza-rd-brain/ZombieGame/blob/master/TaskProcess.md)
 
-## Some visiual fix:
-- [ ] animate card open
-- [ ] roll dice animation
-- [ ] custom react dnd preview
 
 
 
