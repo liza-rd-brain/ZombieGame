@@ -78,10 +78,12 @@ const PlayerCardList = styled.div<PlayerCardListType>`
     }
   }};
 
+  /*  turned off -return "relative !important"- for customDragPreview
+*/
   > * {
     position: ${(props) => {
       if (props.needSplitCards) {
-        return "relative !important";
+        return "relative ";
       }
     }};
 
