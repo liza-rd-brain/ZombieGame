@@ -12,6 +12,7 @@ import {
 } from "../../business/types";
 import { PlayerCard } from "./PlayerCard";
 
+//TODO:organize images!
 import player from "./player.png";
 import player2 from "./player2.png";
 import player3 from "./player3.png";
@@ -246,8 +247,6 @@ export const PlayerList = (props: PlayerListItem) => {
                   currPlayerCoord
                 );
 
-                console.log(contextMenuCoord);
-
                 const [hor, vert] = contextMenuCoord.split(".");
                 const fieildElem = document.getElementById("field");
 
@@ -303,7 +302,6 @@ export const PlayerList = (props: PlayerListItem) => {
 
       const coordString = playerListOnCell[0].coord;
       const [hor, vert] = coordString.split(".");
-      console.log("coordString", playerListOnCell[0].coord);
 
       const isCurrPlayer = playerList[numberOfPlayer].coord === coordString;
 

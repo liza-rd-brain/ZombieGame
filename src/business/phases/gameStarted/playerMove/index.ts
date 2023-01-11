@@ -16,7 +16,6 @@ export const playerMove = (state: State, action: ActionType): State => {
 
     case "playerWasMoved": {
       const newCoord = action.payload;
-      console.log("newCoord", newCoord);
       return getStatePlayerMovedToCoord(state, newCoord);
     }
 

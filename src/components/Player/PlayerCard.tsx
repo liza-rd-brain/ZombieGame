@@ -1,54 +1,14 @@
-import { CSSProperties, FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 
-import type { XYCoord } from "react-dnd";
-import { useDrag, DragPreviewImage, useDragLayer } from "react-dnd";
-import { getEmptyImage } from "react-dnd-html5-backend";
 import styled from "styled-components";
+import { useDrag } from "react-dnd";
 
 import { ItemDragTypes } from "../../shared/ItemTypes";
 import { State } from "../../business/types";
-
-const StyledCommonPlayerCard = styled.div<{
-  image: string;
-  isCurrent: boolean;
-}>`
-  width: 50px;
-  height: 50px;
-  margin: 0px;
-  text-align: center;
-  padding: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  background-repeat: no-repeat;
-  background-position: 0px;
-  background-size: 44px;
-  background-position: 3px;
-
-  background-image: ${(props) => {
-    return `url(${props.image})`;
-  }};
-
-  &:before {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 1px;
-
-    border: ${(props) => {
-      if (props.isCurrent) {
-        return "5px solid #8834b8";
-      }
-    }};
-
-    pointer-events: none;
-    opacity: 0.5;
-    padding: 4px;
-    left: 4px;
-    top: 4px;
-  }
-`;
+import { PreviewDrag } from "./PreviewDrag";
+import { StyledCommonPlayerCard } from "./StyledCommonPlayerCard";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 const StyledPlayerCard = styled(StyledCommonPlayerCard)<PlayerItemProps>`
   z-index: ${(props) => {
@@ -77,18 +37,6 @@ const StyledPlayerCard = styled(StyledCommonPlayerCard)<PlayerItemProps>`
   }
 `;
 
-const StyledPreviewWrap = styled.div`
-  position: absolute !important;
-  pointer-events: none;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-`;
-
-// const NewStyledCard = styled(StyledCommonPlayerCard)<{ image: string }>``;
-
 type PlayerStyleProps = {
   isCurrent: boolean;
   needHighlightning?: boolean;
@@ -107,25 +55,17 @@ export const PlayerCard: FC<PlayerItemProps> = ({
   image,
   onClick,
 }) => {
-  const gameStateType = useSelector((state: State) => state.gameState.type);
+  const [gameStateType] = useSelector((state: State) => [state.gameState.type]);
 
   const playerCardCanBeDragged =
     gameStateType === "gameStarted.playerMove" && isCurrent;
 
-  // console.log("isCurrent", isCurrent, id);
-  /*   console.log(playerCardCanBeDragged); */
-  /**
-   * canDrag - we can drag cards
-   * type=gameStarted.playerMove
-   */
   const [{ isDragging }, drag, dragPreview] = useDrag(
     () => ({
       item: { id: id },
       type: ItemDragTypes.PLAYER,
       collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
-      // canDrag: playerCardCanBeDragged,
       canDrag: (monitor) => {
-        console.log("playerCardCanBeDragged", playerCardCanBeDragged);
         return playerCardCanBeDragged;
       },
     }),
@@ -134,77 +74,11 @@ export const PlayerCard: FC<PlayerItemProps> = ({
 
   //Hide initial preview on dragging
   useEffect(() => {
-    dragPreview(getEmptyImage(), { captureDraggingState: true });
-
-    return () => {};
-  }, [dragPreview]);
-
-  const styles: CSSProperties = {
-    border: "1px solid red",
-    backgroundColor: "red",
-    padding: "0.5rem 1rem",
-    cursor: "move",
-  };
-
-  function getItemStyles(
-    initialOffset: XYCoord | null,
-    currentOffset: XYCoord | null
-  ) {
-    if (!initialOffset || !currentOffset) {
-      return {
-        display: "none",
-      };
+    if (dragPreview) {
+      dragPreview(getEmptyImage(), { captureDraggingState: true });
     }
-
-    let { x, y } = currentOffset;
-    /*     console.log(x, y); */
-    // - Half of card size
-    const transform = `translate(${x /*  - 30 */}px, ${y}px)`;
-    return {
-      transform,
-      WebkitTransform: transform,
-    };
-  }
-
-  const PreviewDrag = ({ isCurrent, image }: any) => {
-    const { isDragging, initialOffset, currentOffset, itemType } = useDragLayer(
-      (monitor) => ({
-        item: monitor.getItem(),
-        itemType: monitor.getItemType(),
-        isDragging: monitor.isDragging(),
-        initialOffset: monitor.getInitialSourceClientOffset(),
-        currentOffset: monitor.getDifferenceFromInitialOffset(),
-      })
-    );
-
-    function renderItem() {
-      switch (itemType) {
-        case ItemDragTypes.PLAYER:
-          return (
-            <StyledPreviewWrap>
-              <div style={getItemStyles(initialOffset, currentOffset)}>
-                {/* <div style={{ ...styles }}></div> */}
-                <StyledCommonPlayerCard image={image} isCurrent={isCurrent} />
-              </div>
-            </StyledPreviewWrap>
-          );
-        default:
-          return null;
-      }
-    }
-
-    if (!isDragging || !isCurrent) {
-      return null;
-    } else {
-      return renderItem();
-    }
-
-    // <StyledPreviewWrap>
-    //   <div style={getItemStyles(initialOffset, currentOffset)}>
-    //     {renderItem()}
-    //   </div>
-    // </StyledPreviewWrap>
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -219,7 +93,6 @@ export const PlayerCard: FC<PlayerItemProps> = ({
         image={image}
         onClick={onClick}
       />
-      <></>
       <PreviewDrag isCurrent={isCurrent} image={image} />
     </>
   );

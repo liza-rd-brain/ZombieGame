@@ -2,7 +2,7 @@ import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import "./index.css";
-import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
+import { PlayGrid, Dice, StatusList } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
@@ -14,7 +14,6 @@ import {
   useInteractWithEnemy,
   useApplyCard,
 } from "./business/effects";
-import { CustomDrag } from "./example/CustomDrag";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -92,7 +91,6 @@ export function GetApp() {
             <Field id="field">
               <PlayGrid />
             </Field>
-            <CustomDrag />
             <RightPanel>
               <StatusList />
               <GameControls>

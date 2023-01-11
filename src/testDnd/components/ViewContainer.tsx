@@ -1,10 +1,8 @@
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 
-import { ITEM_LIST } from "../common";
 import { DragItem } from "./DragItem";
 
-import { getRandomList } from "../common/getRandomList";
 import { IndexedListType } from "../types";
 import { AppContext } from "../AppContext";
 import { DropItem } from "./DropItem";

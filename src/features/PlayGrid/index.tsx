@@ -53,6 +53,8 @@ export const PlayGrid = () => {
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 
+  // console.log("перерисовка grid");
+
   return (
     <GridItem key={"grid"} vert={height} mode={config.playGridMode}>
       {getFilledPlayGrid(state)}
