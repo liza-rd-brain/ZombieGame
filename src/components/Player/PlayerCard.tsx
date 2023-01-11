@@ -9,7 +9,10 @@ import styled from "styled-components";
 import { ItemDragTypes } from "../../shared/ItemTypes";
 import { State } from "../../business/types";
 
-const StyledPlayerCard = styled.div<PlayerItemProps>`
+const StyledCommonPlayerCard = styled.div<{
+  image: string;
+  isCurrent: boolean;
+}>`
   width: 50px;
   height: 50px;
   margin: 0px;
@@ -24,14 +27,6 @@ const StyledPlayerCard = styled.div<PlayerItemProps>`
 
   background-image: ${(props) => {
     return `url(${props.image})`;
-  }};
-
-  z-index: ${(props) => {
-    if (props.isCurrent) {
-      return "10";
-    } else {
-      return "3";
-    }
   }};
 
   &:before {
@@ -53,6 +48,16 @@ const StyledPlayerCard = styled.div<PlayerItemProps>`
     left: 4px;
     top: 4px;
   }
+`;
+
+const StyledPlayerCard = styled(StyledCommonPlayerCard)<PlayerItemProps>`
+  z-index: ${(props) => {
+    if (props.isCurrent) {
+      return "10";
+    } else {
+      return "3";
+    }
+  }};
 
   &:after {
     content: "";
@@ -60,16 +65,15 @@ const StyledPlayerCard = styled.div<PlayerItemProps>`
     width: 36px;
     height: 36px;
     border-radius: 1px;
+    padding: 4px;
+    left: 0px;
+    top: 0px;
 
     border: ${(props) => {
       if (props.needHighlightning) {
         return "3px solid rgb(55 163 0 / 52%);";
       }
     }};
-
-    padding: 4px;
-    left: 0px;
-    top: 0px;
   }
 `;
 
@@ -83,41 +87,7 @@ const StyledPreviewWrap = styled.div`
   height: 100%;
 `;
 
-const NewStyledCard = styled.div<{ image: string }>`
-  width: 50px;
-  height: 50px;
-  margin: 0px;
-  text-align: center;
-  padding: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  background-repeat: no-repeat;
-  background-position: 0px;
-  background-size: 44px;
-  background-position: 3px;
-
-  background-image: ${(props) => {
-    return `url(${props.image})`;
-  }};
-
-  /*   z-index: 10; */
-
-  &:before {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 1px;
-
-    border: 5px solid #8834b8;
-
-    pointer-events: none;
-    opacity: 0.5;
-    padding: 4px;
-    left: 4px;
-    top: 4px;
-  }
-`;
+// const NewStyledCard = styled(StyledCommonPlayerCard)<{ image: string }>``;
 
 type PlayerStyleProps = {
   isCurrent: boolean;
@@ -214,7 +184,7 @@ export const PlayerCard: FC<PlayerItemProps> = ({
             <StyledPreviewWrap>
               <div style={getItemStyles(initialOffset, currentOffset)}>
                 {/* <div style={{ ...styles }}></div> */}
-                <NewStyledCard image={image} />
+                <StyledCommonPlayerCard image={image} isCurrent={isCurrent} />
               </div>
             </StyledPreviewWrap>
           );
