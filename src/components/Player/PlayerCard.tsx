@@ -100,7 +100,7 @@ const NewStyledCard = styled.div<{ image: string }>`
     return `url(${props.image})`;
   }};
 
-  z-index: 10;
+  /*   z-index: 10; */
 
   &:before {
     content: "";
@@ -116,18 +116,6 @@ const NewStyledCard = styled.div<{ image: string }>`
     padding: 4px;
     left: 4px;
     top: 4px;
-  }
-
-  &:after {
-    content: "";
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    border-radius: 1px;
-    border: 3px solid rgb(55 163 0 / 52%);
-    padding: 4px;
-    left: 0px;
-    top: 0px;
   }
 `;
 
@@ -177,13 +165,9 @@ export const PlayerCard: FC<PlayerItemProps> = ({
   //Hide initial preview on dragging
   useEffect(() => {
     dragPreview(getEmptyImage(), { captureDraggingState: true });
-  }, []);
 
-  function snapToGrid(x: number, y: number): [number, number] {
-    const snappedX = Math.round(x / 32) * 32;
-    const snappedY = Math.round(y / 32) * 32;
-    return [snappedX, snappedY];
-  }
+    return () => {};
+  }, [dragPreview]);
 
   const styles: CSSProperties = {
     border: "1px solid red",
@@ -194,8 +178,7 @@ export const PlayerCard: FC<PlayerItemProps> = ({
 
   function getItemStyles(
     initialOffset: XYCoord | null,
-    currentOffset: XYCoord | null,
-    isSnapToGrid?: boolean
+    currentOffset: XYCoord | null
   ) {
     if (!initialOffset || !currentOffset) {
       return {
@@ -206,7 +189,7 @@ export const PlayerCard: FC<PlayerItemProps> = ({
     let { x, y } = currentOffset;
     /*     console.log(x, y); */
     // - Half of card size
-    const transform = `translate(${x - 30}px, ${y}px)`;
+    const transform = `translate(${x /*  - 30 */}px, ${y}px)`;
     return {
       transform,
       WebkitTransform: transform,
@@ -230,8 +213,8 @@ export const PlayerCard: FC<PlayerItemProps> = ({
           return (
             <StyledPreviewWrap>
               <div style={getItemStyles(initialOffset, currentOffset)}>
-                <div style={{ ...styles }}></div>
-                {/*    <NewStyledCard image={image} /> */}
+                {/* <div style={{ ...styles }}></div> */}
+                <NewStyledCard image={image} />
               </div>
             </StyledPreviewWrap>
           );
