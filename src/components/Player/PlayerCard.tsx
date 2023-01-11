@@ -74,7 +74,8 @@ const StyledPlayerCard = styled.div<PlayerItemProps>`
 `;
 
 const StyledPreviewWrap = styled.div`
-  position: fixed;
+  position: absolute !important;
+  pointer-events: none;
   z-index: 100;
   left: 0;
   top: 0;
