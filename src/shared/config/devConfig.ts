@@ -6,7 +6,7 @@ export const DEV_CONFIG: ConfigType = {
   // cellsBarrierList: CELLS_BARRIERS_LIST,
   startCoord: { hor: 0, vert: 0 },
   finishCoord: { hor: 3, vert: 3 },
-  amountPlayers: 2,
+  amountPlayers: 1,
   initialPlayerHealth: 1,
   amountHealthItems: 0,
   amountBoardsItems: 20,

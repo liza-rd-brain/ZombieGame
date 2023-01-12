@@ -36,7 +36,7 @@ export function useOpenCard() {
               dispatch({
                 type: "req-takeCard",
               }),
-            500
+            5000
           );
           return () => {
             clearTimeout(timerTakeCard);
