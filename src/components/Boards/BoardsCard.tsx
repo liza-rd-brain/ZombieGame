@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { CardApperance } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./boards.png";
@@ -9,18 +9,41 @@ type BoardsApperanceType = {
   apperance?: "closed" | "open";
 };
 
+const flipCard = keyframes`
+from{
+  transform: rotateY(0deg);
+}
+ to {
+    transform: rotateY(180deg);
+  }`;
+
+const flipFrontCard = keyframes`
+from{
+  transform: rotateY(90deg);
+}
+ to {
+    transform: rotateY(180deg);
+  }`;
+
+// const animationCondition = () => css`
+//   ${flipCard}
+// `;
+
 const CardContainer = styled.div<BoardsApperanceType>`
   width: 50px;
   height: 50px;
   position: relative;
-  transition: transform 3s;
+  /* transition: transform 3s; */
   //to set 3d to children of card
   transform-style: preserve-3d;
-  transform: ${({ apperance }) => {
+  animation-timing-function: linear;
+  animation: ${({ apperance }) => {
     if (apperance === "open") {
-      return "rotateY(180deg)";
+      return flipCard;
     }
   }};
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
 `;
 
 const CardFace = styled.div`
@@ -35,57 +58,39 @@ const CardFront = styled(CardFace)`
   background-color: unset;
   background-image: url(${img});
   border-color: gray;
-  transform: rotateY(180deg);
+  animation: ${flipFrontCard};
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  /* transform: rotateY(180deg); */
 `;
 
-const CardBack = styled(CardFace)`
+const CardBack = styled(CardFace)<BoardsApperanceType>`
   ${StyledCommonCard}
   background-image: url(${brainImg});
-`;
-
-const StyledBoardsCard = styled.div<BoardsApperanceType>`
-  ${StyledCommonCard}
-
-  background-color: ${(props) => {
-    if (props.apperance === "open") {
-      return "unset";
+  animation-duration: 5s;
+  animation: ${flipCard};
+  /* animation: ${({ apperance }) => {
+    if (apperance === "open") {
+      return flipCard;
     }
-  }};
-
-  background-image: ${(props) => {
-    if (props.apperance === "open") {
-      return `url(${img})`;
-    }
-  }};
-
-  border-color: ${(props) => {
-    if (props.apperance === "open") {
-      return "gray";
-    }
-  }};
+  }}; */
 `;
 
 export const BoardsCard: FC<{ apperance: CardApperance }> = ({ apperance }) => {
-  // const [openState, setOpen] = useState({ isOpen: apperance });
   return (
     <CardContainer
       apperance={apperance}
       onAnimationEnd={() => {
-        console.log("end animation");
+        console.log("end animation CardContainer");
       }}
     >
       <CardFront
         onAnimationEnd={() => {
-          console.log("end animation");
+          console.log("end animation CardFront");
         }}
       />
-      <CardBack
-        onAnimationEnd={() => {
-          console.log("end animation");
-        }}
-      />
-      {/* <StyledBoardsCard apperance={"open"} />
-      <StyledBoardsCard apperance={"closed"} /> */}
+      <CardBack apperance={apperance} />
     </CardContainer>
   );
 };
