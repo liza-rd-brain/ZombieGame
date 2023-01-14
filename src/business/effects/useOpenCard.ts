@@ -17,18 +17,19 @@ export function useOpenCard() {
           break;
         }
 
-        case "!openCard": {
-          const timerOpen = setTimeout(
-            () =>
-              dispatch({
-                type: "req-openCard",
-              }),
-            1000
-          );
-          return () => {
-            clearTimeout(timerOpen);
-          };
-        }
+        //TODO: here control need be given to hook for only card open animation!
+        // case "!openCard": {
+        //   const timerOpen = setTimeout(
+        //     () =>
+        //       dispatch({
+        //         type: "req-openCard",
+        //       }),
+        //     1000
+        //   );
+        //   return () => {
+        //     clearTimeout(timerOpen);
+        //   };
+        // }
 
         case "!takeCard": {
           const timerTakeCard = setTimeout(

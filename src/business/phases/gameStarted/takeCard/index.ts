@@ -162,6 +162,7 @@ const checkInventoryCardApperance = (state: State): State => {
         }
       }
     }
+    //If the previous player died
     case false: {
       return { ...state, doEffect: { type: "!takeCard" } };
     }

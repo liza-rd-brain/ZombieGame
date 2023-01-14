@@ -1,9 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { CardApperance } from "../../business/types";
+import { CardApperance, State } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
 import img from "./boards.png";
 import brainImg from "../CommonCard/brain_4.png";
+import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
+import { useSelector } from "react-redux";
 
 type BoardsApperanceType = {
   apperance?: "closed" | "open";
@@ -77,20 +79,62 @@ const CardBack = styled(CardFace)<BoardsApperanceType>`
   }}; */
 `;
 
-export const BoardsCard: FC<{ apperance: CardApperance }> = ({ apperance }) => {
+export const BoardsCardPrev: FC<{ apperance: CardApperance; coord: string }> =
+  ({ apperance, coord }) => {
+    useOpenCardAnimation({ coord });
+    return (
+      <CardContainer
+        apperance={apperance}
+        /* onAnimationEnd={() => {
+        console.log("end animation CardContainer");
+      }} */
+      >
+        <CardFront
+        /*    onAnimationEnd={() => {
+          console.log("end animation CardFront");
+        }} */
+        />
+        <CardBack apperance={apperance} />
+      </CardContainer>
+    );
+  };
+
+const MemoizedCard: FC<{ apperance: CardApperance; coord: string }> = ({
+  apperance,
+  coord,
+}) => {
+  useOpenCardAnimation({ coord });
+
   return (
     <CardContainer
       apperance={apperance}
-      onAnimationEnd={() => {
+      /* onAnimationEnd={() => {
         console.log("end animation CardContainer");
-      }}
+      }} */
     >
       <CardFront
-        onAnimationEnd={() => {
+      /*    onAnimationEnd={() => {
           console.log("end animation CardFront");
-        }}
+        }} */
       />
       <CardBack apperance={apperance} />
     </CardContainer>
   );
 };
+
+export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
+  apperance,
+  coord,
+}) => {
+  const { doEffect, playerList, activePlayerNumber } = useSelector(
+    (state: State) => ({ ...state })
+  );
+  const currCoord = playerList[activePlayerNumber].coord;
+
+  return useMemo(() => {
+    return <MemoizedCard apperance={apperance} coord={coord} />;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currCoord]);
+};
+
+// useMemo(() => computeExpensiveValue(a, b), [a, b]);

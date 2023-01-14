@@ -10,7 +10,7 @@ import {
   EnemyListType,
   GameState,
 } from "../../business/types";
-import { getCards } from "./getCards";
+import { CardListEl } from "./CardListEl";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
 import { EnemyList } from "../../components";
@@ -247,14 +247,17 @@ export const getFilledPlayGrid = (state: State) => {
       />
     );
 
-    const cardListEl = getCards(
-      cellValues,
-      hor,
-      vert,
-      orderIndex,
-      enemyList,
-      deadPlayerList,
-      activePlayerNumber
+    const cardListEl = (
+      <CardListEl
+        cell={cellValues}
+        hor={hor}
+        vert={vert}
+        currCoord={orderIndex}
+        enemyList={enemyList}
+        deadPlayerList={deadPlayerList}
+        activePlayerNumber={activePlayerNumber}
+        playerList={playerList}
+      />
     );
 
     //TODO: Need to find out is more than one card in the cell!
