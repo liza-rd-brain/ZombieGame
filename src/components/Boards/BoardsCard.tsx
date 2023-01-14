@@ -79,32 +79,7 @@ const CardBack = styled(CardFace)<BoardsApperanceType>`
   }}; */
 `;
 
-export const BoardsCardPrev: FC<{ apperance: CardApperance; coord: string }> =
-  ({ apperance, coord }) => {
-    useOpenCardAnimation({ coord });
-    return (
-      <CardContainer
-        apperance={apperance}
-        /* onAnimationEnd={() => {
-        console.log("end animation CardContainer");
-      }} */
-      >
-        <CardFront
-        /*    onAnimationEnd={() => {
-          console.log("end animation CardFront");
-        }} */
-        />
-        <CardBack apperance={apperance} />
-      </CardContainer>
-    );
-  };
-
-const MemoizedCard: FC<{ apperance: CardApperance; coord: string }> = ({
-  apperance,
-  coord,
-}) => {
-  useOpenCardAnimation({ coord });
-
+const PlainCard: FC<{ apperance: CardApperance }> = ({ apperance }) => {
   return (
     <CardContainer
       apperance={apperance}
@@ -122,6 +97,28 @@ const MemoizedCard: FC<{ apperance: CardApperance; coord: string }> = ({
   );
 };
 
+//run animation only on card with animation
+const CardWithAnimation: FC<{ apperance: CardApperance; coord: string }> = ({
+  apperance,
+  coord,
+}) => {
+  useOpenCardAnimation({ coord });
+
+  return <PlainCard apperance={apperance} />;
+};
+
+const MemoizedCard: FC<{
+  apperance: CardApperance;
+  coord: string;
+  playerOnCellWithBoard: boolean;
+}> = ({ apperance, coord, playerOnCellWithBoard }) => {
+  if (playerOnCellWithBoard) {
+    return <CardWithAnimation apperance={apperance} coord={coord} />;
+  } else {
+    return <PlainCard apperance={apperance} />;
+  }
+};
+
 export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
   apperance,
   coord,
@@ -129,12 +126,20 @@ export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
   const { doEffect, playerList, activePlayerNumber } = useSelector(
     (state: State) => ({ ...state })
   );
+
   const currCoord = playerList[activePlayerNumber].coord;
+  const playerOnCellWithBoard = currCoord === coord;
 
   return useMemo(() => {
-    return <MemoizedCard apperance={apperance} coord={coord} />;
+    return (
+      <MemoizedCard
+        apperance={apperance}
+        coord={coord}
+        playerOnCellWithBoard={playerOnCellWithBoard}
+      />
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currCoord]);
+  }, [playerOnCellWithBoard]);
 };
 
 // useMemo(() => computeExpensiveValue(a, b), [a, b]);

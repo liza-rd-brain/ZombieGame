@@ -13,10 +13,10 @@ export function useOpenCardAnimation({ coord }: { coord: string }) {
     function openCardAnimation() {
       switch (doEffect?.type) {
         case "!openCard": {
-          if (currCoord === coord) {
-            console.log("run open card animation");
-            console.log(coord);
-          }
+          /*    if (currCoord === coord) { */
+          console.log("run open card animation");
+          console.log(coord);
+          /*      } */
 
           break;
           //   const timerOpen = setTimeout(
