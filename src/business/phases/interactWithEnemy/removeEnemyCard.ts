@@ -17,7 +17,7 @@ export const removeEnemyCard = (state: State): State => {
 
   const { attackInitiator, ...newGameState } = gameState;
 
-  const cellHasCard = gameField.values[currentCoord].cardItem.length > 0;
+  const cellHasCard = Boolean(gameField.values[currentCoord].cardItem?.length);
 
   switch (cellHasCard) {
     case true: {

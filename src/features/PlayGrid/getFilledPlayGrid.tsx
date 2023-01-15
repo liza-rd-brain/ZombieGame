@@ -142,7 +142,7 @@ const checkNeedSplitCards = (
 
   const hasPlayerOncell = playerListOnCell.length === 1;
 
-  const hasCardOnCell = cell.cardItem.length === 1;
+  const hasCardOnCell = cell.cardItem?.length === 1;
 
   const enemyOnCell = Object.entries(enemiyList).filter(
     ([string, enemyCard]) => enemyCard.coord === orderIndex
@@ -223,8 +223,8 @@ export const getFilledPlayGrid = (state: State) => {
     deadPlayerList,
     _config,
   } = state;
-  const orderGameCells = gameField.order;
 
+  const orderGameCells = gameField.order;
   const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
@@ -262,7 +262,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     //TODO: Need to find out is more than one card in the cell!
 
-    const hasCard = cellValues.cardItem.length > 0;
+    const hasCard = cellValues.cardItem && cellValues.cardItem.length > 0;
 
     const hasClosedEnemyItem = Object.entries(enemyList).find(
       ([string, enemyCard]) =>
@@ -396,7 +396,8 @@ export const getFilledPlayGrid = (state: State) => {
                  * Inventory or other closed cards, like enemy
                  */
                 const hasCardOnCell =
-                  cellValues.cardItem.length === 1 || closedEnemyOnCell;
+                  (cellValues.cardItem && cellValues.cardItem.length === 1) ||
+                  closedEnemyOnCell;
 
                 const phaseInteractWithEnemy =
                   gameState.type.includes("interactWithEnemy");
