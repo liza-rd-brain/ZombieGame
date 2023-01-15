@@ -23,8 +23,7 @@ export const getPlayerMoveResult = (state: State) => {
 
   const takeCard =
     newCellWithPlayer?.name === "commonCell" &&
-    newCellWithPlayer.cardItem &&
-    newCellWithPlayer.cardItem?.length > 0;
+    newCellWithPlayer.cardItem.length > 0;
 
   const hasCurrCoordEnemy = Object.entries(enemyList).find(
     ([index, enemyCard]) => {

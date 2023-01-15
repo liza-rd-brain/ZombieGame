@@ -116,7 +116,7 @@ const getListForCards = (
     (cellItem): cellItem is [string, CommonCell] => {
       const [, item] = cellItem;
 
-      return item.name === "commonCell" && item.cardItem?.length === 0;
+      return item.name === "commonCell" && item.cardItem.length === 0;
     }
   );
 

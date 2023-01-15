@@ -3,7 +3,6 @@ import {
   GameField,
   PlayerListType,
   InventoryType,
-  CardItem,
 } from "../../../types";
 
 import { ActionType } from "../../../reducer";
@@ -57,8 +56,7 @@ const getStateCardTaken = (state: State): State => {
   const { gameField, activePlayerNumber, playerList } = state;
   const player = playerList[activePlayerNumber];
 
-  //We now for sure there is the card
-  const cardItems = gameField.values[player.coord].cardItem as CardItem[];
+  const cardItems = gameField.values[player.coord].cardItem;
 
   const emptyInventory = {
     boards: 0,
@@ -141,11 +139,10 @@ const checkInventoryCardApperance = (state: State): State => {
   const { gameField, activePlayerNumber, playerList } = state;
   const playerCoordIndex = playerList[activePlayerNumber].coord;
   const currCell = gameField.values[playerCoordIndex];
-  //we now for sure there is card
-  const cardItemList = currCell.cardItem as CardItem[];
+  const cardItemList = currCell.cardItem;
   const isOneCardOnCell = cardItemList.length === 1;
 
-  switch (isOneCardOnCell && cardItemList) {
+  switch (isOneCardOnCell) {
     case true: {
       const needOpenCard = cardItemList[0]?.apperance === "closed";
 

@@ -65,9 +65,9 @@ export type InventoryType = {
   cardSelected: TypeOfCard;
 };
 
-export type CardItem = HealthCardType | BoardsCardType | WeaponCardType;
+export type CardItem = HealthCardType | BoardsCardType | WeaponCardType | null;
 
-export type CardItemList = CardItem[] | null;
+export type CardItemList = CardItem[];
 
 export type PlayerListType = Record<string, PLayerType>;
 export type DeadPlayerListType = Record<string, DeadPlayer> | null;
