@@ -28,7 +28,7 @@ const maxNumber = 4;
 
 export const Dice = () => {
   const dispatch = useDispatch();
-  const [diceNumber] = useSelector((state: State) => [state.dice]);
+  const diceNumber = useSelector((state: State) => state.dice);
 
   const getNumber = () => {
     return maxNumber;

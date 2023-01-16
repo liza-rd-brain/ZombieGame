@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { State } from "../types";
 
 export function useInteractWithEnemy() {
-  const [doEffect] = useSelector((state: State) => [state.doEffect]);
+  const doEffect = useSelector((state: State) => state.doEffect);
   const dispatch = useDispatch();
 
   useEffect(() => {

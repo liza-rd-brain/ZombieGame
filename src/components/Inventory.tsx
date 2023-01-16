@@ -63,9 +63,7 @@ const Counter = styled.div`
 
 export const Inventory = (props: { index: number }) => {
   const dispatch = useDispatch();
-  const { playerList } = useSelector((state: State) => ({
-    ...state,
-  }));
+  const playerList = useSelector((state: State) => state.playerList);
 
   const inventory: InventoryType = playerList[props.index].inventory;
 

@@ -379,10 +379,14 @@ const Wall = styled(CommonWall)<WallType>`
 
 export const Barrier = (props: BarrierCoord) => {
   const dispatch = useDispatch();
-  const { gameField, playerList, activePlayerNumber, gameState, _config } =
-    useSelector((state: State) => ({
-      ...state,
-    }));
+
+  const _config = useSelector((state: State) => state._config);
+  const gameState = useSelector((state: State) => state.gameState);
+  const gameField = useSelector((state: State) => state.gameField);
+  const playerList = useSelector((state: State) => state.playerList);
+  const activePlayerNumber = useSelector(
+    (state: State) => state.activePlayerNumber
+  );
 
   const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];

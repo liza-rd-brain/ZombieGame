@@ -70,7 +70,7 @@ const GameControls = styled.div`
 `;
 
 export function GetApp() {
-  const { gameState } = useSelector((state: State) => ({ ...state }));
+  const gameState = useSelector((state: State) => state.gameState);
 
   useOpenCard();
   usePlayerMove();

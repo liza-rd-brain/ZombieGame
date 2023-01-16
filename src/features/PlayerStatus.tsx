@@ -12,7 +12,7 @@ import player2 from "../components/Player/player2.png";
 import player3 from "../components/Player/player3.png";
 import player4 from "../components/Player/player4.png";
 
-type AvatarType = { image: string };
+type avatarType = { image: string };
 
 const PlayerStatusCard = styled.div`
   width: 250px;
@@ -27,7 +27,7 @@ const PlayerStatusCard = styled.div`
 `;
 
 //eslint-disable-next-line
-const CharacterAvatar = styled.div<AvatarType>`
+const Characteravatar = styled.div<avatarType>`
   width: 50px;
   height: 50px;
   border: 1px solid lightgray;
@@ -67,17 +67,23 @@ const Row = styled.div`
 `;
 
 export const PlayerStatus = () => {
-  const { activePlayerNumber, playerList } = useSelector((state: State) => ({
-    ...state,
-  }));
+  // const { activePlayerNumber, playerList } = useSelector((state: State) => ({
+  //   ...state,
+  // }));
+
+  const activePlayerNumber = useSelector(
+    (state: State) => state.activePlayerNumber
+  );
+  const playerList = useSelector((state: State) => state.playerList);
+
   const playerImageList = [player, player2, player3, player4];
 
   // TODO: why pass the index?
 
   const avatar = (
-    <CharacterAvatar image={playerImageList[activePlayerNumber]}>
+    <Characteravatar image={playerImageList[activePlayerNumber]}>
       {`${activePlayerNumber + 1}`}
-    </CharacterAvatar>
+    </Characteravatar>
   );
   const health = (
     <HealthStatus>

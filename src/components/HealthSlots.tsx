@@ -28,9 +28,7 @@ const HealthSlot = styled.div<HealthSlotType>`
 `;
 
 export const HealthSlots = (props: { index: number }) => {
-  const { playerList } = useSelector((state: State) => ({
-    ...state,
-  }));
+  const playerList = useSelector((state: State) => state.playerList);
 
   return (
     <HealthSlotList>

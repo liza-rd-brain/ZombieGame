@@ -1,12 +1,18 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { State } from "../types";
 
 export function useOpenCardAnimation({ coord }: { coord: string }) {
-  const { doEffect, playerList, activePlayerNumber } = useSelector(
-    (state: State) => ({ ...state })
+  // const { doEffect, playerList, activePlayerNumber } = useSelector(
+  //   (state: State) => ({ ...state })
+  // );
+  const doEffect = useSelector((state: State) => state.doEffect);
+  const playerList = useSelector((state: State) => state.playerList);
+  const activePlayerNumber = useSelector(
+    (state: State) => state.activePlayerNumber
   );
+
   const currCoord = playerList[activePlayerNumber].coord;
 
   useEffect(

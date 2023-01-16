@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { State, PlayGridMode } from "../../business/types";
-import { FilledPlayGrid } from "./getFilledPlayGrid";
+import { FilledPlayGrid } from "./FilledPlayGrid";
 
 import img from "./house_2.png";
 
@@ -56,14 +56,13 @@ export const PlayGrid: React.FC<PlayGridProps> = React.memo(function PlayGrid({
   test,
 }) {
   const config = useSelector((state: State) => state._config);
-  // const config = state._config;
+
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 
   return (
     <GridItem key={"grid"} vert={height} mode={config.playGridMode}>
       <FilledPlayGrid />
-      {/* {getFilledPlayGrid(state)} */}
     </GridItem>
   );
 });

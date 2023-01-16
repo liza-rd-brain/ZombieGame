@@ -215,15 +215,6 @@ const getCardsOnCell = (
 };
 
 export const FilledPlayGrid = React.memo(() => {
-  // const {
-  //   gameField,
-  //   playerList,
-  //   activePlayerNumber,
-  //   gameState,
-  //   enemyList,
-  //   deadPlayerList,
-
-  // } = useSelector((state: State) => state._config);
   const _config = useSelector((state: State) => state._config);
   const gameField = useSelector((state: State) => state.gameField);
   const playerList = useSelector((state: State) => state.playerList);

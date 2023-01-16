@@ -26,11 +26,10 @@ export const StatusList = () => {
   const initialStatus: statusType = "";
   const [status, updateStatus] = useState(initialStatus);
 
-  const { dice, gameState, doEffect, gameResult } = useSelector(
-    (state: State) => ({
-      ...state,
-    })
-  );
+  const dice = useSelector((state: State) => state.dice);
+  const gameState = useSelector((state: State) => state.gameState);
+  const doEffect = useSelector((state: State) => state.doEffect);
+  const gameResult = useSelector((state: State) => state.gameResult);
 
   const newStatus = getTextStatus(gameState, doEffect, dice, gameResult);
   const battlePhrase = "pежим боя";
