@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import {
   EnemyListType,
   GameState,
 } from "../../business/types";
+
 import { CardListEl } from "./CardListEl";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
@@ -213,8 +214,8 @@ const getCardsOnCell = (
     }
   }
 };
-
-export const FilledPlayGrid = React.memo(() => {
+//не получится мемозировать из-за объектов селектора?! н-р gameField - object!?
+export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const _config = useSelector((state: State) => state._config);
   const gameField = useSelector((state: State) => state.gameField);
   const playerList = useSelector((state: State) => state.playerList);
@@ -225,8 +226,19 @@ export const FilledPlayGrid = React.memo(() => {
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const gameState = useMemo(() => gameState, []);
+  const memoConfig = useMemo(() => _config, []);
+  // const gameField = useMemo(() => gameField, []);
+  // const playerList = useMemo(() => playerList, []);
+  // const enemyList = useMemo(() => enemyList, []);
+  // const deadPlayerList = useMemo(() => deadPlayerList, []);
+  // const activePlayerNumber = useMemo(() => activePlayerNumber, []);
+
   const orderGameCells = gameField.order;
   const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
+
+  const MemoizedWrap = useMemo(() => Wrap, []);
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const cellValues = gameField.values[orderIndex];
@@ -318,19 +330,19 @@ export const FilledPlayGrid = React.memo(() => {
     switch (isCurrPlayerAlive) {
       case false: {
         return (
-          <Wrap key={`${hor}.${vert}`}>
+          <MemoizedWrap key={`${hor}.${vert}`}>
             <CellItem
               needHighlightning={needHighlightning}
-              mode={_config.playGridMode}
+              mode={memoConfig.playGridMode}
             >
               {cardsOnCell}
 
-              {_config.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
+              {memoConfig.playGridMode === "cssStyle" ? `${hor}.${vert}` : null}
             </CellItem>
             {cellValues.name === "commonCell" ? (
               <Barrier orderIndex={orderIndex}></Barrier>
             ) : null}
-          </Wrap>
+          </MemoizedWrap>
         );
       }
 
@@ -411,12 +423,12 @@ export const FilledPlayGrid = React.memo(() => {
 
                 return (
                   <React.Fragment key={`${hor}.${vert}`}>
-                    <Wrap key={`${hor}.${vert}`}>
+                    <MemoizedWrap key={`${hor}.${vert}`}>
                       <CellItem
                         needHighlightning={needHighlightning}
-                        mode={_config.playGridMode}
+                        mode={memoConfig.playGridMode}
                       >
-                        {_config.playGridMode === "cssStyle"
+                        {memoConfig.playGridMode === "cssStyle"
                           ? `${hor}.${vert}`
                           : null}
                         {hasEnemyPlayerCard ? inventoryElement : null}
@@ -425,7 +437,7 @@ export const FilledPlayGrid = React.memo(() => {
                       {cellValues.name === "commonCell" ? (
                         <Barrier orderIndex={orderIndex}></Barrier>
                       ) : null}
-                    </Wrap>
+                    </MemoizedWrap>
 
                     {ReactDOM.createPortal(
                       <>
@@ -445,20 +457,20 @@ export const FilledPlayGrid = React.memo(() => {
 
           case false: {
             return (
-              <Wrap key={`${hor}.${vert}`}>
+              <MemoizedWrap key={`${hor}.${vert}`}>
                 <CellItem
                   needHighlightning={needHighlightning}
-                  mode={_config.playGridMode}
+                  mode={memoConfig.playGridMode}
                 >
                   {cardsOnCell}
-                  {_config.playGridMode === "cssStyle"
+                  {memoConfig.playGridMode === "cssStyle"
                     ? `${hor}.${vert}`
                     : null}
                 </CellItem>
                 {cellValues.name === "commonCell" ? (
                   <Barrier orderIndex={orderIndex}></Barrier>
                 ) : null}
-              </Wrap>
+              </MemoizedWrap>
             );
           }
 

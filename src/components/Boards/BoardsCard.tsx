@@ -81,29 +81,6 @@ const CardBack = styled(CardFace)<BoardsApperanceType>`
   }}; */
 `;
 
-const MemoizedCard: FC<{ apperance: CardApperance; coord: string }> = ({
-  apperance,
-  coord,
-}) => {
-  // useOpenCardAnimation({ coord });
-  console.log("перерисовка");
-  return (
-    <CardContainer
-      apperance={apperance}
-      /* onAnimationEnd={() => {
-        console.log("end animation CardContainer");
-      }} */
-    >
-      <CardFront
-      /*    onAnimationEnd={() => {
-          console.log("end animation CardFront");
-        }} */
-      />
-      <CardBack apperance={apperance} />
-    </CardContainer>
-  );
-};
-
 export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
   apperance,
   coord,

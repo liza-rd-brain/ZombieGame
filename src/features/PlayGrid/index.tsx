@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { memo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -51,7 +51,7 @@ type PlayGridProps = {
   test?: string;
 };
 
-export const PlayGrid: React.FC<PlayGridProps> = React.memo(function PlayGrid({
+export const PlayGrid: React.FC<PlayGridProps> = React.memo(function _PlayGrid({
   className,
   test,
 }) {
@@ -60,9 +60,11 @@ export const PlayGrid: React.FC<PlayGridProps> = React.memo(function PlayGrid({
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 
+  const MemoizedFilledPlayGrid = useMemo(() => <FilledPlayGrid />, []);
+
   return (
     <GridItem key={"grid"} vert={height} mode={config.playGridMode}>
-      <FilledPlayGrid />
+      {MemoizedFilledPlayGrid}
     </GridItem>
   );
 });
