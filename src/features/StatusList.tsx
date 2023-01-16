@@ -33,14 +33,14 @@ export const StatusList = () => {
   );
 
   const newStatus = getTextStatus(gameState, doEffect, dice, gameResult);
-  const batlePhrase = "pежим боя";
+  const battlePhrase = "pежим боя";
   useEffect(() => {
     updateStatus(() => {
       if (gameState.type.includes("interactWithEnemy")) {
         if (gameState.type === "interactWithEnemy") {
           return newStatus;
         } else {
-          return `${batlePhrase}: ${newStatus}`;
+          return `${battlePhrase}: ${newStatus}`;
         }
       } else {
         return newStatus;

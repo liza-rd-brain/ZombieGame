@@ -2,7 +2,7 @@ import { State } from "../../types";
 
 /**
  * Need separate method for open EnemyCard
- * Because it dont lying structurally on cell
+ * Because it does not structurally lie on the cell
  */
 export const openEnemyCard = (state: State): State => {
   const { enemyList, playerList, activePlayerNumber } = state;
