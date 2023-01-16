@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 import {
   State,
@@ -125,7 +126,7 @@ const checkNeedSplitCards = (
   playerList: PlayerListType,
   orderIndex: string,
   cell: CellType,
-  enemiyList: EnemyListType,
+  enemyList: EnemyListType,
   gameState: GameState
 ) => {
   const playerItemList = Object.entries(playerList);
@@ -140,11 +141,11 @@ const checkNeedSplitCards = (
       return playerCard;
     });
 
-  const hasPlayerOncell = playerListOnCell.length === 1;
+  const hasPlayerOnCell = playerListOnCell.length === 1;
 
   const hasCardOnCell = cell.cardItem?.length === 1;
 
-  const enemyOnCell = Object.entries(enemiyList).filter(
+  const enemyOnCell = Object.entries(enemyList).filter(
     ([string, enemyCard]) => enemyCard.coord === orderIndex
   );
   const hasEnemyOnCell = enemyOnCell.length === 1;
@@ -154,12 +155,12 @@ const checkNeedSplitCards = (
   const hasTwoEnemy = amountEnemyOnCell === 2;
 
   const hasPlayerAndEnemy =
-    hasEnemyOnCell && hasPlayerOncell && !phaseInteractWithEnemy;
+    hasEnemyOnCell && hasPlayerOnCell && !phaseInteractWithEnemy;
   const hasEnemyAndCard = hasEnemyOnCell && hasCardOnCell;
 
   const hasEnemyAndPlayerAndCard =
     hasEnemyOnCell &&
-    hasPlayerOncell &&
+    hasPlayerOnCell &&
     hasCardOnCell &&
     phaseInteractWithEnemy;
 
@@ -213,16 +214,25 @@ const getCardsOnCell = (
   }
 };
 
-export const getFilledPlayGrid = (state: State) => {
-  const {
-    gameField,
-    playerList,
-    activePlayerNumber,
-    gameState,
-    enemyList,
-    deadPlayerList,
-    _config,
-  } = state;
+export const FilledPlayGrid = React.memo(() => {
+  // const {
+  //   gameField,
+  //   playerList,
+  //   activePlayerNumber,
+  //   gameState,
+  //   enemyList,
+  //   deadPlayerList,
+
+  // } = useSelector((state: State) => state._config);
+  const _config = useSelector((state: State) => state._config);
+  const gameField = useSelector((state: State) => state.gameField);
+  const playerList = useSelector((state: State) => state.playerList);
+  const activePlayerNumber = useSelector(
+    (state: State) => state.activePlayerNumber
+  );
+  const gameState = useSelector((state: State) => state.gameState);
+  const enemyList = useSelector((state: State) => state.enemyList);
+  const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
 
   const orderGameCells = gameField.order;
   const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
@@ -310,7 +320,7 @@ export const getFilledPlayGrid = (state: State) => {
 
     const cardsOnCell = getCardsOnCell(needSplitCards, cardList, orderIndex);
 
-    const availableCells = state.gameState.coordOfAvailableCells;
+    const availableCells = gameState.coordOfAvailableCells;
 
     const needHighlightning = availableCells?.includes(orderIndex);
 
@@ -382,7 +392,7 @@ export const getFilledPlayGrid = (state: State) => {
                     return playerCard;
                   });
 
-                const hasPlayerOncell = playerListOnCell.length === 1;
+                const hasPlayerOnCell = playerListOnCell.length === 1;
 
                 const cellValues = gameField.values[orderIndex];
 
@@ -404,7 +414,7 @@ export const getFilledPlayGrid = (state: State) => {
 
                 const hasEnemyPlayerCard =
                   hasEnemyOnCell &&
-                  hasPlayerOncell &&
+                  hasPlayerOnCell &&
                   hasCardOnCell &&
                   phaseInteractWithEnemy;
 
@@ -470,5 +480,5 @@ export const getFilledPlayGrid = (state: State) => {
     return null;
   });
 
-  return fullPlayerGrid;
-};
+  return <>{fullPlayerGrid}</>;
+});

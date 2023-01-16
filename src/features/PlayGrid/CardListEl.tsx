@@ -6,7 +6,8 @@ import {
   EnemyListType,
   PlayerListType,
 } from "../../business/types";
-import { FC, useMemo } from "react";
+import { FC, memo, useMemo } from "react";
+import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
 
 /**
  * Return inventory and other closed cards
@@ -21,48 +22,59 @@ const CardView = ({
   type: string;
   coord: string;
 }) => {
-  return useMemo(() => {
-    return <BoardsCard apperance={apperance} coord={coord} />;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apperance]);
+  //TODO: only for
+  return <BoardsCard apperance={apperance} coord={coord} />;
+  // return useMemo(() => {
+  //   return <BoardsCard apperance={apperance} coord={coord} />;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [apperance]);
 };
 
-export const CardListEl: FC<{
-  cell: CellType;
-  hor: string;
-  vert: string;
-  currCoord: string;
-  enemyList: EnemyListType;
-  deadPlayerList: DeadPlayerListType;
-  activePlayerNumber: number;
-  playerList: PlayerListType;
-}> = ({
-  cell,
-  hor,
-  vert,
-  currCoord,
-  enemyList,
-  deadPlayerList,
-  activePlayerNumber,
-  playerList,
-}) => {
-  const cardItemList = cell.cardItem;
-  if (cardItemList) {
-    return (
-      <>
-        {cardItemList.map((cardItem) => {
-          return (
-            <CardView
-              key={`${hor}.${vert}.health`}
-              apperance={cardItem.apperance}
-              type={cardItem.name}
-              coord={currCoord}
-            />
-          );
-        })}
-      </>
-    );
-  } else {
-    return null;
+export const CardListEl = memo(
+  ({
+    cell,
+    hor,
+    vert,
+    currCoord,
+    enemyList,
+    deadPlayerList,
+    activePlayerNumber,
+    playerList,
+  }: {
+    cell: CellType;
+    hor: string;
+    vert: string;
+    currCoord: string;
+    enemyList: EnemyListType;
+    deadPlayerList: DeadPlayerListType;
+    activePlayerNumber: number;
+    playerList: PlayerListType;
+  }) => {
+    //Should get coordinate or is nedd to run
+
+    const playerCoord = playerList[activePlayerNumber].coord;
+    useOpenCardAnimation({ coord: "" });
+
+    const MemoCardView = memo(CardView);
+
+    const cardItemList = cell.cardItem;
+    if (cardItemList) {
+      return (
+        <>
+          {cardItemList.map((cardItem) => {
+            return (
+              <MemoCardView
+                key={`${hor}.${vert}.health`}
+                apperance={cardItem.apperance}
+                type={cardItem.name}
+                coord={currCoord}
+              />
+            );
+          })}
+        </>
+      );
+    } else {
+      return null;
+    }
   }
-};
+);

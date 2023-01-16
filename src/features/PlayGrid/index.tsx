@@ -1,8 +1,10 @@
+import React from "react";
+import { memo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { State, PlayGridMode } from "../../business/types";
-import { getFilledPlayGrid } from "./getFilledPlayGrid";
+import { FilledPlayGrid } from "./getFilledPlayGrid";
 
 import img from "./house_2.png";
 
@@ -44,17 +46,24 @@ const GridItem = styled.div<GridProps>`
   box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 `;
 
-export const PlayGrid = () => {
-  const state = useSelector((state: State) => ({
-    ...state,
-  }));
-  const config = state._config;
+type PlayGridProps = {
+  className?: string;
+  test?: string;
+};
+
+export const PlayGrid: React.FC<PlayGridProps> = React.memo(function PlayGrid({
+  className,
+  test,
+}) {
+  const config = useSelector((state: State) => state._config);
+  // const config = state._config;
   const { vert: maxVert } = config.finishCoord;
   const height = maxVert + 1;
 
   return (
     <GridItem key={"grid"} vert={height} mode={config.playGridMode}>
-      {getFilledPlayGrid(state)}
+      <FilledPlayGrid />
+      {/* {getFilledPlayGrid(state)} */}
     </GridItem>
   );
-};
+});
