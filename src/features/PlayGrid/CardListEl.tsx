@@ -15,23 +15,31 @@ import { useDispatch } from "react-redux";
  * Return inventory and other closed cards
  */
 
+const ANIMATION_TIME = 3;
+
 const CardView = React.memo(function _CardView({
-  type,
-  coord,
   apperance,
+  refList,
 }: {
   type: string;
   coord: string;
   apperance: CardApperance;
+  refList: {
+    cardContainerRef: React.RefObject<HTMLDivElement>;
+    cardFrontRef: React.RefObject<HTMLDivElement>;
+  };
 }) {
   //TODO: only for
-  return <BoardsCard apperance={apperance} coord={coord} />;
+  return <BoardsCard apperance={apperance} refList={refList} />;
   // return useMemo(() => {
   //   return <BoardsCard apperance={apperance} coord={coord} />;
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [apperance]);
 });
 
+/**
+ * Represent some card on one Cell
+ */
 export const CardListEl = React.memo(function _CardListEl({
   cell,
   hor,
@@ -57,7 +65,7 @@ export const CardListEl = React.memo(function _CardListEl({
 
   const getNextPhase = () => {
     console.log("конец анимации");
-    // dispatch({type: "req-openCard"})
+    dispatch({ type: "req-openCard" });
   };
 
   const playerCoord = playerList[activePlayerNumber].coord;
@@ -72,7 +80,7 @@ export const CardListEl = React.memo(function _CardListEl({
 
   const { cardRef } = useOpenCardAnimation({
     needRun: needRerender,
-    maxTime: 3,
+    maxTime: ANIMATION_TIME,
     onTimerEnd: getNextPhase,
   });
 
@@ -85,7 +93,7 @@ export const CardListEl = React.memo(function _CardListEl({
         {cardItemList.map((cardItem) => {
           return (
             <MemoCardView
-              /*   ref= */
+              refList={cardRef}
               key={`${hor}.${vert}.health`}
               apperance={cardItem.apperance}
               type={cardItem.name}

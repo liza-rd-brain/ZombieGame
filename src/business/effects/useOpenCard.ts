@@ -18,30 +18,12 @@ export function useOpenCard() {
         }
 
         //TODO: here control need be given to hook for only card open animation!
-        // case "!openCard": {
-        //   const timerOpen = setTimeout(
-        //     () =>
-        //       dispatch({
-        //         type: "req-openCard",
-        //       }),
-        //     1000
-        //   );
-        //   return () => {
-        //     clearTimeout(timerOpen);
-        //   };
-        // }
 
         case "!takeCard": {
-          const timerTakeCard = setTimeout(
-            () =>
-              dispatch({
-                type: "req-takeCard",
-              }),
-            5000
-          );
-          return () => {
-            clearTimeout(timerTakeCard);
-          };
+          dispatch({
+            type: "req-takeCard",
+          });
+          break;
         }
 
         case "!changePlayerHealth": {

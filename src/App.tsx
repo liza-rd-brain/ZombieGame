@@ -86,7 +86,7 @@ export function GetApp() {
         <Field id="field">
           <PlayGrid />
         </Field>
-        <FlipCard />
+        {/*      <FlipCard /> */}
         <RightPanel>
           <StatusList />
           <GameControls>

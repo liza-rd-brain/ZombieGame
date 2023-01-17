@@ -35,7 +35,10 @@ export function useOpenCardAnimation({
   //   (state: State) => ({ ...state })
   // );
   const doEffect = useSelector((state: State) => state.doEffect);
-  const cardRef = useRef<HTMLDivElement>();
+  const cardRef = {
+    cardContainerRef: useRef<HTMLDivElement>(null),
+    cardFrontRef: useRef<HTMLDivElement>(null),
+  };
 
   const initialTimeState = {
     timeMark: 0,
@@ -112,16 +115,18 @@ export function useOpenCardAnimation({
       const intervalId = setInterval(() => {
         const currentTime = getTimerValue(new Date().getTime());
 
-        // if (timerNodeRef.current) {
-        //   timerNodeRef.current.innerHTML = newTimeString;
-        // }
+        if (cardRef.cardContainerRef.current && cardRef.cardFrontRef.current) {
+          cardRef.cardContainerRef.current.style.transform = "rotateY(180deg)";
+          cardRef.cardContainerRef.current.style.transition = `transform ${maxTime}s`;
+          cardRef.cardContainerRef.current.style.color = "red";
+
+          cardRef.cardFrontRef.current.style.transform = "rotateY(180deg)";
+        }
 
         if (currentTime <= 0) {
           clearInterval(intervalId);
-          const timeoutId = setTimeout(() => onTimerEnd(), 1000);
-          return () => {
-            clearTimeout(timeoutId);
-          };
+
+          onTimerEnd();
         }
       }, 1000);
 
