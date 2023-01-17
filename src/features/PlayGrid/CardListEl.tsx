@@ -9,6 +9,7 @@ import {
 import { FC, memo, useMemo } from "react";
 import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 /**
  * Return inventory and other closed cards
@@ -52,18 +53,28 @@ export const CardListEl = React.memo(function _CardListEl({
 }) {
   //Should get coordinate or is nedd to run
 
+  const dispatch = useDispatch();
+
+  const getNextPhase = () => {
+    console.log("конец анимации");
+    // dispatch({type: "req-openCard"})
+  };
+
   const playerCoord = playerList[activePlayerNumber].coord;
 
-  //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
-  //TODO:добавить условие карточка на ячейке
-  const needRerender = Boolean(
-    playerCoord === currCoord && cell.cardItem?.length
-  );
-  if (needRerender) {
-    console.log(needRerender, playerCoord);
-  }
+  const isCardClosed =
+    cell.cardItem?.length === 1 && cell.cardItem[0].apperance === "closed";
 
-  useOpenCardAnimation({ coord: "", needRun: needRerender });
+  //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
+
+  //TODO:добавить условие карточка на ячейке
+  const needRerender = Boolean(playerCoord === currCoord && isCardClosed);
+
+  const { cardRef } = useOpenCardAnimation({
+    needRun: needRerender,
+    maxTime: 3,
+    onTimerEnd: getNextPhase,
+  });
 
   const MemoCardView = useMemo(() => CardView, [needRerender]);
 
@@ -74,6 +85,7 @@ export const CardListEl = React.memo(function _CardListEl({
         {cardItemList.map((cardItem) => {
           return (
             <MemoCardView
+              /*   ref= */
               key={`${hor}.${vert}.health`}
               apperance={cardItem.apperance}
               type={cardItem.name}

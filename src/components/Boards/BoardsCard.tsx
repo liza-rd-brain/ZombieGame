@@ -81,33 +81,14 @@ const CardBack = styled(CardFace)<BoardsApperanceType>`
   }}; */
 `;
 
+//TODO: нужно
 export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
   apperance,
   coord,
 }) => {
-  // const { doEffect, playerList, activePlayerNumber } = useSelector(
-  //   (state: State) => ({ ...state })
-  // );
-
-  // const currCoord = playerList[activePlayerNumber].coord;
-
-  // return useMemo(() => {
-  //   return <MemoizedCard apperance={apperance} coord={coord} />;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currCoord]);
-  // console.log("перерисовка");
   return (
-    <CardContainer
-      apperance={apperance}
-      /* onAnimationEnd={() => {
-        console.log("end animation CardContainer");
-      }} */
-    >
-      <CardFront
-      /*    onAnimationEnd={() => {
-          console.log("end animation CardFront");
-        }} */
-      />
+    <CardContainer apperance={apperance}>
+      <CardFront />
       <CardBack apperance={apperance} />
     </CardContainer>
   );
