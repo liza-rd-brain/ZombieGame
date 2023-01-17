@@ -95,7 +95,7 @@ export const BoardsCard: FC<{ apperance: CardApperance; coord: string }> = ({
   //   return <MemoizedCard apperance={apperance} coord={coord} />;
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [currCoord]);
-  console.log("перерисовка");
+  // console.log("перерисовка");
   return (
     <CardContainer
       apperance={apperance}

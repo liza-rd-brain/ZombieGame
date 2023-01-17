@@ -53,12 +53,17 @@ export const CardListEl = React.memo(function _CardListEl({
   //Should get coordinate or is nedd to run
 
   const playerCoord = playerList[activePlayerNumber].coord;
-  /*     useOpenCardAnimation({ coord: "" }); */
+
+  //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
   //TODO:добавить условие карточка на ячейке
-  const needRerender = playerCoord === currCoord && cell.cardItem?.length;
+  const needRerender = Boolean(
+    playerCoord === currCoord && cell.cardItem?.length
+  );
   if (needRerender) {
     console.log(needRerender, playerCoord);
   }
+
+  useOpenCardAnimation({ coord: "", needRun: needRerender });
 
   const MemoCardView = useMemo(() => CardView, [needRerender]);
 

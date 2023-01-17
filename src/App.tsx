@@ -16,6 +16,7 @@ import {
   useInteractWithEnemy,
   useApplyCard,
 } from "./business/effects";
+import { useCallback, useMemo } from "react";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -78,6 +79,26 @@ export function GetApp() {
   useInteractWithEnemy();
   useApplyCard();
 
+  const memoizedMainPage = useMemo(() => {
+    return (
+      <>
+        <LeftPanel>{/*  <PlayersStatusList /> */}</LeftPanel>
+        <Field id="field">
+          <PlayGrid />
+        </Field>
+        {/* <FlipCard /> */}
+        <RightPanel>
+          <StatusList />
+          <GameControls>
+            <Dice />
+            <MoveControls />
+          </GameControls>
+          {/*  <PlayerStatus /> */}
+        </RightPanel>
+      </>
+    );
+  }, []);
+
   const getGameScreen = () => {
     switch (gameState.type) {
       case "waitingStart":
@@ -87,26 +108,13 @@ export function GetApp() {
         return <EndScreen />;
 
       default:
-        return (
-          <>
-            <LeftPanel>{/*  <PlayersStatusList /> */}</LeftPanel>
-            <Field id="field">
-              <PlayGrid />
-            </Field>
-            {/* <FlipCard /> */}
-            <RightPanel>
-              <StatusList />
-              <GameControls>
-                <Dice />
-                <MoveControls />
-              </GameControls>
-              {/*  <PlayerStatus /> */}
-            </RightPanel>
-          </>
-        );
+        return memoizedMainPage;
     }
   };
 
+  // const memoizedGetApp = useMemo(() => {
+  //   return ;
+  // }, [gameState.type]);
   return <Game>{getGameScreen()}</Game>;
 }
 

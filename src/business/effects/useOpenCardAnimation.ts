@@ -3,7 +3,13 @@ import { useSelector } from "react-redux";
 
 import { State } from "../types";
 
-export function useOpenCardAnimation({ coord }: { coord: string }) {
+export function useOpenCardAnimation({
+  coord,
+  needRun,
+}: {
+  coord: string;
+  needRun: boolean;
+}) {
   // const { doEffect, playerList, activePlayerNumber } = useSelector(
   //   (state: State) => ({ ...state })
   // );
@@ -19,7 +25,7 @@ export function useOpenCardAnimation({ coord }: { coord: string }) {
     function openCardAnimation() {
       switch (doEffect?.type) {
         case "!openCard": {
-          if (currCoord === coord) {
+          if (needRun) {
             console.log("run open card animation");
             console.log(coord);
           }
