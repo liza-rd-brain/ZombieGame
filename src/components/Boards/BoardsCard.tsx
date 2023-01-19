@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { CardApperance } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";

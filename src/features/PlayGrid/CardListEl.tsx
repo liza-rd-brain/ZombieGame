@@ -5,6 +5,7 @@ import {
   DeadPlayerListType,
   EnemyListType,
   PlayerListType,
+  TypeOfCard,
 } from "../../business/types";
 import { FC, memo, useMemo } from "react";
 import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
@@ -21,8 +22,9 @@ type CardsListType = "all" | "enemy" | "inventory";
 const CardView = React.memo(function _CardView({
   apperance,
   refList,
+  type,
 }: {
-  type: string;
+  type: TypeOfCard;
   coord: string;
   apperance: CardApperance;
   refList: {
@@ -30,7 +32,17 @@ const CardView = React.memo(function _CardView({
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
 }) {
-  return <BoardsCard apperance={apperance} refList={refList} />;
+  switch (type) {
+    case "boards": {
+      return <BoardsCard apperance={apperance} refList={refList} />;
+    }
+    case "weapon": {
+      return <WeaponCard apperance={apperance} refList={refList} />;
+    }
+    default: {
+      return null;
+    }
+  }
 });
 
 /**
@@ -55,8 +67,6 @@ export const CardListEl = React.memo(function _CardListEl({
 }) {
   const dispatch = useDispatch();
   const [hor, vert] = currCoord.split(".");
-
-  console.log("type", type);
 
   const getNextPhase = () => {
     dispatch({ type: "req-openCard" });
@@ -89,25 +99,44 @@ export const CardListEl = React.memo(function _CardListEl({
   const hasEnemy = enemyListOnCell.length > 0;
 
   //перенести это условие в CardView
-  if (cardItemList) {
-    return (
-      <>
-        {cardItemList.map((cardItem) => {
-          return (
-            <MemoCardView
-              refList={cardRef}
-              key={`${hor}.${vert}.health`}
-              apperance={cardItem.apperance}
-              type={cardItem.name}
-              coord={currCoord}
-            />
-          );
-        })}
-      </>
-    );
-  } else if (hasEnemy) {
-    return null;
-  } else {
-    return null;
-  }
+
+  const inventoryElem = cardItemList ? (
+    <>
+      {cardItemList.map((cardItem) => {
+        return (
+          <MemoCardView
+            refList={cardRef}
+            key={`${hor}.${vert}.health`}
+            apperance={cardItem.apperance}
+            type={cardItem.name}
+            coord={currCoord}
+          />
+        );
+      })}
+    </>
+  ) : null;
+
+  // const enemyElem=
+  // if (cardItemList) {
+  //   return (
+  //     <>
+  //       {cardItemList.map((cardItem) => {
+  //         return (
+  //           <MemoCardView
+  //             refList={cardRef}
+  //             key={`${hor}.${vert}.health`}
+  //             apperance={cardItem.apperance}
+  //             type={cardItem.name}
+  //             coord={currCoord}
+  //           />
+  //         );
+  //       })}
+  //     </>
+  //   );
+  // } else if (hasEnemy) {
+  //   return null;
+  // } else {
+  //   return null;
+  // }
+  return inventoryElem;
 });
