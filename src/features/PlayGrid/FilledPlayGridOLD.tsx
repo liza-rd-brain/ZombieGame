@@ -16,8 +16,6 @@ import { CardListEl } from "./CardListEl";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
 import { EnemyList } from "../../components";
-import { checkNeedSplitCards } from "./checkNeedSplitCards";
-import { getSplittedCardsPassive } from "./getSplittedCardsPassive";
 
 type CellApperance = {
   needHighlightning?: boolean;
@@ -91,10 +89,134 @@ const UnderlayerItem = styled.div<UnderlayerType>`
   z-index: 6;
 `;
 
+type PortalType = {
+  coordX: string;
+  coordY: string;
+};
+
+const CardsPortal = styled.div<PortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
+
+const CardsWrap = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  position: absolute;
+  z-index: 3;
+  font-size: 12px;
+  font-weight: bold;
+  /*   flex-direction: row-reverse; */
+  > * {
+    position: relative !important;
+    margin: 0 -12px;
+
+    /*     margin: 0px -41px;
+    left: -54px; */
+  }
+`;
+
+const checkNeedSplitCards = (
+  playerList: PlayerListType,
+  orderIndex: string,
+  cell: CellType,
+  enemyList: EnemyListType,
+  gameState: GameState
+) => {
+  const playerItemList = Object.entries(playerList);
+
+  const playerListOnCell = playerItemList
+    .filter((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard.coord === orderIndex && playerCard.name === "player";
+    })
+    .map((playerItem) => {
+      const [, playerCard] = playerItem;
+      return playerCard;
+    });
+
+  const hasPlayerOnCell = playerListOnCell.length === 1;
+
+  const hasCardOnCell = cell.cardItem?.length === 1;
+
+  const enemyOnCell = Object.entries(enemyList).filter(
+    ([string, enemyCard]) => enemyCard.coord === orderIndex
+  );
+  const hasEnemyOnCell = enemyOnCell.length === 1;
+  const amountEnemyOnCell = enemyOnCell.length;
+
+  const phaseInteractWithEnemy = gameState.type.includes("interactWithEnemy");
+  const hasTwoEnemy = amountEnemyOnCell === 2;
+
+  const hasPlayerAndEnemy =
+    hasEnemyOnCell && hasPlayerOnCell && !phaseInteractWithEnemy;
+  const hasEnemyAndCard = hasEnemyOnCell && hasCardOnCell;
+
+  const hasEnemyAndPlayerAndCard =
+    hasEnemyOnCell &&
+    hasPlayerOnCell &&
+    hasCardOnCell &&
+    phaseInteractWithEnemy;
+
+  switch (true) {
+    case hasEnemyAndPlayerAndCard: {
+      return false;
+    }
+
+    case hasTwoEnemy:
+    case hasPlayerAndEnemy:
+    case hasEnemyAndCard: {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+};
+
 /**
  * @returns view of cards, single or multiple and splitted
  */
+const getSplittedCardsOnCell = (
+  needSplitCards: Boolean,
+  cardList: JSX.Element,
+  orderIndex: string
+) => {
+  switch (needSplitCards) {
+    case false: {
+      return cardList;
+    }
+    case true: {
+      const fieildElem = document.getElementById("field");
+      switch (fieildElem) {
+        case null: {
+          return cardList;
+        }
+        default: {
+          const [hor, vert] = orderIndex.split(".");
 
+          const portal = ReactDOM.createPortal(
+            <CardsPortal coordX={hor} coordY={vert}>
+              <CardsWrap>{cardList}</CardsWrap>
+            </CardsPortal>,
+            fieildElem
+          );
+          return portal;
+        }
+      }
+    }
+    default: {
+      return null;
+    }
+  }
+};
 //не получится мемозировать из-за объектов селектора?! н-р gameField - object!?
 export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const _config = useSelector((state: State) => state._config);
@@ -109,6 +231,10 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const memoConfig = useMemo(() => _config, []);
 
   const orderGameCells = gameField.order;
+
+  /**
+   * paint cell number only for css mode
+   */
 
   /**
    * ? often need, make as selector
@@ -205,7 +331,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
       gameState
     );
 
-    const cardsOnCell = getSplittedCardsPassive(
+    const cardsOnCell = getSplittedCardsOnCell(
       needSplitCards,
       cardList,
       orderIndex
@@ -225,6 +351,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
               mode={memoConfig.playGridMode}
             >
               {cardsOnCell}
+
               {draftCellNumbers}
             </CellItem>
             {barrier}
@@ -301,9 +428,6 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
                 const phaseInteractWithEnemy =
                   gameState.type.includes("interactWithEnemy");
 
-                /**
-                 * has Enemy and Player and Card
-                 */
                 const hasEnemyPlayerCard =
                   hasEnemyOnCell &&
                   hasPlayerOnCell &&
