@@ -142,8 +142,13 @@ export const EnemyList = (props: EnemyArray) => {
     return enemyCard;
   });
 
+  /**
+   * ! spec props
+   */
   const needSplitCards = enemyListOnCell.length > 1;
-
+  /**
+   * ! spec props
+   */
   const firstItemIsClosed = enemyListOnCell[0].apperance === "closed";
 
   const isActiveEnemyCard =
@@ -172,45 +177,22 @@ export const EnemyList = (props: EnemyArray) => {
             ? true
             : false;
 
-          switch (isActivePlayerDead) {
-            case false: {
-              return (
-                <EnemyCard
-                  key={index}
-                  {...enemyCard}
-                  isCurrent={false}
-                  onClick={() => {
-                    dispatch({
-                      type: "clickedEnemy",
-                      payload: { enemyCard: enemyCard },
-                    });
-                  }}
-                ></EnemyCard>
-              );
-            }
+          const isCurrentEnemyCard =
+            Number(deadPlayerList[activePlayerNumber].index) === Number(index);
 
-            case true: {
-              return (
-                <EnemyCard
-                  key={index}
-                  {...enemyCard}
-                  isCurrent={
-                    Number(deadPlayerList[activePlayerNumber].index) ===
-                    Number(index)
-                  }
-                  onClick={() => {
-                    dispatch({
-                      type: "clickedEnemy",
-                      payload: { enemyCard: enemyCard },
-                    });
-                  }}
-                ></EnemyCard>
-              );
-            }
-            default: {
-              return null;
-            }
-          }
+          return (
+            <EnemyCard
+              key={index}
+              {...enemyCard}
+              isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
+              onClick={() => {
+                dispatch({
+                  type: "clickedEnemy",
+                  payload: { enemyCard: enemyCard },
+                });
+              }}
+            ></EnemyCard>
+          );
         } else {
           return (
             <EnemyCard

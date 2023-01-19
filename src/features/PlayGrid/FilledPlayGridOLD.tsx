@@ -351,7 +351,6 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
               mode={memoConfig.playGridMode}
             >
               {cardsOnCell}
-
               {draftCellNumbers}
             </CellItem>
             {barrier}

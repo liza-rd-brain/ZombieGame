@@ -11,12 +11,13 @@ import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimatio
 import React from "react";
 import { useDispatch } from "react-redux";
 
+const ANIMATION_TIME = 3;
+
+type CardsListType = "all" | "enemy" | "inventory";
+
 /**
  * Return inventory and other closed cards
  */
-
-const ANIMATION_TIME = 3;
-
 const CardView = React.memo(function _CardView({
   apperance,
   refList,
@@ -29,21 +30,15 @@ const CardView = React.memo(function _CardView({
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
 }) {
-  //TODO: only for
   return <BoardsCard apperance={apperance} refList={refList} />;
-  // return useMemo(() => {
-  //   return <BoardsCard apperance={apperance} coord={coord} />;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [apperance]);
 });
 
 /**
  * Represent some card on one Cell
  */
 export const CardListEl = React.memo(function _CardListEl({
+  type,
   cell,
-  hor,
-  vert,
   currCoord,
   enemyList,
   deadPlayerList,
@@ -51,20 +46,17 @@ export const CardListEl = React.memo(function _CardListEl({
   playerList,
 }: {
   cell: CellType;
-  hor: string;
-  vert: string;
+  type?: CardsListType;
   currCoord: string;
   enemyList: EnemyListType;
   deadPlayerList: DeadPlayerListType;
   activePlayerNumber: number;
   playerList: PlayerListType;
 }) {
-  //Should get coordinate or is nedd to run
-
   const dispatch = useDispatch();
+  const [hor, vert] = currCoord.split(".");
 
   const getNextPhase = () => {
-    console.log("конец анимации");
     dispatch({ type: "req-openCard" });
   };
 
@@ -75,18 +67,26 @@ export const CardListEl = React.memo(function _CardListEl({
 
   //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
 
-  //TODO:добавить условие карточка на ячейке
-  const needRerender = Boolean(playerCoord === currCoord && isCardClosed);
+  const needRerenderCard = Boolean(playerCoord === currCoord && isCardClosed);
 
   const { cardRef } = useOpenCardAnimation({
-    needRun: needRerender,
+    needRun: needRerenderCard,
     maxTime: ANIMATION_TIME,
     onTimerEnd: getNextPhase,
   });
 
-  const MemoCardView = useMemo(() => CardView, [needRerender]);
+  const MemoCardView = useMemo(() => CardView, [needRerenderCard]);
 
   const cardItemList = cell.cardItem;
+
+  const enemyListOnCell = Object.entries(enemyList).filter(
+    ([string, enemyCard]) =>
+      enemyCard.coord === currCoord && enemyCard.apperance === "open"
+  );
+
+  const hasEnemy = enemyListOnCell.length > 0;
+
+  //перенести это условие в CardView
   if (cardItemList) {
     return (
       <>
@@ -103,6 +103,8 @@ export const CardListEl = React.memo(function _CardListEl({
         })}
       </>
     );
+  } else if (hasEnemy) {
+    return null;
   } else {
     return null;
   }

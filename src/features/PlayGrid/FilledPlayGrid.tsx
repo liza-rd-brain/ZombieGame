@@ -149,8 +149,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     const cardListEl = (
       <CardListEl
         cell={cellValues}
-        hor={hor}
-        vert={vert}
+        /* type={} */
         currCoord={orderIndex}
         enemyList={enemyList}
         deadPlayerList={deadPlayerList}
@@ -192,8 +191,8 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     );
 
     /**
-     * inventory and closed cards
-     * Rename to backgroundCards-!?
+     * ? its only inventory cards
+     * wor case when enemy take card with inventory
      */
     const inventoryElement = <>{cardListEl}</>;
 
@@ -205,11 +204,9 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
       gameState
     );
 
-    const cardsOnCell = getSplittedCardsPassive(
-      needSplitCards,
-      cardList,
-      orderIndex
-    );
+    const cardsOnCell = needSplitCards
+      ? getSplittedCardsPassive(cardList, orderIndex)
+      : cardList;
 
     const availableCells = gameState.coordOfAvailableCells;
 
@@ -320,7 +317,6 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
                         {draftCellNumbers}
                         {hasEnemyPlayerCard ? inventoryElement : null}
                       </CellItem>
-
                       {barrier}
                     </MemoizedWrap>
 

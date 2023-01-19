@@ -21,9 +21,9 @@ export const getPlayerList = (
       return playerCard;
     });
 
-  const hasPlayerOncell = playerListOnCell.length > 0;
+  const hasPlayerOnCell = playerListOnCell.length > 0;
 
-  switch (hasPlayerOncell) {
+  switch (hasPlayerOnCell) {
     case true: {
       return (
         <PlayerList

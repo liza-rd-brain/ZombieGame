@@ -17,8 +17,6 @@ export function useOpenCard() {
           break;
         }
 
-        //TODO: here control need be given to hook for only card open animation!
-
         case "!takeCard": {
           dispatch({
             type: "req-takeCard",

@@ -31,9 +31,6 @@ export function useOpenCardAnimation({
   maxTime: number;
   onTimerEnd: () => void;
 }) {
-  // const { doEffect, playerList, activePlayerNumber } = useSelector(
-  //   (state: State) => ({ ...state })
-  // );
   const doEffect = useSelector((state: State) => state.doEffect);
   const cardRef = {
     cardContainerRef: useRef<HTMLDivElement>(null),

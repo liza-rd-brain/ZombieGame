@@ -36,36 +36,25 @@ const CardsWrap = styled.div`
 `;
 
 export const getSplittedCardsPassive = (
-  needSplitCards: Boolean,
   cardList: JSX.Element,
   orderIndex: string
 ) => {
-  switch (needSplitCards) {
-    case false: {
+  const fieildElem = document.getElementById("field");
+  switch (fieildElem) {
+    case null: {
       return cardList;
     }
-    case true: {
-      const fieildElem = document.getElementById("field");
-      switch (fieildElem) {
-        case null: {
-          return cardList;
-        }
-        default: {
-          const [hor, vert] = orderIndex.split(".");
-
-          const portal = ReactDOM.createPortal(
-            <CardsPortal coordX={hor} coordY={vert}>
-              <CardsWrap>{cardList}</CardsWrap>
-            </CardsPortal>,
-            fieildElem
-          );
-
-          return portal;
-        }
-      }
-    }
     default: {
-      return null;
+      const [hor, vert] = orderIndex.split(".");
+
+      const portal = ReactDOM.createPortal(
+        <CardsPortal coordX={hor} coordY={vert}>
+          <CardsWrap>{cardList}</CardsWrap>
+        </CardsPortal>,
+        fieildElem
+      );
+
+      return portal;
     }
   }
 };
