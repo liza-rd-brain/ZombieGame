@@ -6,11 +6,11 @@ import img from "./boards.png";
 import brainImg from "../CommonCard/brain_4.png";
 
 type BoardsApperanceType = {
-  apperance?: "closed" | "open";
+  apperance: "closed" | "open";
   ref: any;
 };
 
-const CardContainer = styled.div<BoardsApperanceType>`
+const CardContainer = styled.div`
   width: 50px;
   height: 50px;
   position: relative;
@@ -31,9 +31,14 @@ const CardFront = styled(CardFace)`
   border-color: gray;
 `;
 
-const CardBack = styled(CardFace)`
+const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
   ${StyledCommonCard}
   background-image: url(${brainImg});
+  display: ${({ apperance }) => {
+    if (apperance === "open") {
+      return "none";
+    }
+  }};
 `;
 
 export const BoardsCard: FC<{
@@ -46,7 +51,7 @@ export const BoardsCard: FC<{
   return (
     <CardContainer ref={refList.cardContainerRef}>
       <CardFront ref={refList.cardFrontRef} />
-      <CardBack />
+      <CardBack apperance={apperance} />
     </CardContainer>
   );
 };

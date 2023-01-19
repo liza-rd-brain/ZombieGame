@@ -31,9 +31,14 @@ const CardFront = styled(CardFace)`
   border-color: gray;
 `;
 
-const CardBack = styled(CardFace)`
+const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
   ${StyledCommonCard}
   background-image: url(${brainImg});
+  display: ${({ apperance }) => {
+    if (apperance === "open") {
+      return "none";
+    }
+  }};
 `;
 
 export const WeaponCard: FC<{
@@ -46,7 +51,7 @@ export const WeaponCard: FC<{
   return (
     <CardContainer ref={refList.cardContainerRef}>
       <CardFront ref={refList.cardFrontRef} />
-      <CardBack />
+      <CardBack apperance={apperance} />
     </CardContainer>
   );
 };
