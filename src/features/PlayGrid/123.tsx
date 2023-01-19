@@ -274,7 +274,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
 
     const cardListEl = (
       <CardListEl
-        type={"all"}
+        type="all"
         cell={cellValues}
         currCoord={orderIndex}
         enemyList={enemyList}
@@ -350,6 +350,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
               mode={memoConfig.playGridMode}
             >
               {cardsOnCell}
+
               {draftCellNumbers}
             </CellItem>
             {barrier}

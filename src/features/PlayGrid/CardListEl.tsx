@@ -34,7 +34,7 @@ const CardView = React.memo(function _CardView({
 });
 
 /**
- * Represent some card on one Cell
+ * Represent some card on one Cell: inventory and enemy
  */
 export const CardListEl = React.memo(function _CardListEl({
   type,
@@ -46,7 +46,7 @@ export const CardListEl = React.memo(function _CardListEl({
   playerList,
 }: {
   cell: CellType;
-  type?: CardsListType;
+  type: CardsListType;
   currCoord: string;
   enemyList: EnemyListType;
   deadPlayerList: DeadPlayerListType;
@@ -55,6 +55,8 @@ export const CardListEl = React.memo(function _CardListEl({
 }) {
   const dispatch = useDispatch();
   const [hor, vert] = currCoord.split(".");
+
+  console.log("type", type);
 
   const getNextPhase = () => {
     dispatch({ type: "req-openCard" });
