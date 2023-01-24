@@ -62,11 +62,19 @@ export const EnemyCardNew: FC<{
   needSplitCards: boolean;
   needReverseCards: boolean;
   apperance: CardApperance;
+  enemyCard: EnemyCardType;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
-}> = ({ isCurrent, needSplitCards, needReverseCards, apperance, refList }) => {
+}> = ({
+  isCurrent,
+  needSplitCards,
+  needReverseCards,
+  apperance,
+  refList,
+  enemyCard,
+}) => {
   const dispatch = useDispatch();
 
   return (
@@ -74,7 +82,11 @@ export const EnemyCardNew: FC<{
       needSplitCards={needSplitCards}
       needReverseCards={needReverseCards}
     >
-      <EnemyViewNew apperance={apperance} refList={refList} />
+      <EnemyViewNew
+        apperance={apperance}
+        refList={refList}
+        enemyCard={enemyCard}
+      />
     </EnemyCardList>
   );
 };

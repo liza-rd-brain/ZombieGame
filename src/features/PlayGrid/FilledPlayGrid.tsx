@@ -107,17 +107,19 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
   const memoConfig = useMemo(() => _config, []);
 
-  const playerCoord = playerList[activePlayerNumber].coord;
-  const hasEnemyCard = Object.values(enemyList).find(
-    (enemyItem) => enemyItem.coord === playerCoord
-  );
+  const playerCoord = playerList[activePlayerNumber]?.coord;
+  const hasEnemyCard =
+    playerCoord &&
+    Object.values(enemyList).find(
+      (enemyItem) => enemyItem.coord === playerCoord
+    );
   const hasInventoryCards = gameField.values[playerCoord];
   // const hasInventoryCard=
   const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
 
   console.log(hasEnemyCard, hasInventoryCards, needRerenderCard);
 
-  const ANIMATION_TIME = 3;
+  const ANIMATION_TIME = 1;
 
   const getNextPhase = () => {
     //for inventory and for other card ???
@@ -184,8 +186,14 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
 
     const needHighlightning = availableCells?.includes(orderIndex);
 
-    const currPlayerCoord = playerList[activePlayerNumber].coord;
-    const [playerX, playerY] = currPlayerCoord.split(".");
+    const currPlayerCoord = playerList[activePlayerNumber]?.coord as
+      | string
+      | undefined;
+
+    const [playerX, playerY] = currPlayerCoord
+      ? currPlayerCoord.split(".")
+      : [undefined, undefined];
+
     const isPhaseCreateSeparateWindow =
       gameState.type.includes("interactWithEnemy") ||
       gameState.type === "gameStarted.takeCard";
@@ -270,6 +278,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
           }
           break;
         }
+
         case "front": {
           switch (hasEnemyPlayerCard) {
             case true: {

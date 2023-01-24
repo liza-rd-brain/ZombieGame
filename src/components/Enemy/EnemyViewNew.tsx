@@ -1,12 +1,13 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
-import { CardApperance } from "../../business/types";
+import { CardApperance, EnemyCardType } from "../../business/types";
 
 import zombie from "./zombie.png";
 // import zombie_defeated from "./zombie_defeated.png";
 
 import brainImg from "../CommonCard/brain_4.png";
+import { useDispatch } from "react-redux";
 
 type WeaponApperanceType = {
   apperance?: "closed" | "open";
@@ -46,13 +47,24 @@ const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
 
 export const EnemyViewNew: FC<{
   apperance: CardApperance;
+  enemyCard: EnemyCardType;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
-}> = ({ apperance, refList }) => {
+}> = ({ apperance, refList, enemyCard }) => {
+  const dispatch = useDispatch();
+
   return (
-    <CardContainer ref={refList.cardContainerRef}>
+    <CardContainer
+      ref={refList.cardContainerRef}
+      onClick={() => {
+        dispatch({
+          type: "clickedEnemy",
+          payload: { enemyCard: enemyCard },
+        });
+      }}
+    >
       <CardFront ref={refList.cardFrontRef} />
       <CardBack apperance={apperance} />
     </CardContainer>

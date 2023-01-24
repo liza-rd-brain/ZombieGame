@@ -87,7 +87,7 @@ export const CardListEl = React.memo(function _CardListEl({
   //   dispatch({ type: "req-openCard" });
   // };
 
-  const playerCoord = playerList[activePlayerNumber].coord;
+  const playerCoord = playerList[activePlayerNumber]?.coord;
 
   //TODO: почему только открытые карточки???
   const enemyListOnCell = Object.entries(enemyList).filter(
@@ -173,15 +173,17 @@ export const CardListEl = React.memo(function _CardListEl({
      *
      */
 
-    const isCurrentEnemyCard = Boolean(
-      deadPlayerList &&
-        Number(deadPlayerList[activePlayerNumber].index) === Number(index)
-    );
+    // const isCurrentEnemyCard = Boolean(
+    //   deadPlayerList &&
+    //     Number(deadPlayerList[activePlayerNumber].index) === Number(index)
+    // );
 
     return (
       <EnemyCardNew
+        enemyCard={enemyCard}
         key={index}
-        isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
+        isCurrent={false}
+        // isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
         apperance={enemyCard.apperance}
