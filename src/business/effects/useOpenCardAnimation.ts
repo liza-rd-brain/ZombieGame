@@ -6,11 +6,7 @@ import { State } from "../types";
 type PhaseType = "waiting" | "running" | "ended";
 type EffectType = null | "startEffect" | "stopEffect";
 
-type ActionType =
-  | { type: "start" }
-  | { type: "stop" }
-  | { type: "setTime" }
-  | { type: "clearEffect" };
+type ActionType = { type: "start" } | { type: "clearEffect" };
 
 type TimerControlledType = {
   timeState: {
@@ -66,8 +62,8 @@ export function useOpenCardAnimation({
         }
       }
 
-      case "stop": {
-        return { ...state, effect: "stopEffect" };
+      case "clearEffect": {
+        return { ...state, effect: null };
       }
       default: {
         return state;
@@ -83,7 +79,7 @@ export function useOpenCardAnimation({
         case "!openCard": {
           if (needRun) {
             //нужно запустить анимацию
-            console.log("run open card animation");
+
             dispatch({ type: "start" });
           }
 
@@ -122,7 +118,9 @@ export function useOpenCardAnimation({
 
         if (currentTime <= 0) {
           clearInterval(intervalId);
+          console.log(" onTimerEnd 1");
 
+          dispatch({ type: "clearEffect" });
           onTimerEnd();
         }
       }, 1000);
@@ -130,9 +128,10 @@ export function useOpenCardAnimation({
       return () => {
         clearInterval(intervalId);
       };
-    } else if (state.effect === "stopEffect") {
+    } /* else if (state.effect === "stopEffect") {
+      console.log(" onTimerEnd 2");
       onTimerEnd();
-    }
+    } */
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.effect]);

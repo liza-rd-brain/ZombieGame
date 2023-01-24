@@ -1,3 +1,8 @@
+import React, { useMemo } from "react";
+import { useDispatch } from "react-redux";
+
+import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
+
 import { Health, BoardsCard, WeaponCard, EnemyList } from "../../components";
 import {
   CardApperance,
@@ -8,10 +13,6 @@ import {
   TypeOfCard,
   TypeOfInventoryCard,
 } from "../../business/types";
-import { FC, memo, useMemo } from "react";
-import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
-import React from "react";
-import { useDispatch } from "react-redux";
 import { EnemyCardNew } from "../../components/Enemy/EnemyCardNew";
 
 const ANIMATION_TIME = 3;
@@ -64,6 +65,7 @@ export const CardListEl = React.memo(function _CardListEl({
   deadPlayerList,
   activePlayerNumber,
   playerList,
+  refList,
 }: {
   cell: CellType;
   type: CardsListType;
@@ -72,14 +74,18 @@ export const CardListEl = React.memo(function _CardListEl({
   deadPlayerList: DeadPlayerListType;
   activePlayerNumber: number;
   playerList: PlayerListType;
+  refList: {
+    cardContainerRef: React.RefObject<HTMLDivElement>;
+    cardFrontRef: React.RefObject<HTMLDivElement>;
+  };
 }) {
   const dispatch = useDispatch();
   const [hor, vert] = currCoord.split(".");
 
-  const getNextPhase = () => {
-    //for inventory and for other card ???
-    dispatch({ type: "req-openCard" });
-  };
+  // const getNextPhase = () => {
+  //   //for inventory and for other card ???
+  //   dispatch({ type: "req-openCard" });
+  // };
 
   const playerCoord = playerList[activePlayerNumber].coord;
 
@@ -99,11 +105,11 @@ export const CardListEl = React.memo(function _CardListEl({
   const isItemClosed = isInventoryCardClosed || isEnemyCardClosed;
   const needRerenderCard = Boolean(playerCoord === currCoord && isItemClosed);
 
-  const { cardRef } = useOpenCardAnimation({
-    needRun: needRerenderCard,
-    maxTime: ANIMATION_TIME,
-    onTimerEnd: getNextPhase,
-  });
+  // const { cardRef } = useOpenCardAnimation({
+  //   needRun: needRerenderCard,
+  //   maxTime: ANIMATION_TIME,
+  //   onTimerEnd: getNextPhase,
+  // });
 
   const MemoCard = useMemo(() => Card, [needRerenderCard]);
 
@@ -118,7 +124,7 @@ export const CardListEl = React.memo(function _CardListEl({
       {cardItemList.map((cardItem) => {
         return (
           <MemoCard
-            refList={cardRef}
+            refList={refList}
             key={`${hor}.${vert}.health`}
             apperance={cardItem.apperance}
             type={cardItem.name}
@@ -179,7 +185,7 @@ export const CardListEl = React.memo(function _CardListEl({
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
         apperance={enemyCard.apperance}
-        refList={cardRef}
+        refList={refList}
         // onClick={() => {
         //   dispatch({
         //     type: "clickedEnemy",

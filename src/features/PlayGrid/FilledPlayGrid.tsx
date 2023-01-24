@@ -1,23 +1,18 @@
 import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import {
-  State,
-  PlayGridMode,
-  PlayerListType,
-  CellType,
-  EnemyListType,
-  GameState,
-} from "../../business/types";
+import { State, PlayGridMode } from "../../business/types";
 
 import { CardListEl } from "./CardListEl";
 import { getPlayerList } from "./getPlayerList";
 import { Barrier } from "./Barrier";
-import { EnemyList } from "../../components";
+
 import { checkNeedSplitCards } from "./checkNeedSplitCards";
 import { getSplittedCardsPassive } from "./getSplittedCardsPassive";
+
+import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
 
 type CellApperance = {
   needHighlightning?: boolean;
@@ -100,6 +95,7 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 
 //не получится мемозировать из-за объектов селектора?! н-р gameField - object!?
 export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
+  const dispatch = useDispatch();
   const _config = useSelector((state: State) => state._config);
   const gameField = useSelector((state: State) => state.gameField);
   const playerList = useSelector((state: State) => state.playerList);
@@ -110,6 +106,32 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
   const memoConfig = useMemo(() => _config, []);
+
+  const playerCoord = playerList[activePlayerNumber].coord;
+  const hasEnemyCard = Object.values(enemyList).find(
+    (enemyItem) => enemyItem.coord === playerCoord
+  );
+  const hasInventoryCards = gameField.values[playerCoord];
+  // const hasInventoryCard=
+  const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
+
+  console.log(hasEnemyCard, hasInventoryCards, needRerenderCard);
+
+  const ANIMATION_TIME = 3;
+
+  const getNextPhase = () => {
+    //for inventory and for other card ???
+    dispatch({ type: "req-openCard" });
+  };
+
+  const { cardRef } = useOpenCardAnimation({
+    needRun: needRerenderCard,
+    maxTime: ANIMATION_TIME,
+    onTimerEnd: getNextPhase,
+  });
+
+  // const memoRef = cardRef;
+  const memoRef = useMemo(() => cardRef, []);
 
   const orderGameCells = gameField.order;
 
@@ -293,6 +315,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
         <>
           {playerListEl}
           <CardListEl
+            refList={memoRef}
             cell={cellValues}
             type={type as CardsListType}
             currCoord={orderIndex}
