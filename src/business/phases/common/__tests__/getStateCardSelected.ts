@@ -1,7 +1,7 @@
 import { createConfig } from "../../../../shared/helpers/createConfig";
 import { getInitialState } from "../../../initialState";
 import { reducer } from "../../../reducer";
-import { CardApperance, State, TypeOfCard } from "../../../types";
+import { CardApperance, State, TypeOfInventoryCard } from "../../../types";
 
 const configEmptyField = createConfig();
 
@@ -298,7 +298,7 @@ describe("switch select on another card in full inventory", () => {
 
 const getStateCardNotSelected = (
   initialState: State,
-  type: TypeOfCard
+  type: TypeOfInventoryCard
 ): State => {
   if (type) {
     return {
@@ -323,7 +323,10 @@ const getStateCardNotSelected = (
   }
 };
 
-const getStateCardSelected = (initialState: State, type: TypeOfCard): State => {
+const getStateCardSelected = (
+  initialState: State,
+  type: TypeOfInventoryCard
+): State => {
   if (type) {
     return {
       ...initialState,
@@ -350,7 +353,10 @@ const getStateCardSelected = (initialState: State, type: TypeOfCard): State => {
   }
 };
 
-const getStateFullInvenory = (initialState: State, type: TypeOfCard): State => {
+const getStateFullInvenory = (
+  initialState: State,
+  type: TypeOfInventoryCard
+): State => {
   if (type) {
     return {
       ...initialState,

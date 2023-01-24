@@ -1,4 +1,4 @@
-import { State, TypeOfCard } from "../../../types";
+import { State, TypeOfInventoryCard } from "../../../types";
 
 import { ActionType } from "../../../reducer";
 import { getPlayerMoveResult } from "./getPlayerMoveResult";
@@ -23,8 +23,8 @@ export const playerMove = (state: State, action: ActionType): State => {
 
     //TODO: Rename to inventoryCardClicked-?!
     case "cardChoosed": {
-      const typeofCard: TypeOfCard = action.payload.type;
-      return getStateCardSelected(state, typeofCard);
+      const TypeOfInventoryCard: TypeOfInventoryCard = action.payload.type;
+      return getStateCardSelected(state, TypeOfInventoryCard);
     }
 
     default: {

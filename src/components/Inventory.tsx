@@ -2,14 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { State, InventoryType, TypeOfCard } from "../business/types";
+import { State, InventoryType, TypeOfInventoryCard } from "../business/types";
 
 import health from "../components/Health/health.png";
 import boards from "../components/Boards/boards.png";
 import weapon from "../components/Weapon/weapon.png";
 
 type ImageType = {
-  type: TypeOfCard;
+  type: TypeOfInventoryCard;
   highlighting?: boolean;
 };
 

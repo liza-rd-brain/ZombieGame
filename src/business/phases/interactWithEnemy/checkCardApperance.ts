@@ -19,7 +19,8 @@ export const checkCardApperance = (state: State): State => {
     case isNeedOpenEnemyCard: {
       return {
         ...state,
-        doEffect: { type: "!openEnemyCard" },
+        doEffect: { type: "!openCard" },
+        /*  doEffect: { type: "!openEnemyCard" }, */
       };
     }
 

@@ -35,6 +35,9 @@ const CardsWrap = styled.div`
   }
 `;
 
+/**
+ * card splitted, but not in some action
+ */
 export const getSplittedCardsPassive = (
   cardList: JSX.Element,
   orderIndex: string

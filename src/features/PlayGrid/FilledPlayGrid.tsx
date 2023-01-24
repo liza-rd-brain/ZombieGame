@@ -275,6 +275,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     const foregroundCardListType = getCardListType({
       type: "back",
     }) as CardsListType;
+
     const hasBackgroundCard = Boolean(backgroundCardListType);
 
     const fieildElem = document.getElementById("field");

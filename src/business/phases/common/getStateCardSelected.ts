@@ -1,4 +1,9 @@
-import { State, PlayerListType, TypeOfCard, InventoryType } from "../../types";
+import {
+  State,
+  PlayerListType,
+  TypeOfInventoryCard,
+  InventoryType,
+} from "../../types";
 
 /**
  * We need to give highlighting to healthCard
@@ -6,7 +11,7 @@ import { State, PlayerListType, TypeOfCard, InventoryType } from "../../types";
 
 export const getStateCardSelected = (
   state: State,
-  typeOfSelect: TypeOfCard
+  typeOfSelect: TypeOfInventoryCard
 ): State => {
   // TODO: Need to restrict select unneceserry card -?!
   // Add switch on type of cards
@@ -70,7 +75,7 @@ export const getStateCardSelected = (
 
 const changeSelectedCard = (
   state: State,
-  typeOfSelect: TypeOfCard
+  typeOfSelect: TypeOfInventoryCard
 ): PlayerListType => {
   const { playerList, activePlayerNumber } = state;
   const inventory = playerList[activePlayerNumber].inventory;
@@ -114,7 +119,10 @@ const changeSelectedCard = (
   }
 };
 
-const checkCardNonZero = (state: State, typeOfSelect: TypeOfCard): Boolean => {
+const checkCardNonZero = (
+  state: State,
+  typeOfSelect: TypeOfInventoryCard
+): Boolean => {
   const { playerList, activePlayerNumber } = state;
   const inventory = playerList[activePlayerNumber].inventory;
   if (typeOfSelect !== null) {

@@ -35,7 +35,7 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
   text-indent: -4px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.apperance === "open" || props.apperance === "defeated") {
+    if (props.apperance === "open" /* || props.apperance === "defeated" */) {
       return "unset";
     }
   }};
@@ -50,9 +50,9 @@ const EnemyCard = styled.div<EnemyCardApperanceType>`
 
   background-image: ${(props) => {
     switch (props.apperance) {
-      case "defeated": {
-        return `url(${zombie_defeated})`;
-      }
+      // case "defeated": {
+      //   return `url(${zombie_defeated})`;
+      // }
       case "open": {
         return `url(${zombie})`;
       }

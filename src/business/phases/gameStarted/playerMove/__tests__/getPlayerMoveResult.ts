@@ -1,7 +1,7 @@
 import { createConfig } from "../../../../../shared/helpers/createConfig";
 import { getInitialState } from "../../../../initialState";
 import { reducer } from "../../../../reducer";
-import { CardApperance, State, TypeOfCard } from "../../../../types";
+import { CardApperance, State, TypeOfInventoryCard } from "../../../../types";
 
 const configEmptyField = createConfig();
 const initialState = getInitialState(configEmptyField);
@@ -209,7 +209,7 @@ const getStateTakeCard = (state: State): State => {
 
 const getStateWithCard = (
   initialState: State,
-  type: TypeOfCard,
+  type: TypeOfInventoryCard,
   apperance: CardApperance
 ): State => {
   if (type) {

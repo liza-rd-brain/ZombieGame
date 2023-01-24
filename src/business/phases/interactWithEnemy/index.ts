@@ -57,10 +57,13 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
         case "req-checkEnemyCard": {
           return checkCardApperance(state);
         }
-
-        case "req-openEnemyCard": {
+        case "req-openCard": {
           return openEnemyCard(state);
         }
+
+        // case "req-openEnemyCard": {
+        //   return openEnemyCard(state);
+        // }
 
         case "req-getBattleResult": {
           return getBattleResult(state);

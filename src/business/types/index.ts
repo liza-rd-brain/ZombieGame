@@ -1,6 +1,7 @@
 export type PlayGridMode = "image" | "cssStyle";
 export type CardApperance = "closed" | "open";
-export type TypeOfCard = "boards" | "health" | "weapon" | null;
+export type TypeOfInventoryCard = "boards" | "health" | "weapon" | null;
+export type TypeOfCard = TypeOfInventoryCard | "enemy";
 export type CoordItem = { hor: number; vert: number };
 
 export type MoveDirection = "top" | "bottom" | "left" | "right";
@@ -62,7 +63,7 @@ export type InventoryType = {
   boards: number;
   health: number;
   weapon: number;
-  cardSelected: TypeOfCard;
+  cardSelected: TypeOfInventoryCard;
 };
 
 export type CardItem = HealthCardType | BoardsCardType | WeaponCardType;
@@ -76,7 +77,8 @@ export type EnemyCardType = {
   name: "enemy";
   power: number;
   coord: string;
-  apperance: CardApperance | "defeated";
+  apperance: CardApperance;
+  feature?: "defeated";
 };
 
 export type EnemyListType = Record<number, EnemyCardType>;

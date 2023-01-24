@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
-  TypeOfCard,
+  TypeOfInventoryCard,
   PlayerListType,
   GameState,
   PLayerType,
@@ -399,7 +399,7 @@ export const PlayerList = (props: PlayerListItem) => {
 
 const calculateHighlightning = (
   coordOfAvailableCards: string[] | null,
-  typeOfChosedCard: TypeOfCard,
+  typeOfChosedCard: TypeOfInventoryCard,
   playerCardItem: PLayerType,
   activePlayerCoord: string
 ) => {

@@ -1,6 +1,9 @@
-import { State, PlayerListType, TypeOfCard } from "../../types";
+import { State, PlayerListType, TypeOfInventoryCard } from "../../types";
 
-export const changeSelectedCard = (state: State, typeOfSelect: TypeOfCard) => {
+export const changeSelectedCard = (
+  state: State,
+  typeOfSelect: TypeOfInventoryCard
+) => {
   const { playerList, activePlayerNumber } = state;
   const inventory = playerList[activePlayerNumber].inventory;
 

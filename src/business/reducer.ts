@@ -14,7 +14,7 @@ import {
   MoveDirection,
   PLayerType,
   State,
-  TypeOfCard,
+  TypeOfInventoryCard,
 } from "./types";
 import { getPlayersOrder } from "./phases/gameStarted/getPlayersOrder";
 import { enemyMove } from "./phases/enemyMove";
@@ -38,7 +38,7 @@ export type ActionType =
   | { type: "req-takeCard" }
   | {
       type: "cardChoosed";
-      payload: { type: TypeOfCard };
+      payload: { type: TypeOfInventoryCard };
     }
   | { type: "req-choosePlayer" }
   | {

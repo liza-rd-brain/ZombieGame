@@ -27,7 +27,7 @@ const PlayerStatusCard = styled.div`
 `;
 
 //eslint-disable-next-line
-const Characteravatar = styled.div<avatarType>`
+const CharacterAvatar = styled.div<avatarType>`
   width: 50px;
   height: 50px;
   border: 1px solid lightgray;
@@ -81,9 +81,9 @@ export const PlayerStatus = () => {
   // TODO: why pass the index?
 
   const avatar = (
-    <Characteravatar image={playerImageList[activePlayerNumber]}>
+    <CharacterAvatar image={playerImageList[activePlayerNumber]}>
       {`${activePlayerNumber + 1}`}
-    </Characteravatar>
+    </CharacterAvatar>
   );
   const health = (
     <HealthStatus>

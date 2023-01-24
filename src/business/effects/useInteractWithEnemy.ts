@@ -16,18 +16,18 @@ export function useInteractWithEnemy() {
         break;
       }
 
-      case "!openEnemyCard": {
-        const timerOpen = setTimeout(
-          () =>
-            dispatch({
-              type: "req-openEnemyCard",
-            }),
-          1000
-        );
-        return () => {
-          clearTimeout(timerOpen);
-        };
-      }
+      // case "!openEnemyCard": {
+      //   const timerOpen = setTimeout(
+      //     () =>
+      //       dispatch({
+      //         type: "req-openEnemyCard",
+      //       }),
+      //     1000
+      //   );
+      //   return () => {
+      //     clearTimeout(timerOpen);
+      //   };
+      // }
 
       case "!getBattleResult": {
         const timerGetResult = setTimeout(
