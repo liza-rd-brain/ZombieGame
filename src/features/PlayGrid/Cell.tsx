@@ -51,35 +51,25 @@ export const Cell: React.FC<{ coord: string; mode: PlayGridMode }> = React.memo(
       (state: State) => state.gameField.values[coord]
     );
 
-    // const activePlayerNumber = useSelector(
-    //   (state: State) => state.activePlayerNumber
-    // );
-
-    // const gameField = useSelector((state: State) => state.gameField);
-
-    // const playerList = useSelector((state: State) => state.playerList);
     const hasPlayerOnCell = useSelector(
       (state: State) =>
         state.playerList[state.activePlayerNumber]?.coord === coord
     );
 
-    // const gameState = useSelector((state: State) => state.gameState);
+    const needHighlightning = useSelector((state: State) =>
+      state.gameState.coordOfAvailableCells
+        ? state.gameState.coordOfAvailableCells.includes(coord)
+        : false
+    );
+
+    // const needHighlightning = availableCells?.includes(orderIndex);
+
     const enemyList = useSelector((state: State) => state.enemyList);
     const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
 
     const [hor, vert] = coord.split(".");
 
-    // const currPlayerCoord = playerList[activePlayerNumber]?.coord as
-    //   | string
-    //   | undefined;
-
     const draftCellNumbers = mode === "cssStyle" ? `${hor}.${vert}` : null;
-
-    // console.log(isNeedCreateSeparateWindow);
-
-    // const hasPlayerOnCell = currPlayerCoord && currPlayerCoord === coord;
-
-    // const cellValues = gameField.values[coord];
     const hasCard = cellValues.cardItem && cellValues.cardItem.length > 0;
 
     const enemyListOnCell = Object.entries(enemyList).filter(
@@ -97,25 +87,18 @@ export const Cell: React.FC<{ coord: string; mode: PlayGridMode }> = React.memo(
 
     const memoizedPlayerCard = useMemo(() => {
       return <PlayerList coord={coord} />;
-      // return getPlayerList(
-      //   coord,
-      // playerList,
-      // activePlayerNumber,
-      // gameState,
-      //   isPlayerAlone
-      // );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hasPlayerOnCell]);
 
     const memoizedCellItem = useMemo(() => {
       console.log(hasPlayerOnCell);
+      console.log(needHighlightning);
       return (
-        <CellItem needHighlightning={false} mode={mode}>
+        <CellItem needHighlightning={needHighlightning} mode={mode}>
           {draftCellNumbers}
           {memoizedPlayerCard}
         </CellItem>
       );
-    }, [hasPlayerOnCell]);
+    }, [hasPlayerOnCell, needHighlightning]);
 
     return memoizedCellItem;
   }
