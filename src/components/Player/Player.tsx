@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import React from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import {
@@ -9,6 +9,7 @@ import {
   PlayerListType,
   GameState,
   PLayerType,
+  State,
 } from "../../business/types";
 
 import player from "./player.png";
@@ -31,8 +32,8 @@ type PlayerListItem = {
   playerListOnCell: PLayerType[];
   playerList: PlayerListType;
   numberOfPlayer: number;
-  gameState: GameState;
-  isPlayerAlone: boolean;
+  /*   gameState: GameState; */
+  /*   isPlayerAlone: boolean; */
 };
 
 type PortalType = {
@@ -189,8 +190,10 @@ const Button = styled.button`
   width: 70px;
 `;
 
-export const PlayerList = (props: PlayerListItem) => {
+export const Player = (props: PlayerListItem) => {
   const dispatch = useDispatch();
+
+  const gameState = useSelector((state: State) => state.gameState);
 
   const playerImageList = [player, player2, player3, player4];
 
@@ -198,8 +201,8 @@ export const PlayerList = (props: PlayerListItem) => {
     playerListOnCell,
     playerList,
     numberOfPlayer,
-    gameState,
-    isPlayerAlone,
+
+    /*     isPlayerAlone, */
   } = props;
 
   const needSplitCards = playerListOnCell.length > 1;
@@ -370,19 +373,20 @@ export const PlayerList = (props: PlayerListItem) => {
 
       switch (needSplitCards) {
         case false: {
-          switch (isPlayerAlone) {
-            case true: {
-              return portal;
-            }
+          return playerCardList;
+          // switch (isPlayerAlone) {
+          //   case true: {
+          //     return portal;
+          //   }
 
-            case false: {
-              return playerCardList;
-            }
+          //   case false: {
+          //     return playerCardList;
+          //   }
 
-            default: {
-              return playerCardList;
-            }
-          }
+          //   default: {
+          //     return playerCardList;
+          //   }
+          // }
         }
 
         case true: {
