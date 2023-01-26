@@ -91,7 +91,7 @@ export const Cell: React.FC<{ coord: string; mode: PlayGridMode }> = React.memo(
     }, [hasPlayerOnCell]);
 
     const memoizedBarrier = useMemo(() => {
-      return <Barrier orderIndex={coord}></Barrier>;
+      return <Barrier orderIndex={coord} mode={mode}></Barrier>;
     }, []);
 
     const memoizedCellItem = useMemo(() => {

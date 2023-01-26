@@ -21,6 +21,7 @@ import {
   AvailableCellType,
   PlayGridMode,
 } from "../../business/types";
+import { FC } from "react";
 
 type WallType = {
   barrierItem?: BarrierItem;
@@ -31,6 +32,7 @@ type WallType = {
 
 type BarrierCoord = {
   orderIndex: string;
+  mode: PlayGridMode;
 };
 
 const CommonWall = styled.div<WallType>`
@@ -377,18 +379,25 @@ const Wall = styled(CommonWall)<WallType>`
   }
 `;
 
-export const Barrier = (props: BarrierCoord) => {
+export const Barrier: FC<BarrierCoord> = ({ orderIndex, mode }) => {
   const dispatch = useDispatch();
 
-  const _config = useSelector((state: State) => state._config);
-  const gameState = useSelector((state: State) => state.gameState);
+  const needApplyBoardCard = useSelector((state: State) => {
+    const isCardApplyPhase = state.gameState.type === "gameStarted.applyCard";
+    const boardCardActive =
+      state.playerList[state.activePlayerNumber].inventory.cardSelected ===
+      "boards";
+
+    return isCardApplyPhase && boardCardActive;
+  });
+
+  // const gameState = useSelector((state: State) => state.gameState);
   const gameField = useSelector((state: State) => state.gameField);
   const playerList = useSelector((state: State) => state.playerList);
   const activePlayerNumber = useSelector(
     (state: State) => state.activePlayerNumber
   );
 
-  const orderIndex = props.orderIndex;
   const cellValues = gameField.values[orderIndex];
   const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
 
@@ -430,7 +439,7 @@ export const Barrier = (props: BarrierCoord) => {
       const barrierList = cellValues.barrierList?.map((barrier) => {
         switch (isCurrPlayerAlive) {
           case false: {
-            return getWallItem(barrier, _config.playGridMode, null, null);
+            return getWallItem(barrier, mode, null, null);
           }
 
           case true: {
@@ -458,7 +467,7 @@ export const Barrier = (props: BarrierCoord) => {
               neighboringCellList,
               gameField,
               currPlayerCoord,
-              gameState,
+              needApplyBoardCard,
               playerList,
               activePlayerNumber
             );
@@ -499,7 +508,7 @@ export const Barrier = (props: BarrierCoord) => {
 
             return getWallItem(
               barrier,
-              _config.playGridMode,
+              mode,
               getHighlightningListItem,
               onClickHandler
             );
@@ -547,7 +556,7 @@ const getHighlightningList = (
   neighboringCellList: AvailableCellListType,
   gameField: GameField,
   currCoord: string,
-  gameState: GameState,
+  needApplyBoardCard: boolean,
   playerList: PlayerListType,
   numberOfPlayer: number
 ) => {
@@ -579,19 +588,10 @@ const getHighlightningList = (
     })
     .filter((availableCell) => availableCell !== null);
 
-  switch (gameState.type) {
-    case "gameStarted.applyCard":
-      const cardItemList = playerList[numberOfPlayer].inventory;
-      const typeOfSelectedCard = cardItemList.cardSelected;
-      /*  const typeOfSelectedCard = selectedCard?.name; */
-      if (typeOfSelectedCard === "boards") {
-        return availableCellList;
-      } else {
-        return [];
-      }
-
-    default:
-      return [];
+  if (needApplyBoardCard) {
+    return availableCellList;
+  } else {
+    return [];
   }
 };
 

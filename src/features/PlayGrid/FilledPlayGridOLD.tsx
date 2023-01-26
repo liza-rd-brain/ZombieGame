@@ -153,7 +153,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
 
     const barrier =
       cellValues.name === "commonCell" ? (
-        <Barrier orderIndex={orderIndex}></Barrier>
+        <Barrier orderIndex={orderIndex} mode="image"></Barrier>
       ) : null;
 
     const enemyListOnCell = Object.entries(enemyList).filter(
