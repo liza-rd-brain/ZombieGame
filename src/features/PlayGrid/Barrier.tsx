@@ -392,46 +392,42 @@ export const Barrier = (props: BarrierCoord) => {
   const cellValues = gameField.values[orderIndex];
   const isCurrPlayerAlive = playerList[activePlayerNumber] ? true : false;
 
+  const getWallItem = (
+    barrier: BarrierItem,
+    mode: PlayGridMode,
+    highlightningList: any,
+    onClickHandler: any
+  ) => {
+    switch (mode) {
+      case "cssStyle": {
+        return (
+          <Wall
+            key={barrier.direction}
+            barrierItem={barrier}
+            highlightningList={highlightningList ? highlightningList() : null}
+            onClick={() => onClickHandler()}
+          ></Wall>
+        );
+      }
+      case "image": {
+        return (
+          <WallImage
+            key={barrier.direction}
+            barrierItem={barrier}
+            highlightningList={highlightningList ? highlightningList() : null}
+            onClick={() => onClickHandler()}
+          ></WallImage>
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
+
   switch (cellValues.name) {
     case "commonCell": {
       const barrierList = cellValues.barrierList?.map((barrier) => {
-        const getWallItem = (
-          barrier: BarrierItem,
-          mode: PlayGridMode,
-          highlightningList: any,
-          onClickHandler: any
-        ) => {
-          switch (mode) {
-            case "cssStyle": {
-              return (
-                <Wall
-                  key={barrier.direction}
-                  barrierItem={barrier}
-                  highlightningList={
-                    highlightningList ? highlightningList() : null
-                  }
-                  onClick={() => onClickHandler()}
-                ></Wall>
-              );
-            }
-            case "image": {
-              return (
-                <WallImage
-                  key={barrier.direction}
-                  barrierItem={barrier}
-                  highlightningList={
-                    highlightningList ? highlightningList() : null
-                  }
-                  onClick={() => onClickHandler()}
-                ></WallImage>
-              );
-            }
-            default: {
-              return null;
-            }
-          }
-        };
-
         switch (isCurrPlayerAlive) {
           case false: {
             return getWallItem(barrier, _config.playGridMode, null, null);
@@ -469,7 +465,7 @@ export const Barrier = (props: BarrierCoord) => {
 
             const getHighlightningListItem = () => {
               return needCheckHighlightning
-                ? getHigtlightningDirection(
+                ? getHighlightningDirection(
                     highlightningList,
                     orderIndex,
                     barrier.direction
@@ -522,7 +518,7 @@ export const Barrier = (props: BarrierCoord) => {
   }
 };
 
-const getHigtlightningDirection = (
+const getHighlightningDirection = (
   highlightningList: (AvailableCellType | null)[],
   orderIndex: string,
   direction: MoveDirection

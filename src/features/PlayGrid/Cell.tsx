@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { ConfigType, PlayGridMode, State } from "../../business/types";
+import { Barrier } from "./Barrier";
 
 import { PlayerList } from "./PlayerList";
 
@@ -38,12 +39,12 @@ const CellItem = styled.div<CellApperance>`
 //через селекторы сама решает что рисовать
 
 /**
- * 1. player
+ * 1. player   +
+ * 6.walls===barrier (сейчас просто картинка)
  * 2.enemy
  * 3.invenrory
  * 4.split
  * 5.separate window
- * 6.walls (сейчас просто картинка)
  */
 export const Cell: React.FC<{ coord: string; mode: PlayGridMode }> = React.memo(
   function _Cell({ coord, mode }) {
@@ -89,14 +90,21 @@ export const Cell: React.FC<{ coord: string; mode: PlayGridMode }> = React.memo(
       return <PlayerList coord={coord} />;
     }, [hasPlayerOnCell]);
 
+    const memoizedBarrier = useMemo(() => {
+      return <Barrier orderIndex={coord}></Barrier>;
+    }, []);
+
     const memoizedCellItem = useMemo(() => {
       console.log(hasPlayerOnCell);
       console.log(needHighlightning);
       return (
-        <CellItem needHighlightning={needHighlightning} mode={mode}>
-          {draftCellNumbers}
-          {memoizedPlayerCard}
-        </CellItem>
+        <>
+          <CellItem needHighlightning={needHighlightning} mode={mode}>
+            {draftCellNumbers}
+            {memoizedPlayerCard}
+          </CellItem>
+          {memoizedBarrier}
+        </>
       );
     }, [hasPlayerOnCell, needHighlightning]);
 
