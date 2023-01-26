@@ -467,9 +467,7 @@ export const Barrier: FC<BarrierCoord> = ({ orderIndex, mode }) => {
               neighboringCellList,
               gameField,
               currPlayerCoord,
-              needApplyBoardCard,
-              playerList,
-              activePlayerNumber
+              needApplyBoardCard
             );
 
             const getHighlightningListItem = () => {
@@ -556,9 +554,7 @@ const getHighlightningList = (
   neighboringCellList: AvailableCellListType,
   gameField: GameField,
   currCoord: string,
-  needApplyBoardCard: boolean,
-  playerList: PlayerListType,
-  numberOfPlayer: number
+  needApplyBoardCard: boolean
 ) => {
   const currCell = gameField.values[currCoord];
 

@@ -105,12 +105,6 @@ export const CardListEl = React.memo(function _CardListEl({
   const isItemClosed = isInventoryCardClosed || isEnemyCardClosed;
   const needRerenderCard = Boolean(playerCoord === currCoord && isItemClosed);
 
-  // const { cardRef } = useOpenCardAnimation({
-  //   needRun: needRerenderCard,
-  //   maxTime: ANIMATION_TIME,
-  //   onTimerEnd: getNextPhase,
-  // });
-
   const MemoCard = useMemo(() => Card, [needRerenderCard]);
 
   const cardItemList = cell.cardItem;
@@ -122,7 +116,10 @@ export const CardListEl = React.memo(function _CardListEl({
   const inventoryElem = cardItemList ? (
     <>
       {cardItemList.map((cardItem) => {
-        return (
+        if (type === "enemy") {
+          console.log(true);
+        }
+        return type === "all" || type === "inventory" ? (
           <MemoCard
             refList={refList}
             key={`${hor}.${vert}.health`}
@@ -130,7 +127,7 @@ export const CardListEl = React.memo(function _CardListEl({
             type={cardItem.name}
             coord={currCoord}
           />
-        );
+        ) : null;
       })}
     </>
   ) : null;

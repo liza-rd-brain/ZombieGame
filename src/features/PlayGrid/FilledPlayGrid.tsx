@@ -32,11 +32,38 @@ const Wrap = styled.div`
   position: relative;
 `;
 
+const ANIMATION_TIME = 1;
+
 //не получится мемозировать из-за объектов селектора?! н-р gameField - object!?
 export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
+  const dispatch = useDispatch();
   const gameField = useSelector((state: State) => state.gameField);
   const _config = useSelector((state: State) => state._config);
   const memoConfig = useMemo(() => _config, []);
+  const needRerenderCard = useSelector((state: State) => {
+    const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
+    const hasEnemyCard =
+      playerCoord &&
+      Object.values(state.enemyList).find(
+        (enemyItem) => enemyItem.coord === playerCoord
+      );
+
+    const hasInventoryCards = gameField.values[playerCoord];
+
+    const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
+    return needRerenderCard;
+  });
+
+  const getNextPhase = () => {
+    //for inventory and for other card ???
+    dispatch({ type: "req-openCard" });
+  };
+
+  const { cardRef } = useOpenCardAnimation({
+    needRun: needRerenderCard,
+    maxTime: ANIMATION_TIME,
+    onTimerEnd: getNextPhase,
+  });
 
   const orderGameCells = gameField.order;
 
@@ -44,7 +71,11 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     const [hor, vert] = orderIndex.split(".");
     return (
       <Wrap key={`${hor}.${vert}`}>
-        <Cell coord={orderIndex} mode={memoConfig.playGridMode} />
+        <Cell
+          coord={orderIndex}
+          mode={memoConfig.playGridMode}
+          cardRef={cardRef}
+        />
       </Wrap>
     );
   });
