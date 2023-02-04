@@ -286,12 +286,14 @@ export const Cell: React.FC<{
     </Wrap>
   );
 
-  const cellItem = (
-    <React.Fragment key={`${hor}.${vert}`}>
-      {backgroundCardWrap}
-      {isNeedCreateSeparateWindow ? foregroundPortal : null}
-    </React.Fragment>
-  );
+  const cellItem = useMemo(() => {
+    return (
+      <React.Fragment key={`${hor}.${vert}`}>
+        {backgroundCardWrap}
+        {isNeedCreateSeparateWindow ? foregroundPortal : null}
+      </React.Fragment>
+    );
+  }, []);
 
   return cellItem;
 });
