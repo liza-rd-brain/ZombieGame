@@ -385,7 +385,7 @@ export const Barrier: FC<BarrierCoord> = ({ orderIndex, mode }) => {
   const needApplyBoardCard = useSelector((state: State) => {
     const isCardApplyPhase = state.gameState.type === "gameStarted.applyCard";
     const boardCardActive =
-      state.playerList[state.activePlayerNumber].inventory.cardSelected ===
+      state.playerList[state.activePlayerNumber]?.inventory.cardSelected ===
       "boards";
 
     return isCardApplyPhase && boardCardActive;
