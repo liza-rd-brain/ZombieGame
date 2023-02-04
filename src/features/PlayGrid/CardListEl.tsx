@@ -79,13 +79,7 @@ export const CardListEl = React.memo(function _CardListEl({
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
 }) {
-  const dispatch = useDispatch();
   const [hor, vert] = currCoord.split(".");
-
-  // const getNextPhase = () => {
-  //   //for inventory and for other card ???
-  //   dispatch({ type: "req-openCard" });
-  // };
 
   const playerCoord = playerList[activePlayerNumber]?.coord;
 
@@ -105,7 +99,12 @@ export const CardListEl = React.memo(function _CardListEl({
   const isItemClosed = isInventoryCardClosed || isEnemyCardClosed;
   const needRerenderCard = Boolean(playerCoord === currCoord && isItemClosed);
 
-  const MemoCard = useMemo(() => Card, [needRerenderCard]);
+  const MemoCard = useMemo(
+    () => Card,
+    [
+      /* needRerenderCard */
+    ]
+  );
 
   const cardItemList = cell.cardItem;
 
@@ -139,6 +138,7 @@ export const CardListEl = React.memo(function _CardListEl({
 
   const firstItemIsClosed =
     enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
+
   const isActiveEnemyCard =
     deadPlayerList && deadPlayerList?.[activePlayerNumber]?.index ? true : null;
 
@@ -160,6 +160,7 @@ export const CardListEl = React.memo(function _CardListEl({
     deadPlayerList && deadPlayerList[activePlayerNumber] ? true : false;
 
   const enemyElem = enemyListOnCell.map(([index, enemyCard]) => {
+    console.log("we are here", type, currCoord);
     /**
      * если карточка закрытая - можем просто вернуть view
      * если нет, то взаимодействие с карточкой становится сложным:
@@ -193,6 +194,7 @@ export const CardListEl = React.memo(function _CardListEl({
         // }}
       />
     );
+
     // return (
     //   <MemoCard
     //     refList={cardRef}
@@ -229,7 +231,7 @@ export const CardListEl = React.memo(function _CardListEl({
   return (
     <>
       {inventoryElem}
-      {enemyElem}
+      {type === "inventory" ? null : enemyElem}
     </>
   );
 });
