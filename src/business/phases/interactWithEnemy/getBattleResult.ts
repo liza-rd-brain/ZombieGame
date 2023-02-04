@@ -7,7 +7,7 @@ export const getBattleResult = (state: State): State => {
   switch (dice) {
     case 1:
     case 2: {
-      return getStatePlayerCanFight(state);
+      return getStatePlayerCanFight(state) /* as State */;
     }
 
     case 3: {
@@ -98,7 +98,6 @@ const getStatePlayerLoseHealth = (state: State): State => {
       const newState: State = {
         ...state,
         dice: 0,
-
         gameState: {
           ...newGameState,
           type: "gameStarted.rollDice",

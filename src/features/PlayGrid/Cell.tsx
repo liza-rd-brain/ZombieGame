@@ -236,6 +236,7 @@ export const Cell: React.FC<{
         if (hasActivePlayerOnCell) {
           switch (true) {
             case isPhaseEnemyInteract: {
+              console.log("paint only inventory");
               return "inventory";
             }
             case isPhaseTakeCard: {
@@ -254,18 +255,12 @@ export const Cell: React.FC<{
 
   const getCardsOnCell = ({ type }: { type: PlanType }) => {
     const cardListType = getCardListType({ type });
+    // console.log("cardListType", cardListType);
 
     const cardListWithPlayer = getCardListWithPlayer({
       type: cardListType,
       planType: type,
     });
-
-    // const cardsOnCell = needSplitCards ?
-    //    getSplittedCardsPassive(cardListWithPlayer, orderIndex)
-    //   : cardListWithPlayer;
-
-    // const cardsOnCell = getSplittedCardsPassive(cardListWithPlayer, coord);
-    // const cardsOnCell = getSplittedCardsPassive(cardListWithPlayer, coord);
 
     return cardListWithPlayer;
   };
@@ -281,8 +276,6 @@ export const Cell: React.FC<{
       )
     : null;
 
-  // const MemoizedWrap = useMemo(() => Wrap, []);
-
   const backgroundCardWrap = (
     <Wrap key={`${hor}.${vert}`}>
       <CellItem needHighlightning={needHighlightning} mode={mode}>
@@ -293,12 +286,12 @@ export const Cell: React.FC<{
     </Wrap>
   );
 
-  const memoizedCellItem = (
+  const cellItem = (
     <React.Fragment key={`${hor}.${vert}`}>
       {backgroundCardWrap}
       {isNeedCreateSeparateWindow ? foregroundPortal : null}
     </React.Fragment>
   );
 
-  return memoizedCellItem;
+  return cellItem;
 });

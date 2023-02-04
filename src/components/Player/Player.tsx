@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import React from "react";
+import React, { useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -216,6 +216,16 @@ export const Player = (props: PlayerListItem) => {
 
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
+  const MemoizedClickHandler = (playerCardItem: any) =>
+    useCallback(
+      () =>
+        dispatch({
+          type: "clickedPlayer",
+          payload: playerCardItem,
+        }),
+      []
+    );
+
   const playerCardList = (
     <PlayerCardList
       needSplitCards={needSplitCards}
@@ -234,12 +244,7 @@ export const Player = (props: PlayerListItem) => {
                 image={playerImageList[playerCardItem.orderNumber]}
                 isCurrent={numberOfPlayer === playerCardItem.orderNumber}
                 needHighlightning={false}
-                onClick={() =>
-                  dispatch({
-                    type: "clickedPlayer",
-                    payload: playerCardItem,
-                  })
-                }
+                onClick={() => MemoizedClickHandler(playerCardItem)}
               ></PlayerCard>
             );
           }
