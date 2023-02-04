@@ -293,7 +293,7 @@ export const Cell: React.FC<{
         {isNeedCreateSeparateWindow ? foregroundPortal : null}
       </React.Fragment>
     );
-  }, []);
+  }, [hasActivePlayerOnCell, isPhaseEnemyInteract, isPhaseTakeCard]);
 
   return cellItem;
 });
