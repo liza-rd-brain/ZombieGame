@@ -106,19 +106,24 @@ export const Cell: React.FC<{
   const cellValues = useSelector(
     (state: State) => state.gameField.values[coord]
   );
+  console.log("cellValues", cellValues);
 
   const hasActivePlayerOnCell: boolean = useSelector(
     (state: State) =>
       state.playerList[state.activePlayerNumber]?.coord === coord
   );
+  console.log("hasActivePlayerOnCell", hasActivePlayerOnCell);
 
   const isPhaseEnemyInteract = useSelector((state: State) =>
     state.gameState.type.includes("interactWithEnemy")
   );
+  console.log("isPhaseEnemyInteract", isPhaseEnemyInteract);
 
   const isPhaseTakeCard = useSelector(
     (state: State) => state.gameState.type === "gameStarted.takeCard"
   );
+
+  console.log("isPhaseTakeCard", isPhaseTakeCard);
 
   const needHighlightning = useSelector((state: State) =>
     state.gameState.coordOfAvailableCells
@@ -126,16 +131,10 @@ export const Cell: React.FC<{
       : false
   );
 
+  console.log("needHighlightning", needHighlightning);
+
   const isNeedCreateSeparateWindow =
     hasActivePlayerOnCell && (isPhaseEnemyInteract || isPhaseTakeCard);
-
-  //TODO: позже убрать
-  const activePlayerNumber = useSelector(
-    (state: State) => state.activePlayerNumber
-  );
-
-  //TODO: позже убрать
-  const playerList = useSelector((state: State) => state.playerList);
 
   // const needHighlightning = availableCells?.includes(orderIndex);
 
@@ -194,8 +193,6 @@ export const Cell: React.FC<{
           currCoord={coord}
           enemyList={enemyList}
           deadPlayerList={deadPlayerList}
-          activePlayerNumber={activePlayerNumber}
-          playerList={playerList}
         />
       </>
     );
@@ -293,7 +290,12 @@ export const Cell: React.FC<{
         {isNeedCreateSeparateWindow ? foregroundPortal : null}
       </React.Fragment>
     );
-  }, [hasActivePlayerOnCell, isPhaseEnemyInteract, isPhaseTakeCard]);
+  }, [
+    hasActivePlayerOnCell,
+    isPhaseEnemyInteract,
+    isPhaseTakeCard,
+    needHighlightning,
+  ]);
 
   return cellItem;
 });

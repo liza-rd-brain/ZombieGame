@@ -59,6 +59,10 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     onTimerEnd: getNextPhase,
   });
 
+  const memoizedRef = useMemo(() => {
+    return cardRef;
+  }, []);
+
   const orderGameCells = gameField.order;
 
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
@@ -68,7 +72,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
         <Cell
           coord={orderIndex}
           mode={memoConfig.playGridMode}
-          cardRef={cardRef}
+          cardRef={memoizedRef}
         />
       </Wrap>
     );

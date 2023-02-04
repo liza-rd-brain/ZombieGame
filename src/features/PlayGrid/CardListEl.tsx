@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
 
@@ -10,6 +10,7 @@ import {
   DeadPlayerListType,
   EnemyListType,
   PlayerListType,
+  State,
   TypeOfCard,
   TypeOfInventoryCard,
 } from "../../business/types";
@@ -63,8 +64,7 @@ export const CardListEl = React.memo(function _CardListEl({
   currCoord,
   enemyList,
   deadPlayerList,
-  activePlayerNumber,
-  playerList,
+  // playerList,
   refList,
 }: {
   cell: CellType;
@@ -72,14 +72,20 @@ export const CardListEl = React.memo(function _CardListEl({
   currCoord: string;
   enemyList: EnemyListType;
   deadPlayerList: DeadPlayerListType;
-  activePlayerNumber: number;
-  playerList: PlayerListType;
+
+  // playerList: PlayerListType;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
 }) {
   const [hor, vert] = currCoord.split(".");
+
+  const activePlayerNumber = useSelector(
+    (state: State) => state.activePlayerNumber
+  );
+
+  const playerList = useSelector((state: State) => state.playerList);
 
   const playerCoord = playerList[activePlayerNumber]?.coord;
 
