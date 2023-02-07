@@ -106,24 +106,28 @@ export const Cell: React.FC<{
   const cellValues = useSelector(
     (state: State) => state.gameField.values[coord]
   );
-  console.log("cellValues", cellValues);
 
   const hasActivePlayerOnCell: boolean = useSelector(
     (state: State) =>
       state.playerList[state.activePlayerNumber]?.coord === coord
   );
-  console.log("hasActivePlayerOnCell", hasActivePlayerOnCell);
 
-  const isPhaseEnemyInteract = useSelector((state: State) =>
-    state.gameState.type.includes("interactWithEnemy")
+  /**
+   * considering hasActivePlayerOnCell
+   */
+  const isPhaseEnemyInteract = useSelector(
+    (state: State) =>
+      hasActivePlayerOnCell &&
+      state.gameState.type.includes("interactWithEnemy")
   );
-  console.log("isPhaseEnemyInteract", isPhaseEnemyInteract);
 
+  /**
+   * considering hasActivePlayerOnCell
+   */
   const isPhaseTakeCard = useSelector(
-    (state: State) => state.gameState.type === "gameStarted.takeCard"
+    (state: State) =>
+      hasActivePlayerOnCell && state.gameState.type === "gameStarted.takeCard"
   );
-
-  console.log("isPhaseTakeCard", isPhaseTakeCard);
 
   const needHighlightning = useSelector((state: State) =>
     state.gameState.coordOfAvailableCells
@@ -131,10 +135,7 @@ export const Cell: React.FC<{
       : false
   );
 
-  console.log("needHighlightning", needHighlightning);
-
-  const isNeedCreateSeparateWindow =
-    hasActivePlayerOnCell && (isPhaseEnemyInteract || isPhaseTakeCard);
+  const isNeedCreateSeparateWindow = isPhaseEnemyInteract || isPhaseTakeCard;
 
   // const needHighlightning = availableCells?.includes(orderIndex);
 
@@ -233,7 +234,6 @@ export const Cell: React.FC<{
         if (hasActivePlayerOnCell) {
           switch (true) {
             case isPhaseEnemyInteract: {
-              console.log("paint only inventory");
               return "inventory";
             }
             case isPhaseTakeCard: {
@@ -252,7 +252,6 @@ export const Cell: React.FC<{
 
   const getCardsOnCell = ({ type }: { type: PlanType }) => {
     const cardListType = getCardListType({ type });
-    // console.log("cardListType", cardListType);
 
     const cardListWithPlayer = getCardListWithPlayer({
       type: cardListType,

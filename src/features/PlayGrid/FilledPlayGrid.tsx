@@ -65,6 +65,8 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
 
   const orderGameCells = gameField.order;
 
+  // const MemoizedWrap = useMemo(() => , []);
+
   const fullPlayerGrid = orderGameCells.map((orderIndex: string) => {
     const [hor, vert] = orderIndex.split(".");
     return (
@@ -78,5 +80,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     );
   });
 
-  return <>{fullPlayerGrid}</>;
+  const memoizedPlayerGrid = useMemo(() => fullPlayerGrid, []);
+
+  return <>{memoizedPlayerGrid}</>;
 });
