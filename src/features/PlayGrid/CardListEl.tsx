@@ -56,7 +56,7 @@ const Card = React.memo(function _CardView({
 });
 
 /**
- * Represent some card on one Cell: inventory and enemy
+ * Represent some card on one Cell: inventory and enemy, for now all except player
  */
 export const CardListEl = React.memo(function _CardListEl({
   type,
@@ -64,30 +64,33 @@ export const CardListEl = React.memo(function _CardListEl({
   currCoord,
   enemyList,
   deadPlayerList,
-  // playerList,
-  refList,
-}: {
+}: /*   refList, */
+{
   cell: CellType;
   type: CardsListType;
   currCoord: string;
   enemyList: EnemyListType;
   deadPlayerList: DeadPlayerListType;
-
-  // playerList: PlayerListType;
+  /* 
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
-  };
+  }; */
 }) {
+  const dispatch = useDispatch();
   const [hor, vert] = currCoord.split(".");
 
   const activePlayerNumber = useSelector(
     (state: State) => state.activePlayerNumber
   );
 
-  const playerList = useSelector((state: State) => state.playerList);
+  const playerList = useSelector((state: State) => {
+    const hasPlayerOnCell =
+      state.playerList[state.activePlayerNumber]?.coord === currCoord;
+    return hasPlayerOnCell ? state.playerList : null;
+  });
 
-  const playerCoord = playerList[activePlayerNumber]?.coord;
+  const playerCoord = playerList && playerList[activePlayerNumber]?.coord;
 
   //TODO: почему только открытые карточки???
   const enemyListOnCell = Object.entries(enemyList).filter(
@@ -102,8 +105,38 @@ export const CardListEl = React.memo(function _CardListEl({
     enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
   //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
 
-  const isItemClosed = isInventoryCardClosed || isEnemyCardClosed;
-  const needRerenderCard = Boolean(playerCoord === currCoord && isItemClosed);
+  const needRerenderCard = useSelector((state: State) => {
+    const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
+    if (playerCoord === currCoord) {
+      const hasEnemyCard =
+        playerCoord &&
+        Object.values(state.enemyList).find(
+          (enemyItem) => enemyItem.coord === playerCoord
+        );
+
+      const hasInventoryCards = state.gameField.values[playerCoord];
+
+      const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
+      return needRerenderCard;
+    } else {
+      return false;
+    }
+  });
+
+  const getNextPhase = () => {
+    //for inventory and for other card ???
+    dispatch({ type: "req-openCard" });
+  };
+
+  const { cardRef } = useOpenCardAnimation({
+    needRun: needRerenderCard,
+    maxTime: ANIMATION_TIME,
+    onTimerEnd: getNextPhase,
+  });
+
+  // const memoizedRef = useMemo(() => {
+  //   return cardRef;
+  // }, []);
 
   const MemoCard = useMemo(
     () => Card,
@@ -122,11 +155,10 @@ export const CardListEl = React.memo(function _CardListEl({
     <>
       {cardItemList.map((cardItem) => {
         if (type === "enemy") {
-          console.log(true);
         }
         return type === "all" || type === "inventory" ? (
           <MemoCard
-            refList={refList}
+            refList={cardRef}
             key={`${hor}.${vert}.health`}
             apperance={cardItem.apperance}
             type={cardItem.name}
@@ -136,9 +168,6 @@ export const CardListEl = React.memo(function _CardListEl({
       })}
     </>
   ) : null;
-
-  // console.log("enemyList", enemyList);
-  // console.log("enemyListOnCell", enemyListOnCell);
 
   const needSplitCards = enemyListOnCell.length > 1;
 
@@ -166,7 +195,6 @@ export const CardListEl = React.memo(function _CardListEl({
     deadPlayerList && deadPlayerList[activePlayerNumber] ? true : false;
 
   const enemyElem = enemyListOnCell.map(([index, enemyCard]) => {
-    console.log("we are here", type, currCoord);
     /**
      * если карточка закрытая - можем просто вернуть view
      * если нет, то взаимодействие с карточкой становится сложным:
@@ -191,7 +219,7 @@ export const CardListEl = React.memo(function _CardListEl({
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
         apperance={enemyCard.apperance}
-        refList={refList}
+        refList={cardRef}
         // onClick={() => {
         //   dispatch({
         //     type: "clickedEnemy",

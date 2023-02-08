@@ -379,6 +379,7 @@ const Wall = styled(CommonWall)<WallType>`
   }
 `;
 
+//TODO: слишком много сложной логики лежит в компоненте, вынести наверх?
 export const Barrier: FC<BarrierCoord> = ({ orderIndex, mode }) => {
   const dispatch = useDispatch();
 

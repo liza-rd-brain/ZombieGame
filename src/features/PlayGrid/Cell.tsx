@@ -98,11 +98,11 @@ const UnderlayerItem = styled.div<UnderlayerType>`
 export const Cell: React.FC<{
   coord: string;
   mode: PlayGridMode;
-  cardRef: {
+  /*   cardRef: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
-  };
-}> = React.memo(function _Cell({ coord, mode, cardRef }) {
+  }; */
+}> = React.memo(function _Cell({ coord, mode /* , cardRef */ }) {
   const cellValues = useSelector(
     (state: State) => state.gameField.values[coord]
   );
@@ -188,7 +188,7 @@ export const Cell: React.FC<{
         )}
         {/*  {memoizedPlayerCard} */}
         <CardListEl
-          refList={cardRef}
+          /*     refList={cardRef} */
           cell={cellValues}
           type={type as CardsListType}
           currCoord={coord}
@@ -289,6 +289,7 @@ export const Cell: React.FC<{
         {isNeedCreateSeparateWindow ? foregroundPortal : null}
       </React.Fragment>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     hasActivePlayerOnCell,
     isPhaseEnemyInteract,

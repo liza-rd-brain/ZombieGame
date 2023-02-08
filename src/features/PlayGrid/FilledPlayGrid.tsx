@@ -30,40 +30,43 @@ const ANIMATION_TIME = 2;
 //не получится мемозировать из-за объектов селектора?! н-р gameField - object!?
 export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
   const dispatch = useDispatch();
-  const gameField = useSelector((state: State) => state.gameField);
+
+  const orderGameCells = useSelector((state: State) => state.gameField.order);
+
   const _config = useSelector((state: State) => state._config);
 
   const memoConfig = useMemo(() => _config, []);
-  const needRerenderCard = useSelector((state: State) => {
-    const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
-    const hasEnemyCard =
-      playerCoord &&
-      Object.values(state.enemyList).find(
-        (enemyItem) => enemyItem.coord === playerCoord
-      );
 
-    const hasInventoryCards = gameField.values[playerCoord];
+  // const needRerenderCard = useSelector((state: State) => {
+  //   const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
+  //   const hasEnemyCard =
+  //     playerCoord &&
+  //     Object.values(state.enemyList).find(
+  //       (enemyItem) => enemyItem.coord === playerCoord
+  //     );
 
-    const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
-    return needRerenderCard;
-  });
+  //   const hasInventoryCards = state.gameField.values[playerCoord];
 
-  const getNextPhase = () => {
-    //for inventory and for other card ???
-    dispatch({ type: "req-openCard" });
-  };
+  //   const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
+  //   return needRerenderCard;
+  // });
 
-  const { cardRef } = useOpenCardAnimation({
-    needRun: needRerenderCard,
-    maxTime: ANIMATION_TIME,
-    onTimerEnd: getNextPhase,
-  });
+  // const getNextPhase = () => {
+  //   //for inventory and for other card ???
+  //   dispatch({ type: "req-openCard" });
+  // };
 
-  const memoizedRef = useMemo(() => {
-    return cardRef;
-  }, []);
+  // const { cardRef } = useOpenCardAnimation({
+  //   needRun: needRerenderCard,
+  //   maxTime: ANIMATION_TIME,
+  //   onTimerEnd: getNextPhase,
+  // });
 
-  const orderGameCells = gameField.order;
+  // const memoizedRef = useMemo(() => {
+  //   return cardRef;
+  // }, []);
+
+  // const orderGameCells = gameField.order;
 
   // const MemoizedWrap = useMemo(() => , []);
 
@@ -74,7 +77,7 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
         <Cell
           coord={orderIndex}
           mode={memoConfig.playGridMode}
-          cardRef={memoizedRef}
+          /*      cardRef={memoizedRef} */
         />
       </Wrap>
     );
