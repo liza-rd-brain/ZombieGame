@@ -5,7 +5,7 @@ import { openEnemyCard } from "./openEnemyCard";
 import { getBattleResult } from "./getBattleResult";
 import { removeEnemyCard } from "./removeEnemyCard";
 import { getStateClickedEnemy } from "./getStateClickedEnemy";
-import { checkCardApperance } from "./checkCardApperance";
+import { checkCardAppearance } from "./checkCardAppearance";
 import { thrownBattleDice } from "./thrownBattleDice";
 import { selectCard } from "./selectCard";
 
@@ -55,7 +55,7 @@ export const interactWithEnemy = (state: State, action: ActionType): State => {
     default: {
       switch (action.type) {
         case "req-checkEnemyCard": {
-          return checkCardApperance(state);
+          return checkCardAppearance(state);
         }
         case "req-openCard": {
           return openEnemyCard(state);

@@ -14,7 +14,7 @@ import { getNextPlayerNumber } from "../../common/getNextPlayerNumber";
 export const takeCard = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkInventoryCard": {
-      return checkInventoryCardApperance(state);
+      return checkInventoryCardAppearance(state);
     }
 
     case "req-openCard": {
@@ -137,7 +137,7 @@ const getStateDeletedCard = (state: State): State => {
   };
 };
 
-const checkInventoryCardApperance = (state: State): State => {
+const checkInventoryCardAppearance = (state: State): State => {
   const { gameField, activePlayerNumber, playerList } = state;
   const playerCoordIndex = playerList[activePlayerNumber].coord;
   const currCell = gameField.values[playerCoordIndex];
@@ -147,7 +147,7 @@ const checkInventoryCardApperance = (state: State): State => {
 
   switch (isOneCardOnCell) {
     case true: {
-      const needOpenCard = cardItemList[0]?.apperance === "closed";
+      const needOpenCard = cardItemList[0]?.appearance === "closed";
 
       switch (needOpenCard) {
         case true: {

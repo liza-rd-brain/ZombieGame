@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import {
-  CardApperance,
+  CardAppearance,
   DeadPlayerListType,
   EnemyCardType,
 } from "../../business/types";
@@ -61,7 +61,7 @@ export const EnemyCard: FC<{
   isCurrent: boolean;
   needSplitCards: boolean;
   needReverseCards: boolean;
-  apperance: CardApperance;
+  apperance: CardAppearance;
   enemyCard: EnemyCardType;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
@@ -76,8 +76,6 @@ export const EnemyCard: FC<{
   enemyCard,
 }) => {
   const dispatch = useDispatch();
-
-  console.log(needSplitCards, needReverseCards);
 
   return (
     <EnemyCardContainer

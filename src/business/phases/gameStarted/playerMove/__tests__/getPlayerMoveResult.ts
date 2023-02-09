@@ -203,7 +203,7 @@ const getStateTakeCard = (state: State): State => {
       ...state.gameState,
       type: "gameStarted.takeCard",
     },
-    doEffect: { type: "!checkApperanceInventoryCard" },
+    doEffect: { type: "!checkAppearanceInventoryCard" },
   };
 };
 
@@ -231,7 +231,7 @@ const getStateWithCard = (
             cardItem: [
               {
                 name: type,
-                apperance: apperance,
+                appearance: appearance,
               },
             ],
           },
@@ -249,7 +249,7 @@ const getStateWithCard = (
 */
 const getStateWithEnemy = (
   initialState: State,
-  apperance: CardApperance
+  appearance: CardAppearance
 ): State => {
   return {
     ...initialState,
@@ -264,7 +264,7 @@ const getStateWithEnemy = (
         name: "enemy",
         power: 1,
         coord: "1.1",
-        apperance: apperance,
+        appearance: appearance,
       },
     },
   };
@@ -275,6 +275,6 @@ const getStateInteractWithEnemy = (state: State): State => {
     ...state,
     dice: state.dice - 1,
     gameState: { ...state.gameState, type: "interactWithEnemy" },
-    doEffect: { type: "!checkApperanceEnemyCard" },
+    doEffect: { type: "!checkAppearanceEnemyCard" },
   };
 };

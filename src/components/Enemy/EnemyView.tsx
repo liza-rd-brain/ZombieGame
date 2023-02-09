@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
-import { CardApperance, EnemyCardType } from "../../business/types";
+import { CardAppearance, EnemyCardType } from "../../business/types";
 
 import zombie from "./zombie.png";
 // import zombie_defeated from "./zombie_defeated.png";
@@ -46,7 +46,7 @@ const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
 `;
 
 export const EnemyView: FC<{
-  apperance: CardApperance;
+  apperance: CardAppearance;
   enemyCard: EnemyCardType;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;

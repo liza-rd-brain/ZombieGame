@@ -29,7 +29,7 @@ export const removeEnemyCard = (state: State): State => {
           ...newGameState,
           type: "gameStarted.takeCard",
         },
-        doEffect: { type: "!checkApperanceInventoryCard" },
+        doEffect: { type: "!checkAppearanceInventoryCard" },
       };
     }
 

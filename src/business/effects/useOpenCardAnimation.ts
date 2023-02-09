@@ -118,7 +118,6 @@ export function useOpenCardAnimation({
 
         if (currentTime <= 0) {
           clearInterval(intervalId);
-          console.log(" onTimerEnd 1");
 
           dispatch({ type: "clearEffect" });
           onTimerEnd();
@@ -128,10 +127,7 @@ export function useOpenCardAnimation({
       return () => {
         clearInterval(intervalId);
       };
-    } /* else if (state.effect === "stopEffect") {
-      console.log(" onTimerEnd 2");
-      onTimerEnd();
-    } */
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.effect]);

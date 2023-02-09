@@ -9,7 +9,7 @@ export function useInteractWithEnemy() {
 
   useEffect(() => {
     switch (doEffect?.type) {
-      case "!checkApperanceEnemyCard": {
+      case "!checkAppearanceEnemyCard": {
         dispatch({
           type: "req-checkEnemyCard",
         });

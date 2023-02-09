@@ -9,7 +9,7 @@ export const openCard = (cell: CellType): CellType => {
       /*  if (cardItem) { */
       const openedCard: CardItem = {
         ...cardItem,
-        apperance: "open",
+        appearance: "open",
       };
       return openedCard;
       /* } else {

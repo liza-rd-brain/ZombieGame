@@ -1,4 +1,4 @@
-import { State } from "../../types";
+import { EnemyListType, State } from "../../types";
 
 /**
  * Need separate method for open EnemyCard
@@ -9,6 +9,7 @@ export const openEnemyCard = (state: State): State => {
   const currentCoord = playerList[activePlayerNumber].coord;
 
   //TODO: we have one enemy in the same coordinate, but if not?
+  //TODO:  took out common functional for coordinates
   const currEnemyIndex = Object.entries(enemyList)
     .filter(([, enemyCard]) => {
       return enemyCard.coord === currentCoord;
@@ -18,11 +19,11 @@ export const openEnemyCard = (state: State): State => {
     })
     .join();
 
-  const newEnemyList = {
+  const newEnemyList: EnemyListType = {
     ...enemyList,
     [currEnemyIndex]: {
       ...enemyList[Number(currEnemyIndex)],
-      apperance: "open",
+      appearance: "open",
     },
   };
 

@@ -2,7 +2,7 @@ import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import "./index.css";
-import { PlayGrid, MoveControls, Dice, StatusList } from "./features";
+import { PlayGrid, Dice, StatusList, MoveControls } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";

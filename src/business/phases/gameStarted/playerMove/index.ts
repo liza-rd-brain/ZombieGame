@@ -1,15 +1,22 @@
 import { State, TypeOfInventoryCard } from "../../../types";
 
 import { ActionType } from "../../../reducer";
-import { getPlayerMoveResult } from "./getPlayerMoveResult";
-import { getStateCardSelected } from "../../common/getStateCardSelected";
 import { getAvailableCells } from "./getAvailableCells";
+import { getAvailableCellsMax } from "./getAvailableCellsMax";
+import { getPlayerMoveResult } from "./getPlayerMoveResult";
 import { getStatePlayerMoved } from "./getStatePlayerMoved";
+import { getStatePlayerMovedToCoord } from "./getStatePlayerMovedToCoord";
+import { getStateCardSelected } from "../../common/getStateCardSelected";
 
 export const playerMove = (state: State, action: ActionType): State => {
   switch (action.type) {
     case "req-checkAvailableNeighboringCell": {
-      return getAvailableCells(state);
+      return getAvailableCellsMax(state);
+    }
+
+    case "playerWasMoved": {
+      const newCoord = action.payload;
+      return getStatePlayerMovedToCoord(state, newCoord);
     }
 
     case "moveControlsClicked": {

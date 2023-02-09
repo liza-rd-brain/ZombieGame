@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { PlayGridMode, State } from "../../business/types";
+import { CellItem } from "../../components/CellItem";
 
 import { Barrier } from "./Barrier";
 import { CardListEl } from "./CardListEl";
@@ -26,29 +27,29 @@ const Wrap = styled.div`
   position: relative;
 `;
 
-const CellItem = styled.div<CellApperance>`
-  display: flex;
-  position: relative;
-  box-sizing: border-box;
+// const CellItem = styled.div<CellApperance>`
+//   display: flex;
+//   position: relative;
+//   box-sizing: border-box;
 
-  font-size: 14px;
-  text-align: right;
-  width: 50px;
-  height: 50px;
-  color: lightgrey;
+//   font-size: 14px;
+//   text-align: right;
+//   width: 50px;
+//   height: 50px;
+//   color: lightgrey;
 
-  border: ${(props) => {
-    if (props.mode === "cssStyle") {
-      return "1px solid lightgray";
-    }
-  }};
+//   border: ${(props) => {
+//     if (props.mode === "cssStyle") {
+//       return "1px solid lightgray";
+//     }
+//   }};
 
-  background-color: ${(props) => {
-    if (props.needHighlightning) {
-      return "rgb(55 163 0 / 52%);";
-    }
-  }};
-`;
+//   background-color: ${(props) => {
+//     if (props.needHighlightning) {
+//       return "rgb(55 163 0 / 52%);";
+//     }
+//   }};
+// `;
 
 const UnderlayerItem = styled.div<UnderlayerType>`
   position: relative;
@@ -267,7 +268,12 @@ export const Cell: React.FC<{
 
   const backgroundCardWrap = (
     <Wrap key={`${hor}.${vert}`}>
-      <CellItem needHighlightning={needHighlightning} mode={mode}>
+      <CellItem
+        needHighlightning={needHighlightning}
+        mode={mode}
+        hor={hor}
+        vert={vert}
+      >
         {draftCellNumbers}
         {getCardsOnCell({ type: "back" })}
       </CellItem>

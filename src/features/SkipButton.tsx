@@ -17,7 +17,7 @@ export const SkipButton = () => {
   }));
 
   const hasOpenEnemyCard = Object.values(enemyList).some((enemyCard) => {
-    return enemyCard.apperance === "open";
+    return enemyCard.appearance === "open";
   });
 
   const canSkip =

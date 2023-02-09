@@ -5,7 +5,7 @@ import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimatio
 
 import { HealthCard, BoardsCard, WeaponCard } from "../../components";
 import {
-  CardApperance,
+  CardAppearance,
   CellType,
   DeadPlayerListType,
   EnemyListType,
@@ -34,7 +34,7 @@ const Card = React.memo(function _CardView({
 }: {
   type: TypeOfCard;
   coord: string;
-  apperance: CardApperance;
+  apperance: CardAppearance;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
@@ -108,10 +108,10 @@ export const CardListEl = React.memo(function _CardListEl({
   });
 
   const isInventoryCardClosed =
-    cell.cardItem?.length === 1 && cell.cardItem[0].apperance === "closed";
+    cell.cardItem?.length === 1 && cell.cardItem[0].appearance === "closed";
 
   const isEnemyCardClosed =
-    enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
+    enemyListOnCell.length && enemyListOnCell[0][1].appearance === "closed";
 
   //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
   const needRenderOpenCard = useSelector((state: State) => {
@@ -157,7 +157,7 @@ export const CardListEl = React.memo(function _CardListEl({
           <MemoCard
             refList={cardRef}
             key={`${hor}.${vert}.health`}
-            apperance={cardItem.apperance}
+            apperance={cardItem.appearance}
             type={cardItem.name}
             coord={currCoord}
           />
@@ -169,12 +169,12 @@ export const CardListEl = React.memo(function _CardListEl({
   const needSplitCards = enemyCardsOnCell.length > 1;
 
   if (enemyCardsOnCell.length) {
-    console.log("enemyListOnCell", enemyListOnCell);
-    console.log("enemyCardsOnCell", currCoord, enemyCardsOnCell);
+    // console.log("enemyListOnCell", enemyListOnCell);
+    // console.log("enemyCardsOnCell", currCoord, enemyCardsOnCell);
   }
 
   const firstItemIsClosed =
-    enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
+    enemyListOnCell.length && enemyListOnCell[0][1].appearance === "closed";
 
   const isActiveEnemyCard =
     deadPlayerList && deadPlayerList?.[activePlayerNumber]?.index ? true : null;
@@ -205,7 +205,7 @@ export const CardListEl = React.memo(function _CardListEl({
         // isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
-        apperance={enemyCard.apperance}
+        apperance={enemyCard.appearance}
         refList={cardRef}
         // onClick={() => {
         //   dispatch({

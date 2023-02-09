@@ -11,10 +11,12 @@ import {
   State,
 } from "../../business/types";
 
+//TODO:organize images!
 import player from "./player.png";
 import player2 from "./player2.png";
 import player3 from "./player3.png";
 import player4 from "./player4.png";
+import { PlayerCard } from "./PlayerCard";
 
 type PlayerItem = {
   isCurrent: boolean;
@@ -36,6 +38,7 @@ type PlayerListItem = {
 type PortalType = {
   coordX: string;
   coordY: string;
+  isCurrPlayer?: boolean;
 };
 
 const PLayersPortal = styled.div<PortalType>`
@@ -47,6 +50,10 @@ const PLayersPortal = styled.div<PortalType>`
 
   bottom: ${(props) => {
     return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+
+  pointer-events: ${({ isCurrPlayer }) => {
+    return isCurrPlayer ? "initial" : "none";
   }};
 `;
 
@@ -66,79 +73,79 @@ const ContextMenuPortal = styled.div<PortalType>`
  * before - for highlightning active card
  * after - for interacting highlightning
  */
-const PlayerCard = styled.div<PlayerItem>`
-  width: 50px;
-  height: 50px;
-  margin: 0px;
-  text-align: center;
-  padding: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  background-repeat: no-repeat;
-  background-position: 0px;
-  background-size: 44px;
-  background-position: 3px;
+// const PlayerCard = styled.div<PlayerItem>`
+//   width: 50px;
+//   height: 50px;
+//   margin: 0px;
+//   text-align: center;
+//   padding: 2px;
+//   box-sizing: border-box;
+//   cursor: default;
+//   background-repeat: no-repeat;
+//   background-position: 0px;
+//   background-size: 44px;
+//   background-position: 3px;
 
-  background-image: ${(props) => {
-    return `url(${props.image})`;
-  }};
+//   background-image: ${(props) => {
+//     return `url(${props.image})`;
+//   }};
 
-  z-index: ${(props) => {
-    if (props.isCurrent) {
-      return "10";
-    } else {
-      return "3";
-    }
-  }};
+//   z-index: ${(props) => {
+//     if (props.isCurrent) {
+//       return "10";
+//     } else {
+//       return "3";
+//     }
+//   }};
 
-  cursor: pointer;
+//   cursor: pointer;
 
-  &:before {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 1px;
+//   &:before {
+//     content: "";
+//     position: absolute;
+//     width: 24px;
+//     height: 24px;
+//     border-radius: 1px;
 
-    border: ${(props) => {
-      if (props.isCurrent) {
-        return "5px solid #8834b8";
-      }
-    }};
+//     border: ${(props) => {
+//       if (props.isCurrent) {
+//         return "5px solid #8834b8";
+//       }
+//     }};
 
-    pointer-events: none;
-    opacity: 0.5;
-    padding: 4px;
-    left: 4px;
-    top: 4px;
-  }
+//     pointer-events: none;
+//     opacity: 0.5;
+//     padding: 4px;
+//     left: 4px;
+//     top: 4px;
+//   }
 
-  &:after {
-    content: "";
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    border-radius: 1px;
+//   &:after {
+//     content: "";
+//     position: absolute;
+//     width: 36px;
+//     height: 36px;
+//     border-radius: 1px;
 
-    border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid #c1fe2f6b;";
-      }
-    }};
+//     border: ${(props) => {
+//       if (props.needHighlightning) {
+//         return "3px solid #c1fe2f6b;";
+//       }
+//     }};
 
-    padding: 4px;
-    left: 0px;
-    top: 0px;
-  }
+//     padding: 4px;
+//     left: 0px;
+//     top: 0px;
+//   }
 
-  &:hover:after {
-    border: ${(props) => {
-      if (props.needHighlightning) {
-        return "3px solid #6cfe2fde;";
-      }
-    }};
-  }
-`;
+//   &:hover:after {
+//     border: ${(props) => {
+//       if (props.needHighlightning) {
+//         return "3px solid #6cfe2fde;";
+//       }
+//     }};
+//   }
+// `;
 
 const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
@@ -155,10 +162,12 @@ const PlayerCardList = styled.div<PlayerCardListType>`
     }
   }};
 
+  /*  turned off -return "relative !important"- for customDragPreview
+*/
   > * {
     position: ${(props) => {
       if (props.needSplitCards) {
-        return "relative !important";
+        return "relative ";
       }
     }};
 
@@ -321,14 +330,12 @@ export const Player = (props: PlayerListItem) => {
             switch (playerCardItem.showContextMenu) {
               case true: {
                 const activePLayerCoord = playerList[numberOfPlayer].coord;
-                const currplayerCoord = playerCardItem.coord;
+                const currPlayerCoord = playerCardItem.coord;
 
                 const contextMenuCoord = getContextMenuCoord(
                   activePLayerCoord,
-                  currplayerCoord
+                  currPlayerCoord
                 );
-
-                console.log(contextMenuCoord);
 
                 const [hor, vert] = contextMenuCoord.split(".");
                 const fieildElem = document.getElementById("field");
@@ -379,9 +386,15 @@ export const Player = (props: PlayerListItem) => {
     }
 
     default: {
-      const [hor, vert] = playerListOnCell[0].coord.split(".");
+      //TODO: coordinate handling!
+
+      const coordString = playerListOnCell[0].coord;
+      const [hor, vert] = coordString.split(".");
+
+      const isCurrPlayer = playerList[numberOfPlayer].coord === coordString;
+
       const portal = ReactDOM.createPortal(
-        <PLayersPortal coordX={hor} coordY={vert}>
+        <PLayersPortal coordX={hor} coordY={vert} isCurrPlayer={isCurrPlayer}>
           {playerCardList}
         </PLayersPortal>,
         fieildElem
@@ -470,10 +483,10 @@ const calculateHighlightning = (
 
 const getContextMenuCoord = (
   activePLayerCoord: string,
-  currplayerCoord: string
+  currPlayerCoord: string
 ) => {
   const [horActive, vertActive] = activePLayerCoord.split(".");
-  const [horCurrent, vertCurrent] = currplayerCoord.split(".");
+  const [horCurrent, vertCurrent] = currPlayerCoord.split(".");
 
   const differenceHor = getNewCoordHor(horCurrent, horActive);
   const differenceVert = getNewCoordVert(vertCurrent, vertActive);

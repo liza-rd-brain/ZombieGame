@@ -16,7 +16,6 @@ export const getNextPlayerNumber = (state: State): number => {
         ? minPlayerNumber
         : attackInitiator + 1;
 
-    console.log(nextPlayerNumber);
     return nextPlayerNumber;
   } else {
     const nextPlayerNumber =

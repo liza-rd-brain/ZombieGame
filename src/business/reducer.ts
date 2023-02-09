@@ -10,6 +10,7 @@ import {
 import { endGame } from "./phases/endGame";
 import {
   ContextMenuButtonType,
+  CoordItem,
   EnemyCardType,
   MoveDirection,
   PLayerType,
@@ -23,6 +24,7 @@ export type ActionType =
   | { type: "clickedStartButton" }
   | { type: "diceThrown"; payload: number }
   | { type: "moveControlsClicked"; payload: MoveDirection }
+  | { type: "playerWasMoved"; payload: CoordItem }
   | { type: "req-openCard" }
   | { type: "req-checkInventoryCard" }
   | { type: "req-changePlayerHealth" }

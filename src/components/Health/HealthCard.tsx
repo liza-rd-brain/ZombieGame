@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
-import { CardApperance } from "../../business/types";
+import { CardAppearance } from "../../business/types";
 import img from "./health.png";
 import brainImg from "../CommonCard/brain_4.png";
 import { FC } from "react";
@@ -42,7 +42,7 @@ const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
 `;
 
 export const HealthCard: FC<{
-  apperance: CardApperance;
+  apperance: CardAppearance;
   refList: {
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;

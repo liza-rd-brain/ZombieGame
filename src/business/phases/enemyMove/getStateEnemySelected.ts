@@ -16,7 +16,7 @@ export const getStateEnemySelected = (
       const currEnemyIndex = Object.keys(enemyList).find((key) => {
         return (
           enemyList[Number(key)].coord === currEnemyCard.coord &&
-          enemyList[Number(key)].apperance === "open"
+          enemyList[Number(key)].appearance === "open"
         );
       });
 
@@ -29,7 +29,7 @@ export const getStateEnemySelected = (
           : true;
 
         const isOpenEnemyCard =
-          enemyList[Number(currEnemyIndex)].apperance === "open";
+          enemyList[Number(currEnemyIndex)].appearance === "open";
 
         const canPickEnemyCard = hasEnemyCard && isOpenEnemyCard;
 
