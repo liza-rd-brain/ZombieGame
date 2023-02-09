@@ -92,6 +92,18 @@ export const CardListEl = React.memo(function _CardListEl({
     return hasPlayerOnCell ? state.playerList : null;
   });
 
+  const isCurrentEnemyCard = useSelector((state: State) => {
+    const enemyOrderNumber = state.deadPlayerList
+      ? state.deadPlayerList[state.activePlayerNumber]?.index
+      : undefined;
+
+    const isCurrEnemyCard = enemyOrderNumber
+      ? state.enemyList[enemyOrderNumber].coord === currCoord
+      : undefined;
+
+    return Boolean(isCurrEnemyCard);
+  });
+
   const playerCoord = playerList && playerList[activePlayerNumber]?.coord;
 
   //TODO: почему только открытые карточки???
@@ -202,8 +214,8 @@ export const CardListEl = React.memo(function _CardListEl({
       <EnemyCard
         enemyCard={enemyCard}
         key={index}
-        isCurrent={false}
-        // isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
+        order={index}
+        isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
         apperance={enemyCard.appearance}

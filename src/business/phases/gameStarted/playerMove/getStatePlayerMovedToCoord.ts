@@ -11,8 +11,6 @@ export const getStatePlayerMovedToCoord = (
 ): State => {
   const { playerList, activePlayerNumber } = state;
 
-  const prevPlayerCoord = playerList[activePlayerNumber].coord;
-
   //TODO: took out common functional for coordinates
   const nextPlayerCoordString = Object.values(newCoord).join(".");
 

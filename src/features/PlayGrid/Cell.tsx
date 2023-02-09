@@ -141,7 +141,9 @@ export const Cell: React.FC<{
   );
 
   const isPlayerMoveArea = useSelector((state: State) => {
-    const playerMovePhase = state.gameState.type === "gameStarted.playerMove";
+    const playerMovePhase =
+      state.gameState.type === "gameStarted.playerMove" ||
+      state.gameState.type === "enemyMove";
 
     return playerMovePhase && needHighlightning;
   });

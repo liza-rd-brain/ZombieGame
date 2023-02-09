@@ -44,6 +44,9 @@ export const PreviewDrag = ({ isCurrent, image, coordX, coordY }: any) => {
       currentOffset: monitor.getDifferenceFromInitialOffset(),
     })
   );
+  if (isDragging) {
+    console.log("isDragging");
+  }
 
   function getItemStyles(
     initialOffset: XYCoord | null,

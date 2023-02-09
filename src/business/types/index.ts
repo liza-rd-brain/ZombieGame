@@ -53,6 +53,9 @@ export type PLayerType = {
   showContextMenu?: boolean;
 };
 
+/**
+ * index here is orderNumber in enemyList
+ */
 export type DeadPlayer = {
   name: "dead";
   orderNumber: number;

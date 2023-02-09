@@ -7,6 +7,8 @@ import { getStateEnemySelected } from "./getStateEnemySelected";
 import { getStateEnemyMoved } from "./getStateEnemyMoved";
 import { getEnemyMoveResult } from "./getEnemyMoveResult";
 import { getStateSwitchPlayer } from "./getStateSwitchPlayer";
+import { getStatePlayerMovedToCoord } from "../gameStarted/playerMove/getStatePlayerMovedToCoord";
+import { getStateEnemyMovedToCoord } from "./getStateEnemyMovedToCoord";
 
 export const enemyMove = (state: State, action: ActionType): State => {
   const [, phaseInner] = state.gameState.type.split(".");
@@ -32,6 +34,11 @@ export const enemyMove = (state: State, action: ActionType): State => {
       switch (action.type) {
         case "req-checkAvailableNeighboringCell": {
           return getAvailableCells(state);
+        }
+
+        case "playerWasMoved": {
+          const newCoord = action.payload;
+          return getStateEnemyMovedToCoord(state, newCoord);
         }
 
         case "moveControlsClicked": {

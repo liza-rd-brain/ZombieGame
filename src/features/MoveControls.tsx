@@ -10,7 +10,7 @@ type ArrowProps = {
 };
 
 const Arrow = styled.div<ArrowProps>`
-  text-align: center;import { useDispatch } from "react-redux";
+  text-align: center;
   vertical-align: middle;
   border: 1px solid lightgrey;
   cursor: pointer;

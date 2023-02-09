@@ -134,13 +134,7 @@ export const Player = (props: PlayerListItem) => {
 
   const playerImageList = [player, player2, player3, player4];
 
-  const {
-    playerListOnCell,
-    playerList,
-    numberOfPlayer,
-
-    /*     isPlayerAlone, */
-  } = props;
+  const { playerListOnCell, playerList, numberOfPlayer } = props;
 
   const needSplitCards = playerListOnCell.length > 1;
 
@@ -154,14 +148,29 @@ export const Player = (props: PlayerListItem) => {
   const needReverseCards = indexOfActiveCard !== 0 && needSplitCards;
 
   const MemoizedClickHandler = (playerCardItem: any) =>
-    useCallback(
+    dispatch({
+      type: "clickedPlayer",
+      payload: playerCardItem,
+    });
+
+  //err when click enemy on player
+  // const MemoizedClickHandler = (playerCardItem: any) =>
+  //   useCallback(
+  //     () =>
+  //       dispatch({
+  //         type: "clickedPlayer",
+  //         payload: playerCardItem,
+  //       }),
+  //     [playerCardItem]
+  //   );
+  /*     useCallback(
       () =>
         dispatch({
           type: "clickedPlayer",
           payload: playerCardItem,
         }),
       []
-    );
+    ); */
 
   const playerCardList = (
     <PlayerCardList
