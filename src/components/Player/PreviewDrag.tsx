@@ -4,6 +4,7 @@ import styled from "styled-components";
 import type { XYCoord } from "react-dnd";
 import { useDragLayer } from "react-dnd";
 import { StyledCommonPlayerCard } from "./StyledCommonPlayerCard";
+import ReactDOM from "react-dom";
 
 const StyledPreviewWrap = styled.div`
   position: absolute !important;
@@ -15,7 +16,25 @@ const StyledPreviewWrap = styled.div`
   height: 100%;
 `;
 
-export const PreviewDrag = ({ isCurrent, image }: any) => {
+type PortalType = {
+  coordX: string;
+  coordY: string;
+};
+
+const PLayersPortal = styled.div<PortalType>`
+  position: relative;
+  display: flex;
+  left: ${(props) => {
+    return `${Number(props.coordX) * 50}px`;
+  }};
+
+  bottom: ${(props) => {
+    return `${Number(props.coordY) * 50 + 50}px`;
+  }};
+`;
+
+export const PreviewDrag = ({ isCurrent, image, coordX, coordY }: any) => {
+  // const [gameStateType] = useSelector((state: State) => [state.gameState.type]);
   const { isDragging, initialOffset, currentOffset, itemType } = useDragLayer(
     (monitor) => ({
       /*       item: monitor.getItem(), */
@@ -45,10 +64,12 @@ export const PreviewDrag = ({ isCurrent, image }: any) => {
     };
   }
 
+  const fieildElem = document.getElementById("field");
+
   function renderItem() {
     switch (itemType) {
       case ItemDragTypes.PLAYER:
-        return (
+        const styledPreview = (
           <StyledPreviewWrap>
             <div style={getItemStyles(initialOffset, currentOffset)}>
               {/* <div style={{ ...styles }}></div> */}
@@ -56,6 +77,21 @@ export const PreviewDrag = ({ isCurrent, image }: any) => {
             </div>
           </StyledPreviewWrap>
         );
+        switch (fieildElem) {
+          case null: {
+            return styledPreview;
+          }
+          default: {
+            const portal = ReactDOM.createPortal(
+              <PLayersPortal coordX={coordX} coordY={coordY}>
+                {styledPreview}
+              </PLayersPortal>,
+              fieildElem
+            );
+            return portal;
+          }
+        }
+        return styledPreview;
       default:
         return null;
     }

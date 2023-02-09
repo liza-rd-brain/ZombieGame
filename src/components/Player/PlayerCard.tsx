@@ -10,7 +10,9 @@ import { PreviewDrag } from "./PreviewDrag";
 import { StyledCommonPlayerCard } from "./StyledCommonPlayerCard";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
-const StyledPlayerCard = styled(StyledCommonPlayerCard)<PlayerItemProps>`
+const StyledPlayerCard = styled(StyledCommonPlayerCard)<
+  Omit<PlayerItemProps, "coordX" | "coordY">
+>`
   z-index: ${(props) => {
     if (props.isCurrent) {
       return "10";
@@ -41,6 +43,8 @@ type PlayerStyleProps = {
   isCurrent: boolean;
   needHighlightning?: boolean;
   image: string;
+  coordX: string;
+  coordY: string;
 };
 
 type PlayerItemProps = {
@@ -54,6 +58,8 @@ export const PlayerCard: FC<PlayerItemProps> = ({
   needHighlightning,
   image,
   onClick,
+  coordX,
+  coordY,
 }) => {
   const [gameStateType] = useSelector((state: State) => [state.gameState.type]);
 
@@ -93,7 +99,12 @@ export const PlayerCard: FC<PlayerItemProps> = ({
         image={image}
         onClick={onClick}
       />
-      <PreviewDrag isCurrent={isCurrent} image={image} />
+      <PreviewDrag
+        isCurrent={isCurrent}
+        image={image}
+        coordX={coordX}
+        coordY={coordY}
+      />
     </>
   );
 };

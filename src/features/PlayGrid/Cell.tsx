@@ -134,6 +134,18 @@ export const Cell: React.FC<{
       state.gameState.type.includes("interactWithEnemy")
   );
 
+  const needHighlightning = useSelector((state: State) =>
+    state.gameState.coordOfAvailableCells
+      ? state.gameState.coordOfAvailableCells.includes(coord)
+      : false
+  );
+
+  const isPlayerMoveArea = useSelector((state: State) => {
+    const playerMovePhase = state.gameState.type === "gameStarted.playerMove";
+
+    return playerMovePhase && needHighlightning;
+  });
+
   /**
    * considering hasActivePlayerOnCell
    */
@@ -142,13 +154,8 @@ export const Cell: React.FC<{
       hasActivePlayerOnCell && state.gameState.type === "gameStarted.takeCard"
   );
 
-  const needHighlightning = useSelector((state: State) =>
-    state.gameState.coordOfAvailableCells
-      ? state.gameState.coordOfAvailableCells.includes(coord)
-      : false
-  );
-
-  const isNeedCreateSeparateWindow = isPhaseEnemyInteract || isPhaseTakeCard;
+  const isNeedCreateSeparateWindow =
+    isPhaseEnemyInteract || isPhaseTakeCard; /* || isPhasePlayerMove */
 
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
@@ -295,6 +302,7 @@ export const Cell: React.FC<{
     isPhaseTakeCard,
     needHighlightning,
     hasActiveDeadPlayerOnCell,
+    isPlayerMoveArea,
   ]);
 
   return cellItem;

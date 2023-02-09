@@ -256,6 +256,8 @@ export const Player = (props: PlayerListItem) => {
         const coordOfAvailableCards = gameState.coordOfAvailableCards;
         const isActivePlayerAlive = playerList[numberOfPlayer] ? true : false;
 
+        const coordString = playerListOnCell[0].coord;
+        const [hor, vert] = coordString.split(".");
         switch (isActivePlayerAlive) {
           case false: {
             return (
@@ -266,6 +268,8 @@ export const Player = (props: PlayerListItem) => {
                 isCurrent={numberOfPlayer === playerCardItem.orderNumber}
                 needHighlightning={false}
                 onClick={() => MemoizedClickHandler(playerCardItem)}
+                coordX={String(hor)}
+                coordY={String(vert)}
               ></PlayerCard>
             );
           }
@@ -286,6 +290,8 @@ export const Player = (props: PlayerListItem) => {
                   playerCardItem,
                   activePlayerCoord
                 )}
+                coordX={String(hor)}
+                coordY={String(vert)}
                 onClick={() =>
                   dispatch({
                     type: "clickedPlayer",
@@ -387,6 +393,8 @@ export const Player = (props: PlayerListItem) => {
 
     default: {
       //TODO: coordinate handling!
+
+      console.log("createPortal");
 
       const coordString = playerListOnCell[0].coord;
       const [hor, vert] = coordString.split(".");
