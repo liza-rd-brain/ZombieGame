@@ -113,6 +113,17 @@ export const Cell: React.FC<{
       state.playerList[state.activePlayerNumber]?.coord === coord
   );
 
+  const hasActiveDeadPlayerOnCell: boolean = useSelector(
+    (state: State) => {
+      const hasEnemyCard = Object.values(state.enemyList).find(
+        (enemyItem) => enemyItem.coord === coord
+      );
+      return Boolean(hasEnemyCard);
+    }
+    // state.deadPlayerList &&
+    // state.deadPlayerList[state.activePlayerNumber]?.coord === coord
+  );
+
   /**
    * considering hasActivePlayerOnCell
    */
@@ -277,6 +288,7 @@ export const Cell: React.FC<{
     isPhaseEnemyInteract,
     isPhaseTakeCard,
     needHighlightning,
+    hasActiveDeadPlayerOnCell,
   ]);
 
   return cellItem;

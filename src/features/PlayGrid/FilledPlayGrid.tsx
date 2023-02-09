@@ -19,7 +19,6 @@ export const FilledPlayGrid: React.FC = React.memo(function _FilledPlayGrid() {
     const [hor, vert] = orderIndex.split(".");
     return (
       <Wrap key={`${hor}.${vert}`}>
-        {/* <Cell coord={orderIndex} mode={memoConfig.playGridMode} /> */}
         <Cell coord={orderIndex} mode={memoConfig.playGridMode} />
       </Wrap>
     );
