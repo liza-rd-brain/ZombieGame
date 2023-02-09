@@ -7,8 +7,6 @@ import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
 import { store } from "./business/store";
 
-import { FlipCard } from "./example/FlipCard";
-
 import {
   useOpenCard,
   useEndScreen,
@@ -16,11 +14,7 @@ import {
   useInteractWithEnemy,
   useApplyCard,
 } from "./business/effects";
-<<<<<<< HEAD
-import { useCallback, useMemo } from "react";
-=======
-import { SkipButton } from "./features/SkipButton";
->>>>>>> 7c02e8f655f120c290f28734d352f0f1401a8e29
+import { useMemo } from "react";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -112,27 +106,7 @@ export function GetApp() {
         return <EndScreen />;
 
       default:
-<<<<<<< HEAD
         return memoizedMainPage;
-=======
-        return (
-          <>
-            <LeftPanel>{/*  <PlayersStatusList /> */}</LeftPanel>
-            <Field id="field">
-              <PlayGrid />
-            </Field>
-            <RightPanel>
-              <StatusList />
-              <GameControls>
-                <Dice />
-                <MoveControls />
-                <SkipButton />
-              </GameControls>
-              {/*  <PlayerStatus /> */}
-            </RightPanel>
-          </>
-        );
->>>>>>> 7c02e8f655f120c290f28734d352f0f1401a8e29
     }
   };
 
