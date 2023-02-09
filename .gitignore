@@ -29,5 +29,10 @@ example
 
 .env
 
+<<<<<<< HEAD
 /Process.md
 
+=======
+# config
+devConfig.ts
+>>>>>>> 7c02e8f655f120c290f28734d352f0f1401a8e29

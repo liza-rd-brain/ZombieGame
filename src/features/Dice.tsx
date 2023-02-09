@@ -31,9 +31,9 @@ export const Dice = () => {
   const diceNumber = useSelector((state: State) => state.dice);
 
   const getNumber = () => {
+    // return 1;
     // return maxNumber;
-    // return Math.floor(Math.random() * maxNumber + 1);
-    return 3;
+    return Math.floor(Math.random() * maxNumber + 1);
   };
 
   return (
