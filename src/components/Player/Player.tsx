@@ -18,12 +18,6 @@ import player3 from "./player3.png";
 import player4 from "./player4.png";
 import { PlayerCard } from "./PlayerCard";
 
-type PlayerItem = {
-  isCurrent: boolean;
-  needHighlightning?: boolean;
-  image: string;
-};
-
 type PlayerCardListType = {
   needSplitCards?: boolean;
   needReverseCards?: boolean;
@@ -68,84 +62,6 @@ const ContextMenuPortal = styled.div<PortalType>`
     return `${Number(props.coordY) * 50}px`;
   }};
 `;
-
-/**
- * before - for highlightning active card
- * after - for interacting highlightning
- */
-// const PlayerCard = styled.div<PlayerItem>`
-//   width: 50px;
-//   height: 50px;
-//   margin: 0px;
-//   text-align: center;
-//   padding: 2px;
-//   box-sizing: border-box;
-//   cursor: default;
-//   background-repeat: no-repeat;
-//   background-position: 0px;
-//   background-size: 44px;
-//   background-position: 3px;
-
-//   background-image: ${(props) => {
-//     return `url(${props.image})`;
-//   }};
-
-//   z-index: ${(props) => {
-//     if (props.isCurrent) {
-//       return "10";
-//     } else {
-//       return "3";
-//     }
-//   }};
-
-//   cursor: pointer;
-
-//   &:before {
-//     content: "";
-//     position: absolute;
-//     width: 24px;
-//     height: 24px;
-//     border-radius: 1px;
-
-//     border: ${(props) => {
-//       if (props.isCurrent) {
-//         return "5px solid #8834b8";
-//       }
-//     }};
-
-//     pointer-events: none;
-//     opacity: 0.5;
-//     padding: 4px;
-//     left: 4px;
-//     top: 4px;
-//   }
-
-//   &:after {
-//     content: "";
-//     position: absolute;
-//     width: 36px;
-//     height: 36px;
-//     border-radius: 1px;
-
-//     border: ${(props) => {
-//       if (props.needHighlightning) {
-//         return "3px solid #c1fe2f6b;";
-//       }
-//     }};
-
-//     padding: 4px;
-//     left: 0px;
-//     top: 0px;
-//   }
-
-//   &:hover:after {
-//     border: ${(props) => {
-//       if (props.needHighlightning) {
-//         return "3px solid #6cfe2fde;";
-//       }
-//     }};
-//   }
-// `;
 
 const PlayerCardList = styled.div<PlayerCardListType>`
   display: flex;
@@ -397,7 +313,9 @@ export const Player = (props: PlayerListItem) => {
       const coordString = playerListOnCell[0].coord;
       const [hor, vert] = coordString.split(".");
 
-      const isCurrPlayer = playerList[numberOfPlayer].coord === coordString;
+      const isCurrPlayer =
+        playerList[numberOfPlayer] &&
+        playerList[numberOfPlayer].coord === coordString;
 
       const portal = ReactDOM.createPortal(
         <PLayersPortal coordX={hor} coordY={vert} isCurrPlayer={isCurrPlayer}>

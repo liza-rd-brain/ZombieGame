@@ -1,4 +1,4 @@
-import { ItemDragTypes } from "../../shared/ItemTypes";
+import { ItemDragTypes } from "../../../shared/ItemTypes";
 import styled from "styled-components";
 
 import type { XYCoord } from "react-dnd";
@@ -91,7 +91,7 @@ export const PreviewDrag = ({ isCurrent, image, coordX, coordY }: any) => {
             return portal;
           }
         }
-        return styledPreview;
+
       default:
         return null;
     }

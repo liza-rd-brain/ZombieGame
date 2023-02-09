@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { StyledCommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../common/CommonCard";
 import img from "./health.png";
 
 type HealthAppearanceType = {

@@ -1,10 +1,10 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { CardAppearance } from "../../business/types";
-import { StyledCommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../common/CommonCard";
 
 import img from "./boards.png";
-import brainImg from "../CommonCard/brain_4.png";
+import brainImg from "../common/CommonCard/brain_4.png";
 
 type BoardsApperanceType = {
   apperance: "closed" | "open";

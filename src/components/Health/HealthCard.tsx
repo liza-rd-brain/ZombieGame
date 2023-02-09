@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { StyledCommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../common/CommonCard";
 import { CardAppearance } from "../../business/types";
 import img from "./health.png";
-import brainImg from "../CommonCard/brain_4.png";
+import brainImg from "../common/CommonCard/brain_4.png";
 import { FC } from "react";
 
 type WeaponApperanceType = {

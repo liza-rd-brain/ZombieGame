@@ -6,8 +6,8 @@ import { useDrag } from "react-dnd";
 
 import { ItemDragTypes } from "../../shared/ItemTypes";
 import { State } from "../../business/types";
-import { PreviewDrag } from "./PreviewDrag";
-import { StyledCommonPlayerCard } from "./StyledCommonPlayerCard";
+import { PreviewDrag } from "../common/DragPreview/PreviewDrag";
+import { StyledCommonPlayerCard } from "../common/DragPreview/StyledCommonPlayerCard";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 const StyledPlayerCard = styled(StyledCommonPlayerCard)<

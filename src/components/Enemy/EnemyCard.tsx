@@ -2,20 +2,9 @@ import { FC } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import {
-  CardAppearance,
-  DeadPlayerListType,
-  EnemyCardType,
-} from "../../business/types";
-import { StyledCommonCard } from "../CommonCard/CommonCard";
+import { CardAppearance, EnemyCardType } from "../../business/types";
+
 import { EnemyView } from "./EnemyView";
-
-import zombie from "./zombie.png";
-import zombie_defeated from "./zombie_defeated.png";
-
-type EnemyCardApperanceType = EnemyCardType & {
-  isCurrent: boolean;
-};
 
 type EnemyCardContainerType = {
   needSplitCards?: boolean;
@@ -67,16 +56,7 @@ export const EnemyCard: FC<{
     cardContainerRef: React.RefObject<HTMLDivElement>;
     cardFrontRef: React.RefObject<HTMLDivElement>;
   };
-}> = ({
-  isCurrent,
-  needSplitCards,
-  needReverseCards,
-  apperance,
-  refList,
-  enemyCard,
-}) => {
-  const dispatch = useDispatch();
-
+}> = ({ needSplitCards, needReverseCards, apperance, refList, enemyCard }) => {
   return (
     <EnemyCardContainer
       needSplitCards={false}

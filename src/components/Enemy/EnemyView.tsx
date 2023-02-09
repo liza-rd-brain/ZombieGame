@@ -1,12 +1,12 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { StyledCommonCard } from "../CommonCard/CommonCard";
+import { StyledCommonCard } from "../common/CommonCard";
 import { CardAppearance, EnemyCardType } from "../../business/types";
 
 import zombie from "./zombie.png";
 // import zombie_defeated from "./zombie_defeated.png";
 
-import brainImg from "../CommonCard/brain_4.png";
+import brainImg from "../common/CommonCard/brain_4.png";
 import { useDispatch } from "react-redux";
 
 type WeaponApperanceType = {
