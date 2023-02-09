@@ -63,7 +63,7 @@ export function useOpenCardAnimation({
       }
 
       case "clearEffect": {
-        return { ...state, effect: null };
+        return { ...state, effect: "stopEffect" };
       }
       default: {
         return state;
@@ -118,15 +118,16 @@ export function useOpenCardAnimation({
 
         if (currentTime <= 0) {
           clearInterval(intervalId);
-
+          console.log("double");
           dispatch({ type: "clearEffect" });
-          onTimerEnd();
         }
       }, 1000);
 
       return () => {
         clearInterval(intervalId);
       };
+    } else if (state.effect === "stopEffect") {
+      onTimerEnd();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

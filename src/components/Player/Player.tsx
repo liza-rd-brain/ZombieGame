@@ -394,8 +394,6 @@ export const Player = (props: PlayerListItem) => {
     default: {
       //TODO: coordinate handling!
 
-      console.log("createPortal");
-
       const coordString = playerListOnCell[0].coord;
       const [hor, vert] = coordString.split(".");
 

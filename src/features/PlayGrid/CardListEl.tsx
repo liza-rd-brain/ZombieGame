@@ -134,6 +134,7 @@ export const CardListEl = React.memo(function _CardListEl({
 
   const getNextPhase = () => {
     //for inventory and for other card ???
+    console.log("taking Card");
     dispatch({ type: "req-openCard" });
   };
 
