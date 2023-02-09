@@ -2,11 +2,11 @@ import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { ConfigType, PlayGridMode, State } from "../../business/types";
+
+import { PlayGridMode, State } from "../../business/types";
+
 import { Barrier } from "./Barrier";
 import { CardListEl } from "./CardListEl";
-import { getSplittedCardsPassive } from "./getSplittedCardsPassive";
-
 import { PlayerList } from "./PlayerList";
 
 type CellApperance = {
@@ -91,17 +91,18 @@ const UnderlayerItem = styled.div<UnderlayerType>`
  * 1. player   +
  * 6.walls===barrier (сейчас просто картинка)
  * 2.enemy
- * 3.invenrory
+ * 3.inventory
  * 4.split
  * 5.separate window
+ */
+
+/**
+ * 1. Есть ли активная карточка на ячейка- нет=> только background
+ * 2. Достаем все карточки на ячейке
  */
 export const Cell: React.FC<{
   coord: string;
   mode: PlayGridMode;
-  /*   cardRef: {
-    cardContainerRef: React.RefObject<HTMLDivElement>;
-    cardFrontRef: React.RefObject<HTMLDivElement>;
-  }; */
 }> = React.memo(function _Cell({ coord, mode /* , cardRef */ }) {
   const cellValues = useSelector(
     (state: State) => state.gameField.values[coord]
@@ -137,40 +138,21 @@ export const Cell: React.FC<{
 
   const isNeedCreateSeparateWindow = isPhaseEnemyInteract || isPhaseTakeCard;
 
-  // const needHighlightning = availableCells?.includes(orderIndex);
-
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
 
   const [hor, vert] = coord.split(".");
 
   const draftCellNumbers = mode === "cssStyle" ? `${hor}.${vert}` : null;
-  const hasCard = cellValues.cardItem && cellValues.cardItem.length > 0;
-
-  const enemyListOnCell = Object.entries(enemyList).filter(
-    ([string, enemyCard]) =>
-      enemyCard.coord === coord && enemyCard.apperance === "open"
-  );
-
-  const hasEnemy = enemyListOnCell.length > 0;
-  const hasClosedEnemyItem = Object.entries(enemyList).find(
-    ([string, enemyCard]) =>
-      enemyCard.coord === coord && enemyCard.apperance === "closed"
-  );
-
-  const isPlayerAlone = !hasEnemy && !hasCard && !hasClosedEnemyItem;
-
-  const memoizedPlayerCard = useMemo(() => {
-    return <PlayerList coord={coord} />;
-  }, [hasActivePlayerOnCell]);
 
   const memoizedBarrier = useMemo(() => {
     return <Barrier orderIndex={coord} mode={mode}></Barrier>;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fieildElem = document.getElementById("field");
 
-  const getCardListWithPlayer = ({
+  const getCardList = ({
     type,
     planType,
   }: {
@@ -253,7 +235,7 @@ export const Cell: React.FC<{
   const getCardsOnCell = ({ type }: { type: PlanType }) => {
     const cardListType = getCardListType({ type });
 
-    const cardListWithPlayer = getCardListWithPlayer({
+    const cardListWithPlayer = getCardList({
       type: cardListType,
       planType: type,
     });
@@ -282,7 +264,7 @@ export const Cell: React.FC<{
     </Wrap>
   );
 
-  const cellItem = useMemo(() => {
+  const cellItem: JSX.Element = useMemo(() => {
     return (
       <React.Fragment key={`${hor}.${vert}`}>
         {backgroundCardWrap}

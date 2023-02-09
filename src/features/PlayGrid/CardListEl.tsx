@@ -3,22 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
 
-import { Health, BoardsCard, WeaponCard, EnemyList } from "../../components";
+import { HealthCard, BoardsCard, WeaponCard } from "../../components";
 import {
   CardApperance,
   CellType,
   DeadPlayerListType,
+  EnemyCardType,
   EnemyListType,
-  PlayerListType,
   State,
   TypeOfCard,
-  TypeOfInventoryCard,
 } from "../../business/types";
-import { EnemyCardNew } from "../../components/Enemy/EnemyCardNew";
+import { EnemyCard } from "../../components/Enemy/EnemyCard";
+import styled from "styled-components";
 
+//TODO: при 1 секунде- промаргивание
 const ANIMATION_TIME = 3;
 
 type CardsListType = "all" | "enemy" | "inventory";
+
+const CardList = styled.div`
+  position: absolute;
+`;
 
 /**
  * Return inventory and other closed cards
@@ -43,12 +48,10 @@ const Card = React.memo(function _CardView({
     case "weapon": {
       return <WeaponCard apperance={apperance} refList={refList} />;
     }
+    case "health": {
+      return <HealthCard apperance={apperance} refList={refList} />;
+    }
 
-    // case "enemy": {
-    //   return <EnemyCardNew apperance={apperance} refList={refList} />;
-    // }
-
-    // }
     default: {
       return null;
     }
@@ -94,18 +97,25 @@ export const CardListEl = React.memo(function _CardListEl({
 
   //TODO: почему только открытые карточки???
   const enemyListOnCell = Object.entries(enemyList).filter(
-    ([string, enemyCard]) =>
-      enemyCard.coord === currCoord /* && enemyCard.apperance === "open" */
+    ([string, enemyCard]) => {
+      return enemyCard.coord === currCoord;
+    }
+
+    /* && enemyCard.apperance === "open" */
   );
+
+  const enemyCardsOnCell = enemyListOnCell.map(([string, enemyCard]) => {
+    return enemyCard;
+  });
 
   const isInventoryCardClosed =
     cell.cardItem?.length === 1 && cell.cardItem[0].apperance === "closed";
 
   const isEnemyCardClosed =
     enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
-  //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
 
-  const needRerenderCard = useSelector((state: State) => {
+  //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
+  const needRenderOpenCard = useSelector((state: State) => {
     const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
     if (playerCoord === currCoord) {
       const hasEnemyCard =
@@ -116,8 +126,8 @@ export const CardListEl = React.memo(function _CardListEl({
 
       const hasInventoryCards = state.gameField.values[playerCoord];
 
-      const needRerenderCard = Boolean(hasEnemyCard || hasInventoryCards);
-      return needRerenderCard;
+      const needRenderOpenCard = Boolean(hasEnemyCard || hasInventoryCards);
+      return needRenderOpenCard;
     } else {
       return false;
     }
@@ -129,33 +139,21 @@ export const CardListEl = React.memo(function _CardListEl({
   };
 
   const { cardRef } = useOpenCardAnimation({
-    needRun: needRerenderCard,
+    needRun: needRenderOpenCard,
     maxTime: ANIMATION_TIME,
     onTimerEnd: getNextPhase,
   });
 
-  // const memoizedRef = useMemo(() => {
-  //   return cardRef;
-  // }, []);
-
-  const MemoCard = useMemo(
-    () => Card,
-    [
-      /* needRerenderCard */
-    ]
-  );
+  const MemoCard = useMemo(() => Card, []);
 
   const cardItemList = cell.cardItem;
 
-  const hasEnemy = enemyListOnCell.length > 0;
-
-  //перенести это условие в Card
-
+  /**
+   * Пока рассматривается возможность нахождения только одной карточки инвентаря на ячейке
+   */
   const inventoryElem = cardItemList ? (
     <>
       {cardItemList.map((cardItem) => {
-        if (type === "enemy") {
-        }
         return type === "all" || type === "inventory" ? (
           <MemoCard
             refList={cardRef}
@@ -169,7 +167,12 @@ export const CardListEl = React.memo(function _CardListEl({
     </>
   ) : null;
 
-  const needSplitCards = enemyListOnCell.length > 1;
+  const needSplitCards = enemyCardsOnCell.length > 1;
+
+  if (enemyCardsOnCell.length) {
+    console.log("enemyListOnCell", enemyListOnCell);
+    console.log("enemyCardsOnCell", currCoord, enemyCardsOnCell);
+  }
 
   const firstItemIsClosed =
     enemyListOnCell.length && enemyListOnCell[0][1].apperance === "closed";
@@ -195,23 +198,8 @@ export const CardListEl = React.memo(function _CardListEl({
     deadPlayerList && deadPlayerList[activePlayerNumber] ? true : false;
 
   const enemyElem = enemyListOnCell.map(([index, enemyCard]) => {
-    /**
-     * если карточка закрытая - можем просто вернуть view
-     * если нет, то взаимодействие с карточкой становится сложным:
-     * 1) либо бой
-     * 2) либо это активная карточка,
-     * с другой стороны не перерисовывать же весь компонент или все равно перерисовыывать?
-     * т.к. будет другая картинка и прочее
-     *
-     */
-
-    // const isCurrentEnemyCard = Boolean(
-    //   deadPlayerList &&
-    //     Number(deadPlayerList[activePlayerNumber].index) === Number(index)
-    // );
-
     return (
-      <EnemyCardNew
+      <EnemyCard
         enemyCard={enemyCard}
         key={index}
         isCurrent={false}
@@ -228,44 +216,14 @@ export const CardListEl = React.memo(function _CardListEl({
         // }}
       />
     );
-
-    // return (
-    //   <MemoCard
-    //     refList={cardRef}
-    //     key={`${hor}.${vert}.health`}
-    //     apperance={enemyCard.apperance}
-    //     type={"enemy"}
-    //     coord={currCoord}
-    //   />
-    // );
   });
 
-  // const enemyElem=
-  // if (cardItemList) {
-  //   return (
-  //     <>
-  //       {cardItemList.map((cardItem) => {
-  //         return (
-  //           <MemoCard
-  //             refList={cardRef}
-  //             key={`${hor}.${vert}.health`}
-  //             apperance={cardItem.apperance}
-  //             type={cardItem.name}
-  //             coord={currCoord}
-  //           />
-  //         );
-  //       })}
-  //     </>
-  //   );
-  // } else if (hasEnemy) {
-  //   return null;
-  // } else {
-  //   return null;
-  // }
+  // const enemyList = <EnemyList></EnemyList>;
+
   return (
-    <>
+    <CardList>
       {inventoryElem}
       {type === "inventory" ? null : enemyElem}
-    </>
+    </CardList>
   );
 });

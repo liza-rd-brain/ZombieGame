@@ -8,7 +8,7 @@ import {
   EnemyCardType,
 } from "../../business/types";
 import { StyledCommonCard } from "../CommonCard/CommonCard";
-import { EnemyViewNew } from "./EnemyViewNew";
+import { EnemyView } from "./EnemyView";
 
 import zombie from "./zombie.png";
 import zombie_defeated from "./zombie_defeated.png";
@@ -17,12 +17,12 @@ type EnemyCardApperanceType = EnemyCardType & {
   isCurrent: boolean;
 };
 
-type EnemyCardListType = {
+type EnemyCardContainerType = {
   needSplitCards?: boolean;
   needReverseCards?: boolean;
 };
 
-const EnemyCardList = styled.div<EnemyCardListType>`
+const EnemyCardContainer = styled.div<EnemyCardContainerType>`
   display: flex;
   flex-wrap: nowrap;
   position: absolute;
@@ -57,7 +57,7 @@ const EnemyCardList = styled.div<EnemyCardListType>`
   }
 `;
 
-export const EnemyCardNew: FC<{
+export const EnemyCard: FC<{
   isCurrent: boolean;
   needSplitCards: boolean;
   needReverseCards: boolean;
@@ -77,16 +77,18 @@ export const EnemyCardNew: FC<{
 }) => {
   const dispatch = useDispatch();
 
+  console.log(needSplitCards, needReverseCards);
+
   return (
-    <EnemyCardList
-      needSplitCards={needSplitCards}
+    <EnemyCardContainer
+      needSplitCards={false}
       needReverseCards={needReverseCards}
     >
-      <EnemyViewNew
+      <EnemyView
         apperance={apperance}
         refList={refList}
         enemyCard={enemyCard}
       />
-    </EnemyCardList>
+    </EnemyCardContainer>
   );
 };

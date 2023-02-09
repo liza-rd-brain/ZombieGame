@@ -45,7 +45,7 @@ const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
   }};
 `;
 
-export const EnemyViewNew: FC<{
+export const EnemyView: FC<{
   apperance: CardApperance;
   enemyCard: EnemyCardType;
   refList: {
