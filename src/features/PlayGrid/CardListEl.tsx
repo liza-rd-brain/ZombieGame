@@ -20,6 +20,11 @@ const ANIMATION_TIME = 3;
 
 type CardsListType = "all" | "enemy" | "inventory";
 
+type EnemyCardContainerType = {
+  needSplitCards?: boolean;
+  needReverseCards?: boolean;
+};
+
 const CardList = styled.div<{ needSplitCards: boolean }>`
   display: flex;
   width: 50px;
@@ -49,6 +54,41 @@ const CardList = styled.div<{ needSplitCards: boolean }>`
     }};
   }
 `;
+
+// const EnemyCardContainer = styled.div<EnemyCardContainerType>`
+//   display: flex;
+//   flex-wrap: nowrap;
+//   position: absolute;
+//   font-size: 12px;
+//   font-weight: bold;
+//   flex-direction: ${(props) => {
+//     if (props.needReverseCards) {
+//       return "row-reverse";
+//     } else {
+//       return "row";
+//     }
+//   }};
+
+//   margin: ${(props) => {
+//     if (props.needSplitCards) {
+//       return " 0 0 !important;";
+//     }
+//   }};
+
+//   > * {
+//     position: ${(props) => {
+//       if (props.needSplitCards) {
+//         return "relative !important";
+//       }
+//     }};
+
+//     margin: ${(props) => {
+//       if (props.needSplitCards) {
+//         return "0 -12px";
+//       }
+//     }};
+//   }
+// `;
 
 /**
  * Return inventory and other closed cards
@@ -118,16 +158,11 @@ export const CardListEl = React.memo(function _CardListEl({
     return hasPlayerOnCell ? state.playerList : null;
   });
 
-  const isCurrentEnemyCard = useSelector((state: State) => {
+  const currEnemyIndex = useSelector((state: State) => {
     const enemyOrderNumber = state.deadPlayerList
       ? state.deadPlayerList[state.activePlayerNumber]?.index
       : undefined;
-
-    const isCurrEnemyCard = enemyOrderNumber
-      ? state.enemyList[enemyOrderNumber].coord === currCoord
-      : undefined;
-
-    return Boolean(isCurrEnemyCard);
+    return enemyOrderNumber;
   });
 
   const hasInventoryCards = useSelector((state: State) => {
@@ -239,7 +274,11 @@ export const CardListEl = React.memo(function _CardListEl({
         enemyCard={enemyCard}
         key={index}
         order={index}
-        isCurrent={isActivePlayerDead ? isCurrentEnemyCard : false}
+        isCurrent={
+          isActivePlayerDead
+            ? Boolean(currEnemyIndex && String(currEnemyIndex) === index)
+            : false
+        }
         needSplitCards={needSplitCards}
         needReverseCards={needReverseCards}
         apperance={enemyCard.appearance}

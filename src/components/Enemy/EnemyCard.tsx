@@ -11,41 +11,6 @@ type EnemyCardContainerType = {
   needReverseCards?: boolean;
 };
 
-const EnemyCardContainer = styled.div<EnemyCardContainerType>`
-  display: flex;
-  flex-wrap: nowrap;
-  position: absolute;
-  font-size: 12px;
-  font-weight: bold;
-  flex-direction: ${(props) => {
-    if (props.needReverseCards) {
-      return "row-reverse";
-    } else {
-      return "row";
-    }
-  }};
-
-  margin: ${(props) => {
-    if (props.needSplitCards) {
-      return " 0 0 !important;";
-    }
-  }};
-
-  > * {
-    position: ${(props) => {
-      if (props.needSplitCards) {
-        return "relative !important";
-      }
-    }};
-
-    margin: ${(props) => {
-      if (props.needSplitCards) {
-        return "0 -12px";
-      }
-    }};
-  }
-`;
-
 export const EnemyCard: FC<{
   isCurrent: boolean;
   needSplitCards: boolean;
@@ -66,19 +31,14 @@ export const EnemyCard: FC<{
   isCurrent,
   order,
 }) => {
-  // console.log("needSplitCards", needSplitCards);
   return (
-    <EnemyCardContainer
-      needSplitCards={needSplitCards}
-      needReverseCards={needReverseCards}
-    >
-      <EnemyView
-        id={`deadPlayer${order}`}
-        isCurrent={isCurrent}
-        apperance={apperance}
-        refList={refList}
-        enemyCard={enemyCard}
-      />
-    </EnemyCardContainer>
+    <EnemyView
+      // key={`deadPlayer${order}`}
+      id={`deadPlayer${order}`}
+      isCurrent={isCurrent}
+      apperance={apperance}
+      refList={refList}
+      enemyCard={enemyCard}
+    />
   );
 };

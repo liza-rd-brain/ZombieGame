@@ -115,9 +115,9 @@ export const EnemyView: FC<{
   return (
     <>
       <CardContainer
-        style={{
-          opacity: isDragging ? 0 : 1,
-        }}
+        // style={{
+        //   opacity: isDragging ? 0 : 1,
+        // }}
         ref={apperance === "closed" ? refList.cardContainerRef : drag}
         onClick={() => {
           dispatch({
@@ -133,12 +133,12 @@ export const EnemyView: FC<{
         />
         <CardBack apperance={apperance} />
       </CardContainer>
-      <PreviewDrag
+      {/* <PreviewDrag
         isCurrent={isCurrent}
         image={zombie}
         coordX={hor}
         coordY={vert}
-      />
+      /> */}
     </>
   );
 };

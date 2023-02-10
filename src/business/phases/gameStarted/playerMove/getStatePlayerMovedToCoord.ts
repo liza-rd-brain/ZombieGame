@@ -22,8 +22,6 @@ export const getStatePlayerMovedToCoord = (
     case true: {
       const newPlayerList = changePlayerCoord(state, nextPlayerCoordString);
 
-      console.log("newPlayerList", newPlayerList);
-
       const newState: State = {
         ...state,
         gameState: { ...state.gameState, coordOfAvailableCells: null },

@@ -138,6 +138,11 @@ export const Cell: React.FC<{
     (state: State) =>
       hasActivePlayerOnCell && state.gameState.type.includes("enemyMove")
   );
+
+  const additionalUpdate = useSelector(
+    (state: State) => state.gameState.type === "gameStarted.rollDice"
+  );
+
   if (isPhaseEnemyMove) console.log("isPhaseEnemyMove");
 
   const needHighlightning = useSelector((state: State) =>
@@ -153,6 +158,8 @@ export const Cell: React.FC<{
 
     return playerMovePhase && needHighlightning;
   });
+
+  console.log(isPlayerMoveArea, "isPlayerMoveArea");
 
   /**
    * considering hasActivePlayerOnCell
@@ -343,6 +350,7 @@ export const Cell: React.FC<{
     hasActiveDeadPlayerOnCell,
     isPlayerMoveArea,
     isPhaseEnemyMove,
+    additionalUpdate,
   ]);
 
   return cellItem;

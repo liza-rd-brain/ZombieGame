@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -84,6 +84,28 @@ export const PlayerCard: FC<PlayerItemProps> = ({
       dragPreview(getEmptyImage(), { captureDraggingState: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const memoCard = useMemo(() => {
+    <>
+      <StyledPlayerCard
+        style={{
+          opacity: isDragging ? 0 : 1,
+        }}
+        ref={drag}
+        id={id}
+        isCurrent={isCurrent}
+        needHighlightning={needHighlightning}
+        image={image}
+        onClick={onClick}
+      />
+      <PreviewDrag
+        isCurrent={isCurrent}
+        image={image}
+        coordX={coordX}
+        coordY={coordY}
+      />
+    </>;
   }, []);
 
   return (
