@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
+import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
-
-import { HealthCard, BoardsCard, WeaponCard } from "../../components";
 import {
   CardAppearance,
   CellType,
@@ -12,16 +10,44 @@ import {
   State,
   TypeOfCard,
 } from "../../business/types";
+import { useOpenCardAnimation } from "../../business/effects/useOpenCardAnimation";
+
+import { HealthCard, BoardsCard, WeaponCard } from "../../components";
 import { EnemyCard } from "../../components/Enemy/EnemyCard";
-import styled from "styled-components";
 
 //TODO: при 1 секунде- промаргивание
 const ANIMATION_TIME = 3;
 
 type CardsListType = "all" | "enemy" | "inventory";
 
-const CardList = styled.div`
+const CardList = styled.div<{ needSplitCards: boolean }>`
+  display: flex;
+  width: 50px;
+  height: 50px;
+  flex-wrap: nowrap;
   position: absolute;
+
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCards) {
+        return "relative ";
+      }
+    }};
+
+    margin: ${(props) => {
+      if (props.needSplitCards) {
+        return "0 -12px";
+      }
+    }};
+
+    flex-direction: ${(props) => {
+      if (props.needSplitCards) {
+        return "row-reverse";
+      } else {
+        return "row";
+      }
+    }};
+  }
 `;
 
 /**
@@ -104,26 +130,38 @@ export const CardListEl = React.memo(function _CardListEl({
     return Boolean(isCurrEnemyCard);
   });
 
-  const playerCoord = playerList && playerList[activePlayerNumber]?.coord;
+  const hasInventoryCards = useSelector((state: State) => {
+    const enemyOrderNumber = state.deadPlayerList
+      ? state.deadPlayerList[state.activePlayerNumber]?.index
+      : undefined;
+
+    const enemyPlayerCoord =
+      enemyOrderNumber &&
+      state.enemyList[enemyOrderNumber] &&
+      state.enemyList[enemyOrderNumber].coord;
+
+    const isEnemyOnCell = enemyPlayerCoord === currCoord;
+
+    const hasInventory =
+      isEnemyOnCell &&
+      enemyPlayerCoord &&
+      state.gameField.values[enemyPlayerCoord].cardItem?.length;
+
+    console.log("hasInventory on cell", hasInventory, enemyPlayerCoord);
+
+    return hasInventory;
+  });
 
   //TODO: почему только открытые карточки???
   const enemyListOnCell = Object.entries(enemyList).filter(
     ([string, enemyCard]) => {
       return enemyCard.coord === currCoord;
     }
-
-    /* && enemyCard.apperance === "open" */
   );
 
   const enemyCardsOnCell = enemyListOnCell.map(([string, enemyCard]) => {
     return enemyCard;
   });
-
-  const isInventoryCardClosed =
-    cell.cardItem?.length === 1 && cell.cardItem[0].appearance === "closed";
-
-  const isEnemyCardClosed =
-    enemyListOnCell.length && enemyListOnCell[0][1].appearance === "closed";
 
   //TODO: по идее в doEffect можно закидывать номер ячейки, на которой открытие карточки
   const needRenderOpenCard = useSelector((state: State) => {
@@ -135,7 +173,8 @@ export const CardListEl = React.memo(function _CardListEl({
           (enemyItem) => enemyItem.coord === playerCoord
         );
 
-      const hasInventoryCards = state.gameField.values[playerCoord];
+      const hasInventoryCards =
+        state.gameField.values[playerCoord].cardItem?.length;
 
       const needRenderOpenCard = Boolean(hasEnemyCard || hasInventoryCards);
       return needRenderOpenCard;
@@ -146,7 +185,7 @@ export const CardListEl = React.memo(function _CardListEl({
 
   const getNextPhase = () => {
     //for inventory and for other card ???
-    console.log("taking Card");
+    // console.log("taking Card");
     dispatch({ type: "req-openCard" });
   };
 
@@ -163,7 +202,7 @@ export const CardListEl = React.memo(function _CardListEl({
   /**
    * Пока рассматривается возможность нахождения только одной карточки инвентаря на ячейке
    */
-  const inventoryElem = cardItemList ? (
+  const inventoryElem = cardItemList?.length ? (
     <>
       {cardItemList.map((cardItem) => {
         return type === "all" || type === "inventory" ? (
@@ -180,6 +219,7 @@ export const CardListEl = React.memo(function _CardListEl({
   ) : null;
 
   const needSplitCards = enemyCardsOnCell.length > 1;
+  // console.log("needSplitCards", needSplitCards);
 
   if (enemyCardsOnCell.length) {
     // console.log("enemyListOnCell", enemyListOnCell);
@@ -220,22 +260,18 @@ export const CardListEl = React.memo(function _CardListEl({
         needReverseCards={needReverseCards}
         apperance={enemyCard.appearance}
         refList={cardRef}
-        // onClick={() => {
-        //   dispatch({
-        //     type: "clickedEnemy",
-        //     payload: { enemyCard: enemyCard },
-        //   });
-        // }}
       />
     );
   });
 
-  // const enemyList = <EnemyList></EnemyList>;
+  const hasTwoCard = Boolean(enemyCardsOnCell.length && hasInventoryCards);
+
+  console.log(hasTwoCard);
 
   return (
-    <CardList>
-      {inventoryElem}
+    <CardList needSplitCards={hasTwoCard}>
       {type === "inventory" ? null : enemyElem}
+      {inventoryElem}
     </CardList>
   );
 });

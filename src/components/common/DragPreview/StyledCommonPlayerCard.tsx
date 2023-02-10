@@ -39,24 +39,4 @@ export const StyledCommonPlayerCard = styled.div<{
     left: 4px;
     top: 4px;
   }
-
-  &:before {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 1px;
-
-    border: ${(props) => {
-      if (props.isCurrent) {
-        return "5px solid #8834b8";
-      }
-    }};
-
-    pointer-events: none;
-    opacity: 0.5;
-    padding: 4px;
-    left: 4px;
-    top: 4px;
-  }
 `;

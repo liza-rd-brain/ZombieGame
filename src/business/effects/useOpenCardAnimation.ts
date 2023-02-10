@@ -118,7 +118,6 @@ export function useOpenCardAnimation({
 
         if (currentTime <= 0) {
           clearInterval(intervalId);
-          console.log("double");
           dispatch({ type: "clearEffect" });
         }
       }, 1000);

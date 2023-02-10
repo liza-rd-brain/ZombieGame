@@ -27,29 +27,33 @@ const Wrap = styled.div`
   position: relative;
 `;
 
-// const CellItem = styled.div<CellApperance>`
-//   display: flex;
-//   position: relative;
-//   box-sizing: border-box;
+const CardListWrap = styled.div<{ needSplitCards: boolean }>`
+  display: flex;
+  flex-wrap: nowrap;
+  position: absolute;
 
-//   font-size: 14px;
-//   text-align: right;
-//   width: 50px;
-//   height: 50px;
-//   color: lightgrey;
+  > * {
+    position: ${(props) => {
+      if (props.needSplitCards) {
+        return "relative ";
+      }
+    }};
 
-//   border: ${(props) => {
-//     if (props.mode === "cssStyle") {
-//       return "1px solid lightgray";
-//     }
-//   }};
-
-//   background-color: ${(props) => {
-//     if (props.needHighlightning) {
-//       return "rgb(55 163 0 / 52%);";
-//     }
-//   }};
-// `;
+    margin: ${(props) => {
+      if (props.needSplitCards) {
+        return "0 -12px";
+      }
+    }};
+    /* 
+    flex-direction: ${(props) => {
+      if (props.needSplitCards) {
+        return "row-reverse";
+      } else {
+        return "row";
+      }
+    }}; */
+  }
+`;
 
 const UnderlayerItem = styled.div<UnderlayerType>`
   position: relative;
@@ -114,16 +118,12 @@ export const Cell: React.FC<{
       state.playerList[state.activePlayerNumber]?.coord === coord
   );
 
-  const hasActiveDeadPlayerOnCell: boolean = useSelector(
-    (state: State) => {
-      const hasEnemyCard = Object.values(state.enemyList).find(
-        (enemyItem) => enemyItem.coord === coord
-      );
-      return Boolean(hasEnemyCard);
-    }
-    // state.deadPlayerList &&
-    // state.deadPlayerList[state.activePlayerNumber]?.coord === coord
-  );
+  const hasActiveDeadPlayerOnCell: boolean = useSelector((state: State) => {
+    const hasEnemyCard = Object.values(state.enemyList).find(
+      (enemyItem) => enemyItem.coord === coord
+    );
+    return Boolean(hasEnemyCard);
+  });
 
   /**
    * considering hasActivePlayerOnCell
@@ -133,6 +133,12 @@ export const Cell: React.FC<{
       hasActivePlayerOnCell &&
       state.gameState.type.includes("interactWithEnemy")
   );
+
+  const isPhaseEnemyMove = useSelector(
+    (state: State) =>
+      hasActivePlayerOnCell && state.gameState.type.includes("enemyMove")
+  );
+  if (isPhaseEnemyMove) console.log("isPhaseEnemyMove");
 
   const needHighlightning = useSelector((state: State) =>
     state.gameState.coordOfAvailableCells
@@ -162,6 +168,24 @@ export const Cell: React.FC<{
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
 
+  const hasInventoryCards = useSelector((state: State) => {
+    const playerCoord = state.playerList[state.activePlayerNumber]?.coord;
+    const enemyOrderNumber = state.deadPlayerList
+      ? state.deadPlayerList[state.activePlayerNumber]?.index
+      : undefined;
+
+    const enemyPlayerCoord =
+      enemyOrderNumber &&
+      state.enemyList[enemyOrderNumber] &&
+      state.enemyList[enemyOrderNumber].coord;
+
+    const hasInventory =
+      (playerCoord && state.gameField.values[playerCoord].cardItem?.length) ||
+      (enemyPlayerCoord &&
+        state.gameField.values[enemyPlayerCoord].cardItem?.length);
+
+    return hasInventory;
+  });
   const [hor, vert] = coord.split(".");
 
   const draftCellNumbers = mode === "cssStyle" ? `${hor}.${vert}` : null;
@@ -180,18 +204,24 @@ export const Cell: React.FC<{
     type: CardsListType | null;
     planType: PlanType;
   }) => {
-    return (
+    const enemyListOnCell = Object.entries(enemyList).filter(
+      ([string, enemyCard]) => {
+        return enemyCard.coord === coord;
+      }
+    );
+
+    const hasTwoCard = false;
+
+    /**
+     * если задни план и фаза - игрока не рисуем
+     * иначе на заднем\переднем рисуем
+     */
+    const cardList = (
       <>
-        {/**
-         * если задни план и фаза - игрока не рисуем
-         * иначе на заднем\переднем рисуем
-         */}
         {planType === "back" && isNeedCreateSeparateWindow ? null : (
           <PlayerList coord={coord} />
         )}
-        {/*  {memoizedPlayerCard} */}
         <CardListEl
-          /*     refList={cardRef} */
           cell={cellValues}
           type={type as CardsListType}
           currCoord={coord}
@@ -199,6 +229,12 @@ export const Cell: React.FC<{
           deadPlayerList={deadPlayerList}
         />
       </>
+    );
+
+    return hasTwoCard ? (
+      <CardListWrap needSplitCards={true}>{cardList}</CardListWrap>
+    ) : (
+      cardList
     );
   };
 
@@ -305,6 +341,7 @@ export const Cell: React.FC<{
     needHighlightning,
     hasActiveDeadPlayerOnCell,
     isPlayerMoveArea,
+    isPhaseEnemyMove,
   ]);
 
   return cellItem;

@@ -45,7 +45,7 @@ export const PreviewDrag = ({ isCurrent, image, coordX, coordY }: any) => {
     })
   );
   if (isDragging) {
-    console.log("isDragging");
+    // console.log("isDragging");
   }
 
   function getItemStyles(

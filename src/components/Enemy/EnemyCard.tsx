@@ -66,9 +66,10 @@ export const EnemyCard: FC<{
   isCurrent,
   order,
 }) => {
+  // console.log("needSplitCards", needSplitCards);
   return (
     <EnemyCardContainer
-      needSplitCards={false}
+      needSplitCards={needSplitCards}
       needReverseCards={needReverseCards}
     >
       <EnemyView
