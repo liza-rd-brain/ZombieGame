@@ -136,7 +136,7 @@ export const Cell: React.FC<{
 
   const isPhaseEnemyMove = useSelector(
     (state: State) =>
-      hasActivePlayerOnCell && state.gameState.type.includes("enemyMove")
+      hasActiveDeadPlayerOnCell && state.gameState.type.includes("enemyMove")
   );
 
   const additionalUpdate = useSelector(
@@ -170,7 +170,8 @@ export const Cell: React.FC<{
   );
 
   const isNeedCreateSeparateWindow =
-    isPhaseEnemyInteract || isPhaseTakeCard; /* || isPhasePlayerMove */
+    isPhaseEnemyInteract || isPhaseTakeCard; /* ||
+    isPhaseEnemyMove */ /* || isPhasePlayerMove */
 
   const enemyList = useSelector((state: State) => state.enemyList);
   const deadPlayerList = useSelector((state: State) => state.deadPlayerList);
@@ -334,6 +335,7 @@ export const Cell: React.FC<{
     </Wrap>
   );
 
+  console.log(isNeedCreateSeparateWindow, "isNeedCreateSeparateWindow");
   const cellItem: JSX.Element = useMemo(() => {
     return (
       <React.Fragment key={`${hor}.${vert}`}>
@@ -350,7 +352,6 @@ export const Cell: React.FC<{
     hasActiveDeadPlayerOnCell,
     isPlayerMoveArea,
     isPhaseEnemyMove,
-    additionalUpdate,
   ]);
 
   return cellItem;
