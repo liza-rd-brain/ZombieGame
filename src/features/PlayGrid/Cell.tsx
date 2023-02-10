@@ -210,7 +210,8 @@ export const Cell: React.FC<{
       }
     );
 
-    const hasTwoCard = false;
+    const hasTwoCard =
+      false; /* Boolean(enemyListOnCell.length && hasInventoryCards); */
 
     /**
      * если задни план и фаза - игрока не рисуем

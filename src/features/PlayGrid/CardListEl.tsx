@@ -131,23 +131,7 @@ export const CardListEl = React.memo(function _CardListEl({
   });
 
   const hasInventoryCards = useSelector((state: State) => {
-    const enemyOrderNumber = state.deadPlayerList
-      ? state.deadPlayerList[state.activePlayerNumber]?.index
-      : undefined;
-
-    const enemyPlayerCoord =
-      enemyOrderNumber &&
-      state.enemyList[enemyOrderNumber] &&
-      state.enemyList[enemyOrderNumber].coord;
-
-    const isEnemyOnCell = enemyPlayerCoord === currCoord;
-
-    const hasInventory =
-      isEnemyOnCell &&
-      enemyPlayerCoord &&
-      state.gameField.values[enemyPlayerCoord].cardItem?.length;
-
-    console.log("hasInventory on cell", hasInventory, enemyPlayerCoord);
+    const hasInventory = state.gameField.values[currCoord].cardItem?.length;
 
     return hasInventory;
   });
@@ -265,8 +249,6 @@ export const CardListEl = React.memo(function _CardListEl({
   });
 
   const hasTwoCard = Boolean(enemyCardsOnCell.length && hasInventoryCards);
-
-  console.log(hasTwoCard);
 
   return (
     <CardList needSplitCards={hasTwoCard}>
