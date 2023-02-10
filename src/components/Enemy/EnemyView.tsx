@@ -13,6 +13,7 @@ import brainImg from "../common/CommonCard/brain_4.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { PreviewDrag } from "../common/DragPreview/PreviewDrag";
+import { StyledCommonPlayerCard } from "../common/DragPreview/StyledCommonPlayerCard";
 
 type WeaponApperanceType = {
   apperance?: "closed" | "open";
@@ -33,11 +34,30 @@ const CardFace = styled.div`
   backface-visibility: hidden;
 `;
 
-const CardFront = styled(CardFace)`
+const CardFront = styled(CardFace)<{ isCurrent: boolean }>`
   ${StyledCommonCard}
   background-color: unset;
   background-image: url(${zombie});
   border-color: gray;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 1px;
+
+    border: ${(props) => {
+      if (props.isCurrent) {
+        return "5px solid #8834b8";
+      }
+    }};
+
+    pointer-events: none;
+    opacity: 0.5;
+    padding: 4px;
+    left: 4px;
+    top: 4px;
+  }
 `;
 
 const CardBack = styled(CardFace)<{ apperance: "closed" | "open" }>`
@@ -106,7 +126,11 @@ export const EnemyView: FC<{
           });
         }}
       >
-        <CardFront ref={refList.cardFrontRef} />
+        <CardFront
+          ref={refList.cardFrontRef}
+          isCurrent={isCurrent}
+          // image={image}
+        />
         <CardBack apperance={apperance} />
       </CardContainer>
       <PreviewDrag
