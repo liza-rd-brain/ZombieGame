@@ -15,6 +15,7 @@ import {
   useApplyCard,
 } from "./business/effects";
 import { useMemo } from "react";
+import { SkipButton } from "./features/SkipButton";
 
 /* import { PlayerStatus } from "./features/PlayerStatus"; */
 
@@ -88,6 +89,7 @@ export function GetApp() {
           <StatusList />
           <GameControls>
             <Dice />
+            <SkipButton />
             {/* <MoveControls /> */}
           </GameControls>
           {/*  <PlayerStatus /> */}

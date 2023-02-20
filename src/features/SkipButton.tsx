@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -12,19 +12,29 @@ const SkipButtonContainer = styled.button`
 
 export const SkipButton = () => {
   const dispatch = useDispatch();
-  const { enemyList, gameState } = useSelector((state: State) => ({
-    ...state,
-  }));
+
+  const enemyList = useSelector((state: State) => state.enemyList);
+  const gameState = useSelector((state: State) => state.gameState);
+
+  const activePlayerDead = useSelector((state: State) => {
+    const activePlayerNumber = state.activePlayerNumber;
+    const isPlayerDead =
+      state.deadPlayerList && state.deadPlayerList[activePlayerNumber];
+    return Boolean(isPlayerDead);
+  });
 
   const hasOpenEnemyCard = Object.values(enemyList).some((enemyCard) => {
     return enemyCard.appearance === "open";
   });
 
   const canSkip =
-    gameState.type === "enemyMove.chooseEnemy" ? !hasOpenEnemyCard : false;
+    gameState.type === "gameStarted.rollDice" && activePlayerDead
+      ? !hasOpenEnemyCard
+      : false;
 
+  const MemoButton = useMemo(() => SkipButtonContainer, [canSkip]);
   return (
-    <SkipButtonContainer
+    <MemoButton
       disabled={!canSkip}
       onClick={() => {
         dispatch({
@@ -33,6 +43,6 @@ export const SkipButton = () => {
       }}
     >
       пропустить ход
-    </SkipButtonContainer>
+    </MemoButton>
   );
 };
