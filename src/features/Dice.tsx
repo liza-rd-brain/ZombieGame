@@ -32,8 +32,8 @@ export const Dice = () => {
 
   const getNumber = () => {
     // return 1;
-    return maxNumber - 1;
-    // return Math.floor(Math.random() * maxNumber + 1);
+    // return maxNumber - 1;
+    return Math.floor(Math.random() * maxNumber + 1);
   };
 
   return (

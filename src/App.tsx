@@ -88,7 +88,7 @@ export function GetApp() {
           <StatusList />
           <GameControls>
             <Dice />
-            <MoveControls />
+            {/* <MoveControls /> */}
           </GameControls>
           {/*  <PlayerStatus /> */}
         </RightPanel>
