@@ -143,8 +143,6 @@ export const Cell: React.FC<{
     (state: State) => state.gameState.type === "gameStarted.rollDice"
   );
 
-  if (isPhaseEnemyMove) console.log("isPhaseEnemyMove");
-
   const needHighlightning = useSelector((state: State) =>
     state.gameState.coordOfAvailableCells
       ? state.gameState.coordOfAvailableCells.includes(coord)
@@ -158,8 +156,6 @@ export const Cell: React.FC<{
 
     return playerMovePhase && needHighlightning;
   });
-
-  console.log(isPlayerMoveArea, "isPlayerMoveArea");
 
   /**
    * considering hasActivePlayerOnCell
@@ -335,7 +331,6 @@ export const Cell: React.FC<{
     </Wrap>
   );
 
-  console.log(isNeedCreateSeparateWindow, "isNeedCreateSeparateWindow");
   const cellItem: JSX.Element = useMemo(() => {
     return (
       <React.Fragment key={`${hor}.${vert}`}>
