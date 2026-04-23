@@ -8,8 +8,9 @@ body {
   justify-content: space-between;
   margin: 0;
   padding: 0;
-  background-image: url("assets/backgrounds/47074.jpg");
+  background-image: url("assets/backgrounds/deskFone.jpg");
   background-size: 310px;
+  backdrop-filter: blur(1px);
 }
 
 h2 {

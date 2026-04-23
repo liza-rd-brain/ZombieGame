@@ -1,5 +1,5 @@
 import { css } from "styled-components";
-import img from "./brain_4.png";
+import img from "./brain.png";
 
 export const StyledCommonCard = css`
   position: absolute;

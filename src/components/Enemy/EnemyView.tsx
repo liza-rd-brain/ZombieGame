@@ -9,7 +9,7 @@ import { CardAppearance, EnemyCardType, State } from "../../business/types";
 import zombie from "./zombie.png";
 // import zombie_defeated from "./zombie_defeated.png";
 
-import brainImg from "../common/CommonCard/brain_4.png";
+import brainImg from "../common/CommonCard/brain.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { PreviewDrag } from "../common/DragPreview/PreviewDrag";
@@ -98,7 +98,7 @@ export const EnemyView: FC<{
         return enemyCardCanBeDragged;
       },
     }),
-    [id, gameStateType]
+    [id, gameStateType],
   );
 
   //Hide initial preview on dragging

@@ -11,7 +11,7 @@ export const getInitialState = (config: ConfigType): State => {
   const gameFieldWithoutEnemy = getGameField(config);
   return {
     gameState: {
-      type: "waitingStart",
+      type: "gameStarted.rollDice",
       coordOfAvailableCells: null,
       coordOfAvailableCards: null,
     },

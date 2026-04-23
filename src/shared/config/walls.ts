@@ -42,7 +42,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "window",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -77,7 +77,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "window",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -126,7 +126,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "bottom",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -203,7 +203,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "bottom",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -247,7 +247,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "window",
         direction: "bottom",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -315,12 +315,12 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
       {
         name: "door",
         direction: "bottom",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -364,7 +364,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -383,7 +383,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "bottom",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -402,7 +402,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "door",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -441,7 +441,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "window",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -469,7 +469,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "window",
         direction: "left",
-        isOpen: false,
+        isOpen: true,
       },
     ],
   },
@@ -508,7 +508,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: null,
         direction: "left",
-      isOpen: false,
+      isOpen: true,
       },
     ],
   }, */
