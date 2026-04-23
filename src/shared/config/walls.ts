@@ -27,7 +27,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
 
   {
-    coord: { hor: 2, vert: 4 },
+    coord: { hor: 2, vert: 5 },
     barrierList: [
       {
         name: "wall",
@@ -54,19 +54,9 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
         name: "wall",
         direction: "left",
       },
-    ],
-  },
-
-  {
-    coord: { hor: 2, vert: 7 },
-    barrierList: [
       {
         name: "wall",
         direction: "bottom",
-      },
-      {
-        name: "wall",
-        direction: "left",
       },
     ],
   },
@@ -83,17 +73,31 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
 
   {
+    coord: { hor: 2, vert: 8 },
+    barrierList: [{
+      name: "wall",
+      direction: "left",
+    },
+
+    ],
+  },
+
+  {
     coord: { hor: 2, vert: 9 },
     barrierList: [
+
       {
         name: "wall",
-        direction: "left",
+        direction: "bottom",
       },
+
     ],
   },
 
+
+
   {
-    coord: { hor: 2, vert: 10 },
+    coord: { hor: 3, vert: 9 },
     barrierList: [
       {
         name: "wall",
@@ -101,18 +105,8 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       },
     ],
   },
-
   {
-    coord: { hor: 3, vert: 10 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "bottom",
-      },
-    ],
-  },
-  {
-    coord: { hor: 4, vert: 10 },
+    coord: { hor: 4, vert: 9 },
     barrierList: [
       {
         name: "wall",
@@ -131,45 +125,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
     ],
   },
   {
-    coord: { hor: 6, vert: 10 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "bottom",
-      },
-    ],
-  },
-  {
-    coord: { hor: 7, vert: 10 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "bottom",
-      },
-    ],
-  },
-
-  {
-    coord: { hor: 8, vert: 10 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "bottom",
-      },
-    ],
-  },
-
-  {
-    coord: { hor: 9, vert: 10 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "bottom",
-      },
-    ],
-  },
-  {
-    coord: { hor: 10, vert: 10 },
+    coord: { hor: 6, vert: 9 },
     barrierList: [
       {
         name: "wall",
@@ -179,6 +135,44 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
   {
     coord: { hor: 7, vert: 9 },
+    barrierList: [
+      {
+        name: "wall",
+        direction: "bottom",
+      },
+    ],
+  },
+
+  {
+    coord: { hor: 8, vert: 9 },
+    barrierList: [
+      {
+        name: "wall",
+        direction: "bottom",
+      },
+    ],
+  },
+
+  {
+    coord: { hor: 9, vert: 9 },
+    barrierList: [
+      {
+        name: "wall",
+        direction: "bottom",
+      },
+    ],
+  },
+  {
+    coord: { hor: 10, vert: 9 },
+    barrierList: [
+      {
+        name: "wall",
+        direction: "bottom",
+      },
+    ],
+  },
+  {
+    coord: { hor: 7, vert: 8 },
     barrierList: [
       {
         name: "wall",
@@ -272,7 +266,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
 
   {
-    coord: { hor: 10, vert: 7 },
+    coord: { hor: 10, vert: 6 },
     barrierList: [
       {
         name: "wall",
@@ -282,7 +276,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
 
   {
-    coord: { hor: 3, vert: 7 },
+    coord: { hor: 3, vert: 6 },
     barrierList: [
       {
         name: "wall",
@@ -292,6 +286,15 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
   },
   {
     coord: { hor: 4, vert: 9 },
+    barrierList: [
+      {
+        name: "wall",
+        direction: "bottom",
+      },
+    ],
+  },
+  {
+    coord: { hor: 4, vert: 7 },
     barrierList: [
       {
         name: "wall",
@@ -327,7 +330,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
 
 
   {
-    coord: { hor: 5, vert: 7 },
+    coord: { hor: 5, vert: 6 },
     barrierList: [
       {
         name: "wall",
@@ -336,7 +339,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
     ],
   },
   {
-    coord: { hor: 6, vert: 7 },
+    coord: { hor: 6, vert: 6 },
     barrierList: [
       {
         name: "wall",
@@ -345,7 +348,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
     ],
   },
   {
-    coord: { hor: 7, vert: 7 },
+    coord: { hor: 7, vert: 5 },
     barrierList: [
       {
         name: "wall",
@@ -369,7 +372,7 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
     ],
   },
   {
-    coord: { hor: 8, vert: 7 },
+    coord: { hor: 8, vert: 6 },
     barrierList: [
       {
         name: "wall",
@@ -393,6 +396,10 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
       {
         name: "wall",
         direction: "left",
+      },
+      {
+        name: "wall",
+        direction: "bottom",
       },
     ],
   },
@@ -425,15 +432,6 @@ export const CELLS_BARRIERS_LIST: CellsBarrierListType = [
     ],
   },
 
-  {
-    coord: { hor: 11, vert: 9 },
-    barrierList: [
-      {
-        name: "wall",
-        direction: "left",
-      },
-    ],
-  },
 
   {
     coord: { hor: 11, vert: 7 },
