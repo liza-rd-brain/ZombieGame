@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { State, PlayGridMode } from "../../business/types";
 import { FilledPlayGrid } from "./FilledPlayGrid";
 
-import img from "./house_2.png";
+import img from "./houseNew.png";
 
 type GridProps = {
   vert: number;
@@ -36,6 +36,7 @@ const GridItem = styled.div<GridProps>`
   }
 
   background-image: ${(props) => {
+    console.log({ props });
     if (props.mode === "image") {
       return `url(${img})`;
     }
