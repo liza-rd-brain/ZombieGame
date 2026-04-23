@@ -16,6 +16,8 @@ export const getAvailableCellsMax = (state: State): State => {
     dice
   );
 
+  console.log({ neighboringCellList })
+
   /**
    * Returns the coordinates of Cell that can be taken by player.
    */

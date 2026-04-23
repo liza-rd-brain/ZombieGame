@@ -23,7 +23,7 @@ export const getNeighboringCellList = (
     (directionItem) => {
       return {
         direction: directionItem,
-        coord: getNextPlayerCoord(prevPlayerCoord, directionItem),
+        coord: getNextPlayerCoord({ currentCoord: prevPlayerCoord, direction: directionItem }),
       };
     }
   );

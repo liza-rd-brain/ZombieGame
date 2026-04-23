@@ -13,7 +13,7 @@ export const MOVE_DIRECTION_LIST: MoveDirectionList = [
   "left",
 ];
 
-/**
+/** TODO: переписать, нельзя возвращаться назад сбросить путь назад только если это сражение?
  * Returns the coordinates of neighboribgCells that lying in the GameField.
  */
 export const getNeighboringCellListMax = (
@@ -21,18 +21,29 @@ export const getNeighboringCellListMax = (
   gameField: GameField,
   dice: number
 ): AvailableCellListType => {
-  const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.map(
-    (directionItem) => {
-      return {
+  const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.reduce((acc: Array<AvailableCellType>, directionItem) => {
+    let newCoord = []
+    for (let i = 0; i < dice; i++) {
+      newCoord.push({
         direction: directionItem,
-        coord: getNextPlayerCoord(prevPlayerCoord, directionItem),
-      };
+        coord: getNextPlayerCoord({ currentCoord: prevPlayerCoord, direction: directionItem, dice: dice - i }),
+      })
     }
-  );
+
+    return [...acc, ...newCoord]
+  }, [])
+  // const coordNeighboringCells: AvailableCellListType = MOVE_DIRECTION_LIST.map(
+  //   (directionItem) => {
+  //     return {
+  //       direction: directionItem,
+  //       coord: getNextPlayerCoord({ currentCoord: prevPlayerCoord, direction: directionItem, dice }),
+  //     };
+  //   }
+  // );
 
   const getCoordNeibCells = (coord: string) => {
     const coordList = MOVE_DIRECTION_LIST.map((directionItem) => {
-      const newCoord = getNextPlayerCoord(coord, directionItem);
+      const newCoord = getNextPlayerCoord({ currentCoord: coord, direction: directionItem, dice });
       return newCoord;
     });
 
@@ -53,6 +64,7 @@ export const getNeighboringCellListMax = (
       list: [initPlayerCoord],
       counter: dice,
     };
+    debugger;
 
     for (let i = 0; i < dice; i++) {
       const currList = takeableCoordList.list.reduce(
