@@ -37,7 +37,7 @@ const StyledCellItem = styled.div<CellAppearance & { isOver: boolean }>`
 
   background-color: ${({ needHighlightning, isOver }) => {
     if (needHighlightning) {
-      return isOver ? "yellow" : "rgb(55 163 0 / 52%);";
+      return isOver ? "#452be2c9" : "#452be270" /* "rgb(55 163 0 / 52%);" */;
     }
   }};
 `;
