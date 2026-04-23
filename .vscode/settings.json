@@ -2,5 +2,13 @@
     "cSpell.language": ",ru",
     "cSpell.words": [
         "draft"
-    ]
+    ],  
+    "workbench.editor.customLabels.enabled": true,
+    "workbench.editor.customLabels.patterns": {
+        "**/src/**/**.tsx": "${filename}",
+        "**/src/**/phases/**/**.ts": "${filename}_PHASE!",
+        "**/src/**/index.ts": "${dirname}_index",
+        "**/src/index.tsx": "${filename}_ThisIsRoot!"
+    }
 }
+  

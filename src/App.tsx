@@ -1,7 +1,7 @@
 import { Provider, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import "./index.css";
+import "./index.module.css";
 import { PlayGrid, Dice, StatusList, MoveControls } from "./features";
 import { StartScreen, EndScreen } from "./pages";
 import { State } from "./business/types";
@@ -21,6 +21,7 @@ import { SkipButton } from "./features/SkipButton";
 
 const Field = styled.div`
   margin: 0 auto;
+ 
 `;
 
 const Game = styled.div`
