@@ -36,7 +36,6 @@ const GridItem = styled.div<GridProps>`
   }
 
   background-image: ${(props) => {
-    console.log({ props });
     if (props.mode === "image") {
       return `url(${img})`;
     }

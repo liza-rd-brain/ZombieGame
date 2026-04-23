@@ -15,10 +15,18 @@ export const StyledCommonPlayerCard = styled.div<{
   background-position: 0px;
   background-size: 44px;
   background-position: 3px;
+  border-radius: 6px;
 
   background-image: ${(props) => {
     return `url(${props.image})`;
   }};
+
+  box-shadow: ${(props) => {
+    if (props.isCurrent) {
+      return "inset 0px 0px 4px 3px #3e3ab7d4";
+    }
+  }};
+  padding: 0px;
 
   &:before {
     content: "";
@@ -26,12 +34,6 @@ export const StyledCommonPlayerCard = styled.div<{
     width: 24px;
     height: 24px;
     border-radius: 1px;
-
-    border: ${(props) => {
-      if (props.isCurrent) {
-        return "5px solid #8834b8";
-      }
-    }};
 
     pointer-events: none;
     opacity: 0.5;
