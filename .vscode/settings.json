@@ -9,6 +9,11 @@
         "**/src/**/phases/**/**.ts": "${filename}_PHASE!",
         "**/src/**/index.ts": "${dirname}_index",
         "**/src/index.tsx": "${filename}_ThisIsRoot!"
-    }
+    },
+    "js/ts.tsdk.path": "node_modules\\typescript\\lib",
+      "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsserver.log": "verbose",
+  "typescript.disableAutomaticTypeAcquisition": true
 }
   

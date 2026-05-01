@@ -12,7 +12,7 @@ export const getStatePlayerMoved = (
   const { playerList, activePlayerNumber } = state;
 
   const prevPlayerCoord = playerList[activePlayerNumber].coord;
-  const nextPlayerCoord = getNextPlayerCoord(prevPlayerCoord, direction);
+  const nextPlayerCoord = getNextPlayerCoord({currentCoord:prevPlayerCoord, direction});
 
   const canTakeNextCell =
     state.gameState.coordOfAvailableCells?.includes(nextPlayerCoord);
